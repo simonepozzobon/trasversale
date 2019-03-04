@@ -1898,29 +1898,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+// sorgente: https://codepen.io/sanya_misharin/pen/vQBeLV
+// sorgente eventi: https://codepen.io/sanya_misharin/pen/bQgjog
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'UiCalendar',
@@ -1929,7 +1908,7 @@ __webpack_require__.r(__webpack_exports__);
       today: moment__WEBPACK_IMPORTED_MODULE_0___default()(),
       dateContext: moment__WEBPACK_IMPORTED_MODULE_0___default()(),
       selectedDate: moment__WEBPACK_IMPORTED_MODULE_0___default()(),
-      days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      days: ["L", "M", "M", "G", "V", "S", "D"]
     };
   },
   computed: {
@@ -2130,8 +2109,11 @@ __webpack_require__.r(__webpack_exports__);
 
       index = index === 0 ? 6 : index - 1;
       return this.days[index];
-    }
+    },
 
+    dateIsEqualSelectDate: function (date) {
+      return this.selectedDate.format("YYYYMMDD") === date.moment.format("YYYYMMDD");
+    }
   },
   filters: {
     capitalize: function (value) {
@@ -27051,7 +27033,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.b-calendar[data-v-a5487f42] {\n  display: flex;\n  align-items: center;\n  margin: 2.5em auto;\n  max-width: 70rem;\n}\n.b-calendar__information[data-v-a5487f42] {\n    background-color: #535c68;\n    border-radius: 1.2rem 0 0 1.2rem;\n    color: #fff;\n    height: 100%;\n    padding-left: 0.9rem;\n    padding-right: 0.9rem;\n}\n.b-calendar__information .selected-date[data-v-a5487f42] {\n      padding-top: 3rem;\n      padding-left: 2.5rem;\n      position: relative;\n}\n.b-calendar__information .selected-date[data-v-a5487f42]:before {\n        content: \"\";\n        position: absolute;\n        background-color: #f0932b;\n        border-radius: 50%;\n        width: 2rem;\n        height: 2rem;\n        top: 4.5rem;\n        left: -0.25rem;\n}\n.b-calendar__information .selected-date .weekday[data-v-a5487f42] {\n        font-weight: 100;\n        padding-bottom: 0.5em;\n}\n.b-calendar__information .selected-date .day[data-v-a5487f42] {\n        font-size: 2em;\n        font-weight: 600;\n        line-height: 1;\n}\n.b-calendar__information .selected-date .month[data-v-a5487f42] {\n        font-size: 2em;\n        font-weight: 200;\n        line-height: 1;\n}\n.b-calendar__information .go-today-link[data-v-a5487f42] {\n      display: none;\n}\n.b-calendar__calendar[data-v-a5487f42] {\n    min-height: 40rem;\n    padding-right: 0.9rem;\n}\n.b-calendar__header[data-v-a5487f42] {\n    margin-bottom: 2rem;\n}\n.b-calendar__header .month[data-v-a5487f42] {\n      font-size: 1.25em;\n      font-weight: 200;\n      text-transform: capitalize;\n      min-width: 10rem;\n}\n.b-calendar__header .year[data-v-a5487f42] {\n      font-size: 1.5em;\n      font-weight: 600;\n      margin-bottom: 1rem;\n}\n.b-calendar__header .arrow[data-v-a5487f42] {\n      background: transparent;\n      border: 1px solid rgba(0, 0, 0, 0.1);\n      border-radius: 50%;\n      color: #000;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      height: 2.5rem;\n      width: 2.5rem;\n}\n.b-calendar__header .arrow[data-v-a5487f42]:hover {\n        cursor: pointer;\n}\n.b-calendar__header .arrow-left i[data-v-a5487f42] {\n        transform: translateX(-10%);\n}\n.b-calendar__header .arrow-right i[data-v-a5487f42] {\n        transform: translateX(10%);\n}\n.b-calendar__weekdays[data-v-a5487f42] {\n    display: flex;\n    margin-bottom: 1.25rem;\n}\n.b-calendar__weekdays .weekday[data-v-a5487f42] {\n      width: calc(100% / 7);\n      padding: 0.25rem 0.5rem;\n}\n.b-calendar__dates[data-v-a5487f42] {\n    display: flex;\n    flex-wrap: wrap;\n    position: relative;\n}\n.b-calendar__dates[data-v-a5487f42]:after {\n      content: \"\";\n      position: absolute;\n      bottom: 0;\n      background-color: #fff;\n      height: 1px;\n      width: 100%;\n      z-index: 1;\n}\n.b-calendar__dates .date[data-v-a5487f42] {\n      border-right: 1px solid rgba(0, 0, 0, 0.05);\n      border-bottom: 1px solid rgba(0, 0, 0, 0.05);\n      font-weight: 200;\n      min-height: 4.5rem;\n      padding: 0.25rem 0.5rem;\n      position: relative;\n      width: calc(100% / 7);\n}\n.b-calendar__dates .date.blank[data-v-a5487f42] {\n        background-color: rgba(0, 0, 0, 0.02);\n        color: rgba(0, 0, 0, 0.2);\n}\n.b-calendar__dates .date.no-border-right[data-v-a5487f42] {\n        border-right: none;\n}\n.b-calendar__dates .date.today[data-v-a5487f42] {\n        background-color: #ff7979;\n        color: #fff;\n}\n.b-calendar__dates .date.selected[data-v-a5487f42] {\n        background-color: #f0932b;\n        color: #fff;\n}\n.b-calendar__dates .date .link[data-v-a5487f42] {\n        cursor: pointer;\n        position: absolute;\n        top: 0.05rem;\n        left: 0.05rem;\n        bottom: 0.05rem;\n        right: 0.05rem;\n        z-index: 1;\n}\n.b-calendar__dates .date .weekday[data-v-a5487f42] {\n        display: none;\n}\n.b-calendar__dates .date .additional[data-v-a5487f42] {\n        font-size: 0.75em;\n        position: absolute;\n        bottom: 0.25rem;\n        left: 0.5rem;\n}\n.b-calendar__dates .date .additional .year[data-v-a5487f42] {\n          padding-right: 0.25rem;\n          font-size: 0.75em;\n}\n.b-calendar__dates .date .event-mobile-container[data-v-a5487f42] {\n        display: none;\n}\n.b-event-container[data-v-a5487f42] {\n  margin-top: 2rem;\n}\n.b-event-container .create-event-form[data-v-a5487f42] {\n    margin-bottom: 1rem;\n}\n.b-event-container .create-event-form .event-title-input[data-v-a5487f42] {\n      margin-right: 0.25rem;\n      width: calc(100% - 2.7rem);\n}\n.b-event-container .btn-group[data-v-a5487f42] {\n    width: 100%;\n    display: flex;\n    justify-content: center;\n    margin-bottom: 1rem;\n}\n.b-event-container .btn-group .btn[data-v-a5487f42] {\n      width: 33.33%;\n}\n.b-event-container .event-list[data-v-a5487f42] {\n    list-style: none;\n    padding: 0;\n    margin-left: -0.9rem;\n    margin-right: -0.9rem;\n    max-height: 20rem;\n    overflow-y: auto;\n}\n.b-event-container .event-list .event[data-v-a5487f42] {\n      background-color: rgba(255, 255, 255, 0.1);\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      padding: 0.5rem 0.9rem;\n      margin-bottom: 0.5rem;\n}\n.b-event-container .event-list .event.completed[data-v-a5487f42] {\n        background-color: rgba(255, 255, 255, 0.2);\n}\n.b-event-container .event-list .event.completed .title[data-v-a5487f42] {\n          opacity: 0.5;\n}\n.b-event-container .event-list .event.completed .title[data-v-a5487f42]:before {\n            content: \"\";\n            position: absolute;\n            top: 50%;\n            left: -0.5rem;\n            display: block;\n            width: 0%;\n            height: 1px;\n            background: #fff;\n            animation: strikeitem-data-v-a5487f42 0.3s ease-out 0s forwards;\n}\n.b-event-container .event-list .event .title[data-v-a5487f42] {\n        position: relative;\n        max-width: calc(100% - 4rem);\n        white-space: nowrap;\n        overflow: hidden;\n        text-overflow: ellipsis;\n}\n.b-event-container .event-list .event .buttons[data-v-a5487f42] {\n        display: flex;\n}\n.b-event-container .event-list .event .buttons .btn[data-v-a5487f42] {\n          background: transparent;\n          border: none;\n          color: #fff;\n          font-size: 1.2em;\n          padding: 0;\n          height: 1.75rem;\n          width: 1.75rem;\n          box-shadow: none;\n}\n.b-event-container .no-events[data-v-a5487f42] {\n    margin-top: 1.5rem;\n}\n@keyframes strikeitem-data-v-a5487f42 {\nto {\n    width: calc(100% + 1rem);\n}\n}\n@media (max-width: 991.98px) {\n.b-calendar__calendar[data-v-a5487f42] {\n    padding: 0;\n}\n.b-calendar__information[data-v-a5487f42] {\n    border-radius: 2rem 2rem 0 0;\n    padding-top: 2rem;\n    padding-bottom: 2rem;\n    min-height: auto;\n}\n.b-calendar__information .today[data-v-a5487f42] {\n      padding-top: 0;\n}\n}\n@media (max-width: 480px) {\n.b-calendar__weekdays[data-v-a5487f42] {\n    display: none;\n}\n.b-calendar__information .selected-date[data-v-a5487f42] {\n    padding-top: 2rem;\n    padding-bottom: 1rem;\n    padding-left: 2.5rem;\n}\n.b-calendar__information .selected-date[data-v-a5487f42]:before {\n      top: 3rem;\n}\n.b-calendar__information .b-event-container[data-v-a5487f42] {\n    display: none;\n}\n.b-calendar__information .go-today-link[data-v-a5487f42] {\n    display: block;\n    color: #fff;\n}\n.b-calendar__header .go-today-btn[data-v-a5487f42] {\n    display: none;\n}\n.b-calendar__header .month-change-container[data-v-a5487f42] {\n    width: 100%;\n    min-width: 100%;\n}\n.b-calendar__header .month[data-v-a5487f42] {\n    width: 100%;\n}\n.b-calendar__dates .date[data-v-a5487f42] {\n    width: 100%;\n    text-align: left !important;\n    border: none;\n    border-bottom: 1px solid rgba(0, 0, 0, 0.05);\n    display: flex;\n}\n.b-calendar__dates .date.blank[data-v-a5487f42] {\n      display: none;\n}\n.b-calendar__dates .date .weekday[data-v-a5487f42] {\n      display: block;\n      margin-left: 0.25rem;\n}\n.b-calendar__dates .date .event-mobile-container[data-v-a5487f42] {\n      background: #535c68;\n      display: block;\n      position: absolute;\n      margin-top: 0;\n      top: 100%;\n      left: 0;\n      right: 0;\n      padding: 2rem 0.5rem;\n      z-index: 10;\n}\n.b-calendar__dates .date .event-mobile-container.collapse[data-v-a5487f42] {\n        display: none !important;\n}\n.b-calendar__dates .date .event-mobile-container.show[data-v-a5487f42] {\n        display: block !important;\n}\n}\n", ""]);
+exports.push([module.i, "\n.b-calendar[data-v-a5487f42] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  max-width: 70rem;\n}\n.b-calendar__header[data-v-a5487f42] {\n    width: 100%;\n    border-top: 1px solid #000;\n}\n.b-calendar__header span[data-v-a5487f42] {\n      text-transform: uppercase;\n}\n.b-calendar__weekdays[data-v-a5487f42] {\n    border-top: 1px solid #000;\n    width: 100%;\n    display: flex;\n    justify-content: space-between;\n}\n.b-calendar__weekdays .weekday[data-v-a5487f42] {\n      width: calc(100% / 7);\n      display: flex;\n      justify-content: center;\n      align-items: center;\n}\n.b-calendar__calendar[data-v-a5487f42] {\n    border-top: 1px solid #000;\n    width: 100%;\n}\n.b-calendar__dates[data-v-a5487f42] {\n    display: flex;\n    flex-wrap: wrap;\n    position: relative;\n}\n.b-calendar__dates .date[data-v-a5487f42] {\n      width: calc(100% / 7);\n      height: 2rem;\n      border-bottom: 1px solid #000;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n}\n.b-calendar__dates .date.selected[data-v-a5487f42] {\n        position: relative;\n}\n.b-calendar__dates .date.selected[data-v-a5487f42]::before {\n          content: '';\n          width: 1.6rem;\n          height: 1.6rem;\n          position: absolute;\n          border-radius: 50%;\n          background-color: rgba(220, 53, 69, 0.8);\n          top: 50%;\n          left: 50%;\n          transform: translate(-50%, -50%);\n          z-index: -1;\n}\n.b-calendar__dates .date .weekday[data-v-a5487f42] {\n        display: none;\n}\n.b-calendar__dates .date__information.today[data-v-a5487f42] {\n        position: relative;\n}\n.b-calendar__dates .date__information.today[data-v-a5487f42]::before {\n          content: '';\n          width: 1.9rem;\n          height: 1.9rem;\n          position: absolute;\n          border-radius: 50%;\n          background-color: rgba(0, 123, 255, 0.5);\n          top: 50%;\n          left: 50%;\n          transform: translate(-50%, -50%);\n          z-index: -1;\n}\n.b-calendar__dates .date__information.blank[data-v-a5487f42] {\n        opacity: 0;\n}\n.b-calendar__previous[data-v-a5487f42] {\n    width: 100%;\n}\n", ""]);
 
 // exports
 
@@ -78876,268 +78858,140 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _vm._m(0),
+  return _c("div", [
+    _c("div", { staticClass: "b-calendar" }, [
+      _c("div", { staticClass: "b-calendar__header" }, [
+        _c("span", [_vm._v(_vm._s(_vm.month) + " " + _vm._s(_vm.year))])
+      ]),
       _vm._v(" "),
-      _c("b-container", [
+      _c(
+        "div",
+        { staticClass: "b-calendar__weekdays" },
+        _vm._l(_vm.days, function(day, index) {
+          return _c("div", { key: index, staticClass: "weekday" }, [
+            _c("span", [_vm._v(_vm._s(day))])
+          ])
+        }),
+        0
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "b-calendar__calendar" }, [
         _c(
-          "main",
-          { staticClass: "b-calendar" },
-          [
-            _c(
-              "b-row",
+          "div",
+          { staticClass: "b-calendar__dates" },
+          _vm._l(_vm.dateList, function(date) {
+            return _c(
+              "div",
+              {
+                key: date.key,
+                staticClass: "date text-right",
+                class: {
+                  selected: _vm.dateIsEqualSelectDate(date)
+                },
+                attrs: { "data-date": date.date },
+                on: {
+                  click: function($event) {
+                    return _vm.setSelectedDate(date.moment)
+                  }
+                }
+              },
               [
-                _c("b-col", { attrs: { md: "8" } }, [
-                  _c("div", { staticClass: "b-calendar__calendar" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "date__information",
+                    class: {
+                      today: date.today,
+                      blank: date.blank,
+                      "no-border-right": date.key % 7 === 0
+                    }
+                  },
+                  [
+                    _c("span", { staticClass: "day" }, [
+                      _vm._v(_vm._s(date.dayNumber))
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "weekday" }, [
+                      _vm._v(_vm._s(date.weekDay))
+                    ]),
+                    _vm._v(" "),
                     _c(
                       "div",
-                      { staticClass: "b-calendar__header" },
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: date.additional,
+                            expression: "date.additional"
+                          }
+                        ],
+                        staticClass: "additional"
+                      },
                       [
                         _c(
-                          "b-row",
-                          [
-                            _c(
-                              "b-col",
+                          "span",
+                          {
+                            directives: [
                               {
-                                staticClass: "year text-right",
-                                attrs: { "align-h": "end" }
-                              },
-                              [_c("span", [_vm._v(_vm._s(_vm.year))])]
-                            )
-                          ],
-                          1
+                                name: "show",
+                                rawName: "v-show",
+                                value: date.additional.year,
+                                expression: "date.additional.year"
+                              }
+                            ],
+                            staticClass: "year"
+                          },
+                          [_vm._v(_vm._s(date.additional.year))]
                         ),
                         _vm._v(" "),
                         _c(
-                          "b-row",
-                          { attrs: { "align-v": "center" } },
-                          [
-                            _c(
-                              "b-col",
-                              {
-                                staticClass: "text-left",
-                                attrs: { "align-h": "start" }
-                              },
-                              [
-                                _c(
-                                  "b-button",
-                                  {
-                                    staticClass: "arrow arrow-left",
-                                    attrs: {
-                                      id: "subtractMonthBtn",
-                                      variant: "light"
-                                    },
-                                    on: { click: _vm.subtractMonth }
-                                  },
-                                  [
-                                    _c("i", {
-                                      staticClass: "fa fa-fw fa-chevron-left"
-                                    })
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "b-tooltip",
-                                  { attrs: { target: "subtractMonthBtn" } },
-                                  [
-                                    _vm._v(
-                                      "\n                                        " +
-                                        _vm._s(
-                                          _vm._f("capitalize")(
-                                            _vm.previousMonthAsString
-                                          )
-                                        ) +
-                                        "\n                                    "
-                                    )
-                                  ]
-                                )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "b-col",
-                              {
-                                staticClass: "text-center",
-                                attrs: { "align-h": "center" }
-                              },
-                              [
-                                _c("span", { staticClass: "month" }, [
-                                  _vm._v(_vm._s(_vm.month))
-                                ])
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "b-col",
-                              {
-                                staticClass:
-                                  "text-right d-flex flex-row-reverse",
-                                attrs: { "align-h": "end" }
-                              },
-                              [
-                                _c(
-                                  "b-button",
-                                  {
-                                    staticClass: "arrow arrow-right",
-                                    attrs: {
-                                      id: "addMonthBtn",
-                                      variant: "light"
-                                    },
-                                    on: { click: _vm.addMonth }
-                                  },
-                                  [
-                                    _c("i", {
-                                      staticClass: "fa fa-fw fa-chevron-right"
-                                    })
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "b-tooltip",
-                                  { attrs: { target: "addMonthBtn" } },
-                                  [
-                                    _vm._v(
-                                      "\n                                        " +
-                                        _vm._s(
-                                          _vm._f("capitalize")(
-                                            _vm.nextMonthAsString
-                                          )
-                                        ) +
-                                        "\n                                    "
-                                    )
-                                  ]
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "b-calendar__weekdays" },
-                      _vm._l(_vm.days, function(day, index) {
-                        return _c(
-                          "div",
-                          { key: index, staticClass: "weekday" },
-                          [_c("strong", [_vm._v(_vm._s(day))])]
-                        )
-                      }),
-                      0
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "b-calendar__dates" },
-                      _vm._l(_vm.dateList, function(date) {
-                        return _c(
-                          "div",
+                          "span",
                           {
-                            key: date.key,
-                            staticClass: "date text-right",
-                            class: {
-                              today: date.today,
-                              blank: date.blank,
-                              "no-border-right": date.key % 7 === 0
-                            },
-                            attrs: { "data-date": date.date },
-                            on: {
-                              click: function($event) {
-                                return _vm.setSelectedDate(date.moment)
-                              }
-                            }
-                          },
-                          [
-                            _c("span", { staticClass: "day" }, [
-                              _vm._v(_vm._s(date.dayNumber))
-                            ]),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "weekday" }, [
-                              _vm._v(_vm._s(date.weekDay))
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
+                            directives: [
                               {
-                                directives: [
-                                  {
-                                    name: "show",
-                                    rawName: "v-show",
-                                    value: date.additional,
-                                    expression: "date.additional"
-                                  }
-                                ],
-                                staticClass: "additional"
-                              },
-                              [
-                                _c(
-                                  "span",
-                                  {
-                                    directives: [
-                                      {
-                                        name: "show",
-                                        rawName: "v-show",
-                                        value: date.additional.year,
-                                        expression: "date.additional.year"
-                                      }
-                                    ],
-                                    staticClass: "year"
-                                  },
-                                  [_vm._v(_vm._s(date.additional.year))]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "span",
-                                  {
-                                    directives: [
-                                      {
-                                        name: "show",
-                                        rawName: "v-show",
-                                        value: date.additional.month,
-                                        expression: "date.additional.month"
-                                      }
-                                    ],
-                                    staticClass: "month"
-                                  },
-                                  [_vm._v(_vm._s(date.additional.month))]
-                                )
-                              ]
-                            )
-                          ]
+                                name: "show",
+                                rawName: "v-show",
+                                value: date.additional.month,
+                                expression: "date.additional.month"
+                              }
+                            ],
+                            staticClass: "month"
+                          },
+                          [_vm._v(_vm._s(date.additional.month))]
                         )
-                      }),
-                      0
+                      ]
                     )
-                  ])
-                ])
-              ],
-              1
+                  ]
+                )
+              ]
             )
-          ],
-          1
+          }),
+          0
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "b-calendar__previous" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-link arrow arrow-left",
+            attrs: { id: "subtractMonthBtn" },
+            on: { click: _vm.subtractMonth }
+          },
+          [
+            _vm._v(
+              "\n                « " +
+                _vm._s(_vm._f("capitalize")(_vm.previousMonthAsString)) +
+                "\n            "
+            )
+          ]
         )
       ])
-    ],
-    1
-  )
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "b-calendar" }, [
-      _c("div", { staticClass: "row" }, [_c("div", { staticClass: "col" })])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 if (false) {}
