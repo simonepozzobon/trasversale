@@ -10,10 +10,12 @@ Vue.use(BootstrapVue)
 
 import MainGridContainer from './containers/MainGridContainer.vue'
 import SidebarCalendar from './components/SidebarCalendar.vue'
+import SidebarInformation from './components/SidebarInformation.vue'
 
 const app = new Vue({
     components: {
         MainGridContainer,
         SidebarCalendar,
+        SidebarInformation,
     }
 }).$mount('#app');

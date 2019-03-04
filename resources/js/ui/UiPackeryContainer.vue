@@ -11,6 +11,7 @@
             :height="item.height"
             :color="item.bgColor"
             :content="item.content"
+            :gutter="gutter"
             :img="item.img"/>
     </div>
 </template>
@@ -27,6 +28,14 @@ export default {
         items: {
             type: Array,
             default: function() {}
+        },
+        units: {
+            type: Number,
+            default: 12,
+        },
+        gutter: {
+            type: Number,
+            default: 0,
         }
     },
     data: function() {
@@ -49,8 +58,7 @@ export default {
         },
         getContainerWidth: function() {
             let container = this.$refs.container.getBoundingClientRect().width
-            let units = 12
-            this.unitSize = Math.round(container / units)
+            this.unitSize = Math.round(container / this.units)
             this.$nextTick(() => {
                 this.setUnitHeight()
             })

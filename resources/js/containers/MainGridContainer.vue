@@ -1,6 +1,8 @@
 <template lang="html">
     <ui-packery-container
-        :items="this.items" />
+        :items="this.items"
+        :gutter="8"
+        :units="12"/>
 </template>
 
 <script>

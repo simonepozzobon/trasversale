@@ -1,5 +1,5 @@
 <template lang="html">
-    <div>
+    <div class="pb-5">
         <ui-calendar />
     </div>
 </template>

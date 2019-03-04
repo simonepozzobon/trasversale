@@ -39,6 +39,10 @@ export default {
             type: String,
             default: null,
         },
+        gutter: {
+            type: Number,
+            default: 0,
+        }
     },
     computed: {
         bgClass: function() {
@@ -77,8 +81,17 @@ export default {
             }
         },
         setUnitHeight: function(height) {
+            let realGutter = Math.round(this.gutter / 2)
             let itemHeight = height * this.height
+
+            if (this.height > 2) {
+                let deltaGutter = this.height * (realGutter / 2)
+                itemHeight = itemHeight + deltaGutter
+            }
+
+
             this.$refs.item.style.height = itemHeight + 'px'
+            this.$refs.container.style.padding = realGutter + 'px'
         },
     },
     mounted: function() {
@@ -91,7 +104,6 @@ export default {
 @import '~styles/shared';
 
 .packery-item {
-    padding: $spacer / 4;
 
     &__item {
         max-width: 100%;

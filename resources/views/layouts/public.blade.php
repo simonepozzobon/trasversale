@@ -18,12 +18,11 @@
                     @yield('content')
                 </div>
                 <div class="col-md-3">
-                    @yield('sidebar')
+                    <div class="pb-4">
+                        @yield('sidebar')
+                    </div>
                     <sidebar-calendar></sidebar-calendar>
-                    <br>
-                    partner
-                    <br>
-                    informazioni generali
+                    <sidebar-information></sidebar-information>
                 </div>
             </div>
         </div>
