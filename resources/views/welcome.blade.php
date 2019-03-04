@@ -1,7 +1,9 @@
 @extends('layouts.public')
 @section('sidebar')
-  sidebar
+    sidebar
 @endsection
 @section('content')
-  Ciao
+    <div>
+        <main-grid-container></main-grid-container>
+    </div>
 @endsection
