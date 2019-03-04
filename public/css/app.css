@@ -12852,3 +12852,38 @@ a.text-dark:focus {
   }
 }
 
+.navbar-main {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.navbar-main__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 1.25rem;
+}
+
+.navbar-main__topbar {
+  width: 100%;
+  display: flex;
+}
+
+.navbar-main__menubar {
+  width: 100%;
+  display: flex;
+}
+
+.navbar-main__submenu {
+  width: 100%;
+  display: flex;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+
+.navbar-main__submenu .nav-link {
+  font-size: 0.875rem;
+}
+
