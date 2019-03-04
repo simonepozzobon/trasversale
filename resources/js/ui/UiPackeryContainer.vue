@@ -1,5 +1,8 @@
 <template lang="html">
-    <div v-packery='this.packeryOpts' class="row">
+    <div
+        v-packery="this.packeryOpts"
+        class="row no-gutters"
+        ref="container">
         <ui-packery-item
             ref="item"
             v-for="item in this.items"
@@ -8,7 +11,7 @@
             :height="item.height"
             :color="item.bgColor"
             :content="item.content"
-            @height-changed="heightChanged"/>
+            :img="item.img"/>
     </div>
 </template>
 
@@ -34,30 +37,28 @@ export default {
             },
             count: 0,
             maxHeight: 0,
+            unitSize: 0,
         }
     },
     methods: {
         setUnitHeight: function() {
             let items = this.$refs.item
-            let height = this.maxHeight
             for (let i = 0; i < items.length; i++) {
-                items[i].setUnitHeight(this.maxHeight)
+                items[i].setUnitHeight(this.unitSize)
             }
         },
-        heightChanged: function(height) {
-            if (height > this.maxHeight) {
-                this.maxHeight = height
-            }
-
-            this.count++
-
-            if (this.items.length == this.count) {
-                this.$nextTick(() => {
-                    this.setUnitHeight()
-                })
-            }
+        getContainerWidth: function() {
+            let container = this.$refs.container.getBoundingClientRect().width
+            let units = 12
+            this.unitSize = Math.round(container / units)
+            this.$nextTick(() => {
+                this.setUnitHeight()
+            })
         }
     },
+    mounted: function() {
+        this.getContainerWidth()
+    }
 }
 </script>
 

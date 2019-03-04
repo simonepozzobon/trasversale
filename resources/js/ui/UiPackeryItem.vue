@@ -1,9 +1,17 @@
 <template lang="html">
     <div
-        ref="item"
+        ref="container"
         v-packery-item
-        :class="'packery-item ' + widthClass + ' ' + colorClass"
-        v-html="content">
+        class="packery-item"
+        :class="widthClass + ' ' + colorClass + ' '">
+
+        <div ref="item"
+            class="packery-item__item"
+            :class="{
+                'has-image-bg': this.img
+            }">
+
+        </div>
     </div>
 </template>
 
@@ -26,9 +34,19 @@ export default {
         color: {
             type: String,
             default: null,
-        }
+        },
+        img: {
+            type: String,
+            default: null,
+        },
     },
     computed: {
+        bgClass: function() {
+            if (this.img) {
+                return 'has-image-bg'
+            }
+            return null
+        },
         widthClass: function() {
             if (this.width) {
                 return 'col-md-'+this.width
@@ -42,7 +60,7 @@ export default {
             return null
         },
         colorClass: function() {
-            if (this.color) {
+            if (this.color && !this.img) {
                 return 'bg-'+this.color
             }
             return null
@@ -50,30 +68,40 @@ export default {
     },
     data: function() {
         return {
-            itemHeight: 0,
-        }
-    },
-    watch: {
-        itemHeight: function(height) {
-            this.$emit('height-changed', height)
         }
     },
     methods: {
+        setBackground: function() {
+            if (this.img) {
+                this.$refs.item.style.backgroundImage = 'url('+this.img+')'
+            }
+        },
         setUnitHeight: function(height) {
             let itemHeight = height * this.height
             this.$refs.item.style.height = itemHeight + 'px'
         },
-        getHeight: function() {
-            let el = this.$refs.item
-            let rect = el.getBoundingClientRect()
-            this.itemHeight = rect.height
-        }
     },
     mounted: function() {
-        this.getHeight()
+        this.setBackground()
     }
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+@import '~styles/shared';
+
+.packery-item {
+    padding: $spacer / 4;
+
+    &__item {
+        max-width: 100%;
+        height: 100%;
+
+        &.has-image-bg {
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+    }
+}
 </style>
