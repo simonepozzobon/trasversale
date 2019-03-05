@@ -16,6 +16,12 @@
         <ui-button
             v-else-if="module.type == 'button'"
             :text="parsed.text"/>
+
+        <ui-team
+            v-else-if="module.type == 'team'"
+            :grid-col="parsed.gridCol"
+            :people="parsed.people"
+            />
     </div>
 </template>
 
@@ -23,6 +29,7 @@
 import UiButton from './UiButton.vue'
 import UiImage from './UiImage.vue'
 import UiParagraph from './UiParagraph.vue'
+import UiTeam from './UiTeam.vue'
 import UiTitle from './UiTitle.vue'
 
 export default {
@@ -31,6 +38,7 @@ export default {
         UiButton,
         UiImage,
         UiParagraph,
+        UiTeam,
         UiTitle,
     },
     props: {

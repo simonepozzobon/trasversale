@@ -7,7 +7,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" href="{{ mix('css/admin.css') }}">
     </head>
-    <body class="bg-black">
+    <body class="bg-light">
         <div id="admin">
             <main-template
                 pages="{{ $pages }}">
