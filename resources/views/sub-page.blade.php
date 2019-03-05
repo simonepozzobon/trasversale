@@ -1,4 +1,4 @@
-@extends('layouts.public', ['active' => 'home'])
+@extends('layouts.public', ['active' => $sub->page->slug->slug, 'subactive' => $sub->slug->slug])
 @section('sidebar')
     <p>
         Trasversale srl opera nell'ambito della formazione e dell'apprendimento
@@ -10,6 +10,9 @@
 @endsection
 @section('content')
     <div>
-        <main-grid-container></main-grid-container>
+        <main-content
+            modules="{{ $sub->modules }}">
+
+        </main-content>
     </div>
 @endsection

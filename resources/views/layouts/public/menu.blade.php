@@ -1,6 +1,9 @@
+@php
+    $pages = App\Utility::generate_menu();
+@endphp
 <nav class="navbar navbar-main navbar-expand-lg navbar-light bg-white">
     <div class="navbar-main__head">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{{ url('/') }}">
             <img src="/svg/logo.svg" alt="" style="width: 250px">
         </a>
     </div>
@@ -24,50 +27,25 @@
         </div>
         <div class="navbar-main__menubar">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">chi siamo</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">formazione</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">educational</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">corsi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">notizie</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">contatti</a>
-                </li>
+                @foreach ($pages as $key => $page)
+                    <li class="nav-item">
+                        <a class="nav-link {{ $page->slug == $active ? 'active' : null }}" href="{{ url($page->slug) }}">{{ $page->title }}</a>
+                    </li>
+                @endforeach
             </ul>
         </div>
-        <div class="navbar-main__submenu">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">il nostro approcio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">il team</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">la rete</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">la nostra storia</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">certificazioni</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">cv della società</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">archivio progetti realizzati</a>
-                </li>
-            </ul>
-        </div>
+        @foreach ($pages as $key => $page)
+            @if ($page->slug == $active)
+                <div class="navbar-main__submenu">
+                    <ul class="navbar-nav mr-auto">
+                        @foreach ($page->sub_pages as $key => $sub)
+                            <li class="nav-item">
+                                <a class="nav-link {{ $sub->slug == $subactive ? 'active' : null }}" href="{{ url($page->slug.'/'.$sub->slug) }}">{{ $sub->title }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+        @endforeach
     </div>
 </nav>

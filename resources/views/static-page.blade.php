@@ -1,4 +1,4 @@
-@extends('layouts.public', ['active' => 'home'])
+@extends('layouts.public', ['active' => $page->slug->slug])
 @section('sidebar')
     <p>
         Trasversale srl opera nell'ambito della formazione e dell'apprendimento

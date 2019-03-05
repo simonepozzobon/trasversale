@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'MainController@home')->name('home');
+
+$pages = App\StaticPage::all();
+foreach ($pages as $key => $page) {
+    Route::get('/{static_page}', 'MainController@get_static_page')->name('static.page');
+    Route::get($page->slug->slug.'/{slug}', 'MainController@get_sub_page')->name('sub-page');
+}
