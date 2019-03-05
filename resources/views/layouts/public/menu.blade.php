@@ -28,9 +28,24 @@
         <div class="navbar-main__menubar">
             <ul class="navbar-nav mr-auto">
                 @foreach ($pages as $key => $page)
-                    <li class="nav-item">
-                        <a class="nav-link {{ $page->slug == $active ? 'active' : null }}" href="{{ url($page->slug) }}">{{ $page->title }}</a>
-                    </li>
+                    @if ($page->sub_pages->count() == 0 || $page->slug == $active )
+                        <li class="nav-item">
+                            <a class="nav-link {{ $page->slug == $active ? 'active' : null }}" href="{{ url($page->slug) }}">{{ $page->title }}</a>
+                        </li>
+                    @else
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ $page->title }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @foreach ($page->sub_pages as $key => $sub)
+                                    <a class="dropdown-item" href="{{ url($page->slug.'/'.$sub->slug) }}">
+                                        {{ $sub->title }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </li>
+                    @endif
                 @endforeach
             </ul>
         </div>

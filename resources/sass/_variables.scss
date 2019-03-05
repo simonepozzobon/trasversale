@@ -237,7 +237,8 @@ $line-height-sm:              1.5 !default;
 $border-width:                1px !default;
 $border-color:                $gray-300 !default;
 
-$border-radius:               .25rem !default;
+// $border-radius:               .25rem !default;
+$border-radius:               0 !default;
 $border-radius-lg:            .3rem !default;
 $border-radius-sm:            .2rem !default;
 
@@ -737,8 +738,8 @@ $navbar-dark-toggler-icon-bg:       str-replace(url("data:image/svg+xml,%3csvg v
 $navbar-dark-toggler-border-color:  rgba($white, .1) !default;
 
 $navbar-light-color:                rgba($black, .5) !default;
-$navbar-light-hover-color:          rgba($black, .7) !default;
-$navbar-light-active-color:         rgba($black, .9) !default;
+$navbar-light-hover-color:          rgba($primary, .7) !default;
+$navbar-light-active-color:         rgba($primary, .9) !default;
 $navbar-light-disabled-color:       rgba($black, .3) !default;
 $navbar-light-toggler-icon-bg:      str-replace(url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='#{$navbar-light-color}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"), "#", "%23") !default;
 $navbar-light-toggler-border-color: rgba($black, .1) !default;
@@ -754,12 +755,12 @@ $navbar-dark-brand-hover-color:           $navbar-dark-active-color !default;
 // Dropdown menu container and contents.
 
 $dropdown-min-width:                10rem !default;
-$dropdown-padding-y:                .5rem !default;
+$dropdown-padding-y:                .618rem !default;
 $dropdown-spacer:                   .125rem !default;
 $dropdown-font-size:                $font-size-base !default;
-$dropdown-color:                    $body-color !default;
-$dropdown-bg:                       $white !default;
-$dropdown-border-color:             rgba($black, .15) !default;
+$dropdown-color:                    $white !default;
+$dropdown-bg:                       $primary !default;
+$dropdown-border-color:             rgba($black, 0) !default;
 $dropdown-border-radius:            $border-radius !default;
 $dropdown-border-width:             $border-width !default;
 $dropdown-inner-border-radius:      calc(#{$dropdown-border-radius} - #{$dropdown-border-width}) !default;
@@ -767,17 +768,17 @@ $dropdown-divider-bg:               $gray-200 !default;
 $dropdown-divider-margin-y:         $nav-divider-margin-y !default;
 $dropdown-box-shadow:               0 .5rem 1rem rgba($black, .175) !default;
 
-$dropdown-link-color:               $gray-900 !default;
-$dropdown-link-hover-color:         darken($gray-900, 5%) !default;
-$dropdown-link-hover-bg:            $gray-100 !default;
+$dropdown-link-color:               $white !default;
+$dropdown-link-hover-color:         lighten($primary, 50) !default;
+$dropdown-link-hover-bg:            rgba($primary, 0) !default;
 
 $dropdown-link-active-color:        $component-active-color !default;
-$dropdown-link-active-bg:           $component-active-bg !default;
+$dropdown-link-active-bg:           rgba($component-active-bg, 0) !default;
 
 $dropdown-link-disabled-color:      $gray-600 !default;
 
-$dropdown-item-padding-y:           .25rem !default;
-$dropdown-item-padding-x:           1.5rem !default;
+$dropdown-item-padding-y:           .3rem !default;
+$dropdown-item-padding-x:           1.618rem !default;
 
 $dropdown-header-color:             $gray-600 !default;
 

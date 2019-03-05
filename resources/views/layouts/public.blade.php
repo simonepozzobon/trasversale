@@ -20,7 +20,7 @@
     </head>
     <body>
         @include('layouts.public.menu', ['active' => $active, 'subactive' => $subactive])
-        <div id="app" class="container-fluid mt-3">
+        <div id="app" class="container mt-3">
             <div class="row">
                 <div class="col-md-9">
                     @yield('content')

@@ -12,7 +12,6 @@
     <div>
         <main-content
             modules="{{ $sub->modules }}">
-
         </main-content>
     </div>
 @endsection

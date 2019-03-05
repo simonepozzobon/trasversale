@@ -19,6 +19,10 @@
     &__menubar {
         width: 100%;
         display: flex;
+
+        .dropdown-item {
+            text-transform: uppercase;
+        }
     }
 
     &__submenu {
