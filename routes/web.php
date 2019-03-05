@@ -11,6 +11,11 @@
 |
 */
 
+Route::prefix('admin')->group(function() {
+    Route::get('/', 'AdminController@index');
+    Route::get('/{slug}', 'AdminController@index')->where('slug', '.*');
+});
+
 Route::get('/', 'MainController@home')->name('home');
 
 $pages = App\StaticPage::all();
