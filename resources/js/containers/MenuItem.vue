@@ -2,14 +2,14 @@
     <li class="nav-item"
         v-if="type">
         <a
-            class="nav-link"
+            class="nav-link nav-item__link"
             :href="'/' + page.slug.slug"
             @click.prevent="$root.goToWithParams('page', { page: page.slug.slug})">
             {{ page.title }}
         </a>
     </li>
     <li class="nav-item dropdown" v-else>
-        <a class="nav-link dropdown-toggle"
+        <a class="nav-link nav-item__link dropdown-toggle"
             href="#"
             id="navbarDropdown"
             role="button"
@@ -55,4 +55,14 @@ export default {
 
 <style lang="scss" scoped>
 @import '~styles/shared';
+
+.nav-item {
+    &__link:first-child {
+        padding-left: 0;
+    }
+
+    &__link {
+        font-weight: 500;
+    }
+}
 </style>

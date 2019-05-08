@@ -34749,7 +34749,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n.nav-item__link[data-v-25f99bfe]:first-child {\n  padding-left: 0;\n}\n.nav-item__link[data-v-25f99bfe] {\n  font-weight: 500;\n}\n", ""]);
 
 // exports
 
@@ -34882,7 +34882,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.navbar-main__head[data-v-5bf5bca7] {\n  margin-left: -48px;\n}\n", ""]);
+exports.push([module.i, "\n.navbar-main__head[data-v-5bf5bca7] {\n  margin-left: -48px;\n}\n.main-submenu__link[data-v-5bf5bca7]:first-child {\n  padding-left: 0;\n}\n.main-submenu__link[data-v-5bf5bca7] {\n  font-size: 0.9375rem;\n  font-weight: 300;\n}\n", ""]);
 
 // exports
 
@@ -96318,7 +96318,7 @@ var render = function() {
         _c(
           "a",
           {
-            staticClass: "nav-link",
+            staticClass: "nav-link nav-item__link",
             attrs: { href: "/" + _vm.page.slug.slug },
             on: {
               click: function($event) {
@@ -96336,7 +96336,7 @@ var render = function() {
         _c(
           "a",
           {
-            staticClass: "nav-link dropdown-toggle",
+            staticClass: "nav-link nav-item__link dropdown-toggle",
             attrs: {
               href: "#",
               id: "navbarDropdown",
@@ -96673,19 +96673,22 @@ var render = function() {
           ]),
           _vm._v(" "),
           this.subpages && this.current
-            ? _c("div", { staticClass: "navbar-main__submenu" }, [
+            ? _c("div", { staticClass: "navbar-main__submenu main-submenu" }, [
                 _c(
                   "ul",
                   { staticClass: "navbar-nav mr-auto" },
                   _vm._l(_vm.subpages, function(subpage) {
                     return _c(
                       "li",
-                      { key: subpage.id, staticClass: "nav-item" },
+                      {
+                        key: subpage.id,
+                        staticClass: "nav-item main-submenu__item"
+                      },
                       [
                         _c(
                           "a",
                           {
-                            staticClass: "nav-link",
+                            staticClass: "nav-link main-submenu__link",
                             attrs: {
                               href:
                                 "/" +

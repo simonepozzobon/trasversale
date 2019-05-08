@@ -33,13 +33,13 @@
                         :page="page"/>
                 </ul>
             </div>
-            <div class="navbar-main__submenu" v-if="this.subpages && this.current">
+            <div class="navbar-main__submenu main-submenu" v-if="this.subpages && this.current">
                 <ul class="navbar-nav mr-auto">
                     <li
                         v-for="subpage in subpages"
                         :key="subpage.id"
-                        class="nav-item">
-                        <a class="nav-link"
+                        class="nav-item main-submenu__item">
+                        <a class="nav-link main-submenu__link"
                             :href="'/' + current.slug.slug + '/' + subpage.slug.slug"
                             @click.prevent="$root.goToWithParams('subpage', { page: current.slug.slug, subpage: subpage.slug.slug })">
                             {{ subpage.title }}
@@ -108,6 +108,17 @@ export default {
 .navbar-main {
     &__head {
         margin-left: -48px;
+    }
+}
+
+.main-submenu {
+    &__link:first-child {
+        padding-left: 0;
+    }
+
+    &__link {
+        font-size: $font-size-base;
+        font-weight: 300;
     }
 }
 </style>
