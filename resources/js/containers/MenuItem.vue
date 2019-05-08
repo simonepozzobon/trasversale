@@ -60,7 +60,7 @@ export default {
     &__link {
         font-weight: 700;
         font-family: $font-family-sans-serif-var;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.05em;
         padding-right: $spacer !important;
         padding-left: $spacer !important;
     }
@@ -73,11 +73,25 @@ export default {
 .dropdown-custom {
     &__menu {
         margin-top: -1px;
-        padding: 0 !important;
+        padding: $spacer !important;
+    }
+
+    &__menu::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        // background-color: $primary;
+        top: -($spacer * .9);
+        border-left: $spacer solid transparent;
+        border-bottom: $spacer solid $primary;
     }
 
     &__item {
         font-family: $font-family-sans-serif-var;
+        font-size: $font-size-base * 0.8;
+        letter-spacing: 0.05em;
+        padding: 0;
     }
 }
 </style>

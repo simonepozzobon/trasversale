@@ -34770,7 +34770,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.nav-item__link[data-v-25f99bfe] {\n  font-weight: 700;\n  font-family: \"Muli\", sans-serif;\n  letter-spacing: 0.1em;\n  padding-right: 0.9375rem !important;\n  padding-left: 0.9375rem !important;\n}\n.nav-item__link[data-v-25f99bfe]:first-child {\n  padding-left: 0 !important;\n}\n.dropdown-custom__menu[data-v-25f99bfe] {\n  margin-top: -1px;\n  padding: 0 !important;\n}\n.dropdown-custom__item[data-v-25f99bfe] {\n  font-family: \"Muli\", sans-serif;\n}\n", ""]);
+exports.push([module.i, "\n.nav-item__link[data-v-25f99bfe] {\n  font-weight: 700;\n  font-family: \"Muli\", sans-serif;\n  letter-spacing: 0.05em;\n  padding-right: 0.9375rem !important;\n  padding-left: 0.9375rem !important;\n}\n.nav-item__link[data-v-25f99bfe]:first-child {\n  padding-left: 0 !important;\n}\n.dropdown-custom__menu[data-v-25f99bfe] {\n  margin-top: -1px;\n  padding: 0.9375rem !important;\n}\n.dropdown-custom__menu[data-v-25f99bfe]::after {\n  content: '';\n  position: absolute;\n  width: 0;\n  height: 0;\n  top: -0.84375rem;\n  border-left: 0.9375rem solid transparent;\n  border-bottom: 0.9375rem solid #00A6AC;\n}\n.dropdown-custom__item[data-v-25f99bfe] {\n  font-family: \"Muli\", sans-serif;\n  font-size: 0.75rem;\n  letter-spacing: 0.05em;\n  padding: 0;\n}\n", ""]);
 
 // exports
 
