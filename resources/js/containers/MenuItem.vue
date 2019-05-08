@@ -8,8 +8,8 @@
             {{ page.title }}
         </a>
     </li>
-    <li class="nav-item dropdown" v-else>
-        <a class="nav-link dropdown-toggle nav-item__link"
+    <li class="nav-item dropdown dropdown-custom" v-else>
+        <a class="nav-link dropdown-toggle nav-item__link dropdown-custom__toggle"
             href="#"
             id="navbarDropdown"
             role="button"
@@ -18,10 +18,10 @@
             aria-expanded="false">
             {{ page.title }}
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <div class="dropdown-menu dropdown-custom__menu" aria-labelledby="navbarDropdown">
             <a
                 v-for="subpage in page.sub_pages"
-                class="dropdown-item"
+                class="dropdown-item dropdown-custom__item"
                 :href="'/' + page.slug.slug + '/' + subpage.slug.slug"
                 @click.prevent="$root.goToWithParams('subpage', { subpage: page.slug.slug })">
                 {{ subpage.title }}
@@ -58,13 +58,26 @@ export default {
 
 .nav-item {
     &__link {
-        font-weight: 500;
+        font-weight: 700;
+        font-family: $font-family-sans-serif-var;
+        letter-spacing: 0.1em;
         padding-right: $spacer !important;
         padding-left: $spacer !important;
     }
 
     &__link:first-child {
         padding-left: 0 !important;
+    }
+}
+
+.dropdown-custom {
+    &__menu {
+        margin-top: -1px;
+        padding: 0 !important;
+    }
+
+    &__item {
+        font-family: $font-family-sans-serif-var;
     }
 }
 </style>

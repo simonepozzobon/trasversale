@@ -137,7 +137,9 @@ export default {
     }
 
     &__link {
+        font-family: $font-family-sans-serif-var;
         font-size: $font-size-base * 0.9;
+        letter-spacing: 0.1em;
         font-weight: 400;
         padding: 0;
         // position: relative;

@@ -34770,7 +34770,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.nav-item__link[data-v-25f99bfe] {\n  font-weight: 500;\n  padding-right: 0.9375rem !important;\n  padding-left: 0.9375rem !important;\n}\n.nav-item__link[data-v-25f99bfe]:first-child {\n  padding-left: 0 !important;\n}\n", ""]);
+exports.push([module.i, "\n.nav-item__link[data-v-25f99bfe] {\n  font-weight: 700;\n  font-family: \"Muli\", sans-serif;\n  letter-spacing: 0.1em;\n  padding-right: 0.9375rem !important;\n  padding-left: 0.9375rem !important;\n}\n.nav-item__link[data-v-25f99bfe]:first-child {\n  padding-left: 0 !important;\n}\n.dropdown-custom__menu[data-v-25f99bfe] {\n  margin-top: -1px;\n  padding: 0 !important;\n}\n.dropdown-custom__item[data-v-25f99bfe] {\n  font-family: \"Muli\", sans-serif;\n}\n", ""]);
 
 // exports
 
@@ -34903,7 +34903,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.navbar-main__head[data-v-5bf5bca7] {\n  margin-left: -48px;\n}\n.main-submenu__link[data-v-5bf5bca7]:first-child {\n  padding-left: 0;\n  padding-right: 0;\n}\n.main-submenu__link[data-v-5bf5bca7] {\n  font-size: 0.84375rem;\n  font-weight: 400;\n  padding: 0;\n}\n.main-submenu__navbar[data-v-5bf5bca7] {\n  flex-wrap: wrap;\n  padding-top: 0.46875rem;\n  align-items: center;\n}\n.main-submenu__item[data-v-5bf5bca7] {\n  padding-bottom: 0.46875rem;\n}\n.main-submenu__divider[data-v-5bf5bca7] {\n  font-weight: 100;\n  color: rgba(76, 76, 76, 0.5);\n  padding-left: 0.46875rem;\n  padding-right: 0.46875rem;\n}\n", ""]);
+exports.push([module.i, "\n.navbar-main__head[data-v-5bf5bca7] {\n  margin-left: -48px;\n}\n.main-submenu__link[data-v-5bf5bca7]:first-child {\n  padding-left: 0;\n  padding-right: 0;\n}\n.main-submenu__link[data-v-5bf5bca7] {\n  font-family: \"Muli\", sans-serif;\n  font-size: 0.84375rem;\n  letter-spacing: 0.1em;\n  font-weight: 400;\n  padding: 0;\n}\n.main-submenu__navbar[data-v-5bf5bca7] {\n  flex-wrap: wrap;\n  padding-top: 0.46875rem;\n  align-items: center;\n}\n.main-submenu__item[data-v-5bf5bca7] {\n  padding-bottom: 0.46875rem;\n}\n.main-submenu__divider[data-v-5bf5bca7] {\n  font-weight: 100;\n  color: rgba(76, 76, 76, 0.5);\n  padding-left: 0.46875rem;\n  padding-right: 0.46875rem;\n}\n", ""]);
 
 // exports
 
@@ -96353,11 +96353,12 @@ var render = function() {
           [_vm._v("\n        " + _vm._s(_vm.page.title) + "\n    ")]
         )
       ])
-    : _c("li", { staticClass: "nav-item dropdown" }, [
+    : _c("li", { staticClass: "nav-item dropdown dropdown-custom" }, [
         _c(
           "a",
           {
-            staticClass: "nav-link dropdown-toggle nav-item__link",
+            staticClass:
+              "nav-link dropdown-toggle nav-item__link dropdown-custom__toggle",
             attrs: {
               href: "#",
               id: "navbarDropdown",
@@ -96373,14 +96374,14 @@ var render = function() {
         _c(
           "div",
           {
-            staticClass: "dropdown-menu",
+            staticClass: "dropdown-menu dropdown-custom__menu",
             attrs: { "aria-labelledby": "navbarDropdown" }
           },
           _vm._l(_vm.page.sub_pages, function(subpage) {
             return _c(
               "a",
               {
-                staticClass: "dropdown-item",
+                staticClass: "dropdown-item dropdown-custom__item",
                 attrs: {
                   href: "/" + _vm.page.slug.slug + "/" + subpage.slug.slug
                 },
