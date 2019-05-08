@@ -1,6 +1,6 @@
 <template lang="html">
-    <div>
-        <h1>{{ title }}</h1>
+    <div class="ui-title">
+        <h1 class="ui-title__content">{{ title }}</h1>
     </div>
 </template>
 
@@ -16,5 +16,18 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+@import '~styles/shared';
+
+.ui-title {
+    &__content {
+        margin-left: 230px;
+        font-weight: 800;
+        font-size: 2.5rem;
+        letter-spacing: 1px;
+
+        // valutare
+        // line-height: 1;
+    }
+}
 </style>

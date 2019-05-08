@@ -101,8 +101,6 @@ $opacity-test: 0.6 !default;
 
 .page-template {
     padding-top: $spacer;
-    // background-color: $dark;
-    // @include gradient-directional($gray-400, $gray-300, 135deg);
     min-height: 100%;
 
     background: linear-gradient(
