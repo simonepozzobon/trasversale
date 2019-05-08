@@ -138,7 +138,6 @@ export default {
 
     &__link {
         font-size: $font-size-base * 0.9;
-        letter-spacing: 1px;
         font-weight: 400;
         padding: 0;
         // position: relative;

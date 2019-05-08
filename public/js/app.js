@@ -34903,7 +34903,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.navbar-main__head[data-v-5bf5bca7] {\n  margin-left: -48px;\n}\n.main-submenu__link[data-v-5bf5bca7]:first-child {\n  padding-left: 0;\n  padding-right: 0;\n}\n.main-submenu__link[data-v-5bf5bca7] {\n  font-size: 0.84375rem;\n  letter-spacing: 1px;\n  font-weight: 400;\n  padding: 0;\n}\n.main-submenu__navbar[data-v-5bf5bca7] {\n  flex-wrap: wrap;\n  padding-top: 0.46875rem;\n  align-items: center;\n}\n.main-submenu__item[data-v-5bf5bca7] {\n  padding-bottom: 0.46875rem;\n}\n.main-submenu__divider[data-v-5bf5bca7] {\n  font-weight: 100;\n  color: rgba(76, 76, 76, 0.5);\n  padding-left: 0.46875rem;\n  padding-right: 0.46875rem;\n}\n", ""]);
+exports.push([module.i, "\n.navbar-main__head[data-v-5bf5bca7] {\n  margin-left: -48px;\n}\n.main-submenu__link[data-v-5bf5bca7]:first-child {\n  padding-left: 0;\n  padding-right: 0;\n}\n.main-submenu__link[data-v-5bf5bca7] {\n  font-size: 0.84375rem;\n  font-weight: 400;\n  padding: 0;\n}\n.main-submenu__navbar[data-v-5bf5bca7] {\n  flex-wrap: wrap;\n  padding-top: 0.46875rem;\n  align-items: center;\n}\n.main-submenu__item[data-v-5bf5bca7] {\n  padding-bottom: 0.46875rem;\n}\n.main-submenu__divider[data-v-5bf5bca7] {\n  font-weight: 100;\n  color: rgba(76, 76, 76, 0.5);\n  padding-left: 0.46875rem;\n  padding-right: 0.46875rem;\n}\n", ""]);
 
 // exports
 
