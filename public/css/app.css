@@ -13823,8 +13823,8 @@ a.text-dark:focus {
 .navbar-main__submenu {
   width: 100%;
   display: flex;
-  border-top: 1px solid #4c4c4c;
-  border-bottom: 1px solid #4c4c4c;
+  border-top: 1px solid rgba(76, 76, 76, 0.5);
+  border-bottom: 1px solid rgba(76, 76, 76, 0.5);
 }
 
 .navbar-main__submenu .nav-link {

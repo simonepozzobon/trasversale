@@ -1817,6 +1817,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'MainMenu',
@@ -1846,7 +1853,21 @@ __webpack_require__.r(__webpack_exports__);
         this.current = this.pages.filter(page => page.slug.slug == this.$route.params.page)[0];
 
         if (this.current && this.current.sub_pages.length > 0) {
-          this.subpages = this.current.sub_pages;
+          let subpages = this.current.sub_pages;
+          let temp = [];
+
+          for (let i = 0; i < subpages.length; i++) {
+            temp.push(subpages[i]);
+
+            if (i < subpages.length - 1) {
+              temp.push({
+                id: new Date().getUTCMilliseconds(),
+                divider: true
+              });
+            }
+          }
+
+          this.subpages = temp;
         } else {
           this.current = null;
           this.subpages = null;
@@ -34882,7 +34903,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.navbar-main__head[data-v-5bf5bca7] {\n  margin-left: -48px;\n}\n.main-submenu__link[data-v-5bf5bca7]:first-child {\n  padding-left: 0;\n}\n.main-submenu__link[data-v-5bf5bca7] {\n  font-size: 0.9375rem;\n  font-weight: 300;\n}\n", ""]);
+exports.push([module.i, "\n.navbar-main__head[data-v-5bf5bca7] {\n  margin-left: -48px;\n}\n.main-submenu__link[data-v-5bf5bca7]:first-child {\n  padding-left: 0;\n  padding-right: 0;\n}\n.main-submenu__link[data-v-5bf5bca7] {\n  font-size: 0.84375rem;\n  letter-spacing: 1px;\n  font-weight: 400;\n  padding: 0;\n}\n.main-submenu__navbar[data-v-5bf5bca7] {\n  flex-wrap: wrap;\n  padding-top: 0.46875rem;\n  align-items: center;\n}\n.main-submenu__item[data-v-5bf5bca7] {\n  padding-bottom: 0.46875rem;\n}\n.main-submenu__divider[data-v-5bf5bca7] {\n  font-weight: 100;\n  color: rgba(76, 76, 76, 0.5);\n  padding-left: 0.46875rem;\n  padding-right: 0.46875rem;\n}\n", ""]);
 
 // exports
 
@@ -96676,7 +96697,7 @@ var render = function() {
             ? _c("div", { staticClass: "navbar-main__submenu main-submenu" }, [
                 _c(
                   "ul",
-                  { staticClass: "navbar-nav mr-auto" },
+                  { staticClass: "navbar-nav mr-auto main-submenu__navbar" },
                   _vm._l(_vm.subpages, function(subpage) {
                     return _c(
                       "li",
@@ -96685,35 +96706,45 @@ var render = function() {
                         staticClass: "nav-item main-submenu__item"
                       },
                       [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "nav-link main-submenu__link",
-                            attrs: {
-                              href:
-                                "/" +
-                                _vm.current.slug.slug +
-                                "/" +
-                                subpage.slug.slug
-                            },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                return _vm.$root.goToWithParams("subpage", {
-                                  page: _vm.current.slug.slug,
-                                  subpage: subpage.slug.slug
-                                })
-                              }
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                        " +
-                                _vm._s(subpage.title) +
-                                "\n                    "
+                        subpage.hasOwnProperty("divider")
+                          ? _c(
+                              "span",
+                              { staticClass: "main-submenu__divider" },
+                              [
+                                _vm._v(
+                                  "\n                        |\n                    "
+                                )
+                              ]
                             )
-                          ]
-                        )
+                          : _c(
+                              "a",
+                              {
+                                staticClass: "nav-link main-submenu__link",
+                                attrs: {
+                                  href:
+                                    "/" +
+                                    _vm.current.slug.slug +
+                                    "/" +
+                                    subpage.slug.slug
+                                },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.$root.goToWithParams("subpage", {
+                                      page: _vm.current.slug.slug,
+                                      subpage: subpage.slug.slug
+                                    })
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(subpage.title) +
+                                    "\n                    "
+                                )
+                              ]
+                            )
                       ]
                     )
                   }),

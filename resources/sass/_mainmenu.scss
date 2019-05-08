@@ -28,8 +28,8 @@
     &__submenu {
         width: 100%;
         display: flex;
-        border-top: 1px solid $black;
-        border-bottom: 1px solid $black;
+        border-top: 1px solid rgba($black, 0.5);
+        border-bottom: 1px solid rgba($black, 0.5);
 
         .nav-link {
             font-size: $font-size-sm;

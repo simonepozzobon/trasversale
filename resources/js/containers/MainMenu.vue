@@ -34,12 +34,19 @@
                 </ul>
             </div>
             <div class="navbar-main__submenu main-submenu" v-if="this.subpages && this.current">
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav mr-auto main-submenu__navbar">
                     <li
                         v-for="subpage in subpages"
                         :key="subpage.id"
                         class="nav-item main-submenu__item">
-                        <a class="nav-link main-submenu__link"
+                        <span
+                            v-if="subpage.hasOwnProperty('divider')"
+                            class="main-submenu__divider">
+                            |
+                        </span>
+                        <a
+                            v-else
+                            class="nav-link main-submenu__link"
                             :href="'/' + current.slug.slug + '/' + subpage.slug.slug"
                             @click.prevent="$root.goToWithParams('subpage', { page: current.slug.slug, subpage: subpage.slug.slug })">
                             {{ subpage.title }}
@@ -81,7 +88,19 @@ export default {
             if (this.$route.hasOwnProperty('params') && this.$route.params.hasOwnProperty('page')) {
                 this.current = this.pages.filter(page => page.slug.slug == this.$route.params.page)[0]
                 if (this.current && this.current.sub_pages.length > 0) {
-                    this.subpages = this.current.sub_pages
+                    let subpages = this.current.sub_pages
+                    let temp = []
+
+                    for (let i = 0; i < subpages.length; i++) {
+                        temp.push(subpages[i])
+                        if (i < (subpages.length - 1)) {
+                            temp.push({
+                                id: new Date().getUTCMilliseconds(),
+                                divider: true
+                            })
+                        }
+                    }
+                    this.subpages = temp
                 }
 
                 else {
@@ -114,11 +133,32 @@ export default {
 .main-submenu {
     &__link:first-child {
         padding-left: 0;
+        padding-right: 0;
     }
 
     &__link {
-        font-size: $font-size-base;
-        font-weight: 300;
+        font-size: $font-size-base * 0.9;
+        letter-spacing: 1px;
+        font-weight: 400;
+        padding: 0;
+        // position: relative;
+    }
+
+    &__navbar {
+        flex-wrap: wrap;
+        padding-top: $spacer / 2;
+        align-items: center;
+    }
+
+    &__item {
+        padding-bottom: $spacer / 2;
+    }
+
+    &__divider {
+        font-weight: 100;
+        color: rgba($black, .5);
+        padding-left: $spacer / 2;
+        padding-right: $spacer / 2;
     }
 }
 </style>
