@@ -1,6 +1,6 @@
 <template lang="html">
-    <div v-if="src">
-        <img :src="src" :alt="alt" class="img-fluid">
+    <div v-if="src" class="ui-image">
+        <img :src="src" :alt="alt" class="img-fluid ui-image__content">
     </div>
 </template>
 
@@ -20,5 +20,10 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+@import '~styles/shared';
+
+.ui-image {
+    padding-top: $spacer * $line-height-base;
+}
 </style>

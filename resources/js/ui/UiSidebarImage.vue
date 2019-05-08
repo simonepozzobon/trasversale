@@ -1,7 +1,5 @@
 <template lang="html">
-    <div
-        v-if="src"
-        class="ui-sidebar-image">
+    <div v-if="src" class="ui-sidebar-image">
         <img :src="src" :alt="alt" class="img-fluid ui-sidebar-image__content">
     </div>
 </template>
@@ -25,4 +23,7 @@ export default {
 <style lang="scss" scoped>
 @import '~styles/shared';
 
+.ui-sidebar-image {
+    padding-top: $spacer * $line-height-base;
+}
 </style>

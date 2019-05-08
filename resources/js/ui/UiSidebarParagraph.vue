@@ -1,6 +1,6 @@
 <template lang="html">
-    <div v-if="content" class="ui-paragraph">
-        <p v-html="content" class="ui-paragraph__content"></p>
+    <div v-if="content" class="ui-sidebar-paragraph">
+        <p v-html="content" class="ui-sidebar-paragraph__content"></p>
     </div>
 </template>
 
@@ -19,8 +19,9 @@ export default {
 <style lang="scss" scoped>
 @import '~styles/shared';
 
-.ui-paragraph {
+.ui-sidebar-paragraph {
     padding-top: $spacer * $line-height-base;
-    
+
+    &__content {}
 }
 </style>

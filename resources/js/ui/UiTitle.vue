@@ -25,6 +25,7 @@ export default {
         font-weight: 800;
         font-size: 2.5rem;
         letter-spacing: 1px;
+        margin-bottom: 0;
 
         // valutare
         // line-height: 1;

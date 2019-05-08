@@ -7,6 +7,7 @@ import UiPackeryItem from './UiPackeryItem.vue'
 import UiParagraph from './UiParagraph.vue'
 import UiPartner from './UiPartner.vue'
 import UiSidebarImage from './UiSidebarImage.vue'
+import UiSidebarParagraph from './UiSidebarParagraph.vue'
 import UiSidebarTitle from './UiSidebarTitle.vue'
 import UiTitle from './UiTitle.vue'
 
@@ -20,6 +21,7 @@ export {
     UiParagraph,
     UiPartner,
     UiSidebarImage,
+    UiSidebarParagraph,
     UiSidebarTitle,
     UiTitle,
 }

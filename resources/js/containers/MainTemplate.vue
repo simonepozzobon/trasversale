@@ -10,9 +10,8 @@
                     <ui-sidebar-image
                         src="/dummies/il-team/img-1.png"
                         alt="titolo"/>
-                    <p>
-                        Apparently we had reached a great height in the atmosphere, for the sky was a dead black, and the stars had ceased to twinkle. By the same illusion which lifts the horizon of the sea to the level of the spectator on a hillside, the sable cloud beneath was dished out, and the car seemed to float in the middle of an immense dark sphere, whose upper half was strewn with silver.
-                    </p>
+                    <ui-sidebar-paragraph
+                        content="Apparently we had reached a great height in the atmosphere, for the sky was a dead black, and the stars had ceased to twinkle. By the same illusion which lifts the horizon of the sea to the level of the spectator on a hillside, the sable cloud beneath was dished out, and the car seemed to float in the middle of an immense dark sphere, whose upper half was strewn with silver."/>
                 </div>
             </div>
         </div>
@@ -21,13 +20,15 @@
 
 <script>
 import MainMenu from './MainMenu.vue'
-import { UiSidebarImage } from '../ui'
+import { UiSidebarImage, UiSidebarParagraph, UiTitle, } from '../ui'
 
 export default {
     name: 'MainTemplate',
     components: {
         MainMenu,
         UiSidebarImage,
+        UiSidebarParagraph,
+        UiTitle,
     },
     props: {
         pages: {
@@ -55,6 +56,7 @@ $debug-opacity: 0 !default;
     }
 
     &__sidebar {
+        margin-top: $spacer * 3;
         padding-top: $spacer;
     }
 }
