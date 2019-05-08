@@ -1,12 +1,14 @@
 require('../bootstrap')
 
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import routes from './adminroutes'
 import axios from 'axios'
 import MainTemplate from './containers/MainTemplate.vue'
+import Vue from 'vue'
+import BootstrapVue from 'bootstrap-vue'
+import VueRouter from 'vue-router'
+import routes from './adminroutes'
 
 Vue.use(VueRouter)
+Vue.use(BootstrapVue)
 Vue.prototype.$http = axios
 
 const router = new VueRouter({
@@ -24,6 +26,11 @@ const admin = new Vue({
     data: function() {
         return {
             pages: [],
+        }
+    },
+    methods: {
+        goTo: function(name) {
+            this.$router.push({ name: name })
         }
     }
 }).$mount('#admin')

@@ -1,21 +1,9 @@
 <template lang="html">
     <page-template :title="title">
-        <div class="add-module">
-            <button class="btn btn-outline-success">
-                Aggiungi
-            </button>
-        </div>
-        
         <ui-module-container
             v-for="item in this.modules"
             :key="item.id"
             :module="item"/>
-
-        <div class="add-module">
-            <button class="btn btn-outline-success">
-                Aggiungi
-            </button>
-        </div>
     </page-template>
 </template>
 

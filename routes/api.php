@@ -20,6 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('get-page/{slug}', 'MainController@get_dynamic_item');
 
 Route::prefix('admin')->group(function() {
+    Route::post('save-component', 'AdminController@save_component');
+
     Route::prefix('sub-page')->group(function() {
         Route::get('/{id}', 'AdminController@get_sub_page');
     });

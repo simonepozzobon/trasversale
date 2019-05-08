@@ -1,10 +1,10 @@
 <template lang="html">
     <nav class="col-md-2 d-none d-md-block sidebar admin-sidebar">
         <div class="sidebar-sticky">
-            <h5 class="text-light pl-3">Pagine</h5>
+            <h5 class="text-dark pl-3">Pagine</h5>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" @click="goTo($event, 'homepage')">
+                    <a class="nav-link" href="#" @click.prevent="$root.goTo('home')">
                         Home <span class="sr-only">(current)</span>
                     </a>
                 </li>

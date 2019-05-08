@@ -1,10 +1,26 @@
 <template lang="html">
-    <div> Ciao </div>
+    <page-template title="Home">
+        <ui-module-container
+            v-for="item in this.modules"
+            :key="item.id"
+            :module="item"/>
+    </page-template>
 </template>
 
 <script>
+import PageTemplate from '../containers/PageTemplate.vue'
+import { UiModuleContainer } from '../../ui'
+
 export default {
-    name: 'Home'
+    components: {
+        PageTemplate,
+        UiModuleContainer,
+    },
+    data: function() {
+        return {
+            modules: [],
+        }
+    }
 }
 </script>
 

@@ -14,6 +14,12 @@ class AdminController extends Controller
         return view('admin.index', compact('pages'));
     }
 
+    public function save_component(Request $request) {
+        return [
+            'success' => true,
+        ];
+    }
+
     public function get_sub_page($id) {
         $page = SubPage::find($id);
         $page->modules = $page->modules()->get();
