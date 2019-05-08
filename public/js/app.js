@@ -34749,7 +34749,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.nav-item__link[data-v-25f99bfe]:first-child {\n  padding-left: 0;\n}\n.nav-item__link[data-v-25f99bfe] {\n  font-weight: 500;\n}\n", ""]);
+exports.push([module.i, "\n.nav-item__link[data-v-25f99bfe] {\n  font-weight: 500;\n  padding-right: 0.9375rem !important;\n  padding-left: 0.9375rem !important;\n}\n.nav-item__link[data-v-25f99bfe]:first-child {\n  padding-left: 0 !important;\n}\n", ""]);
 
 // exports
 
@@ -96336,7 +96336,7 @@ var render = function() {
         _c(
           "a",
           {
-            staticClass: "nav-link nav-item__link dropdown-toggle",
+            staticClass: "nav-link dropdown-toggle nav-item__link",
             attrs: {
               href: "#",
               id: "navbarDropdown",

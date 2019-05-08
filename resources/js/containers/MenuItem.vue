@@ -9,7 +9,7 @@
         </a>
     </li>
     <li class="nav-item dropdown" v-else>
-        <a class="nav-link nav-item__link dropdown-toggle"
+        <a class="nav-link dropdown-toggle nav-item__link"
             href="#"
             id="navbarDropdown"
             role="button"
@@ -57,12 +57,14 @@ export default {
 @import '~styles/shared';
 
 .nav-item {
-    &__link:first-child {
-        padding-left: 0;
-    }
-
     &__link {
         font-weight: 500;
+        padding-right: $spacer !important;
+        padding-left: $spacer !important;
+    }
+
+    &__link:first-child {
+        padding-left: 0 !important;
     }
 }
 </style>
