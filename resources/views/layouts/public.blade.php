@@ -6,6 +6,8 @@
     if (!isset($subactive)) {
         $subactive = '';
     }
+
+    $pages = App\Utility::generate_menu();
 @endphp
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -19,9 +21,9 @@
         @yield('stylesheets')
     </head>
     <body>
-        @include('layouts.public.menu', ['active' => $active, 'subactive' => $subactive])
-        <div id="app" class="container mt-3">
-            <div class="row">
+        {{-- @include('layouts.public.menu', ['active' => $active, 'subactive' => $subactive]) --}}
+        <div id="app" class="mt-3">
+            {{-- <div class="row">
                 <div class="col-md-9">
                     @yield('content')
                 </div>
@@ -32,7 +34,9 @@
                     <sidebar-calendar></sidebar-calendar>
                     <sidebar-information></sidebar-information>
                 </div>
-            </div>
+            </div> --}}
+            <main-template pages="{{ $pages }}">
+            </main-template>
         </div>
 
         <script src="{{ mix('/js/app.js') }}"></script>

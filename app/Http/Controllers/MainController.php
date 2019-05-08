@@ -14,10 +14,23 @@ class MainController extends Controller
         return view('welcome');
     }
 
+    public function get_dynamic_item($slug) {
+        $item = Slug::where('slug', $slug)->with('sluggable.modules')->first();
+        if ($item) {
+            return [
+                'success' => true,
+                'item' => $item->sluggable,
+            ];
+        }
+        return [
+            'success' => false,
+        ];
+    }
+
     public function get_static_page($static_page) {
         $slug = Slug::where('slug', $static_page)->with('sluggable')->first();
         $page = $slug->sluggable;
-        return view('static-page', compact('page'));
+        return $page;
     }
 
     public function get_sub_page($sub_page) {
@@ -32,7 +45,6 @@ class MainController extends Controller
 
     public function dummy_page() {
         $pages = Collect();
-
         return true;
     }
 

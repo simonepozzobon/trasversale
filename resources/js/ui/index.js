@@ -7,6 +7,7 @@ import UiPackeryItem from './UiPackeryItem.vue'
 import UiParagraph from './UiParagraph.vue'
 import UiPartner from './UiPartner.vue'
 import UiSidebarTitle from './UiSidebarTitle.vue'
+import UiTitle from './UiTitle.vue'
 
 export {
     UiButton,
@@ -18,4 +19,5 @@ export {
     UiParagraph,
     UiPartner,
     UiSidebarTitle,
+    UiTitle,
 }
