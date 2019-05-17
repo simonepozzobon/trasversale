@@ -27,34 +27,7 @@ export default {
     },
     methods: {
         init: function() {
-            let url
-
-            switch (this.$route.name) {
-                case 'page':
-                    url = '/api/get-page/' + this.$route.params.page
-                    break;
-
-                case 'subpage':
-                    this.$root.goToWithParams('subpage', {
-                        page: this.$route.params.page,
-                        subpage: this.$route.params.subpage
-                    })
-
-                    break;
-
-                case 'item':
-                console.log('djslksjflkjdflk');
-                    this.$root.goToWithParams('item', {
-                        page: this.$route.params.page,
-                        subpage: this.$route.params.subpage,
-                        item: this.$route.params.item
-                    })
-                    break;
-
-                default:
-                    // home
-                    url = '/api/get-page/home'
-            }
+            let url = '/api/get-page/home'
             this.getData(url)
         },
         getData: function(url) {

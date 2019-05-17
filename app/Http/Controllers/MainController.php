@@ -17,7 +17,7 @@ class MainController extends Controller
     }
 
     public function test() {
-        $test = $this->get_dynamic_item('educational', 'tutor-dsa', null);
+        $test = $this->get_dynamic_item('educational', 'coaching-per-gli-insegnanti', null);
         dd($test);
     }
 
@@ -33,13 +33,14 @@ class MainController extends Controller
         else if ($subpage) {
             $item = Slug::where([
                 ['slug', '=', $subpage],
-                ['sluggable_type', '!=', 'App\\StaticPage'],
+                ['sluggable_type', '=', 'App\\SubPage'],
             ])->with('sluggable.modules')->first();
         }
 
         else {
             $item = Slug::where([
                 ['slug', '=', $page],
+                ['sluggable_type', '=', 'App\\StaticPage'],
             ])->with('sluggable.modules')->first();
         }
 

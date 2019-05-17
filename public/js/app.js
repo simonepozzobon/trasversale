@@ -4101,34 +4101,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     init: function () {
-      let url;
-
-      switch (this.$route.name) {
-        case 'page':
-          url = '/api/get-page/' + this.$route.params.page;
-          break;
-
-        case 'subpage':
-          this.$root.goToWithParams('subpage', {
-            page: this.$route.params.page,
-            subpage: this.$route.params.subpage
-          });
-          break;
-
-        case 'item':
-          console.log('djslksjflkjdflk');
-          this.$root.goToWithParams('item', {
-            page: this.$route.params.page,
-            subpage: this.$route.params.subpage,
-            item: this.$route.params.item
-          });
-          break;
-
-        default:
-          // home
-          url = '/api/get-page/home';
-      }
-
+      let url = '/api/get-page/home';
       this.getData(url);
     },
     getData: function (url) {
@@ -4216,36 +4189,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     init: function () {
-      // let url
-      //
-      // switch (this.$route.name) {
-      //     case 'page':
-      //         url = '/api/get-page/' + this.$route.params.page
-      //         break;
-      //
-      //     case 'subpage':
-      //         this.$root.goToWithParams('subpage', {
-      //             page: this.$route.params.page,
-      //             subpage: this.$route.params.subpage
-      //         })
-      //
-      //         break;
-      //
-      //     case 'item':
-      //     console.log('2354543');
-      //         this.$root.goToWithParams('item', {
-      //             page: this.$route.params.page,
-      //             subpage: this.$route.params.subpage,
-      //             item: this.$route.params.item
-      //         })
-      //         break;
-      //
-      //     default:
-      //         // home
-      //         url = '/api/get-page/home'
-      // }
-      // this.getData(url)
-      console.log('page mounted');
+      let url = '/api/get-page/' + this.$route.params.page;
+      this.getData(url);
     },
     getData: function (url) {
       if (url) {
@@ -4422,9 +4367,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function () {
     this.init();
   },
-  mounted: function () {
-    console.log('0jhdsgkjdshgkjdhkg');
-  }
+  mounted: function () {}
 });
 
 /***/ }),
@@ -4467,14 +4410,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     init: function () {
-      console.log('subapge');
       let url = '/api/get-page/' + this.$route.params.page + '/' + this.$route.params.subpage;
       this.getData(url);
     },
     getData: function (url) {
       if (url) {
         this.$http.get(url).then(response => {
-          // console.log(response.data);
+          console.log(response.data);
+
           if (response.data.success) {
             this.name = response.data.item.title;
             this.modules = response.data.item.modules;

@@ -117,7 +117,6 @@ export default {
         this.init()
     },
     mounted: function() {
-        console.log('0jhdsgkjdshgkjdhkg');
     }
 }
 </script>
