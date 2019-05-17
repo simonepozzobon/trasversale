@@ -16,22 +16,23 @@
         @mouseleave="hideDropdown">
         <a class="nav-link dropdown-toggle nav-item__link dropdown-custom__toggle"
             href="#"
-            id="navbarDropdown"
+            :id="page.slug.slug"
             role="button"
             data-toggle="dropdown"
             aria-haspopup="true"
-            aria-expanded="false">
+            aria-expanded="false"
+            @click.prevent="$root.goToWithParams('page', { page: page.slug.slug})">
             {{ page.title }}
         </a>
         <div
             class="dropdown-menu dropdown-custom__menu"
             :class="dropdownStatus"
-            aria-labelledby="navbarDropdown">
+            :aria-labelledby="page.slug.slug">
             <a
                 v-for="subpage in page.sub_pages"
                 class="dropdown-item dropdown-custom__item"
                 :href="'/' + page.slug.slug + '/' + subpage.slug.slug"
-                @click.prevent="$root.goToWithParams('subpage', { subpage: page.slug.slug })">
+                @click.prevent="$root.goToWithParams('subpage', { page: page.slug.slug, subpage: subpage.slug.slug })">
                 {{ subpage.title }}
             </a>
         </div>

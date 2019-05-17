@@ -2,7 +2,11 @@
     <div>
         <ui-title
             v-if="module.type == 'title'"
-            :title="content.content"/>
+            :title="content.content"
+            :is-column="content.hasOwnProperty('isColumn') ? content.isColumn : null "
+            :uppercase="content.hasOwnProperty('uppercase') ? content.uppercase : null "
+            :color="content.hasOwnProperty('color') ? content.color : null "
+            :font-size="content.hasOwnProperty('fontSize') ? content.fontSize : null"/>
         <ui-image
             v-else-if="module.type == 'image'"
             :src="content.src"
@@ -22,6 +26,10 @@
             :items="this.content"
             :gutter="8"
             :units="12"/>
+        <ui-module-row
+            v-else-if="module.type == 'row'"
+            :columns="this.content"/>
+
         <div v-else>
             {{ module }}
         </div>
@@ -29,18 +37,10 @@
 </template>
 
 <script>
-import { UiButton, UiImage, UiPackeryContainer, UiParagraph, UiTitle } from '../ui'
-import UiTeam from '../ui/UiTeam.vue'
 
 export default {
     name: 'ModuleManager',
     components: {
-        UiButton,
-        UiImage,
-        UiPackeryContainer,
-        UiParagraph,
-        UiTeam,
-        UiTitle,
     },
     props: {
         module: {
@@ -57,7 +57,19 @@ export default {
             return JSON.parse(this.module.content)
         }
     },
+    beforeCreate: function() {
+        this.$options.components.UiModuleRow = require('../ui/UiModuleRow.vue').default
+        this.$options.components.UiParagraph = require('../ui/UiParagraph.vue').default
+        this.$options.components.UiButton = require('../ui/UiButton.vue').default
+        this.$options.components.UiImage = require('../ui/UiImage.vue').default
+        this.$options.components.UiPackeryContainer = require('../ui/UiPackeryContainer.vue').default
+        this.$options.components.UiTitle = require('../ui/UiTitle.vue').default
+        this.$options.components.UiTeam = require('../ui/UiTeam.vue').default
+    },
     mounted: function() {
+        // if (this.module.type == 'title') {
+        //     console.log(this.content);
+        // }
         // console.log(this.content[0]);
     }
 }

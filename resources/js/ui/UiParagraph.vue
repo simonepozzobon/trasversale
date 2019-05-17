@@ -27,7 +27,7 @@ export default {
         },
         hasPadding: {
             type: Boolean,
-            default: false,
+            default: true,
         },
         padding: {
             type: String,

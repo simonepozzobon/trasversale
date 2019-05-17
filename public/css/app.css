@@ -14074,3 +14074,33 @@ h3 {
   color: #ffffff;
 }
 
+.ui-icon__path {
+  transition: all 0.2s ease-in-out;
+}
+
+.ui-icon--cyan .ui-icon__path {
+  fill: #00A6AC;
+}
+
+.ui-icon--white .ui-icon__path {
+  fill: #fff;
+}
+
+.ui-icon--pointer {
+  cursor: pointer;
+}
+
+.ui-icon--hoverable {
+  cursor: pointer;
+}
+
+.ui-icon--hover-darker:hover .ui-icon__path {
+  fill: rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease-in-out;
+}
+
+.ui-icon--has-shadows {
+  -webkit-filter: drop-shadow(0 0 16px rgba(76, 76, 76, 0.6));
+          filter: drop-shadow(0 0 16px rgba(76, 76, 76, 0.6));
+}
+

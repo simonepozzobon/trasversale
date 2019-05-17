@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Slug;
 use App\Grid;
+use App\Module;
 use App\SubPage;
 use App\Utility;
 use App\StaticPage;
@@ -16,11 +17,12 @@ class MainController extends Controller
     }
 
     public function test() {
-        $item = Slug::where('slug', 'home')->with('sluggable.modules')->first();
+        $item = Slug::where('slug', 'educational')->with('sluggable.modules')->first();
         if ($item) {
             if ($item->sluggable->modules->count() > 0) {
                 $item->sluggable->modules = $this->format_complex_modules($item->sluggable->modules);
             }
+            dd('guiodf'.$item->sluggable);
             return [
                 'success' => true,
                 'debug' => $item->sluggable->modules,
@@ -69,6 +71,7 @@ class MainController extends Controller
 
     public function format_complex_modules($modules) {
         return $modules->transform(function($module, $key) {
+
             if ($module->type == 'grid') {
                     $content = json_decode($module->content);
                     $grid_id = $content->id;
@@ -89,6 +92,7 @@ class MainController extends Controller
                             'bgColor' => $options->color,
                             'img' => $options->img,
                         ];
+
                         switch ($type) {
                             case 'module':
                                 $sub_module = json_decode($block->content);
@@ -108,6 +112,16 @@ class MainController extends Controller
                         array_push($blocks, $grid_block);
                     }
                     $module->content = json_encode($blocks);
+            }
+
+            else if ($module->type == 'row') {
+                $columns = $module->modules()->with('modules')->get();
+                $row = [
+                    'id' => $module->id,
+                    'columns' => $columns,
+                ];
+
+                $module->content = json_encode($columns);
             }
 
             return $module;

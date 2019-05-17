@@ -66,6 +66,7 @@ export default {
 
 .team {
     position: relative;
+    margin-top: $spacer * 1.618;
 
     &__overlay {
         position: absolute;

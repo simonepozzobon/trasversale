@@ -28,16 +28,16 @@
             <div class="navbar-main__menubar">
                 <ul class="navbar-nav mr-auto">
                     <menu-item
-                        v-for="page in pages"
-                        :key="page.id"
+                        v-for="(page, i) in pages"
+                        :key="i"
                         :page="page"/>
                 </ul>
             </div>
             <div class="navbar-main__submenu main-submenu" v-if="this.subpages && this.current">
                 <ul class="navbar-nav mr-auto main-submenu__navbar">
                     <li
-                        v-for="subpage in subpages"
-                        :key="subpage.id"
+                        v-for="(subpage, j) in subpages"
+                        :key="j"
                         class="nav-item main-submenu__item">
                         <span
                             v-if="subpage.hasOwnProperty('divider')"
