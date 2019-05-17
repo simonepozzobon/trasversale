@@ -8,7 +8,12 @@
             {{ page.title }}
         </a>
     </li>
-    <li class="nav-item dropdown dropdown-custom" v-else>
+    <li
+        v-else
+        class="nav-item dropdown dropdown-custom"
+        :class="dropdownStatus"
+        @mouseover="showDropdown"
+        @mouseleave="hideDropdown">
         <a class="nav-link dropdown-toggle nav-item__link dropdown-custom__toggle"
             href="#"
             id="navbarDropdown"
@@ -18,7 +23,10 @@
             aria-expanded="false">
             {{ page.title }}
         </a>
-        <div class="dropdown-menu dropdown-custom__menu" aria-labelledby="navbarDropdown">
+        <div
+            class="dropdown-menu dropdown-custom__menu"
+            :class="dropdownStatus"
+            aria-labelledby="navbarDropdown">
             <a
                 v-for="subpage in page.sub_pages"
                 class="dropdown-item dropdown-custom__item"
@@ -39,6 +47,11 @@ export default {
             default: function() {}
         }
     },
+    data: function() {
+        return {
+            dropdownStatus: null,
+        }
+    },
     computed: {
         type: function() {
             if (this.page.hasOwnProperty('sub_pages')) {
@@ -48,6 +61,14 @@ export default {
                     return true
                 }
             }
+        }
+    },
+    methods: {
+        showDropdown: function() {
+            this.dropdownStatus = 'show'
+        },
+        hideDropdown: function() {
+            this.dropdownStatus = null
         }
     }
 }
@@ -81,7 +102,6 @@ export default {
         position: absolute;
         width: 0;
         height: 0;
-        // background-color: $primary;
         top: -($spacer * .9);
         border-left: $spacer solid transparent;
         border-bottom: $spacer solid $primary;
@@ -92,6 +112,12 @@ export default {
         font-size: $font-size-base * 0.8;
         letter-spacing: 0.05em;
         padding: 0;
+        transition: $transition-base;
+    }
+
+    &__item:hover {
+        color: $black;
+        transition: $transition-base;
     }
 }
 </style>

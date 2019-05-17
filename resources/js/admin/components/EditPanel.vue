@@ -9,6 +9,8 @@
         <div class="edit-panel__content">
             <m-title v-if="idx == 1 " @changed="setObj"/>
             <m-paragraph v-if="idx == 2" @changed="setObj"/>
+            <m-image v-if="idx == 3" @changed="setObj"/>
+            <m-video v-if="idx == 4" @changed="setObj"/>
         </div>
         <hr>
         <div class="edit-panel__footer">
@@ -29,13 +31,15 @@
 </template>
 
 <script>
-import { MParagraph, MTitle } from '../modules'
+import { MImage, MParagraph, MTitle, MVideo } from '../modules'
 
 export default {
     name: 'EditPanel',
     components: {
+        MImage,
         MParagraph,
         MTitle,
+        MVideo,
     },
     props: {
         idx: {

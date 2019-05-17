@@ -36,7 +36,8 @@
                     <option :value="1">Titolo</option>
                     <option :value="2">Paragrafo</option>
                     <option :value="3">Immagine</option>
-                    <option :value="4">Post Grid</option>
+                    <option :value="4">Video</option>
+                    <option :value="5">Citazione</option>
                 </select>
             </div>
 
@@ -75,7 +76,7 @@ export default {
     },
     methods: {
         debug: function() {
-            this.componentId = 1
+            this.componentId = 4
             this.panel = true
         },
         addComponent: function() {

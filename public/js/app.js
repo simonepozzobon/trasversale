@@ -1984,6 +1984,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'MenuItem',
   props: {
@@ -1991,6 +1999,11 @@ __webpack_require__.r(__webpack_exports__);
       type: Object,
       default: function () {}
     }
+  },
+  data: function () {
+    return {
+      dropdownStatus: null
+    };
   },
   computed: {
     type: function () {
@@ -2001,6 +2014,14 @@ __webpack_require__.r(__webpack_exports__);
           return true;
         }
       }
+    }
+  },
+  methods: {
+    showDropdown: function () {
+      this.dropdownStatus = 'show';
+    },
+    hideDropdown: function () {
+      this.dropdownStatus = null;
     }
   }
 });
@@ -3224,6 +3245,8 @@ var _dom = __webpack_require__(/*! ../../utils/dom */ "./node_modules/bootstrap-
 
 var _inspect = __webpack_require__(/*! ../../utils/inspect */ "./node_modules/bootstrap-vue/es/utils/inspect.js");
 
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 var _buttonClose = _interopRequireDefault(__webpack_require__(/*! ../button/button-close */ "./node_modules/bootstrap-vue/es/components/button/button-close.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -3263,6 +3286,7 @@ var isNumericLike = function isNumericLike(value) {
 
 var _default2 = _vue.default.extend({
   name: NAME,
+  mixins: [_normalizeSlot.default],
   model: {
     prop: 'show',
     event: 'input'
@@ -3271,7 +3295,7 @@ var _default2 = _vue.default.extend({
     variant: {
       type: String,
       default: function _default() {
-        return String((0, _config.getComponentConfig)(NAME, 'variant'));
+        return (0, _config.getComponentConfig)(NAME, 'variant');
       }
     },
     dismissible: {
@@ -3281,7 +3305,7 @@ var _default2 = _vue.default.extend({
     dismissLabel: {
       type: String,
       default: function _default() {
-        return String((0, _config.getComponentConfig)(NAME, 'dismissLabel'));
+        return (0, _config.getComponentConfig)(NAME, 'dismissLabel');
       }
     },
     show: {
@@ -3383,7 +3407,6 @@ var _default2 = _vue.default.extend({
     }
   },
   render: function render(h) {
-    var $slots = this.$slots;
     var $alert; // undefined
 
     if (this.localShow) {
@@ -3398,7 +3421,7 @@ var _default2 = _vue.default.extend({
           on: {
             click: this.dismiss
           }
-        }, [$slots.dismiss]);
+        }, [this.normalizeSlot('dismiss')]);
       }
 
       $alert = h('div', {
@@ -3413,7 +3436,7 @@ var _default2 = _vue.default.extend({
           'aria-live': 'polite',
           'aria-atomic': true
         }
-      }, [$dismissBtn, $slots.default]);
+      }, [$dismissBtn, this.normalizeSlot('default')]);
       $alert = [$alert];
     }
 
@@ -3452,6 +3475,8 @@ exports.__esModule = true;
 exports.default = void 0;
 
 var _alert = _interopRequireDefault(__webpack_require__(/*! ./alert */ "./node_modules/bootstrap-vue/es/components/alert/alert.js"));
+
+exports.BAlert = _alert.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -3513,7 +3538,7 @@ var props = _objectSpread({}, linkProps, {
   variant: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'variant'));
+      return (0, _config.getComponentConfig)(NAME, 'variant');
     }
   },
   pill: {
@@ -3536,7 +3561,7 @@ var _default2 = _vue.default.extend({
     var tag = !props.href && !props.to ? props.tag : _link.default;
     var componentData = {
       staticClass: 'badge',
-      class: ["badge-".concat(props.variant || (0, _config.getComponentConfig)(NAME, 'variant')), {
+      class: [props.variant ? "badge-".concat(props.variant) : 'badge-secondary', {
         'badge-pill': Boolean(props.pill),
         active: props.active,
         disabled: props.disabled
@@ -3565,6 +3590,8 @@ exports.__esModule = true;
 exports.default = void 0;
 
 var _badge = _interopRequireDefault(__webpack_require__(/*! ./badge */ "./node_modules/bootstrap-vue/es/components/badge/badge.js"));
+
+exports.BBadge = _badge.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -3811,9 +3838,15 @@ exports.default = void 0;
 
 var _breadcrumb = _interopRequireDefault(__webpack_require__(/*! ./breadcrumb */ "./node_modules/bootstrap-vue/es/components/breadcrumb/breadcrumb.js"));
 
+exports.BBreadcrumb = _breadcrumb.default;
+
 var _breadcrumbItem = _interopRequireDefault(__webpack_require__(/*! ./breadcrumb-item */ "./node_modules/bootstrap-vue/es/components/breadcrumb/breadcrumb-item.js"));
 
+exports.BBreadcrumbItem = _breadcrumbItem.default;
+
 var _breadcrumbLink = _interopRequireDefault(__webpack_require__(/*! ./breadcrumb-link */ "./node_modules/bootstrap-vue/es/components/breadcrumb/breadcrumb-link.js"));
+
+exports.BBreadcrumbLink = _breadcrumbLink.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -3914,6 +3947,8 @@ exports.default = void 0;
 
 var _buttonGroup = _interopRequireDefault(__webpack_require__(/*! ./button-group */ "./node_modules/bootstrap-vue/es/components/button-group/button-group.js"));
 
+exports.BButtonGroup = _buttonGroup.default;
+
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -3948,6 +3983,8 @@ var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./
 
 var _dom = __webpack_require__(/*! ../../utils/dom */ "./node_modules/bootstrap-vue/es/utils/dom.js");
 
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 var _keyCodes = _interopRequireDefault(__webpack_require__(/*! ../../utils/key-codes */ "./node_modules/bootstrap-vue/es/utils/key-codes.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -3956,6 +3993,7 @@ var ITEM_SELECTOR = ['.btn:not(.disabled):not([disabled]):not(.dropdown-item)', 
 
 var _default = _vue.default.extend({
   name: 'BButtonToolbar',
+  mixins: [_normalizeSlot.default],
   props: {
     justify: {
       type: Boolean,
@@ -4055,7 +4093,7 @@ var _default = _vue.default.extend({
         focusin: this.onFocusin,
         keydown: this.onKeydown
       } : {}
-    }, [this.$slots.default]);
+    }, [this.normalizeSlot('default')]);
   }
 });
 
@@ -4077,6 +4115,8 @@ exports.__esModule = true;
 exports.default = void 0;
 
 var _buttonToolbar = _interopRequireDefault(__webpack_require__(/*! ./button-toolbar */ "./node_modules/bootstrap-vue/es/components/button-toolbar/button-toolbar.js"));
+
+exports.BButtonToolbar = _buttonToolbar.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -4114,6 +4154,8 @@ var _vueFunctionalDataMerge = __webpack_require__(/*! vue-functional-data-merge 
 
 var _config = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
 
+var _normalizeSlot = __webpack_require__(/*! ../../utils/normalize-slot */ "./node_modules/bootstrap-vue/es/utils/normalize-slot.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -4127,13 +4169,13 @@ var props = {
   ariaLabel: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'ariaLabel'));
+      return (0, _config.getComponentConfig)(NAME, 'ariaLabel');
     }
   },
   textVariant: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'textVariant') || '') || null;
+      return (0, _config.getComponentConfig)(NAME, 'textVariant');
     }
   } // @vue/component
 
@@ -4147,7 +4189,10 @@ var _default2 = _vue.default.extend({
     var props = _ref.props,
         data = _ref.data,
         listeners = _ref.listeners,
-        slots = _ref.slots;
+        slots = _ref.slots,
+        scopedSlots = _ref.scopedSlots;
+    var $slots = slots();
+    var $scopedSlots = scopedSlots || {};
     var componentData = {
       staticClass: 'close',
       class: _defineProperty({}, "text-".concat(props.textVariant), props.textVariant),
@@ -4170,13 +4215,13 @@ var _default2 = _vue.default.extend({
 
     };
 
-    if (!slots().default) {
+    if (!(0, _normalizeSlot.hasNormalizedSlot)('default', $scopedSlots, $slots)) {
       componentData.domProps = {
         innerHTML: '&times;'
       };
     }
 
-    return h('button', (0, _vueFunctionalDataMerge.mergeData)(data, componentData), slots().default);
+    return h('button', (0, _vueFunctionalDataMerge.mergeData)(data, componentData), (0, _normalizeSlot.normalizeSlot)('default', {}, $scopedSlots, $slots));
   }
 });
 
@@ -4241,7 +4286,7 @@ var btnProps = {
   variant: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'variant'));
+      return (0, _config.getComponentConfig)(NAME, 'variant');
     }
   },
   type: {
@@ -4251,6 +4296,10 @@ var btnProps = {
   tag: {
     type: String,
     default: 'button'
+  },
+  pill: {
+    type: Boolean,
+    default: false
   },
   pressed: {
     // tri-state prop: true, false or null
@@ -4309,7 +4358,7 @@ var isNonStandardTag = function isNonStandardTag(props) {
 var computeClass = function computeClass(props) {
   var _ref;
 
-  return ["btn-".concat(props.variant || (0, _config.getComponentConfig)(NAME, 'variant')), (_ref = {}, _defineProperty(_ref, "btn-".concat(props.size), Boolean(props.size)), _defineProperty(_ref, 'btn-block', props.block), _defineProperty(_ref, "disabled", props.disabled), _defineProperty(_ref, "active", props.pressed), _ref)];
+  return ["btn-".concat(props.variant || (0, _config.getComponentConfig)(NAME, 'variant')), (_ref = {}, _defineProperty(_ref, "btn-".concat(props.size), Boolean(props.size)), _defineProperty(_ref, 'btn-block', props.block), _defineProperty(_ref, 'rounded-pill', props.pill), _defineProperty(_ref, "disabled", props.disabled), _defineProperty(_ref, "active", props.pressed), _ref)];
 }; // Compute the link props to pass to b-link (if required)
 
 
@@ -4419,7 +4468,11 @@ exports.default = void 0;
 
 var _button = _interopRequireDefault(__webpack_require__(/*! ./button */ "./node_modules/bootstrap-vue/es/components/button/button.js"));
 
+exports.BButton = _button.default;
+
 var _buttonClose = _interopRequireDefault(__webpack_require__(/*! ./button-close */ "./node_modules/bootstrap-vue/es/components/button/button-close.js"));
+
+exports.BButtonClose = _buttonClose.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -4984,7 +5037,7 @@ var props = {
   subTitleTextVariant: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'subTitleTextVariant') || '') || null;
+      return (0, _config.getComponentConfig)(NAME, 'subTitleTextVariant');
     }
   } // @vue/component
 
@@ -5131,6 +5184,8 @@ var _copyProps = _interopRequireDefault(__webpack_require__(/*! ../../utils/copy
 
 var _pluckProps = _interopRequireDefault(__webpack_require__(/*! ../../utils/pluck-props */ "./node_modules/bootstrap-vue/es/utils/pluck-props.js"));
 
+var _normalizeSlot = __webpack_require__(/*! ../../utils/normalize-slot */ "./node_modules/bootstrap-vue/es/utils/normalize-slot.js");
+
 var _cardMixin = _interopRequireDefault(__webpack_require__(/*! ../../mixins/card-mixin */ "./node_modules/bootstrap-vue/es/mixins/card-mixin.js"));
 
 var _cardBody = _interopRequireWildcard(__webpack_require__(/*! ./card-body */ "./node_modules/bootstrap-vue/es/components/card/card-body.js"));
@@ -5183,8 +5238,11 @@ var _default = _vue.default.extend({
 
     var props = _ref.props,
         data = _ref.data,
-        slots = _ref.slots;
-    var $slots = slots(); // Create placeholder elements for each section
+        slots = _ref.slots,
+        scopedSlots = _ref.scopedSlots;
+    var $slots = slots(); // Vue < 2.6.x may return undefined for scopedSlots
+
+    var $scopedSlots = scopedSlots || {}; // Create placeholder elements for each section
 
     var imgFirst = h(false);
     var header = h(false);
@@ -5204,25 +5262,25 @@ var _default = _vue.default.extend({
       }
     }
 
-    if (props.header || $slots.header) {
+    if (props.header || (0, _normalizeSlot.hasNormalizedSlot)('header', $scopedSlots, $slots)) {
       header = h(_cardHeader.default, {
         props: (0, _pluckProps.default)(_cardHeader.props, props)
-      }, $slots.header);
+      }, (0, _normalizeSlot.normalizeSlot)('header', {}, $scopedSlots, $slots));
     }
 
-    if (props.noBody) {
-      content = $slots.default || [];
-    } else {
+    content = (0, _normalizeSlot.normalizeSlot)('default', {}, $scopedSlots, $slots) || [];
+
+    if (!props.noBody) {
       // Wrap content in card-body
       content = [h(_cardBody.default, {
         props: (0, _pluckProps.default)(_cardBody.props, props)
-      }, $slots.default)];
+      }, _toConsumableArray(content))];
     }
 
-    if (props.footer || $slots.footer) {
+    if (props.footer || (0, _normalizeSlot.hasNormalizedSlot)('footer', $scopedSlots, $slots)) {
       footer = h(_cardFooter.default, {
         props: (0, _pluckProps.default)(_cardFooter.props, props)
-      }, $slots.footer);
+      }, (0, _normalizeSlot.normalizeSlot)('footer', {}, $scopedSlots, $slots));
     }
 
     return h(props.tag, (0, _vueFunctionalDataMerge.mergeData)(data, {
@@ -5254,23 +5312,43 @@ exports.default = void 0;
 
 var _card = _interopRequireDefault(__webpack_require__(/*! ./card */ "./node_modules/bootstrap-vue/es/components/card/card.js"));
 
+exports.BCard = _card.default;
+
 var _cardHeader = _interopRequireDefault(__webpack_require__(/*! ./card-header */ "./node_modules/bootstrap-vue/es/components/card/card-header.js"));
+
+exports.BCardHeader = _cardHeader.default;
 
 var _cardBody = _interopRequireDefault(__webpack_require__(/*! ./card-body */ "./node_modules/bootstrap-vue/es/components/card/card-body.js"));
 
+exports.BCardBody = _cardBody.default;
+
 var _cardTitle = _interopRequireDefault(__webpack_require__(/*! ./card-title */ "./node_modules/bootstrap-vue/es/components/card/card-title.js"));
+
+exports.BCardTitle = _cardTitle.default;
 
 var _cardSubTitle = _interopRequireDefault(__webpack_require__(/*! ./card-sub-title */ "./node_modules/bootstrap-vue/es/components/card/card-sub-title.js"));
 
+exports.BCardSubTitle = _cardSubTitle.default;
+
 var _cardFooter = _interopRequireDefault(__webpack_require__(/*! ./card-footer */ "./node_modules/bootstrap-vue/es/components/card/card-footer.js"));
+
+exports.BCardFooter = _cardFooter.default;
 
 var _cardImg = _interopRequireDefault(__webpack_require__(/*! ./card-img */ "./node_modules/bootstrap-vue/es/components/card/card-img.js"));
 
+exports.BCardImg = _cardImg.default;
+
 var _cardImgLazy = _interopRequireDefault(__webpack_require__(/*! ./card-img-lazy */ "./node_modules/bootstrap-vue/es/components/card/card-img-lazy.js"));
+
+exports.BCardImgLazy = _cardImgLazy.default;
 
 var _cardText = _interopRequireDefault(__webpack_require__(/*! ./card-text */ "./node_modules/bootstrap-vue/es/components/card/card-text.js"));
 
+exports.BCardText = _cardText.default;
+
 var _cardGroup = _interopRequireDefault(__webpack_require__(/*! ./card-group */ "./node_modules/bootstrap-vue/es/components/card/card-group.js"));
+
+exports.BCardGroup = _cardGroup.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -5315,6 +5393,8 @@ var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./
 var _img = _interopRequireDefault(__webpack_require__(/*! ../image/img */ "./node_modules/bootstrap-vue/es/components/image/img.js"));
 
 var _id = _interopRequireDefault(__webpack_require__(/*! ../../mixins/id */ "./node_modules/bootstrap-vue/es/mixins/id.js"));
+
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
 
 var _env = __webpack_require__(/*! ../../utils/env */ "./node_modules/bootstrap-vue/es/utils/env.js");
 
@@ -5383,7 +5463,7 @@ exports.props = props;
 
 var _default2 = _vue.default.extend({
   name: 'BCarouselSlide',
-  mixins: [_id.default],
+  mixins: [_id.default, _normalizeSlot.default],
   inject: {
     bvCarousel: {
       default: function _default() {
@@ -5412,9 +5492,8 @@ var _default2 = _vue.default.extend({
     }
   },
   render: function render(h) {
-    var $slots = this.$slots;
     var noDrag = !this.bvCarousel.noTouch && _env.hasTouchSupport;
-    var img = $slots.img;
+    var img = this.normalizeSlot('img');
 
     if (!img && (this.imgSrc || this.imgBlank)) {
       img = h(_img.default, {
@@ -5449,7 +5528,7 @@ var _default2 = _vue.default.extend({
       domProps: (0, _html.htmlOrText)(this.captionHtml, this.caption)
     }) : h(false), this.text || this.textHtml ? h(this.textTag, {
       domProps: (0, _html.htmlOrText)(this.textHtml, this.text)
-    }) : h(false), $slots.default]);
+    }) : h(false), this.normalizeSlot('default')]);
     return h('div', {
       staticClass: 'carousel-item',
       style: {
@@ -5497,6 +5576,8 @@ var _env = __webpack_require__(/*! ../../utils/env */ "./node_modules/bootstrap-
 var _inspect = __webpack_require__(/*! ../../utils/inspect */ "./node_modules/bootstrap-vue/es/utils/inspect.js");
 
 var _id = _interopRequireDefault(__webpack_require__(/*! ../../mixins/id */ "./node_modules/bootstrap-vue/es/mixins/id.js"));
+
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5552,7 +5633,7 @@ function getTransitionEndEvent(el) {
 
 var _default2 = _vue.default.extend({
   name: 'BCarousel',
-  mixins: [_id.default],
+  mixins: [_id.default, _normalizeSlot.default],
   provide: function provide() {
     return {
       bvCarousel: this
@@ -5566,25 +5647,25 @@ var _default2 = _vue.default.extend({
     labelPrev: {
       type: String,
       default: function _default() {
-        return String((0, _config.getComponentConfig)(NAME, 'labelPrev'));
+        return (0, _config.getComponentConfig)(NAME, 'labelPrev');
       }
     },
     labelNext: {
       type: String,
       default: function _default() {
-        return String((0, _config.getComponentConfig)(NAME, 'labelNext'));
+        return (0, _config.getComponentConfig)(NAME, 'labelNext');
       }
     },
     labelGotoSlide: {
       type: String,
       default: function _default() {
-        return String((0, _config.getComponentConfig)(NAME, 'labelGotoSlide'));
+        return (0, _config.getComponentConfig)(NAME, 'labelGotoSlide');
       }
     },
     labelIndicators: {
       type: String,
       default: function _default() {
-        return String((0, _config.getComponentConfig)(NAME, 'labelIndicators'));
+        return (0, _config.getComponentConfig)(NAME, 'labelIndicators');
       }
     },
     interval: {
@@ -6013,7 +6094,7 @@ var _default2 = _vue.default.extend({
         id: this.safeId('__BV_inner_'),
         role: 'list'
       }
-    }, [this.$slots.default]); // Prev and next controls
+    }, [this.normalizeSlot('default')]); // Prev and next controls
 
     var controls = h(false);
 
@@ -6186,7 +6267,11 @@ exports.default = void 0;
 
 var _carousel = _interopRequireDefault(__webpack_require__(/*! ./carousel */ "./node_modules/bootstrap-vue/es/components/carousel/carousel.js"));
 
+exports.BCarousel = _carousel.default;
+
 var _carouselSlide = _interopRequireDefault(__webpack_require__(/*! ./carousel-slide */ "./node_modules/bootstrap-vue/es/components/carousel/carousel-slide.js"));
+
+exports.BCarouselSlide = _carouselSlide.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -6222,6 +6307,8 @@ var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./
 
 var _listenOnRoot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/listen-on-root */ "./node_modules/bootstrap-vue/es/mixins/listen-on-root.js"));
 
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 var _env = __webpack_require__(/*! ../../utils/env */ "./node_modules/bootstrap-vue/es/utils/env.js");
 
 var _dom = __webpack_require__(/*! ../../utils/dom */ "./node_modules/bootstrap-vue/es/utils/dom.js");
@@ -6230,13 +6317,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // Events we emit on $root
 var EVENT_STATE = 'bv::collapse::state';
-var EVENT_ACCORDION = 'bv::collapse::accordion'; // Private event we emit on $root to ensure the toggle state is always synced
-// Gets emited even if the state has not changed!
-// This event is NOT to be documented as people should not be using it.
+var EVENT_ACCORDION = 'bv::collapse::accordion'; // Private event we emit on `$root` to ensure the toggle state is
+// always synced. It gets emitted even if the state has not changed!
+// This event is NOT to be documented as people should not be using it
 
-var EVENT_STATE_SYNC = 'bv::collapse::sync::state'; // Events we listen to on $root
+var EVENT_STATE_SYNC = 'bv::collapse::sync::state'; // Events we listen to on `$root`
 
-var EVENT_TOGGLE = 'bv::toggle::collapse'; // Event Listener options
+var EVENT_TOGGLE = 'bv::toggle::collapse';
+var EVENT_STATE_REQUEST = 'bv::request::collapse::state'; // Event listener options
 
 var EventOptions = {
   passive: true,
@@ -6246,7 +6334,7 @@ var EventOptions = {
 
 var _default = _vue.default.extend({
   name: 'BCollapse',
-  mixins: [_listenOnRoot.default],
+  mixins: [_listenOnRoot.default, _normalizeSlot.default],
   model: {
     prop: 'visible',
     event: 'input'
@@ -6301,18 +6389,18 @@ var _default = _vue.default.extend({
     }
   },
   created: function created() {
+    this.show = this.visible;
+  },
+  mounted: function mounted() {
+    var _this = this;
+
     this.show = this.visible; // Listen for toggle events to open/close us
 
     this.listenOnRoot(EVENT_TOGGLE, this.handleToggleEvt); // Listen to other collapses for accordion events
 
     this.listenOnRoot(EVENT_ACCORDION, this.handleAccordionEvt);
-  },
-  mounted: function mounted() {
-    var _this = this;
 
-    this.show = this.visible;
-
-    if (this.isNav && _env.isBrowser) {
+    if (this.isNav) {
       // Set up handlers
       this.setWindowEvents(true);
       this.handleResize();
@@ -6320,29 +6408,35 @@ var _default = _vue.default.extend({
 
     this.$nextTick(function () {
       _this.emitState();
+    }); // Listen for "Sync state" requests from `v-b-toggle`
+
+    this.$root.$on(EVENT_STATE_REQUEST, function (id) {
+      if (id === _this.id) {
+        _this.$nextTick(_this.emitSync);
+      }
     });
   },
   updated: function updated() {
-    // Emit a private event every time this component updates
-    // to ensure the toggle button is in sync with the collapse's state.
-    // It is emitted regardless if the visible state changes.
-    this.$root.$emit(EVENT_STATE_SYNC, this.id, this.show);
+    // Emit a private event every time this component updates to ensure
+    // the toggle button is in sync with the collapse's state
+    // It is emitted regardless if the visible state changes
+    this.emitSync();
   },
   deactivated: function deactivated()
   /* istanbul ignore next */
   {
-    if (this.isNav && _env.isBrowser) {
+    if (this.isNav) {
       this.setWindowEvents(false);
     }
   },
   activated: function activated()
   /* istanbul ignore next */
   {
-    if (this.isNav && _env.isBrowser) {
+    if (this.isNav) {
       this.setWindowEvents(true);
     }
 
-    this.$root.$emit(EVENT_STATE_SYNC, this.id, this.show);
+    this.emitSync();
   },
   beforeDestroy: function beforeDestroy() {
     // Trigger state emit if needed
@@ -6399,6 +6493,22 @@ var _default = _vue.default.extend({
         this.$root.$emit(EVENT_ACCORDION, this.id, this.accordion);
       }
     },
+    emitSync: function emitSync() {
+      // Emit a private event every time this component updates to ensure
+      // the toggle button is in sync with the collapse's state
+      // It is emitted regardless if the visible state changes
+      this.$root.$emit(EVENT_STATE_SYNC, this.id, this.show);
+    },
+    checkDisplayBlock: function checkDisplayBlock() {
+      // Check to see if the collapse has `display: block !important;` set.
+      // We can't set `display: none;` directly on this.$el, as it would
+      // trigger a new transition to start (or cancel a current one).
+      var restore = (0, _dom.hasClass)(this.$el, 'show');
+      (0, _dom.removeClass)(this.$el, 'show');
+      var isBlock = (0, _dom.getCS)(this.$el).display === 'block';
+      restore && (0, _dom.addClass)(this.$el, 'show');
+      return isBlock;
+    },
     clickHandler: function clickHandler(evt) {
       // If we are in a nav/navbar, close the collapse when non-disabled link clicked
       var el = evt.target;
@@ -6409,7 +6519,10 @@ var _default = _vue.default.extend({
       }
 
       if ((0, _dom.matches)(el, '.nav-link,.dropdown-item') || (0, _dom.closest)('.nav-link,.dropdown-item', el)) {
-        this.show = false;
+        if (!this.checkDisplayBlock()) {
+          // Only close the collapse if it is not forced to be 'display: block !important;'
+          this.show = false;
+        }
       }
     },
     handleToggleEvt: function handleToggleEvt(target) {
@@ -6454,7 +6567,7 @@ var _default = _vue.default.extend({
       on: {
         click: this.clickHandler
       }
-    }, [this.$slots.default]);
+    }, [this.normalizeSlot('default')]);
     return h('transition', {
       props: {
         enterClass: '',
@@ -6493,6 +6606,8 @@ exports.default = void 0;
 
 var _collapse = _interopRequireDefault(__webpack_require__(/*! ./collapse */ "./node_modules/bootstrap-vue/es/components/collapse/collapse.js"));
 
+exports.BCollapse = _collapse.default;
+
 var _toggle = _interopRequireDefault(__webpack_require__(/*! ../../directives/toggle/toggle */ "./node_modules/bootstrap-vue/es/directives/toggle/toggle.js"));
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
@@ -6503,7 +6618,7 @@ var components = {
   BCollapse: _collapse.default
 };
 var directives = {
-  BToggle: _toggle.default
+  VBToggle: _toggle.default
 };
 var _default = {
   install: (0, _plugins.installFactory)({
@@ -6546,6 +6661,7 @@ exports.props = props;
 var _default = _vue.default.extend({
   name: 'BDropdownDivider',
   functional: true,
+  inheritAttrs: false,
   props: props,
   render: function render(h, _ref) {
     var props = _ref.props,
@@ -6553,7 +6669,8 @@ var _default = _vue.default.extend({
     return h('li', [h(props.tag, (0, _vueFunctionalDataMerge.mergeData)(data, {
       staticClass: 'dropdown-divider',
       attrs: {
-        role: 'separator'
+        role: 'separator',
+        'aria-orientation': 'horizontal'
       },
       ref: 'divider'
     }))]);
@@ -6594,16 +6711,124 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var _default = _vue.default.extend({
   name: 'BDropdownForm',
   functional: true,
-  props: _objectSpread({}, _form.props),
+  inheritAttrs: false,
+  props: _objectSpread({}, _form.props, {
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  }),
   render: function render(h, _ref) {
     var props = _ref.props,
         data = _ref.data,
         children = _ref.children;
     return h('li', [h(_form.default, (0, _vueFunctionalDataMerge.mergeData)(data, {
+      ref: 'form',
       staticClass: 'b-dropdown-form',
+      class: {
+        disabled: props.disabled
+      },
       props: props,
-      ref: 'form'
+      attrs: {
+        disabled: props.disabled,
+        // Tab index of -1 for keyboard navigation
+        tabindex: props.disabled ? null : '-1'
+      }
     }), children)]);
+  }
+});
+
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap-vue/es/components/dropdown/dropdown-group.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/bootstrap-vue/es/components/dropdown/dropdown-group.js ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.default = exports.props = void 0;
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./node_modules/bootstrap-vue/es/utils/vue.js"));
+
+var _vueFunctionalDataMerge = __webpack_require__(/*! vue-functional-data-merge */ "./node_modules/vue-functional-data-merge/dist/lib.esm.js");
+
+var _normalizeSlot = __webpack_require__(/*! ../../utils/normalize-slot */ "./node_modules/bootstrap-vue/es/utils/normalize-slot.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var props = {
+  id: {
+    type: String,
+    default: null
+  },
+  header: {
+    type: String,
+    default: null
+  },
+  headerTag: {
+    type: String,
+    default: 'header'
+  },
+  headerVariant: {
+    type: String,
+    default: null
+  },
+  headerClasses: {
+    type: [String, Array, Object],
+    default: null
+  },
+  ariaDescribedby: {
+    type: String,
+    default: null
+  } // @vue/component
+
+};
+exports.props = props;
+
+var _default = _vue.default.extend({
+  name: 'BDropdownGroup',
+  functional: true,
+  inheritAttrs: false,
+  props: props,
+  render: function render(h, _ref) {
+    var props = _ref.props,
+        data = _ref.data,
+        slots = _ref.slots,
+        scopedSlots = _ref.scopedSlots;
+    var $slots = slots();
+    var $scopedSlots = scopedSlots || {};
+    var header;
+    var headerId = null;
+
+    if ((0, _normalizeSlot.hasNormalizedSlot)('header', $scopedSlots, $slots) || props.header) {
+      headerId = props.id ? "_bv_".concat(props.id, "_group_dd_header") : null;
+      header = h(props.headerTag, {
+        staticClass: 'dropdown-header',
+        class: [props.headerClasses, _defineProperty({}, "text-".concat(props.variant), props.variant)],
+        attrs: {
+          id: headerId,
+          role: 'heading'
+        }
+      }, (0, _normalizeSlot.normalizeSlot)('header', {}, $scopedSlots, $slots) || props.header);
+    }
+
+    var adb = [headerId, props.ariaDescribedBy].filter(Boolean).join(' ').trim();
+    return h('li', [header || h(false), h('ul', (0, _vueFunctionalDataMerge.mergeData)(data, {
+      staticClass: 'list-unstyled',
+      attrs: {
+        id: props.id || null,
+        'aria-describedby': adb || null
+      }
+    }), (0, _normalizeSlot.normalizeSlot)('default', {}, $scopedSlots, $slots))]);
   }
 });
 
@@ -6630,6 +6855,8 @@ var _vueFunctionalDataMerge = __webpack_require__(/*! vue-functional-data-merge 
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var props = {
   id: {
     type: String,
@@ -6637,7 +6864,11 @@ var props = {
   },
   tag: {
     type: String,
-    default: 'h6'
+    default: 'header'
+  },
+  variant: {
+    type: String,
+    default: null
   } // @vue/component
 
 };
@@ -6646,6 +6877,7 @@ exports.props = props;
 var _default = _vue.default.extend({
   name: 'BDropdownHeader',
   functional: true,
+  inheritAttrs: false,
   props: props,
   render: function render(h, _ref) {
     var props = _ref.props,
@@ -6653,8 +6885,10 @@ var _default = _vue.default.extend({
         children = _ref.children;
     return h('li', [h(props.tag, (0, _vueFunctionalDataMerge.mergeData)(data, {
       staticClass: 'dropdown-header',
+      class: _defineProperty({}, "text-".concat(props.variant), props.variant),
       attrs: {
-        id: props.id || null
+        id: props.id || null,
+        role: 'heading'
       },
       ref: 'header'
     }), children)]);
@@ -6680,7 +6914,11 @@ exports.default = exports.props = void 0;
 
 var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./node_modules/bootstrap-vue/es/utils/vue.js"));
 
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -6696,6 +6934,10 @@ var props = {
   disabled: {
     type: Boolean,
     default: false
+  },
+  variant: {
+    type: String,
+    default: null
   } // @vue/component
 
 };
@@ -6703,6 +6945,8 @@ exports.props = props;
 
 var _default = _vue.default.extend({
   name: 'BDropdownItemButton',
+  mixins: [_normalizeSlot.default],
+  inheritAttrs: false,
   inject: {
     bvDropdown: {
       default: null
@@ -6721,19 +6965,21 @@ var _default = _vue.default.extend({
     }
   },
   render: function render(h) {
+    var _class;
+
     return h('li', [h('button', {
       staticClass: 'dropdown-item',
-      class: _defineProperty({}, this.activeClass, this.active),
-      attrs: {
+      class: (_class = {}, _defineProperty(_class, this.activeClass, this.active), _defineProperty(_class, "text-".concat(this.variant), this.variant && !(this.active || this.disabled)), _class),
+      attrs: _objectSpread({}, this.$attrs, {
         role: 'menuitem',
         type: 'button',
         disabled: this.disabled
-      },
+      }),
       on: {
         click: this.onClick
       },
       ref: 'button'
-    }, this.$slots.default)]);
+    }, this.normalizeSlot('default'))]);
   }
 });
 
@@ -6760,9 +7006,15 @@ var _link = _interopRequireWildcard(__webpack_require__(/*! ../link/link */ "./n
 
 var _dom = __webpack_require__(/*! ../../utils/dom */ "./node_modules/bootstrap-vue/es/utils/dom.js");
 
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var props = (0, _link.propsFactory)(); // @vue/component
 
@@ -6770,12 +7022,19 @@ exports.props = props;
 
 var _default = _vue.default.extend({
   name: 'BDropdownItem',
+  mixins: [_normalizeSlot.default],
+  inheritAttrs: false,
   inject: {
     bvDropdown: {
       default: null
     }
   },
-  props: props,
+  props: _objectSpread({}, props, {
+    variant: {
+      type: String,
+      default: null
+    }
+  }),
   methods: {
     closeDropdown: function closeDropdown() {
       var _this = this;
@@ -6796,14 +7055,15 @@ var _default = _vue.default.extend({
     return h('li', [h(_link.default, {
       props: this.$props,
       staticClass: 'dropdown-item',
-      attrs: {
+      class: _defineProperty({}, "text-".concat(this.variant), this.variant && !(this.active || this.disabled)),
+      attrs: _objectSpread({}, this.$attrs, {
         role: 'menuitem'
-      },
+      }),
       on: {
         click: this.onClick
       },
       ref: 'item'
-    }, this.$slots.default)]);
+    }, this.normalizeSlot('default'))]);
   }
 });
 
@@ -6830,13 +7090,20 @@ var _vueFunctionalDataMerge = __webpack_require__(/*! vue-functional-data-merge 
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var _default = _vue.default.extend({
   name: 'BDropdownText',
   functional: true,
+  inheritAttrs: false,
   props: {
     tag: {
       type: String,
       default: 'p'
+    },
+    variant: {
+      type: String,
+      default: null
     }
   },
   render: function render(h, _ref) {
@@ -6845,6 +7112,7 @@ var _default = _vue.default.extend({
         children = _ref.children;
     return h('li', [h(props.tag, (0, _vueFunctionalDataMerge.mergeData)(data, {
       staticClass: 'b-dropdown-text',
+      class: _defineProperty({}, "text-".concat(props.variant), props.variant),
       props: props,
       ref: 'text'
     }), children)]);
@@ -6874,9 +7142,13 @@ var _html = __webpack_require__(/*! ../../utils/html */ "./node_modules/bootstra
 
 var _config = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
 
+var _safeTypes = __webpack_require__(/*! ../../utils/safe-types */ "./node_modules/bootstrap-vue/es/utils/safe-types.js");
+
 var _id = _interopRequireDefault(__webpack_require__(/*! ../../mixins/id */ "./node_modules/bootstrap-vue/es/mixins/id.js"));
 
 var _dropdown = _interopRequireDefault(__webpack_require__(/*! ../../mixins/dropdown */ "./node_modules/bootstrap-vue/es/mixins/dropdown.js"));
+
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
 
 var _button = _interopRequireDefault(__webpack_require__(/*! ../button/button */ "./node_modules/bootstrap-vue/es/components/button/button.js"));
 
@@ -6888,7 +7160,7 @@ var props = {
     // This really should be toggleLabel
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'toggleText'));
+      return (0, _config.getComponentConfig)(NAME, 'toggleText');
     }
   },
   size: {
@@ -6898,7 +7170,7 @@ var props = {
   variant: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'variant') || '') || null;
+      return (0, _config.getComponentConfig)(NAME, 'variant');
     }
   },
   menuClass: {
@@ -6931,7 +7203,9 @@ var props = {
   },
   splitVariant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'splitVariant');
+    }
   },
   role: {
     type: String,
@@ -6939,8 +7213,8 @@ var props = {
   },
   boundary: {
     // String: `scrollParent`, `window` or `viewport`
-    // Object: HTML Element reference
-    type: [String, Object],
+    // HTMLElement: HTML Element reference
+    type: [String, _safeTypes.HTMLElement],
     default: 'scrollParent'
   } // @vue/component
 
@@ -6949,34 +7223,34 @@ exports.props = props;
 
 var _default2 = _vue.default.extend({
   name: NAME,
-  mixins: [_id.default, _dropdown.default],
+  mixins: [_id.default, _dropdown.default, _normalizeSlot.default],
   props: props,
   computed: {
     dropdownClasses: function dropdownClasses() {
-      // Position `static` is needed to allow menu to "breakout" of the scrollParent boundaries
-      // when boundary is anything other than `scrollParent`
-      // See https://github.com/twbs/bootstrap/issues/24251#issuecomment-341413786
-      var positionStatic = this.boundary !== 'scrollParent' || !this.boundary;
-      return ['btn-group', 'b-dropdown', 'dropdown', this.directionClass, {
+      return [this.directionClass, {
         show: this.visible,
-        'position-static': positionStatic
+        // Position `static` is needed to allow menu to "breakout" of the scrollParent boundaries
+        // when boundary is anything other than `scrollParent`
+        // See https://github.com/twbs/bootstrap/issues/24251#issuecomment-341413786
+        'position-static': this.boundary !== 'scrollParent' || !this.boundary
       }];
     },
     menuClasses: function menuClasses() {
-      return ['dropdown-menu', {
+      return [this.menuClass, {
         'dropdown-menu-right': this.right,
         show: this.visible
-      }, this.menuClass];
+      }];
     },
     toggleClasses: function toggleClasses() {
-      return ['dropdown-toggle', {
+      return [this.toggleClass, {
         'dropdown-toggle-split': this.split,
         'dropdown-toggle-no-caret': this.noCaret && !this.split
-      }, this.toggleClass];
+      }];
     }
   },
   render: function render(h) {
     var split = h(false);
+    var buttonContent = this.normalizeSlot('button-content') || this.normalizeSlot('text') || this.html || (0, _html.stripTags)(this.text);
 
     if (this.split) {
       var btnProps = {
@@ -7003,11 +7277,12 @@ var _default2 = _vue.default.extend({
         on: {
           click: this.click
         }
-      }, [this.$slots['button-content'] || this.$slots.text || this.html || (0, _html.stripTags)(this.text)]);
+      }, [buttonContent]);
     }
 
     var toggle = h(_button.default, {
       ref: 'toggle',
+      staticClass: 'dropdown-toggle',
       class: this.toggleClasses,
       props: {
         variant: this.variant,
@@ -7028,9 +7303,10 @@ var _default2 = _vue.default.extend({
       }
     }, [this.split ? h('span', {
       class: ['sr-only']
-    }, [this.toggleText]) : this.$slots['button-content'] || this.$slots.text || this.html || (0, _html.stripTags)(this.text)]);
+    }, [this.toggleText]) : buttonContent]);
     var menu = h('ul', {
       ref: 'menu',
+      staticClass: 'dropdown-menu',
       class: this.menuClasses,
       attrs: {
         role: this.role,
@@ -7038,16 +7314,18 @@ var _default2 = _vue.default.extend({
         'aria-labelledby': this.safeId(this.split ? '_BV_button_' : '_BV_toggle_')
       },
       on: {
-        mouseover: this.onMouseOver,
-        keydown: this.onKeydown // tab, up, down, esc
+        keydown: this.onKeydown // up, down, esc
 
       }
-    }, [this.$slots.default]);
+    }, this.normalizeSlot('default', {
+      hide: this.hide
+    }));
     return h('div', {
+      staticClass: 'dropdown btn-group b-dropdown',
+      class: this.dropdownClasses,
       attrs: {
         id: this.safeId()
-      },
-      class: this.dropdownClasses
+      }
     }, [split, toggle, menu]);
   }
 });
@@ -7071,17 +7349,35 @@ exports.default = void 0;
 
 var _dropdown = _interopRequireDefault(__webpack_require__(/*! ./dropdown */ "./node_modules/bootstrap-vue/es/components/dropdown/dropdown.js"));
 
+exports.BDropdown = _dropdown.default;
+
 var _dropdownItem = _interopRequireDefault(__webpack_require__(/*! ./dropdown-item */ "./node_modules/bootstrap-vue/es/components/dropdown/dropdown-item.js"));
+
+exports.BDropdownItem = _dropdownItem.default;
 
 var _dropdownItemButton = _interopRequireDefault(__webpack_require__(/*! ./dropdown-item-button */ "./node_modules/bootstrap-vue/es/components/dropdown/dropdown-item-button.js"));
 
+exports.BDropdownItemButton = _dropdownItemButton.default;
+
 var _dropdownHeader = _interopRequireDefault(__webpack_require__(/*! ./dropdown-header */ "./node_modules/bootstrap-vue/es/components/dropdown/dropdown-header.js"));
+
+exports.BDropdownHeader = _dropdownHeader.default;
 
 var _dropdownDivider = _interopRequireDefault(__webpack_require__(/*! ./dropdown-divider */ "./node_modules/bootstrap-vue/es/components/dropdown/dropdown-divider.js"));
 
+exports.BDropdownDivider = _dropdownDivider.default;
+
 var _dropdownForm = _interopRequireDefault(__webpack_require__(/*! ./dropdown-form */ "./node_modules/bootstrap-vue/es/components/dropdown/dropdown-form.js"));
 
+exports.BDropdownForm = _dropdownForm.default;
+
 var _dropdownText = _interopRequireDefault(__webpack_require__(/*! ./dropdown-text */ "./node_modules/bootstrap-vue/es/components/dropdown/dropdown-text.js"));
+
+exports.BDropdownText = _dropdownText.default;
+
+var _dropdownGroup = _interopRequireDefault(__webpack_require__(/*! ./dropdown-group */ "./node_modules/bootstrap-vue/es/components/dropdown/dropdown-group.js"));
+
+exports.BDropdownGroup = _dropdownGroup.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -7103,7 +7399,9 @@ var components = {
   BDropdownForm: _dropdownForm.default,
   BDdForm: _dropdownForm.default,
   BDropdownText: _dropdownText.default,
-  BDdText: _dropdownText.default
+  BDdText: _dropdownText.default,
+  BDropdownGroup: _dropdownGroup.default,
+  BDdGroup: _dropdownGroup.default
 };
 var _default = {
   install: (0, _plugins.installFactory)({
@@ -7194,6 +7492,8 @@ exports.__esModule = true;
 exports.default = void 0;
 
 var _embed = _interopRequireDefault(__webpack_require__(/*! ./embed */ "./node_modules/bootstrap-vue/es/components/embed/embed.js"));
+
+exports.BEmbed = _embed.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -7452,7 +7752,11 @@ exports.default = void 0;
 
 var _formCheckbox = _interopRequireDefault(__webpack_require__(/*! ./form-checkbox */ "./node_modules/bootstrap-vue/es/components/form-checkbox/form-checkbox.js"));
 
+exports.BFormCheckbox = _formCheckbox.default;
+
 var _formCheckboxGroup = _interopRequireDefault(__webpack_require__(/*! ./form-checkbox-group */ "./node_modules/bootstrap-vue/es/components/form-checkbox/form-checkbox-group.js"));
+
+exports.BFormCheckboxGroup = _formCheckboxGroup.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -7534,19 +7838,19 @@ var _default2 = _vue.default.extend({
     placeholder: {
       type: String,
       default: function _default() {
-        return String((0, _config.getComponentConfig)(NAME, 'placeholder') || '');
+        return (0, _config.getComponentConfig)(NAME, 'placeholder');
       }
     },
     browseText: {
       type: String,
       default: function _default() {
-        return String((0, _config.getComponentConfig)(NAME, 'browseText') || '');
+        return (0, _config.getComponentConfig)(NAME, 'browseText');
       }
     },
     dropPlaceholder: {
       type: String,
       default: function _default() {
-        return String((0, _config.getComponentConfig)(NAME, 'dropPlaceholder') || '');
+        return (0, _config.getComponentConfig)(NAME, 'dropPlaceholder');
       }
     },
     multiple: {
@@ -7859,6 +8163,8 @@ exports.default = void 0;
 
 var _formFile = _interopRequireDefault(__webpack_require__(/*! ./form-file */ "./node_modules/bootstrap-vue/es/components/form-file/form-file.js"));
 
+exports.BFormFile = _formFile.default;
+
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -7911,6 +8217,8 @@ var _formState = _interopRequireDefault(__webpack_require__(/*! ../../mixins/for
 
 var _id = _interopRequireDefault(__webpack_require__(/*! ../../mixins/id */ "./node_modules/bootstrap-vue/es/mixins/id.js"));
 
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 var _col = _interopRequireDefault(__webpack_require__(/*! ../layout/col */ "./node_modules/bootstrap-vue/es/components/layout/col.js"));
 
 var _formInvalidFeedback = _interopRequireDefault(__webpack_require__(/*! ../form/form-invalid-feedback */ "./node_modules/bootstrap-vue/es/components/form/form-invalid-feedback.js"));
@@ -7934,7 +8242,7 @@ var SELECTOR = 'input:not([disabled]),textarea:not([disabled]),select:not([disab
 var DEPRECATED_MSG = 'Props "horizontal" and "breakpoint" are deprecated. Use "label-cols(-{breakpoint})" props instead.'; // Render helper functions (here rather than polluting the instance with more methods)
 
 var renderInvalidFeedback = function renderInvalidFeedback(h, ctx) {
-  var content = ctx.$slots['invalid-feedback'] || ctx.invalidFeedback;
+  var content = ctx.normalizeSlot('invalid-feedback') || ctx.invalidFeedback;
   var invalidFeedback = h(false);
 
   if (content) {
@@ -7957,7 +8265,7 @@ var renderInvalidFeedback = function renderInvalidFeedback(h, ctx) {
 };
 
 var renderValidFeedback = function renderValidFeedback(h, ctx) {
-  var content = ctx.$slots['valid-feedback'] || ctx.validFeedback;
+  var content = ctx.normalizeSlot('valid-feedback') || ctx.validFeedback;
   var validFeedback = h(false);
 
   if (content) {
@@ -7981,7 +8289,7 @@ var renderValidFeedback = function renderValidFeedback(h, ctx) {
 
 var renderHelpText = function renderHelpText(h, ctx) {
   // Form help text (description)
-  var content = ctx.$slots['description'] || ctx.description;
+  var content = ctx.normalizeSlot('description') || ctx.description;
   var description = h(false);
 
   if (content) {
@@ -7998,7 +8306,7 @@ var renderHelpText = function renderHelpText(h, ctx) {
 
 var renderLabel = function renderLabel(h, ctx) {
   // Render label/legend inside b-col if necessary
-  var content = ctx.$slots['label'] || ctx.label;
+  var content = ctx.normalizeSlot('label') || ctx.label;
   var labelFor = ctx.labelFor;
   var isLegend = !labelFor;
   var isHorizontal = ctx.isHorizontal;
@@ -8151,7 +8459,7 @@ var generateProps = function generateProps() {
 
 var _default = {
   name: NAME,
-  mixins: [_id.default, _formState.default],
+  mixins: [_id.default, _formState.default, _normalizeSlot.default],
 
   get props() {
     // Allow props to be lazy evaled on first access and
@@ -8342,7 +8650,7 @@ var _default = {
         tabindex: isFieldset ? '-1' : null,
         role: isFieldset ? 'group' : null
       }
-    }, [this.$slots['default'] || h(false), renderInvalidFeedback(h, this), renderValidFeedback(h, this), renderHelpText(h, this)]); // Create the form-group
+    }, [this.normalizeSlot('default') || h(false), renderInvalidFeedback(h, this), renderValidFeedback(h, this), renderHelpText(h, this)]); // Create the form-group
 
     var data = {
       staticClass: 'form-group',
@@ -8385,6 +8693,8 @@ exports.__esModule = true;
 exports.default = void 0;
 
 var _formGroup = _interopRequireDefault(__webpack_require__(/*! ./form-group */ "./node_modules/bootstrap-vue/es/components/form-group/form-group.js"));
+
+exports.BFormGroup = _formGroup.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -8593,6 +8903,8 @@ exports.default = void 0;
 
 var _formInput = _interopRequireDefault(__webpack_require__(/*! ./form-input */ "./node_modules/bootstrap-vue/es/components/form-input/form-input.js"));
 
+exports.BFormInput = _formInput.default;
+
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -8774,7 +9086,11 @@ exports.default = void 0;
 
 var _formRadio = _interopRequireDefault(__webpack_require__(/*! ./form-radio */ "./node_modules/bootstrap-vue/es/components/form-radio/form-radio.js"));
 
+exports.BFormRadio = _formRadio.default;
+
 var _formRadioGroup = _interopRequireDefault(__webpack_require__(/*! ./form-radio-group */ "./node_modules/bootstrap-vue/es/components/form-radio/form-radio-group.js"));
+
+exports.BFormRadioGroup = _formRadioGroup.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -8822,6 +9138,8 @@ var _formState = _interopRequireDefault(__webpack_require__(/*! ../../mixins/for
 
 var _formCustom = _interopRequireDefault(__webpack_require__(/*! ../../mixins/form-custom */ "./node_modules/bootstrap-vue/es/mixins/form-custom.js"));
 
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 var _array = __webpack_require__(/*! ../../utils/array */ "./node_modules/bootstrap-vue/es/utils/array.js");
 
 var _html = __webpack_require__(/*! ../../utils/html */ "./node_modules/bootstrap-vue/es/utils/html.js");
@@ -8835,7 +9153,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 // @vue/component
 var _default = _vue.default.extend({
   name: 'BFormSelect',
-  mixins: [_id.default, _form.default, _formSize.default, _formState.default, _formCustom.default, _formOptions.default],
+  mixins: [_id.default, _normalizeSlot.default, _form.default, _formSize.default, _formState.default, _formCustom.default, _formOptions.default],
   model: {
     prop: 'value',
     event: 'input'
@@ -8900,7 +9218,6 @@ var _default = _vue.default.extend({
   render: function render(h) {
     var _this = this;
 
-    var $slots = this.$slots;
     var options = this.formOptions.map(function (option, index) {
       return h('option', {
         key: "option_".concat(index, "_opt"),
@@ -8947,7 +9264,7 @@ var _default = _vue.default.extend({
           });
         }
       }
-    }, [$slots.first, options, $slots.default]);
+    }, [this.normalizeSlot('first'), options, this.normalizeSlot('default')]);
   }
 });
 
@@ -8969,6 +9286,8 @@ exports.__esModule = true;
 exports.default = void 0;
 
 var _formSelect = _interopRequireDefault(__webpack_require__(/*! ./form-select */ "./node_modules/bootstrap-vue/es/components/form-select/form-select.js"));
+
+exports.BFormSelect = _formSelect.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -9244,6 +9563,8 @@ exports.default = void 0;
 
 var _formTextarea = _interopRequireDefault(__webpack_require__(/*! ./form-textarea */ "./node_modules/bootstrap-vue/es/components/form-textarea/form-textarea.js"));
 
+exports.BFormTextarea = _formTextarea.default;
+
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -9278,6 +9599,8 @@ var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./
 
 var _formOptions = _interopRequireDefault(__webpack_require__(/*! ../../mixins/form-options */ "./node_modules/bootstrap-vue/es/mixins/form-options.js"));
 
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 var _html = __webpack_require__(/*! ../../utils/html */ "./node_modules/bootstrap-vue/es/utils/html.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -9289,7 +9612,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 // @vue/component
 var _default = _vue.default.extend({
   name: 'BFormDatalist',
-  mixins: [_formOptions.default],
+  mixins: [_formOptions.default, _normalizeSlot.default],
   props: {
     id: {
       type: String,
@@ -9313,7 +9636,7 @@ var _default = _vue.default.extend({
       attrs: {
         id: this.id
       }
-    }, [options, this.$slots.default]);
+    }, [options, this.normalizeSlot('default')]);
   }
 });
 
@@ -9402,28 +9725,6 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ "./node_modules/bootstrap-vue/es/components/form/form-row.js":
-/*!*******************************************************************!*\
-  !*** ./node_modules/bootstrap-vue/es/components/form/form-row.js ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-exports.default = void 0;
-
-var _formRow = _interopRequireDefault(__webpack_require__(/*! ../layout/form-row */ "./node_modules/bootstrap-vue/es/components/layout/form-row.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var _default = _formRow.default;
-exports.default = _default;
-
-/***/ }),
-
 /***/ "./node_modules/bootstrap-vue/es/components/form/form-text.js":
 /*!********************************************************************!*\
   !*** ./node_modules/bootstrap-vue/es/components/form/form-text.js ***!
@@ -9460,7 +9761,7 @@ var props = {
   textVariant: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'textVariant') || '');
+      return (0, _config.getComponentConfig)(NAME, 'textVariant');
     }
   },
   inline: {
@@ -9655,15 +9956,25 @@ exports.default = void 0;
 
 var _form = _interopRequireDefault(__webpack_require__(/*! ./form */ "./node_modules/bootstrap-vue/es/components/form/form.js"));
 
+exports.BForm = _form.default;
+
 var _formDatalist = _interopRequireDefault(__webpack_require__(/*! ./form-datalist */ "./node_modules/bootstrap-vue/es/components/form/form-datalist.js"));
 
-var _formRow = _interopRequireDefault(__webpack_require__(/*! ./form-row */ "./node_modules/bootstrap-vue/es/components/form/form-row.js"));
+exports.BFormDatalist = _formDatalist.default;
 
 var _formText = _interopRequireDefault(__webpack_require__(/*! ./form-text */ "./node_modules/bootstrap-vue/es/components/form/form-text.js"));
 
+exports.BFormText = _formText.default;
+
 var _formInvalidFeedback = _interopRequireDefault(__webpack_require__(/*! ./form-invalid-feedback */ "./node_modules/bootstrap-vue/es/components/form/form-invalid-feedback.js"));
 
+exports.BFormInvalidFeedback = _formInvalidFeedback.default;
+
 var _formValidFeedback = _interopRequireDefault(__webpack_require__(/*! ./form-valid-feedback */ "./node_modules/bootstrap-vue/es/components/form/form-valid-feedback.js"));
+
+exports.BFormValidFeedback = _formValidFeedback.default;
+
+var _formRow = _interopRequireDefault(__webpack_require__(/*! ../layout/form-row */ "./node_modules/bootstrap-vue/es/components/layout/form-row.js"));
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -9673,11 +9984,13 @@ var components = {
   BForm: _form.default,
   BFormDatalist: _formDatalist.default,
   BDatalist: _formDatalist.default,
-  BFormRow: _formRow.default,
   BFormText: _formText.default,
   BFormInvalidFeedback: _formInvalidFeedback.default,
   BFormFeedback: _formInvalidFeedback.default,
-  BFormValidFeedback: _formValidFeedback.default
+  BFormValidFeedback: _formValidFeedback.default,
+  // Added here for convenience
+  BFormRow: _formRow.default // BFormRow is not exported here as a named export, as it is exported by Layout
+
 };
 var _default = {
   install: (0, _plugins.installFactory)({
@@ -9743,7 +10056,7 @@ var props = {
   blankColor: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'blankColor'));
+      return (0, _config.getComponentConfig)(NAME, 'blankColor');
     }
   },
   blankWidth: {
@@ -10049,7 +10362,7 @@ var props = {
   blankColor: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'blankColor'));
+      return (0, _config.getComponentConfig)(NAME, 'blankColor');
     }
   } // --- Helper methods ---
 
@@ -10138,7 +10451,11 @@ exports.default = void 0;
 
 var _img = _interopRequireDefault(__webpack_require__(/*! ./img */ "./node_modules/bootstrap-vue/es/components/image/img.js"));
 
+exports.BImg = _img.default;
+
 var _imgLazy = _interopRequireDefault(__webpack_require__(/*! ./img-lazy */ "./node_modules/bootstrap-vue/es/components/image/img-lazy.js"));
+
+exports.BImgLazy = _imgLazy.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -10168,160 +10485,343 @@ exports.default = _default;
 
 
 exports.__esModule = true;
+var _exportNames = {};
+exports.default = void 0;
 
-var _alert = _interopRequireDefault(__webpack_require__(/*! ./alert */ "./node_modules/bootstrap-vue/es/components/alert/index.js"));
+var _plugins = __webpack_require__(/*! ../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
-exports.Alert = _alert.default;
+var componentPlugins = _interopRequireWildcard(__webpack_require__(/*! ./plugins */ "./node_modules/bootstrap-vue/es/components/plugins.js"));
 
-var _badge = _interopRequireDefault(__webpack_require__(/*! ./badge */ "./node_modules/bootstrap-vue/es/components/badge/index.js"));
+Object.keys(componentPlugins).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = componentPlugins[key];
+});
 
-exports.Badge = _badge.default;
+var _pluginsLegacy = __webpack_require__(/*! ./plugins-legacy */ "./node_modules/bootstrap-vue/es/components/plugins-legacy.js");
 
-var _breadcrumb = _interopRequireDefault(__webpack_require__(/*! ./breadcrumb */ "./node_modules/bootstrap-vue/es/components/breadcrumb/index.js"));
+Object.keys(_pluginsLegacy).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _pluginsLegacy[key];
+});
 
-exports.Breadcrumb = _breadcrumb.default;
+var _alert = __webpack_require__(/*! ./alert */ "./node_modules/bootstrap-vue/es/components/alert/index.js");
 
-var _button = _interopRequireDefault(__webpack_require__(/*! ./button */ "./node_modules/bootstrap-vue/es/components/button/index.js"));
+Object.keys(_alert).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _alert[key];
+});
 
-exports.Button = _button.default;
+var _badge = __webpack_require__(/*! ./badge */ "./node_modules/bootstrap-vue/es/components/badge/index.js");
 
-var _buttonGroup = _interopRequireDefault(__webpack_require__(/*! ./button-group */ "./node_modules/bootstrap-vue/es/components/button-group/index.js"));
+Object.keys(_badge).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _badge[key];
+});
 
-exports.ButtonGroup = _buttonGroup.default;
+var _breadcrumb = __webpack_require__(/*! ./breadcrumb */ "./node_modules/bootstrap-vue/es/components/breadcrumb/index.js");
 
-var _buttonToolbar = _interopRequireDefault(__webpack_require__(/*! ./button-toolbar */ "./node_modules/bootstrap-vue/es/components/button-toolbar/index.js"));
+Object.keys(_breadcrumb).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _breadcrumb[key];
+});
 
-exports.ButtonToolbar = _buttonToolbar.default;
+var _button = __webpack_require__(/*! ./button */ "./node_modules/bootstrap-vue/es/components/button/index.js");
 
-var _inputGroup = _interopRequireDefault(__webpack_require__(/*! ./input-group */ "./node_modules/bootstrap-vue/es/components/input-group/index.js"));
+Object.keys(_button).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _button[key];
+});
 
-exports.InputGroup = _inputGroup.default;
+var _buttonGroup = __webpack_require__(/*! ./button-group */ "./node_modules/bootstrap-vue/es/components/button-group/index.js");
 
-var _card = _interopRequireDefault(__webpack_require__(/*! ./card */ "./node_modules/bootstrap-vue/es/components/card/index.js"));
+Object.keys(_buttonGroup).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _buttonGroup[key];
+});
 
-exports.Card = _card.default;
+var _buttonToolbar = __webpack_require__(/*! ./button-toolbar */ "./node_modules/bootstrap-vue/es/components/button-toolbar/index.js");
 
-var _carousel = _interopRequireDefault(__webpack_require__(/*! ./carousel */ "./node_modules/bootstrap-vue/es/components/carousel/index.js"));
+Object.keys(_buttonToolbar).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _buttonToolbar[key];
+});
 
-exports.Carousel = _carousel.default;
+var _inputGroup = __webpack_require__(/*! ./input-group */ "./node_modules/bootstrap-vue/es/components/input-group/index.js");
 
-var _layout = _interopRequireDefault(__webpack_require__(/*! ./layout */ "./node_modules/bootstrap-vue/es/components/layout/index.js"));
+Object.keys(_inputGroup).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _inputGroup[key];
+});
 
-exports.Layout = _layout.default;
+var _card = __webpack_require__(/*! ./card */ "./node_modules/bootstrap-vue/es/components/card/index.js");
 
-var _collapse = _interopRequireDefault(__webpack_require__(/*! ./collapse */ "./node_modules/bootstrap-vue/es/components/collapse/index.js"));
+Object.keys(_card).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _card[key];
+});
 
-exports.Collapse = _collapse.default;
+var _carousel = __webpack_require__(/*! ./carousel */ "./node_modules/bootstrap-vue/es/components/carousel/index.js");
 
-var _dropdown = _interopRequireDefault(__webpack_require__(/*! ./dropdown */ "./node_modules/bootstrap-vue/es/components/dropdown/index.js"));
+Object.keys(_carousel).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _carousel[key];
+});
 
-exports.Dropdown = _dropdown.default;
+var _layout = __webpack_require__(/*! ./layout */ "./node_modules/bootstrap-vue/es/components/layout/index.js");
 
-var _embed = _interopRequireDefault(__webpack_require__(/*! ./embed */ "./node_modules/bootstrap-vue/es/components/embed/index.js"));
+Object.keys(_layout).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _layout[key];
+});
 
-exports.Embed = _embed.default;
+var _collapse = __webpack_require__(/*! ./collapse */ "./node_modules/bootstrap-vue/es/components/collapse/index.js");
 
-var _form = _interopRequireDefault(__webpack_require__(/*! ./form */ "./node_modules/bootstrap-vue/es/components/form/index.js"));
+Object.keys(_collapse).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _collapse[key];
+});
 
-exports.Form = _form.default;
+var _dropdown = __webpack_require__(/*! ./dropdown */ "./node_modules/bootstrap-vue/es/components/dropdown/index.js");
 
-var _formGroup = _interopRequireDefault(__webpack_require__(/*! ./form-group */ "./node_modules/bootstrap-vue/es/components/form-group/index.js"));
+Object.keys(_dropdown).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _dropdown[key];
+});
 
-exports.FormGroup = _formGroup.default;
+var _embed = __webpack_require__(/*! ./embed */ "./node_modules/bootstrap-vue/es/components/embed/index.js");
 
-var _formCheckbox = _interopRequireDefault(__webpack_require__(/*! ./form-checkbox */ "./node_modules/bootstrap-vue/es/components/form-checkbox/index.js"));
+Object.keys(_embed).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _embed[key];
+});
 
-exports.FormCheckbox = _formCheckbox.default;
+var _form = __webpack_require__(/*! ./form */ "./node_modules/bootstrap-vue/es/components/form/index.js");
 
-var _formRadio = _interopRequireDefault(__webpack_require__(/*! ./form-radio */ "./node_modules/bootstrap-vue/es/components/form-radio/index.js"));
+Object.keys(_form).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _form[key];
+});
 
-exports.FormRadio = _formRadio.default;
+var _formGroup = __webpack_require__(/*! ./form-group */ "./node_modules/bootstrap-vue/es/components/form-group/index.js");
 
-var _formInput = _interopRequireDefault(__webpack_require__(/*! ./form-input */ "./node_modules/bootstrap-vue/es/components/form-input/index.js"));
+Object.keys(_formGroup).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _formGroup[key];
+});
 
-exports.FormInput = _formInput.default;
+var _formCheckbox = __webpack_require__(/*! ./form-checkbox */ "./node_modules/bootstrap-vue/es/components/form-checkbox/index.js");
 
-var _formTextarea = _interopRequireDefault(__webpack_require__(/*! ./form-textarea */ "./node_modules/bootstrap-vue/es/components/form-textarea/index.js"));
+Object.keys(_formCheckbox).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _formCheckbox[key];
+});
 
-exports.FormTextarea = _formTextarea.default;
+var _formRadio = __webpack_require__(/*! ./form-radio */ "./node_modules/bootstrap-vue/es/components/form-radio/index.js");
 
-var _formFile = _interopRequireDefault(__webpack_require__(/*! ./form-file */ "./node_modules/bootstrap-vue/es/components/form-file/index.js"));
+Object.keys(_formRadio).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _formRadio[key];
+});
 
-exports.FormFile = _formFile.default;
+var _formInput = __webpack_require__(/*! ./form-input */ "./node_modules/bootstrap-vue/es/components/form-input/index.js");
 
-var _formSelect = _interopRequireDefault(__webpack_require__(/*! ./form-select */ "./node_modules/bootstrap-vue/es/components/form-select/index.js"));
+Object.keys(_formInput).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _formInput[key];
+});
 
-exports.FormSelect = _formSelect.default;
+var _formTextarea = __webpack_require__(/*! ./form-textarea */ "./node_modules/bootstrap-vue/es/components/form-textarea/index.js");
 
-var _image = _interopRequireDefault(__webpack_require__(/*! ./image */ "./node_modules/bootstrap-vue/es/components/image/index.js"));
+Object.keys(_formTextarea).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _formTextarea[key];
+});
 
-exports.Image = _image.default;
+var _formFile = __webpack_require__(/*! ./form-file */ "./node_modules/bootstrap-vue/es/components/form-file/index.js");
 
-var _jumbotron = _interopRequireDefault(__webpack_require__(/*! ./jumbotron */ "./node_modules/bootstrap-vue/es/components/jumbotron/index.js"));
+Object.keys(_formFile).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _formFile[key];
+});
 
-exports.Jumbotron = _jumbotron.default;
+var _formSelect = __webpack_require__(/*! ./form-select */ "./node_modules/bootstrap-vue/es/components/form-select/index.js");
 
-var _link = _interopRequireDefault(__webpack_require__(/*! ./link */ "./node_modules/bootstrap-vue/es/components/link/index.js"));
+Object.keys(_formSelect).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _formSelect[key];
+});
 
-exports.Link = _link.default;
+var _image = __webpack_require__(/*! ./image */ "./node_modules/bootstrap-vue/es/components/image/index.js");
 
-var _listGroup = _interopRequireDefault(__webpack_require__(/*! ./list-group */ "./node_modules/bootstrap-vue/es/components/list-group/index.js"));
+Object.keys(_image).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _image[key];
+});
 
-exports.ListGroup = _listGroup.default;
+var _jumbotron = __webpack_require__(/*! ./jumbotron */ "./node_modules/bootstrap-vue/es/components/jumbotron/index.js");
 
-var _media = _interopRequireDefault(__webpack_require__(/*! ./media */ "./node_modules/bootstrap-vue/es/components/media/index.js"));
+Object.keys(_jumbotron).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _jumbotron[key];
+});
 
-exports.Media = _media.default;
+var _link = __webpack_require__(/*! ./link */ "./node_modules/bootstrap-vue/es/components/link/index.js");
 
-var _modal = _interopRequireDefault(__webpack_require__(/*! ./modal */ "./node_modules/bootstrap-vue/es/components/modal/index.js"));
+Object.keys(_link).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _link[key];
+});
 
-exports.Modal = _modal.default;
+var _listGroup = __webpack_require__(/*! ./list-group */ "./node_modules/bootstrap-vue/es/components/list-group/index.js");
 
-var _nav = _interopRequireDefault(__webpack_require__(/*! ./nav */ "./node_modules/bootstrap-vue/es/components/nav/index.js"));
+Object.keys(_listGroup).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _listGroup[key];
+});
 
-exports.Nav = _nav.default;
+var _media = __webpack_require__(/*! ./media */ "./node_modules/bootstrap-vue/es/components/media/index.js");
 
-var _navbar = _interopRequireDefault(__webpack_require__(/*! ./navbar */ "./node_modules/bootstrap-vue/es/components/navbar/index.js"));
+Object.keys(_media).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _media[key];
+});
 
-exports.Navbar = _navbar.default;
+var _modal = __webpack_require__(/*! ./modal */ "./node_modules/bootstrap-vue/es/components/modal/index.js");
 
-var _pagination = _interopRequireDefault(__webpack_require__(/*! ./pagination */ "./node_modules/bootstrap-vue/es/components/pagination/index.js"));
-
-exports.Pagination = _pagination.default;
-
-var _paginationNav = _interopRequireDefault(__webpack_require__(/*! ./pagination-nav */ "./node_modules/bootstrap-vue/es/components/pagination-nav/index.js"));
-
-exports.PaginationNav = _paginationNav.default;
-
-var _popover = _interopRequireDefault(__webpack_require__(/*! ./popover */ "./node_modules/bootstrap-vue/es/components/popover/index.js"));
-
-exports.Popover = _popover.default;
-
-var _progress = _interopRequireDefault(__webpack_require__(/*! ./progress */ "./node_modules/bootstrap-vue/es/components/progress/index.js"));
-
-exports.Progress = _progress.default;
-
-var _spinner = _interopRequireDefault(__webpack_require__(/*! ./spinner */ "./node_modules/bootstrap-vue/es/components/spinner/index.js"));
-
-exports.Spinner = _spinner.default;
-
-var _table = _interopRequireDefault(__webpack_require__(/*! ./table */ "./node_modules/bootstrap-vue/es/components/table/index.js"));
-
-exports.Table = _table.default;
-
-var _tabs = _interopRequireDefault(__webpack_require__(/*! ./tabs */ "./node_modules/bootstrap-vue/es/components/tabs/index.js"));
-
-exports.Tabs = _tabs.default;
-
-var _toast = _interopRequireDefault(__webpack_require__(/*! ./toast */ "./node_modules/bootstrap-vue/es/components/toast/index.js"));
-
-exports.Toast = _toast.default;
-
-var _tooltip = _interopRequireDefault(__webpack_require__(/*! ./tooltip */ "./node_modules/bootstrap-vue/es/components/tooltip/index.js"));
-
-exports.Tooltip = _tooltip.default;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+Object.keys(_modal).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _modal[key];
+});
+
+var _nav = __webpack_require__(/*! ./nav */ "./node_modules/bootstrap-vue/es/components/nav/index.js");
+
+Object.keys(_nav).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _nav[key];
+});
+
+var _navbar = __webpack_require__(/*! ./navbar */ "./node_modules/bootstrap-vue/es/components/navbar/index.js");
+
+Object.keys(_navbar).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _navbar[key];
+});
+
+var _pagination = __webpack_require__(/*! ./pagination */ "./node_modules/bootstrap-vue/es/components/pagination/index.js");
+
+Object.keys(_pagination).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _pagination[key];
+});
+
+var _paginationNav = __webpack_require__(/*! ./pagination-nav */ "./node_modules/bootstrap-vue/es/components/pagination-nav/index.js");
+
+Object.keys(_paginationNav).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _paginationNav[key];
+});
+
+var _popover = __webpack_require__(/*! ./popover */ "./node_modules/bootstrap-vue/es/components/popover/index.js");
+
+Object.keys(_popover).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _popover[key];
+});
+
+var _progress = __webpack_require__(/*! ./progress */ "./node_modules/bootstrap-vue/es/components/progress/index.js");
+
+Object.keys(_progress).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _progress[key];
+});
+
+var _spinner = __webpack_require__(/*! ./spinner */ "./node_modules/bootstrap-vue/es/components/spinner/index.js");
+
+Object.keys(_spinner).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _spinner[key];
+});
+
+var _table = __webpack_require__(/*! ./table */ "./node_modules/bootstrap-vue/es/components/table/index.js");
+
+Object.keys(_table).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _table[key];
+});
+
+var _tabs = __webpack_require__(/*! ./tabs */ "./node_modules/bootstrap-vue/es/components/tabs/index.js");
+
+Object.keys(_tabs).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _tabs[key];
+});
+
+var _toast = __webpack_require__(/*! ./toast */ "./node_modules/bootstrap-vue/es/components/toast/index.js");
+
+Object.keys(_toast).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _toast[key];
+});
+
+var _tooltip = __webpack_require__(/*! ./tooltip */ "./node_modules/bootstrap-vue/es/components/tooltip/index.js");
+
+Object.keys(_tooltip).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _tooltip[key];
+});
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+// Export all component group plugins as named exports
+// Export all legacy name component group plugins as named exports
+// Export all individual components as named exports
+// Export default as a plugin that installs all the component group plugins
+var _default = {
+  install: (0, _plugins.installFactory)({
+    plugins: componentPlugins
+  })
+};
+exports.default = _default;
 
 /***/ }),
 
@@ -10340,13 +10840,23 @@ exports.default = void 0;
 
 var _inputGroup = _interopRequireDefault(__webpack_require__(/*! ./input-group */ "./node_modules/bootstrap-vue/es/components/input-group/input-group.js"));
 
+exports.BInputGroup = _inputGroup.default;
+
 var _inputGroupAddon = _interopRequireDefault(__webpack_require__(/*! ./input-group-addon */ "./node_modules/bootstrap-vue/es/components/input-group/input-group-addon.js"));
+
+exports.BInputGroupAddon = _inputGroupAddon.default;
 
 var _inputGroupPrepend = _interopRequireDefault(__webpack_require__(/*! ./input-group-prepend */ "./node_modules/bootstrap-vue/es/components/input-group/input-group-prepend.js"));
 
+exports.BInputGroupPrepend = _inputGroupPrepend.default;
+
 var _inputGroupAppend = _interopRequireDefault(__webpack_require__(/*! ./input-group-append */ "./node_modules/bootstrap-vue/es/components/input-group/input-group-append.js"));
 
+exports.BInputGroupAppend = _inputGroupAppend.default;
+
 var _inputGroupText = _interopRequireDefault(__webpack_require__(/*! ./input-group-text */ "./node_modules/bootstrap-vue/es/components/input-group/input-group-text.js"));
+
+exports.BInputGroupText = _inputGroupText.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -10608,6 +11118,8 @@ var _inputGroupText = _interopRequireDefault(__webpack_require__(/*! ./input-gro
 
 var _html = __webpack_require__(/*! ../../utils/html */ "./node_modules/bootstrap-vue/es/utils/html.js");
 
+var _normalizeSlot = __webpack_require__(/*! ../../utils/normalize-slot */ "./node_modules/bootstrap-vue/es/utils/normalize-slot.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -10654,8 +11166,10 @@ var _default = _vue.default.extend({
   render: function render(h, _ref) {
     var props = _ref.props,
         data = _ref.data,
-        slots = _ref.slots;
+        slots = _ref.slots,
+        scopedSlots = _ref.scopedSlots;
     var $slots = slots();
+    var $scopedSlots = scopedSlots || {};
     var childNodes = []; // Prepend prop
 
     if (props.prepend) {
@@ -10667,15 +11181,15 @@ var _default = _vue.default.extend({
     } // Prepend slot
 
 
-    if ($slots.prepend) {
-      childNodes.push(h(_inputGroupPrepend.default, $slots.prepend));
+    if ((0, _normalizeSlot.hasNormalizedSlot)('prepend', $scopedSlots, $slots)) {
+      childNodes.push(h(_inputGroupPrepend.default, (0, _normalizeSlot.normalizeSlot)('prepend', {}, $scopedSlots, $slots)));
     } else {
       childNodes.push(h(false));
     } // Default slot
 
 
-    if ($slots.default) {
-      childNodes.push.apply(childNodes, _toConsumableArray($slots.default));
+    if ((0, _normalizeSlot.hasNormalizedSlot)('default', $scopedSlots, $slots)) {
+      childNodes.push.apply(childNodes, _toConsumableArray((0, _normalizeSlot.normalizeSlot)('default', {}, $scopedSlots, $slots)));
     } else {
       childNodes.push(h(false));
     } // Append prop
@@ -10690,8 +11204,8 @@ var _default = _vue.default.extend({
     } // Append slot
 
 
-    if ($slots.append) {
-      childNodes.push(h(_inputGroupAppend.default, $slots.append));
+    if ((0, _normalizeSlot.hasNormalizedSlot)('prepend', $scopedSlots, $slots)) {
+      childNodes.push(h(_inputGroupAppend.default, (0, _normalizeSlot.normalizeSlot)('append', {}, $scopedSlots, $slots)));
     } else {
       childNodes.push(h(false));
     }
@@ -10726,6 +11240,8 @@ exports.default = void 0;
 
 var _jumbotron = _interopRequireDefault(__webpack_require__(/*! ./jumbotron */ "./node_modules/bootstrap-vue/es/components/jumbotron/jumbotron.js"));
 
+exports.BJumbotron = _jumbotron.default;
+
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -10759,7 +11275,11 @@ var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./
 
 var _vueFunctionalDataMerge = __webpack_require__(/*! vue-functional-data-merge */ "./node_modules/vue-functional-data-merge/dist/lib.esm.js");
 
+var _config = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
+
 var _html = __webpack_require__(/*! ../../utils/html */ "./node_modules/bootstrap-vue/es/utils/html.js");
+
+var _normalizeSlot = __webpack_require__(/*! ../../utils/normalize-slot */ "./node_modules/bootstrap-vue/es/utils/normalize-slot.js");
 
 var _container = _interopRequireDefault(__webpack_require__(/*! ../layout/container */ "./node_modules/bootstrap-vue/es/components/layout/container.js"));
 
@@ -10767,6 +11287,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+var NAME = 'BJumbotron';
 var props = {
   fluid: {
     type: Boolean,
@@ -10810,22 +11331,28 @@ var props = {
   },
   bgVariant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'bgVariant');
+    }
   },
   borderVariant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'borderVariant');
+    }
   },
   textVariant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'textVariant');
+    }
   } // @vue/component
 
 };
 exports.props = props;
 
-var _default = _vue.default.extend({
-  name: 'BJumbotron',
+var _default2 = _vue.default.extend({
+  name: NAME,
   functional: true,
   props: props,
   render: function render(h, _ref) {
@@ -10833,28 +11360,30 @@ var _default = _vue.default.extend({
 
     var props = _ref.props,
         data = _ref.data,
-        slots = _ref.slots;
+        slots = _ref.slots,
+        scopedSlots = _ref.scopedSlots;
     // The order of the conditionals matter.
     // We are building the component markup in order.
     var childNodes = [];
-    var $slots = slots(); // Header
+    var $slots = slots();
+    var $scopedSlots = scopedSlots || {}; // Header
 
-    if (props.header || $slots.header || props.headerHtml) {
+    if (props.header || (0, _normalizeSlot.hasNormalizedSlot)('header', $scopedSlots, $slots) || props.headerHtml) {
       childNodes.push(h(props.headerTag, {
         class: _defineProperty({}, "display-".concat(props.headerLevel), Boolean(props.headerLevel))
-      }, $slots.header || props.headerHtml || (0, _html.stripTags)(props.header)));
+      }, (0, _normalizeSlot.normalizeSlot)('header', {}, $scopedSlots, $slots) || props.headerHtml || (0, _html.stripTags)(props.header)));
     } // Lead
 
 
-    if (props.lead || $slots.lead || props.leadHtml) {
+    if (props.lead || (0, _normalizeSlot.hasNormalizedSlot)('lead', $scopedSlots, $slots) || props.leadHtml) {
       childNodes.push(h(props.leadTag, {
         staticClass: 'lead'
-      }, $slots.lead || props.leadHtml || (0, _html.stripTags)(props.lead)));
+      }, (0, _normalizeSlot.normalizeSlot)('lead', {}, $scopedSlots, $slots) || props.leadHtml || (0, _html.stripTags)(props.lead)));
     } // Default slot
 
 
-    if ($slots.default) {
-      childNodes.push($slots.default);
+    if ((0, _normalizeSlot.hasNormalizedSlot)('default', $scopedSlots, $slots)) {
+      childNodes.push((0, _normalizeSlot.normalizeSlot)('default', {}, $scopedSlots, $slots));
     } // If fluid, wrap content in a container/container-fluid
 
 
@@ -10877,7 +11406,7 @@ var _default = _vue.default.extend({
   }
 });
 
-exports.default = _default;
+exports.default = _default2;
 
 /***/ }),
 
@@ -11191,11 +11720,19 @@ exports.default = void 0;
 
 var _container = _interopRequireDefault(__webpack_require__(/*! ./container */ "./node_modules/bootstrap-vue/es/components/layout/container.js"));
 
+exports.BContainer = _container.default;
+
 var _row = _interopRequireDefault(__webpack_require__(/*! ./row */ "./node_modules/bootstrap-vue/es/components/layout/row.js"));
+
+exports.BRow = _row.default;
 
 var _col = _interopRequireDefault(__webpack_require__(/*! ./col */ "./node_modules/bootstrap-vue/es/components/layout/col.js"));
 
+exports.BCol = _col.default;
+
 var _formRow = _interopRequireDefault(__webpack_require__(/*! ./form-row */ "./node_modules/bootstrap-vue/es/components/layout/form-row.js"));
+
+exports.BFormRow = _formRow.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -11311,6 +11848,8 @@ exports.__esModule = true;
 exports.default = void 0;
 
 var _link = _interopRequireDefault(__webpack_require__(/*! ./link */ "./node_modules/bootstrap-vue/es/components/link/link.js"));
+
+exports.BLink = _link.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -11593,7 +12132,11 @@ exports.default = void 0;
 
 var _listGroup = _interopRequireDefault(__webpack_require__(/*! ./list-group */ "./node_modules/bootstrap-vue/es/components/list-group/list-group.js"));
 
+exports.BListGroup = _listGroup.default;
+
 var _listGroupItem = _interopRequireDefault(__webpack_require__(/*! ./list-group-item */ "./node_modules/bootstrap-vue/es/components/list-group/list-group-item.js"));
+
+exports.BListGroupItem = _listGroupItem.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -11633,6 +12176,8 @@ var _pluckProps = _interopRequireDefault(__webpack_require__(/*! ../../utils/plu
 
 var _array = __webpack_require__(/*! ../../utils/array */ "./node_modules/bootstrap-vue/es/utils/array.js");
 
+var _config = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
+
 var _link = _interopRequireWildcard(__webpack_require__(/*! ../link/link */ "./node_modules/bootstrap-vue/es/components/link/link.js"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -11643,6 +12188,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+var NAME = 'BListGroupItem';
 var actionTags = ['a', 'router-link', 'button', 'b-link'];
 var linkProps = (0, _link.propsFactory)();
 delete linkProps.href.default;
@@ -11663,15 +12209,17 @@ var props = _objectSpread({
   },
   variant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'variant');
+    }
   }
 }, linkProps); // @vue/component
 
 
 exports.props = props;
 
-var _default = _vue.default.extend({
-  name: 'BListGroupItem',
+var _default2 = _vue.default.extend({
+  name: NAME,
   functional: true,
   props: props,
   render: function render(h, _ref) {
@@ -11709,7 +12257,7 @@ var _default = _vue.default.extend({
   }
 });
 
-exports.default = _default;
+exports.default = _default2;
 
 /***/ }),
 
@@ -11793,9 +12341,15 @@ exports.default = void 0;
 
 var _media = _interopRequireDefault(__webpack_require__(/*! ./media */ "./node_modules/bootstrap-vue/es/components/media/media.js"));
 
+exports.BMedia = _media.default;
+
 var _mediaAside = _interopRequireDefault(__webpack_require__(/*! ./media-aside */ "./node_modules/bootstrap-vue/es/components/media/media-aside.js"));
 
+exports.BMediaAside = _mediaAside.default;
+
 var _mediaBody = _interopRequireDefault(__webpack_require__(/*! ./media-body */ "./node_modules/bootstrap-vue/es/components/media/media-body.js"));
+
+exports.BMediaBody = _mediaBody.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -11934,6 +12488,8 @@ var _mediaBody = _interopRequireDefault(__webpack_require__(/*! ./media-body */ 
 
 var _mediaAside = _interopRequireDefault(__webpack_require__(/*! ./media-aside */ "./node_modules/bootstrap-vue/es/components/media/media-aside.js"));
 
+var _normalizeSlot = __webpack_require__(/*! ../../utils/normalize-slot */ "./node_modules/bootstrap-vue/es/utils/normalize-slot.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var props = {
@@ -11965,29 +12521,34 @@ var _default = _vue.default.extend({
     var props = _ref.props,
         data = _ref.data,
         slots = _ref.slots,
+        scopedSlots = _ref.scopedSlots,
         children = _ref.children;
     var childNodes = props.noBody ? children : [];
-    var $slots = slots();
 
     if (!props.noBody) {
-      if ($slots.aside && !props.rightAlign) {
+      var $slots = slots();
+      var $scopedSlots = scopedSlots || {};
+      var $aside = (0, _normalizeSlot.normalizeSlot)('aside', {}, $scopedSlots, $slots);
+      var $default = (0, _normalizeSlot.normalizeSlot)('default', {}, $scopedSlots, $slots);
+
+      if ($aside && !props.rightAlign) {
         childNodes.push(h(_mediaAside.default, {
           staticClass: 'mr-3',
           props: {
             verticalAlign: props.verticalAlign
           }
-        }, $slots.aside));
+        }, $aside));
       }
 
-      childNodes.push(h(_mediaBody.default, $slots.default));
+      childNodes.push(h(_mediaBody.default, {}, $default));
 
-      if ($slots.aside && props.rightAlign) {
+      if ($aside && props.rightAlign) {
         childNodes.push(h(_mediaAside.default, {
           staticClass: 'ml-3',
           props: {
             verticalAlign: props.verticalAlign
           }
-        }, $slots.aside));
+        }, $aside));
       }
     }
 
@@ -12063,7 +12624,6 @@ function (_BvEvent) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(BvModalEvent).call(this, type, eventInit)); // Freeze our new props as readonly, but leave them enumerable
 
     (0, _object.defineProperties)(_assertThisInitialized(_this), {
-      modalId: (0, _object.readonlyDescriptor)(),
       trigger: (0, _object.readonlyDescriptor)()
     });
     return _this;
@@ -12078,11 +12638,19 @@ function (_BvEvent) {
       (0, _warn.default)('b-modal: evt.cancel() is deprecated. Please use evt.preventDefault().');
       this.preventDefault();
     }
+  }, {
+    key: "modalId",
+    get: function get()
+    /* istanbul ignore next */
+    {
+      // Backwards compatability <= 2.0.0-rc.19
+      (0, _warn.default)('b-modal: evt.modalId is deprecated. Please use evt.componentId.');
+      return this.componentId;
+    }
   }], [{
     key: "Defaults",
     get: function get() {
       return _objectSpread({}, _get(_getPrototypeOf(BvModalEvent), "Defaults", this), {
-        modalId: null,
         trigger: null
       });
     }
@@ -12116,6 +12684,8 @@ var _vue = _interopRequireDefault(__webpack_require__(/*! ../../../utils/vue */ 
 
 var _modal = _interopRequireWildcard(__webpack_require__(/*! ../modal */ "./node_modules/bootstrap-vue/es/components/modal/modal.js"));
 
+var _array = __webpack_require__(/*! ../../../utils/array */ "./node_modules/bootstrap-vue/es/utils/array.js");
+
 var _config = __webpack_require__(/*! ../../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
 
 var _inspect = __webpack_require__(/*! ../../../utils/inspect */ "./node_modules/bootstrap-vue/es/utils/inspect.js");
@@ -12147,12 +12717,13 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 // --- Constants ---
-var PROP_NAME = '$bvModal'; // Base modal props that are allowed
+var PROP_NAME = '$bvModal';
+var PROP_NAME_PRIV = '_bv__modal'; // Base modal props that are allowed
 // Some may be ignored or overridden on some message boxes
 // Prop ID is allowed, but really only should be used for testing
 // We need to add it in explicitly as it comes from the `idMixin`
 
-var BASE_PROPS = ['id'].concat(_toConsumableArray((0, _object.keys)((0, _object.omit)(_modal.props, ['busy', 'lazy', 'noStacking', 'visible'])))); // Fallback event resolver (returns undefined)
+var BASE_PROPS = ['id'].concat(_toConsumableArray((0, _object.keys)((0, _object.omit)(_modal.props, ['busy', 'lazy', 'noStacking', "static", 'visible'])))); // Fallback event resolver (returns undefined)
 
 var defaultResolver = function defaultResolver(bvModalEvt) {}; // Map prop names to modal slot names
 
@@ -12258,7 +12829,7 @@ var asyncMsgBox = function asyncMsgBox(props, $parent) {
     if (!(0, _inspect.isUndefined)(props[prop])) {
       // Can be a string, or array of VNodes.
       // Alternatively, user can use HTML version of prop to pass an HTML string.
-      msgBox.$slots[propsToSlots[prop]] = props[prop];
+      msgBox.$slots[propsToSlots[prop]] = (0, _array.concat)(props[prop]);
     }
   }); // Create a mount point (a DIV)
 
@@ -12412,20 +12983,20 @@ function () {
 
 
 var install = function install(_Vue) {
-  if (install._installed) {
+  if (install.installed) {
     // Only install once
 
     /* istanbul ignore next */
     return;
   }
 
-  install._installed = true; // Add our instance mixin
+  install.installed = true; // Add our instance mixin
 
   _Vue.mixin({
     beforeCreate: function beforeCreate() {
       // Because we need access to `$root` for `$emits`, and VM for parenting,
       // we have to create a fresh instance of `BvModal` for each VM
-      this._bv__modal = new BvModal(this);
+      this[PROP_NAME_PRIV] = new BvModal(this);
     }
   }); // Define our read-only `$bvModal` instance property
   // Placed in an if just in case in HMR mode
@@ -12434,13 +13005,21 @@ var install = function install(_Vue) {
   if (!_Vue.prototype.hasOwnProperty(PROP_NAME)) {
     (0, _object.defineProperty)(_Vue.prototype, PROP_NAME, {
       get: function get() {
-        return this._bv__modal;
+        /* istanbul ignore next */
+        if (!this || !this[PROP_NAME_PRIV]) {
+          (0, _warn.warn)("'".concat(PROP_NAME, "' must be accessed from a Vue instance 'this' context"));
+        }
+
+        return this[PROP_NAME_PRIV];
       }
     });
   }
 };
 
-var _default = install;
+install.installed = false;
+var _default = {
+  install: install
+};
 exports.default = _default;
 
 /***/ }),
@@ -12460,11 +13039,17 @@ exports.default = void 0;
 
 var _vue = _interopRequireDefault(__webpack_require__(/*! ../../../utils/vue */ "./node_modules/bootstrap-vue/es/utils/vue.js"));
 
+var _portalVue = __webpack_require__(/*! portal-vue */ "./node_modules/portal-vue/dist/portal-vue.common.js");
+
 var _dom = __webpack_require__(/*! ../../../utils/dom */ "./node_modules/bootstrap-vue/es/utils/dom.js");
 
 var _env = __webpack_require__(/*! ../../../utils/env */ "./node_modules/bootstrap-vue/es/utils/env.js");
 
 var _inspect = __webpack_require__(/*! ../../../utils/inspect */ "./node_modules/bootstrap-vue/es/utils/inspect.js");
+
+var _modalTarget = _interopRequireWildcard(__webpack_require__(/*! ./modal-target */ "./node_modules/bootstrap-vue/es/components/modal/helpers/modal-target.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -12498,6 +13083,9 @@ var ModalManager = _vue.default.extend({
     },
     modalsAreOpen: function modalsAreOpen() {
       return this.modalCount > 0;
+    },
+    modalTargetName: function modalTargetName() {
+      return _modalTarget.modalTargetName;
     }
   },
   watch: {
@@ -12532,6 +13120,12 @@ var ModalManager = _vue.default.extend({
     // Public methods
     registerModal: function registerModal(modal) {
       var _this2 = this;
+
+      // Make sure the modal target exists
+      if (!modal.static) {
+        this.ensureTarget(modal);
+      } // Register the modal if not already registered
+
 
       if (modal && this.modals.indexOf(modal) === -1) {
         // Add modal to modals array
@@ -12579,8 +13173,31 @@ var ModalManager = _vue.default.extend({
       return this.scrollbarWidth || 0;
     },
     // Private methods
-    updateModals: function updateModals(modals) {
+    ensureTarget: function ensureTarget(modal) {
       var _this3 = this;
+
+      if (_env.isBrowser && !_portalVue.Wormhole.hasTarget(this.modalTargetName)) {
+        var div = document.createElement('div');
+        document.body.appendChild(div);
+        var target = new _modalTarget.default({
+          // Set parent/root to the modal's $root
+          parent: modal.$root
+        });
+        target.$mount(div);
+        target.$once('hook:beforeDestroy', function () {
+          _this3.modals.forEach(function (modal) {
+            // Hide any modals that may be in the target, if
+            // target is destroyed, using the 'FORCE' trigger
+            // which makes the hide event non-cancelable
+            if (!modal.static) {
+              modal.hide('FORCED');
+            }
+          });
+        });
+      }
+    },
+    updateModals: function updateModals(modals) {
+      var _this4 = this;
 
       var baseZIndex = this.getBaseZIndex();
       var scrollbarWidth = this.getScrollbarWidth();
@@ -12588,8 +13205,8 @@ var ModalManager = _vue.default.extend({
         // We update data values on each modal
         modal.zIndex = baseZIndex + index;
         modal.scrollbarWidth = scrollbarWidth;
-        modal.isTop = index === _this3.modals.length - 1;
-        modal.isBodyOverflowing = _this3.isBodyOverflowing;
+        modal.isTop = index === _this4.modals.length - 1;
+        modal.isBodyOverflowing = _this4.isBodyOverflowing;
       });
     },
     resetModal: function resetModal(modal) {
@@ -12601,9 +13218,6 @@ var ModalManager = _vue.default.extend({
     },
     checkScrollbar: function checkScrollbar() {
       // Determine if the body element is overflowing
-      // const { left, right, height } = getBCR(document.body)
-      // Extra check for body.height needed for stacked modals
-      // this.isBodyOverflowing = left + right < window.innerWidth || height > window.innerHeight
       var _getBCR = (0, _dom.getBCR)(document.body),
           left = _getBCR.left,
           right = _getBCR.right;
@@ -12703,6 +13317,89 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ "./node_modules/bootstrap-vue/es/components/modal/helpers/modal-target.js":
+/*!********************************************************************************!*\
+  !*** ./node_modules/bootstrap-vue/es/components/modal/helpers/modal-target.js ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.default = exports.modalTargetName = void 0;
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! ../../../utils/vue */ "./node_modules/bootstrap-vue/es/utils/vue.js"));
+
+var _portalVue = __webpack_require__(/*! portal-vue */ "./node_modules/portal-vue/dist/portal-vue.common.js");
+
+var _dom = __webpack_require__(/*! ../../../utils/dom */ "./node_modules/bootstrap-vue/es/utils/dom.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var NAME = 'BModalTarget';
+var modalTargetName = "BV-".concat(NAME); // Pivate internal component used by ModalManager.
+// Not to be used directly by humans.
+// @vue/component
+
+exports.modalTargetName = modalTargetName;
+
+var _default = _vue.default.extend({
+  name: NAME,
+  data: function data() {
+    return {
+      doRender: false
+    };
+  },
+  destroyed: function destroyed()
+  /* istanbul ignore next */
+  {
+    // Ensure we get removed from DOM when destroyed
+    if (this.$el && this.$el.parentNode) {
+      this.$el.parentNode.removeChild(this.$el);
+    }
+  },
+  beforeMount: function beforeMount() {
+    var self = this; // There can be only one modal target in the document
+
+    /* istanbul ignore if */
+
+    if (_portalVue.Wormhole.hasTarget(modalTargetName)) {
+      this.$once('hook:mounted', function () {
+        self.$nextTick(function () {
+          (0, _dom.requestAF)(function () {
+            self.$destroy();
+          });
+        });
+      });
+    } else {
+      this.doRender = true;
+    }
+  },
+  render: function render(h) {
+    /* istanbul ignore else */
+    if (this.doRender) {
+      return h(_portalVue.PortalTarget, {
+        staticClass: 'b-modal-target',
+        props: {
+          tag: 'div',
+          name: modalTargetName,
+          multiple: true,
+          transition: null,
+          slim: false
+        }
+      });
+    } else {
+      return h('div');
+    }
+  }
+});
+
+exports.default = _default;
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap-vue/es/components/modal/index.js":
 /*!*****************************************************************!*\
   !*** ./node_modules/bootstrap-vue/es/components/modal/index.js ***!
@@ -12718,6 +13415,8 @@ exports.default = void 0;
 
 var _modal = _interopRequireDefault(__webpack_require__(/*! ./modal */ "./node_modules/bootstrap-vue/es/components/modal/modal.js"));
 
+exports.BModal = _modal.default;
+
 var _bvModal = _interopRequireDefault(__webpack_require__(/*! ./helpers/bv-modal */ "./node_modules/bootstrap-vue/es/components/modal/helpers/bv-modal.js"));
 
 var _modal2 = _interopRequireDefault(__webpack_require__(/*! ../../directives/modal/modal */ "./node_modules/bootstrap-vue/es/directives/modal/modal.js"));
@@ -12730,21 +13429,18 @@ var components = {
   BModal: _modal.default
 };
 var directives = {
-  BModal: _modal2.default
+  VBModal: _modal2.default
 };
-
-var _install = (0, _plugins.installFactory)({
-  components: components,
-  directives: directives
-});
-
+var plugins = {
+  // $bvModal injection
+  BVModalPlugin: _bvModal.default
+};
 var _default = {
-  install: function install(Vue) {
-    // Inject `$bvModal` into Vue prototype
-    (0, _bvModal.default)(Vue); // Install component and directive
-
-    _install(Vue);
-  }
+  install: (0, _plugins.installFactory)({
+    components: components,
+    directives: directives,
+    plugins: plugins
+  })
 };
 exports.default = _default;
 
@@ -12764,6 +13460,8 @@ exports.__esModule = true;
 exports.default = exports.props = void 0;
 
 var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./node_modules/bootstrap-vue/es/utils/vue.js"));
+
+var _portalVue = __webpack_require__(/*! portal-vue */ "./node_modules/portal-vue/dist/portal-vue.common.js");
 
 var _modalManager = _interopRequireDefault(__webpack_require__(/*! ./helpers/modal-manager */ "./node_modules/bootstrap-vue/es/components/modal/helpers/modal-manager.js"));
 
@@ -12823,11 +13521,15 @@ var props = {
   },
   titleTag: {
     type: String,
-    default: 'h5'
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'titleTag');
+    }
   },
   size: {
     type: String,
-    default: 'md'
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'size');
+    }
   },
   centered: {
     type: Boolean,
@@ -12863,19 +13565,27 @@ var props = {
   },
   headerBgVariant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'headerBgVariant');
+    }
   },
   headerBorderVariant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'headerBorderVariant');
+    }
   },
   headerTextVariant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'headerTextVariant');
+    }
   },
   headerCloseVariant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'headerCloseVariant');
+    }
   },
   headerClass: {
     type: [String, Array],
@@ -12883,11 +13593,15 @@ var props = {
   },
   bodyBgVariant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'bodyBgVariant');
+    }
   },
   bodyTextVariant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'bodyTextVariant');
+    }
   },
   modalClass: {
     type: [String, Array],
@@ -12907,15 +13621,21 @@ var props = {
   },
   footerBgVariant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'footerBgVariant');
+    }
   },
   footerBorderVariant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'footerBorderVariant');
+    }
   },
   footerTextVariant: {
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'footerTextVariant');
+    }
   },
   footerClass: {
     type: [String, Array],
@@ -12960,13 +13680,13 @@ var props = {
   headerCloseLabel: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'headerCloseLabel') || '');
+      return (0, _config.getComponentConfig)(NAME, 'headerCloseLabel');
     }
   },
   cancelTitle: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'cancelTitle') || '');
+      return (0, _config.getComponentConfig)(NAME, 'cancelTitle');
     }
   },
   cancelTitleHtml: {
@@ -12975,7 +13695,7 @@ var props = {
   okTitle: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'okTitle') || '');
+      return (0, _config.getComponentConfig)(NAME, 'okTitle');
     }
   },
   okTitleHtml: {
@@ -12984,13 +13704,13 @@ var props = {
   cancelVariant: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'cancelVariant') || '');
+      return (0, _config.getComponentConfig)(NAME, 'cancelVariant');
     }
   },
   okVariant: {
     type: String,
     default: function _default() {
-      return String((0, _config.getComponentConfig)(NAME, 'okVariant') || '');
+      return (0, _config.getComponentConfig)(NAME, 'okVariant');
     }
   },
   lazy: {
@@ -12998,6 +13718,10 @@ var props = {
     default: false
   },
   busy: {
+    type: Boolean,
+    default: false
+  },
+  static: {
     type: Boolean,
     default: false
   } // @vue/component
@@ -13015,8 +13739,8 @@ var _default2 = _vue.default.extend({
   props: props,
   data: function data() {
     return {
-      is_hidden: this.lazy || false,
-      // For lazy modals
+      is_hidden: true,
+      // If should not be in document
       is_visible: false,
       // Controls modal visible state
       is_transitioning: false,
@@ -13167,22 +13891,15 @@ var _default2 = _vue.default.extend({
         return;
       }
 
-      this.is_opening = true;
+      this.is_opening = true; // Set the element to return focus to when closed
 
-      if (_env.isBrowser && document.activeElement.focus) {
-        // Preset the fallback return focus value if it is not set
-        // `document.activeElement` should be the trigger element that was clicked or
-        // in the case of using the v-model, which ever element has current focus
-        // Will be overridden by some commands such as toggle, etc.
-        this.return_focus = this.return_focus || document.activeElement;
-      }
-
+      this.return_focus = this.return_focus || this.getActiveElement();
       var showEvt = new _bvModalEvent.default('show', {
         cancelable: true,
         vueTarget: this,
         target: this.$refs.modal,
         relatedTarget: null,
-        modalId: this.safeId()
+        componentId: this.safeId()
       });
       this.emitEvent(showEvt); // Don't show if canceled
 
@@ -13204,11 +13921,11 @@ var _default2 = _vue.default.extend({
 
       this.is_closing = true;
       var hideEvt = new _bvModalEvent.default('hide', {
-        cancelable: true,
+        cancelable: trigger !== 'FORCE',
         vueTarget: this,
         target: this.$refs.modal,
         relatedTarget: null,
-        modalId: this.safeId(),
+        componentId: this.safeId(),
         trigger: trigger || null
       }); // We emit specific event for one of the three built-in buttons
 
@@ -13234,7 +13951,8 @@ var _default2 = _vue.default.extend({
         this._observer.disconnect();
 
         this._observer = null;
-      }
+      } // Trigger the hide transition
+
 
       this.is_visible = false; // Update the v-model
 
@@ -13252,6 +13970,26 @@ var _default2 = _vue.default.extend({
         this.show();
       }
     },
+    // Private method to get the current document active element
+    getActiveElement: function getActiveElement() {
+      if (_env.isBrowser) {
+        var activeElement = document.activeElement; // Note: On IE11, `document.activeElement` may be null. So we test it for
+        // truthyness first.
+        // https://github.com/bootstrap-vue/bootstrap-vue/issues/3206
+        // Returning focus to document.body may cause unwanted scrolls, so we
+        // exclude setting focus on body
+
+        if (activeElement && activeElement !== document.body && activeElement.focus) {
+          // Preset the fallback return focus value if it is not set
+          // `document.activeElement` should be the trigger element that was clicked or
+          // in the case of using the v-model, which ever element has current focus
+          // Will be overridden by some commands such as toggle, etc.
+          return activeElement;
+        }
+      }
+
+      return null;
+    },
     // Private method to finish showing modal
     doShow: function doShow() {
       var _this = this;
@@ -13261,7 +13999,9 @@ var _default2 = _vue.default.extend({
         // If another modal(s) is already open, wait for it(them) to close
         this.listenOnRootOnce('bv::modal::hidden', this.doShow);
         return;
-      } // Place modal in DOM if lazy
+      }
+
+      _modalManager.default.registerModal(this); // Place modal in DOM
 
 
       this.is_hidden = false;
@@ -13280,10 +14020,6 @@ var _default2 = _vue.default.extend({
     // Transition handlers
     onBeforeEnter: function onBeforeEnter() {
       this.is_transitioning = true;
-
-      _modalManager.default.registerModal(this);
-
-      this.checkModalOverflow();
       this.setResizeEvent(true);
     },
     onEnter: function onEnter() {
@@ -13292,6 +14028,7 @@ var _default2 = _vue.default.extend({
     onAfterEnter: function onAfterEnter() {
       var _this2 = this;
 
+      this.checkModalOverflow();
       this.is_show = true;
       this.is_transitioning = false;
       this.$nextTick(function () {
@@ -13300,7 +14037,7 @@ var _default2 = _vue.default.extend({
           vueTarget: _this2,
           target: _this2.$refs.modal,
           relatedTarget: null,
-          modalId: _this2.safeId()
+          componentId: _this2.safeId()
         });
 
         _this2.emitEvent(shownEvt);
@@ -13325,6 +14062,7 @@ var _default2 = _vue.default.extend({
       this.is_transitioning = false;
       this.setEnforceFocus(false);
       this.isModalOverflowing = false;
+      this.is_hidden = true;
       this.$nextTick(function () {
         _this3.returnFocusTo();
 
@@ -13335,9 +14073,9 @@ var _default2 = _vue.default.extend({
         var hiddenEvt = new _bvModalEvent.default('hidden', {
           cancelable: false,
           vueTarget: _this3,
-          target: _this3.lazy ? null : _this3.$refs.modal,
+          target: _this3.$el,
           relatedTarget: null,
-          modalId: _this3.safeId()
+          componentId: _this3.safeId()
         });
 
         _this3.emitEvent(hiddenEvt);
@@ -13350,7 +14088,7 @@ var _default2 = _vue.default.extend({
       var type = bvModalEvt.type; // We emit on root first incase a global listener wants to cancel
       // the event first before the instance emits it's event
 
-      this.emitOnRoot("bv::modal::".concat(type), bvModalEvt, bvModalEvt.modalId);
+      this.emitOnRoot("bv::modal::".concat(type), bvModalEvt, bvModalEvt.componentId);
       this.$emit(type, bvModalEvt);
     },
     // UI event handlers
@@ -13432,7 +14170,7 @@ var _default2 = _vue.default.extend({
     // Root listener handlers
     showHandler: function showHandler(id, triggerEl) {
       if (id === this.id) {
-        this.return_focus = triggerEl || document.activeElement || null;
+        this.return_focus = triggerEl || this.getActiveElement();
         this.show();
       }
     },
@@ -13459,7 +14197,7 @@ var _default2 = _vue.default.extend({
       // Don't try and focus if we are SSR
       if (_env.isBrowser) {
         var modal = this.$refs.modal;
-        var activeElement = document.activeElement; // If the modal contains the activeElement, we don't do anything
+        var activeElement = this.getActiveElement(); // If the modal contains the activeElement, we don't do anything
 
         if (modal && !(activeElement && (0, _dom.contains)(modal, activeElement))) {
           // Make sure top of modal is showing (if longer than the viewport)
@@ -13474,7 +14212,7 @@ var _default2 = _vue.default.extend({
     returnFocusTo: function returnFocusTo() {
       // Prefer `returnFocus` prop over event specified
       // `return_focus` value
-      var el = this.returnFocus || this.return_focus || document.activeElement || null; // Is el a string CSS selector?
+      var el = this.returnFocus || this.return_focus || null; // Is el a string CSS selector?
 
       el = (0, _inspect.isString)(el) ? (0, _dom.select)(el) : el;
 
@@ -13492,214 +14230,215 @@ var _default2 = _vue.default.extend({
         var modal = this.$refs.modal;
         this.isModalOverflowing = modal.scrollHeight > document.documentElement.clientHeight;
       }
-    }
-  },
-  render: function render(h) {
-    var _this5 = this;
+    },
+    makeModal: function makeModal(h) {
+      var _this5 = this;
 
-    var $slots = this.$slots; // Modal header
+      // Modal header
+      var header = h(false);
 
-    var header = h(false);
+      if (!this.hideHeader) {
+        var modalHeader = this.normalizeSlot('modal-header', this.slotScope);
 
-    if (!this.hideHeader) {
-      var modalHeader = this.normalizeSlot('modal-header', this.slotScope);
+        if (!modalHeader) {
+          var closeButton = h(false);
 
-      if (!modalHeader) {
-        var closeButton = h(false);
-
-        if (!this.hideHeaderClose) {
-          closeButton = h(_buttonClose.default, {
-            props: {
-              disabled: this.is_transitioning,
-              ariaLabel: this.headerCloseLabel,
-              textVariant: this.headerCloseVariant || this.headerTextVariant
-            },
-            on: {
-              click: function click(evt) {
-                _this5.onClose();
+          if (!this.hideHeaderClose) {
+            closeButton = h(_buttonClose.default, {
+              props: {
+                disabled: this.is_transitioning,
+                ariaLabel: this.headerCloseLabel,
+                textVariant: this.headerCloseVariant || this.headerTextVariant
+              },
+              on: {
+                click: function click(evt) {
+                  _this5.onClose();
+                }
               }
-            }
-          }, [$slots['modal-header-close']]);
-        }
-
-        modalHeader = [h(this.titleTag, {
-          class: ['modal-title']
-        }, [this.normalizeSlot('modal-title', this.slotScope) || this.titleHtml || (0, _html.stripTags)(this.title)]), closeButton];
-      }
-
-      header = h('header', {
-        ref: 'header',
-        staticClass: 'modal-header',
-        class: this.headerClasses,
-        attrs: {
-          id: this.safeId('__BV_modal_header_')
-        }
-      }, [modalHeader]);
-    } // Modal body
-
-
-    var body = h('div', {
-      ref: 'body',
-      staticClass: 'modal-body',
-      class: this.bodyClasses,
-      attrs: {
-        id: this.safeId('__BV_modal_body_')
-      }
-    }, this.normalizeSlot('default', this.slotScope)); // Modal footer
-
-    var footer = h(false);
-
-    if (!this.hideFooter) {
-      var modalFooter = this.normalizeSlot('modal-footer', this.slotScope);
-
-      if (!modalFooter) {
-        var cancelButton = h(false);
-
-        if (!this.okOnly) {
-          cancelButton = h(_button.default, {
-            props: {
-              variant: this.cancelVariant,
-              size: this.buttonSize,
-              disabled: this.cancelDisabled || this.busy || this.is_transitioning
-            },
-            on: {
-              click: function click(evt) {
-                _this5.onCancel();
-              }
-            }
-          }, [$slots['modal-cancel'] || this.cancelTitleHtml || (0, _html.stripTags)(this.cancelTitle)]);
-        }
-
-        var okButton = h(_button.default, {
-          props: {
-            variant: this.okVariant,
-            size: this.buttonSize,
-            disabled: this.okDisabled || this.busy || this.is_transitioning
-          },
-          on: {
-            click: function click(evt) {
-              _this5.onOk();
-            }
+            }, [this.normalizeSlot('modal-header-close', {})]);
           }
-        }, [$slots['modal-ok'] || this.okTitleHtml || (0, _html.stripTags)(this.okTitle)]);
-        modalFooter = [cancelButton, okButton];
-      }
 
-      footer = h('footer', {
-        ref: 'footer',
-        staticClass: 'modal-footer',
-        class: this.footerClasses,
-        attrs: {
-          id: this.safeId('__BV_modal_footer_')
+          modalHeader = [h(this.titleTag, {
+            class: ['modal-title']
+          }, [this.normalizeSlot('modal-title', this.slotScope) || this.titleHtml || (0, _html.stripTags)(this.title)]), closeButton];
         }
-      }, [modalFooter]);
-    } // Assemble modal content
+
+        header = h('header', {
+          ref: 'header',
+          staticClass: 'modal-header',
+          class: this.headerClasses,
+          attrs: {
+            id: this.safeId('__BV_modal_header_')
+          }
+        }, [modalHeader]);
+      } // Modal body
 
 
-    var modalContent = h('div', {
-      ref: 'content',
-      staticClass: 'modal-content',
-      class: this.contentClass,
-      attrs: {
-        role: 'document',
-        id: this.safeId('__BV_modal_content_'),
-        'aria-labelledby': this.hideHeader ? null : this.safeId('__BV_modal_header_'),
-        'aria-describedby': this.safeId('__BV_modal_body_')
-      }
-    }, [header, body, footer]); // Modal dialog wrapper
-
-    var modalDialog = h('div', {
-      staticClass: 'modal-dialog',
-      class: this.dialogClasses,
-      on: {
-        mousedown: this.onDialogMousedown
-      }
-    }, [modalContent]); // Modal
-
-    var modal = h('div', {
-      ref: 'modal',
-      staticClass: 'modal',
-      class: this.modalClasses,
-      style: this.modalStyles,
-      directives: [{
-        name: 'show',
-        rawName: 'v-show',
-        value: this.is_visible,
-        expression: 'is_visible'
-      }],
-      attrs: {
-        id: this.safeId(),
-        role: 'dialog',
-        tabindex: '-1',
-        'aria-hidden': this.is_visible ? null : 'true',
-        'aria-modal': this.is_visible ? 'true' : null
-      },
-      on: {
-        keydown: this.onEsc,
-        click: this.onClickOut
-      }
-    }, [modalDialog]); // Wrap modal in transition
-
-    modal = h('transition', {
-      props: {
-        enterClass: '',
-        enterToClass: '',
-        enterActiveClass: '',
-        leaveClass: '',
-        leaveActiveClass: '',
-        leaveToClass: ''
-      },
-      on: {
-        'before-enter': this.onBeforeEnter,
-        enter: this.onEnter,
-        'after-enter': this.onAfterEnter,
-        'before-leave': this.onBeforeLeave,
-        leave: this.onLeave,
-        'after-leave': this.onAfterLeave
-      }
-    }, [modal]); // Modal backdrop
-
-    var backdrop = h(false);
-
-    if (!this.hideBackdrop && (this.is_visible || this.is_transitioning || this.is_block)) {
-      backdrop = h('div', {
-        staticClass: 'modal-backdrop',
-        class: this.backdropClasses,
+      var body = h('div', {
+        ref: 'body',
+        staticClass: 'modal-body',
+        class: this.bodyClasses,
         attrs: {
-          id: this.safeId('__BV_modal_backdrop_')
+          id: this.safeId('__BV_modal_body_')
         }
-      }, [$slots['modal-backdrop']]);
-    } // Tab trap to prevent page from scrolling to next element in
-    // tab index during enforce focus tab cycle
+      }, this.normalizeSlot('default', this.slotScope)); // Modal footer
+
+      var footer = h(false);
+
+      if (!this.hideFooter) {
+        var modalFooter = this.normalizeSlot('modal-footer', this.slotScope);
+
+        if (!modalFooter) {
+          var cancelButton = h(false);
+
+          if (!this.okOnly) {
+            cancelButton = h(_button.default, {
+              props: {
+                variant: this.cancelVariant,
+                size: this.buttonSize,
+                disabled: this.cancelDisabled || this.busy || this.is_transitioning
+              },
+              on: {
+                click: function click(evt) {
+                  _this5.onCancel();
+                }
+              }
+            }, [this.normalizeSlot('modal-cancel', {}) || this.cancelTitleHtml || (0, _html.stripTags)(this.cancelTitle)]);
+          }
+
+          var okButton = h(_button.default, {
+            props: {
+              variant: this.okVariant,
+              size: this.buttonSize,
+              disabled: this.okDisabled || this.busy || this.is_transitioning
+            },
+            on: {
+              click: function click(evt) {
+                _this5.onOk();
+              }
+            }
+          }, [this.normalizeSlot('modal-ok', {}) || this.okTitleHtml || (0, _html.stripTags)(this.okTitle)]);
+          modalFooter = [cancelButton, okButton];
+        }
+
+        footer = h('footer', {
+          ref: 'footer',
+          staticClass: 'modal-footer',
+          class: this.footerClasses,
+          attrs: {
+            id: this.safeId('__BV_modal_footer_')
+          }
+        }, [modalFooter]);
+      } // Assemble modal content
 
 
-    var tabTrap = h(false);
-
-    if (this.is_visible && this.isTop && !this.noEnforceFocus) {
-      tabTrap = h('div', {
+      var modalContent = h('div', {
+        ref: 'content',
+        staticClass: 'modal-content',
+        class: this.contentClass,
         attrs: {
-          tabindex: '0'
+          role: 'document',
+          id: this.safeId('__BV_modal_content_'),
+          'aria-labelledby': this.hideHeader ? null : this.safeId('__BV_modal_header_'),
+          'aria-describedby': this.safeId('__BV_modal_body_')
         }
-      });
-    } // Assemble modal and backdrop in an outer <div>
-    // Needed for lazy modals
+      }, [header, body, footer]); // Modal dialog wrapper
+
+      var modalDialog = h('div', {
+        staticClass: 'modal-dialog',
+        class: this.dialogClasses,
+        on: {
+          mousedown: this.onDialogMousedown
+        }
+      }, [modalContent]); // Modal
+
+      var modal = h('div', {
+        ref: 'modal',
+        staticClass: 'modal',
+        class: this.modalClasses,
+        style: this.modalStyles,
+        directives: [{
+          name: 'show',
+          rawName: 'v-show',
+          value: this.is_visible,
+          expression: 'is_visible'
+        }],
+        attrs: {
+          id: this.safeId(),
+          role: 'dialog',
+          tabindex: '-1',
+          'aria-hidden': this.is_visible ? null : 'true',
+          'aria-modal': this.is_visible ? 'true' : null
+        },
+        on: {
+          keydown: this.onEsc,
+          click: this.onClickOut
+        }
+      }, [modalDialog]); // Wrap modal in transition
+
+      modal = h('transition', {
+        props: {
+          enterClass: '',
+          enterToClass: '',
+          enterActiveClass: '',
+          leaveClass: '',
+          leaveActiveClass: '',
+          leaveToClass: ''
+        },
+        on: {
+          'before-enter': this.onBeforeEnter,
+          enter: this.onEnter,
+          'after-enter': this.onAfterEnter,
+          'before-leave': this.onBeforeLeave,
+          leave: this.onLeave,
+          'after-leave': this.onAfterLeave
+        }
+      }, [modal]); // Modal backdrop
+
+      var backdrop = h(false);
+
+      if (!this.hideBackdrop && (this.is_visible || this.is_transitioning || this.is_block)) {
+        backdrop = h('div', {
+          staticClass: 'modal-backdrop',
+          class: this.backdropClasses,
+          attrs: {
+            id: this.safeId('__BV_modal_backdrop_')
+          }
+        }, [this.normalizeSlot('modal-backdrop', {})]);
+      } // Tab trap to prevent page from scrolling to next element in
+      // tab index during enforce focus tab cycle
 
 
-    var outer = h(false);
+      var tabTrap = h(false);
 
-    if (!this.is_hidden) {
-      outer = h('div', {
-        key: 'modal-outer',
+      if (this.is_visible && this.isTop && !this.noEnforceFocus) {
+        tabTrap = h('div', {
+          attrs: {
+            tabindex: '0'
+          }
+        });
+      } // Assemble modal and backdrop in an outer <div>
+
+
+      return h('div', {
+        key: "modal-outer-".concat(this._uid),
         style: this.modalOuterStyle,
         attrs: {
           id: this.safeId('__BV_modal_outer_')
         }
       }, [modal, tabTrap, backdrop]);
-    } // Wrap in <div> to maintain `this.$el` reference for
-    // hide/show method access
-
-
-    return h('div', {}, [outer]);
+    }
+  },
+  render: function render(h) {
+    // Wrap in a portal
+    return h(_portalVue.Portal, {
+      props: {
+        name: "b-modal-".concat(this._uid),
+        to: _modalManager.default.modalTargetName,
+        slim: true,
+        disabled: this.static
+      }
+    }, [!this.is_hidden || this.static && !this.lazy ? this.makeModal(h) : h(false)]);
   }
 });
 
@@ -13722,13 +14461,23 @@ exports.default = void 0;
 
 var _nav = _interopRequireDefault(__webpack_require__(/*! ./nav */ "./node_modules/bootstrap-vue/es/components/nav/nav.js"));
 
+exports.BNav = _nav.default;
+
 var _navItem = _interopRequireDefault(__webpack_require__(/*! ./nav-item */ "./node_modules/bootstrap-vue/es/components/nav/nav-item.js"));
+
+exports.BNavItem = _navItem.default;
 
 var _navText = _interopRequireDefault(__webpack_require__(/*! ./nav-text */ "./node_modules/bootstrap-vue/es/components/nav/nav-text.js"));
 
+exports.BNavText = _navText.default;
+
 var _navForm = _interopRequireDefault(__webpack_require__(/*! ./nav-form */ "./node_modules/bootstrap-vue/es/components/nav/nav-form.js"));
 
+exports.BNavForm = _navForm.default;
+
 var _navItemDropdown = _interopRequireDefault(__webpack_require__(/*! ./nav-item-dropdown */ "./node_modules/bootstrap-vue/es/components/nav/nav-item-dropdown.js"));
+
+exports.BNavItemDropdown = _navItemDropdown.default;
 
 var _dropdown = _interopRequireDefault(__webpack_require__(/*! ../dropdown */ "./node_modules/bootstrap-vue/es/components/dropdown/index.js"));
 
@@ -13827,11 +14576,15 @@ exports.default = exports.props = void 0;
 
 var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./node_modules/bootstrap-vue/es/utils/vue.js"));
 
+var _link = _interopRequireDefault(__webpack_require__(/*! ../link/link */ "./node_modules/bootstrap-vue/es/components/link/link.js"));
+
 var _dropdown = __webpack_require__(/*! ../dropdown/dropdown */ "./node_modules/bootstrap-vue/es/components/dropdown/dropdown.js");
 
 var _id = _interopRequireDefault(__webpack_require__(/*! ../../mixins/id */ "./node_modules/bootstrap-vue/es/mixins/id.js"));
 
 var _dropdown2 = _interopRequireDefault(__webpack_require__(/*! ../../mixins/dropdown */ "./node_modules/bootstrap-vue/es/mixins/dropdown.js"));
+
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
 
 var _pluckProps = _interopRequireDefault(__webpack_require__(/*! ../../utils/pluck-props */ "./node_modules/bootstrap-vue/es/utils/pluck-props.js"));
 
@@ -13866,7 +14619,7 @@ exports.props = props;
 
 var _default = _vue.default.extend({
   name: 'BNavItemDropdown',
-  mixins: [_id.default, _dropdown2.default],
+  mixins: [_id.default, _dropdown2.default, _normalizeSlot.default],
   props: props,
   computed: {
     isNav: function isNav() {
@@ -13874,32 +14627,36 @@ var _default = _vue.default.extend({
       return true;
     },
     dropdownClasses: function dropdownClasses() {
-      return ['nav-item', 'b-nav-dropdown', 'dropdown', this.directionClass, {
+      return [this.directionClass, {
         show: this.visible
       }];
     },
     menuClasses: function menuClasses() {
-      return ['dropdown-menu', {
+      return [this.extraMenuClasses, // Deprecated
+      this.menuClass, {
         'dropdown-menu-right': this.right,
         show: this.visible
-      }, this.extraMenuClasses, // Deprecated
-      this.menuClass];
+      }];
     },
     toggleClasses: function toggleClasses() {
-      return ['nav-link', 'dropdown-toggle', {
+      return [this.extraToggleClasses, // Deprecated
+      this.toggleClass, {
+        disabled: this.disabled,
         'dropdown-toggle-no-caret': this.noCaret
-      }, this.extraToggleClasses, // Deprecated
-      this.toggleClass];
+      }];
     }
   },
   render: function render(h) {
-    var button = h('a', {
-      class: this.toggleClasses,
+    var button = h(_link.default, {
       ref: 'toggle',
-      attrs: {
+      staticClass: 'nav-link dropdown-toggle',
+      class: this.toggleClasses,
+      props: {
         href: '#',
+        disabled: this.disabled
+      },
+      attrs: {
         id: this.safeId('_BV_button_'),
-        disabled: this.disabled,
         'aria-haspopup': 'true',
         'aria-expanded': String(this.visible)
       },
@@ -13912,6 +14669,7 @@ var _default = _vue.default.extend({
       domProps: (0, _html.htmlOrText)(this.html, this.text)
     })]);
     var menu = h('ul', {
+      staticClass: 'dropdown-menu',
       class: this.menuClasses,
       ref: 'menu',
       attrs: {
@@ -13919,16 +14677,18 @@ var _default = _vue.default.extend({
         'aria-labelledby': this.safeId('_BV_button_')
       },
       on: {
-        mouseover: this.onMouseOver,
-        keydown: this.onKeydown // tab, up, down, esc
+        keydown: this.onKeydown // up, down, esc
 
       }
-    }, [this.$slots.default]);
+    }, [this.normalizeSlot('default', {
+      hide: this.hide
+    })]);
     return h('li', {
+      staticClass: 'nav-item b-nav-dropdown dropdown',
+      class: this.dropdownClasses,
       attrs: {
         id: this.safeId()
-      },
-      class: this.dropdownClasses
+      }
     }, [button, menu]);
   }
 });
@@ -14169,11 +14929,19 @@ exports.default = void 0;
 
 var _navbar = _interopRequireDefault(__webpack_require__(/*! ./navbar */ "./node_modules/bootstrap-vue/es/components/navbar/navbar.js"));
 
+exports.BNavbar = _navbar.default;
+
 var _navbarNav = _interopRequireDefault(__webpack_require__(/*! ./navbar-nav */ "./node_modules/bootstrap-vue/es/components/navbar/navbar-nav.js"));
+
+exports.BNavbarNav = _navbarNav.default;
 
 var _navbarBrand = _interopRequireDefault(__webpack_require__(/*! ./navbar-brand */ "./node_modules/bootstrap-vue/es/components/navbar/navbar-brand.js"));
 
+exports.BNavbarBrand = _navbarBrand.default;
+
 var _navbarToggle = _interopRequireDefault(__webpack_require__(/*! ./navbar-toggle */ "./node_modules/bootstrap-vue/es/components/navbar/navbar-toggle.js"));
+
+exports.BNavbarToggle = _navbarToggle.default;
 
 var _nav = _interopRequireDefault(__webpack_require__(/*! ../nav */ "./node_modules/bootstrap-vue/es/components/nav/index.js"));
 
@@ -14349,6 +15117,8 @@ var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./
 
 var _listenOnRoot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/listen-on-root */ "./node_modules/bootstrap-vue/es/mixins/listen-on-root.js"));
 
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 var _config = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -14363,12 +15133,12 @@ var EVENT_STATE_SYNC = 'bv::collapse::sync::state'; // @vue/component
 
 var _default2 = _vue.default.extend({
   name: NAME,
-  mixins: [_listenOnRoot.default],
+  mixins: [_listenOnRoot.default, _normalizeSlot.default],
   props: {
     label: {
       type: String,
       default: function _default() {
-        return String((0, _config.getComponentConfig)(NAME, 'label') || '');
+        return (0, _config.getComponentConfig)(NAME, 'label');
       }
     },
     target: {
@@ -14411,7 +15181,7 @@ var _default2 = _vue.default.extend({
       on: {
         click: this.onClick
       }
-    }, [this.$slots.default || h('span', {
+    }, [this.normalizeSlot('default') || h('span', {
       class: ['navbar-toggler-icon']
     })]);
   }
@@ -14446,6 +15216,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+var NAME = 'BNavbar';
 var props = {
   tag: {
     type: String,
@@ -14456,7 +15227,10 @@ var props = {
     default: 'light'
   },
   variant: {
-    type: String
+    type: String,
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'variant');
+    }
   },
   toggleable: {
     type: [Boolean, String],
@@ -14477,8 +15251,8 @@ var props = {
 };
 exports.props = props;
 
-var _default = _vue.default.extend({
-  name: 'BNavbar',
+var _default2 = _vue.default.extend({
+  name: NAME,
   functional: true,
   props: props,
   render: function render(h, _ref) {
@@ -14509,7 +15283,7 @@ var _default = _vue.default.extend({
   }
 });
 
-exports.default = _default;
+exports.default = _default2;
 
 /***/ }),
 
@@ -14527,6 +15301,8 @@ exports.__esModule = true;
 exports.default = void 0;
 
 var _paginationNav = _interopRequireDefault(__webpack_require__(/*! ./pagination-nav */ "./node_modules/bootstrap-vue/es/components/pagination-nav/pagination-nav.js"));
+
+exports.BPaginationNav = _paginationNav.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -14934,6 +15710,8 @@ exports.default = void 0;
 
 var _pagination = _interopRequireDefault(__webpack_require__(/*! ./pagination */ "./node_modules/bootstrap-vue/es/components/pagination/pagination.js"));
 
+exports.BPagination = _pagination.default;
+
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -15090,6 +15868,352 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ "./node_modules/bootstrap-vue/es/components/plugins-legacy.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/bootstrap-vue/es/components/plugins-legacy.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.Tooltip = exports.Toast = exports.Tabs = exports.Table = exports.Spinner = exports.Progress = exports.Popover = exports.PaginationNav = exports.Pagination = exports.Navbar = exports.Nav = exports.Modal = exports.Media = exports.ListGroup = exports.Link = exports.Jumbotron = exports.Image = exports.FormSelect = exports.FormFile = exports.FormTextarea = exports.FormInput = exports.FormRadio = exports.FormCheckbox = exports.FormGroup = exports.Form = exports.Embed = exports.Dropdown = exports.Collapse = exports.Layout = exports.Carousel = exports.Card = exports.InputGroup = exports.ButtonToolbar = exports.ButtonGroup = exports.Button = exports.Breadcrumb = exports.Badge = exports.Alert = void 0;
+
+var _alert = _interopRequireDefault(__webpack_require__(/*! ./alert */ "./node_modules/bootstrap-vue/es/components/alert/index.js"));
+
+exports.Alert = _alert.default;
+
+var _badge = _interopRequireDefault(__webpack_require__(/*! ./badge */ "./node_modules/bootstrap-vue/es/components/badge/index.js"));
+
+exports.Badge = _badge.default;
+
+var _breadcrumb = _interopRequireDefault(__webpack_require__(/*! ./breadcrumb */ "./node_modules/bootstrap-vue/es/components/breadcrumb/index.js"));
+
+exports.Breadcrumb = _breadcrumb.default;
+
+var _button = _interopRequireDefault(__webpack_require__(/*! ./button */ "./node_modules/bootstrap-vue/es/components/button/index.js"));
+
+exports.Button = _button.default;
+
+var _buttonGroup = _interopRequireDefault(__webpack_require__(/*! ./button-group */ "./node_modules/bootstrap-vue/es/components/button-group/index.js"));
+
+exports.ButtonGroup = _buttonGroup.default;
+
+var _buttonToolbar = _interopRequireDefault(__webpack_require__(/*! ./button-toolbar */ "./node_modules/bootstrap-vue/es/components/button-toolbar/index.js"));
+
+exports.ButtonToolbar = _buttonToolbar.default;
+
+var _inputGroup = _interopRequireDefault(__webpack_require__(/*! ./input-group */ "./node_modules/bootstrap-vue/es/components/input-group/index.js"));
+
+exports.InputGroup = _inputGroup.default;
+
+var _card = _interopRequireDefault(__webpack_require__(/*! ./card */ "./node_modules/bootstrap-vue/es/components/card/index.js"));
+
+exports.Card = _card.default;
+
+var _carousel = _interopRequireDefault(__webpack_require__(/*! ./carousel */ "./node_modules/bootstrap-vue/es/components/carousel/index.js"));
+
+exports.Carousel = _carousel.default;
+
+var _layout = _interopRequireDefault(__webpack_require__(/*! ./layout */ "./node_modules/bootstrap-vue/es/components/layout/index.js"));
+
+exports.Layout = _layout.default;
+
+var _collapse = _interopRequireDefault(__webpack_require__(/*! ./collapse */ "./node_modules/bootstrap-vue/es/components/collapse/index.js"));
+
+exports.Collapse = _collapse.default;
+
+var _dropdown = _interopRequireDefault(__webpack_require__(/*! ./dropdown */ "./node_modules/bootstrap-vue/es/components/dropdown/index.js"));
+
+exports.Dropdown = _dropdown.default;
+
+var _embed = _interopRequireDefault(__webpack_require__(/*! ./embed */ "./node_modules/bootstrap-vue/es/components/embed/index.js"));
+
+exports.Embed = _embed.default;
+
+var _form = _interopRequireDefault(__webpack_require__(/*! ./form */ "./node_modules/bootstrap-vue/es/components/form/index.js"));
+
+exports.Form = _form.default;
+
+var _formGroup = _interopRequireDefault(__webpack_require__(/*! ./form-group */ "./node_modules/bootstrap-vue/es/components/form-group/index.js"));
+
+exports.FormGroup = _formGroup.default;
+
+var _formCheckbox = _interopRequireDefault(__webpack_require__(/*! ./form-checkbox */ "./node_modules/bootstrap-vue/es/components/form-checkbox/index.js"));
+
+exports.FormCheckbox = _formCheckbox.default;
+
+var _formRadio = _interopRequireDefault(__webpack_require__(/*! ./form-radio */ "./node_modules/bootstrap-vue/es/components/form-radio/index.js"));
+
+exports.FormRadio = _formRadio.default;
+
+var _formInput = _interopRequireDefault(__webpack_require__(/*! ./form-input */ "./node_modules/bootstrap-vue/es/components/form-input/index.js"));
+
+exports.FormInput = _formInput.default;
+
+var _formTextarea = _interopRequireDefault(__webpack_require__(/*! ./form-textarea */ "./node_modules/bootstrap-vue/es/components/form-textarea/index.js"));
+
+exports.FormTextarea = _formTextarea.default;
+
+var _formFile = _interopRequireDefault(__webpack_require__(/*! ./form-file */ "./node_modules/bootstrap-vue/es/components/form-file/index.js"));
+
+exports.FormFile = _formFile.default;
+
+var _formSelect = _interopRequireDefault(__webpack_require__(/*! ./form-select */ "./node_modules/bootstrap-vue/es/components/form-select/index.js"));
+
+exports.FormSelect = _formSelect.default;
+
+var _image = _interopRequireDefault(__webpack_require__(/*! ./image */ "./node_modules/bootstrap-vue/es/components/image/index.js"));
+
+exports.Image = _image.default;
+
+var _jumbotron = _interopRequireDefault(__webpack_require__(/*! ./jumbotron */ "./node_modules/bootstrap-vue/es/components/jumbotron/index.js"));
+
+exports.Jumbotron = _jumbotron.default;
+
+var _link = _interopRequireDefault(__webpack_require__(/*! ./link */ "./node_modules/bootstrap-vue/es/components/link/index.js"));
+
+exports.Link = _link.default;
+
+var _listGroup = _interopRequireDefault(__webpack_require__(/*! ./list-group */ "./node_modules/bootstrap-vue/es/components/list-group/index.js"));
+
+exports.ListGroup = _listGroup.default;
+
+var _media = _interopRequireDefault(__webpack_require__(/*! ./media */ "./node_modules/bootstrap-vue/es/components/media/index.js"));
+
+exports.Media = _media.default;
+
+var _modal = _interopRequireDefault(__webpack_require__(/*! ./modal */ "./node_modules/bootstrap-vue/es/components/modal/index.js"));
+
+exports.Modal = _modal.default;
+
+var _nav = _interopRequireDefault(__webpack_require__(/*! ./nav */ "./node_modules/bootstrap-vue/es/components/nav/index.js"));
+
+exports.Nav = _nav.default;
+
+var _navbar = _interopRequireDefault(__webpack_require__(/*! ./navbar */ "./node_modules/bootstrap-vue/es/components/navbar/index.js"));
+
+exports.Navbar = _navbar.default;
+
+var _pagination = _interopRequireDefault(__webpack_require__(/*! ./pagination */ "./node_modules/bootstrap-vue/es/components/pagination/index.js"));
+
+exports.Pagination = _pagination.default;
+
+var _paginationNav = _interopRequireDefault(__webpack_require__(/*! ./pagination-nav */ "./node_modules/bootstrap-vue/es/components/pagination-nav/index.js"));
+
+exports.PaginationNav = _paginationNav.default;
+
+var _popover = _interopRequireDefault(__webpack_require__(/*! ./popover */ "./node_modules/bootstrap-vue/es/components/popover/index.js"));
+
+exports.Popover = _popover.default;
+
+var _progress = _interopRequireDefault(__webpack_require__(/*! ./progress */ "./node_modules/bootstrap-vue/es/components/progress/index.js"));
+
+exports.Progress = _progress.default;
+
+var _spinner = _interopRequireDefault(__webpack_require__(/*! ./spinner */ "./node_modules/bootstrap-vue/es/components/spinner/index.js"));
+
+exports.Spinner = _spinner.default;
+
+var _table = _interopRequireDefault(__webpack_require__(/*! ./table */ "./node_modules/bootstrap-vue/es/components/table/index.js"));
+
+exports.Table = _table.default;
+
+var _tabs = _interopRequireDefault(__webpack_require__(/*! ./tabs */ "./node_modules/bootstrap-vue/es/components/tabs/index.js"));
+
+exports.Tabs = _tabs.default;
+
+var _toast = _interopRequireDefault(__webpack_require__(/*! ./toast */ "./node_modules/bootstrap-vue/es/components/toast/index.js"));
+
+exports.Toast = _toast.default;
+
+var _tooltip = _interopRequireDefault(__webpack_require__(/*! ./tooltip */ "./node_modules/bootstrap-vue/es/components/tooltip/index.js"));
+
+exports.Tooltip = _tooltip.default;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap-vue/es/components/plugins.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/bootstrap-vue/es/components/plugins.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.TooltipPlugin = exports.ToastPlugin = exports.TabsPlugin = exports.TablePlugin = exports.SpinnerPlugin = exports.ProgressPlugin = exports.PopoverPlugin = exports.PaginationNavPlugin = exports.PaginationPlugin = exports.NavbarPlugin = exports.NavPlugin = exports.ModalPlugin = exports.MediaPlugin = exports.ListGroupPlugin = exports.LinkPlugin = exports.JumbotronPlugin = exports.ImagePlugin = exports.FormSelectPlugin = exports.FormFilePlugin = exports.FormTextareaPlugin = exports.FormInputPlugin = exports.FormRadioPlugin = exports.FormCheckboxPlugin = exports.FormGroupPlugin = exports.FormPlugin = exports.EmbedPlugin = exports.DropdownPlugin = exports.CollapsePlugin = exports.LayoutPlugin = exports.CarouselPlugin = exports.CardPlugin = exports.InputGroupPlugin = exports.ButtonToolbarPlugin = exports.ButtonGroupPlugin = exports.ButtonPlugin = exports.BreadcrumbPlugin = exports.BadgePlugin = exports.AlertPlugin = exports.BVToastPlugin = exports.BVModalPlugin = void 0;
+
+var _bvModal = _interopRequireDefault(__webpack_require__(/*! ./modal/helpers/bv-modal */ "./node_modules/bootstrap-vue/es/components/modal/helpers/bv-modal.js"));
+
+exports.BVModalPlugin = _bvModal.default;
+
+var _bvToast = _interopRequireDefault(__webpack_require__(/*! ./toast/helpers/bv-toast */ "./node_modules/bootstrap-vue/es/components/toast/helpers/bv-toast.js"));
+
+exports.BVToastPlugin = _bvToast.default;
+
+var _alert = _interopRequireDefault(__webpack_require__(/*! ./alert */ "./node_modules/bootstrap-vue/es/components/alert/index.js"));
+
+exports.AlertPlugin = _alert.default;
+
+var _badge = _interopRequireDefault(__webpack_require__(/*! ./badge */ "./node_modules/bootstrap-vue/es/components/badge/index.js"));
+
+exports.BadgePlugin = _badge.default;
+
+var _breadcrumb = _interopRequireDefault(__webpack_require__(/*! ./breadcrumb */ "./node_modules/bootstrap-vue/es/components/breadcrumb/index.js"));
+
+exports.BreadcrumbPlugin = _breadcrumb.default;
+
+var _button = _interopRequireDefault(__webpack_require__(/*! ./button */ "./node_modules/bootstrap-vue/es/components/button/index.js"));
+
+exports.ButtonPlugin = _button.default;
+
+var _buttonGroup = _interopRequireDefault(__webpack_require__(/*! ./button-group */ "./node_modules/bootstrap-vue/es/components/button-group/index.js"));
+
+exports.ButtonGroupPlugin = _buttonGroup.default;
+
+var _buttonToolbar = _interopRequireDefault(__webpack_require__(/*! ./button-toolbar */ "./node_modules/bootstrap-vue/es/components/button-toolbar/index.js"));
+
+exports.ButtonToolbarPlugin = _buttonToolbar.default;
+
+var _inputGroup = _interopRequireDefault(__webpack_require__(/*! ./input-group */ "./node_modules/bootstrap-vue/es/components/input-group/index.js"));
+
+exports.InputGroupPlugin = _inputGroup.default;
+
+var _card = _interopRequireDefault(__webpack_require__(/*! ./card */ "./node_modules/bootstrap-vue/es/components/card/index.js"));
+
+exports.CardPlugin = _card.default;
+
+var _carousel = _interopRequireDefault(__webpack_require__(/*! ./carousel */ "./node_modules/bootstrap-vue/es/components/carousel/index.js"));
+
+exports.CarouselPlugin = _carousel.default;
+
+var _layout = _interopRequireDefault(__webpack_require__(/*! ./layout */ "./node_modules/bootstrap-vue/es/components/layout/index.js"));
+
+exports.LayoutPlugin = _layout.default;
+
+var _collapse = _interopRequireDefault(__webpack_require__(/*! ./collapse */ "./node_modules/bootstrap-vue/es/components/collapse/index.js"));
+
+exports.CollapsePlugin = _collapse.default;
+
+var _dropdown = _interopRequireDefault(__webpack_require__(/*! ./dropdown */ "./node_modules/bootstrap-vue/es/components/dropdown/index.js"));
+
+exports.DropdownPlugin = _dropdown.default;
+
+var _embed = _interopRequireDefault(__webpack_require__(/*! ./embed */ "./node_modules/bootstrap-vue/es/components/embed/index.js"));
+
+exports.EmbedPlugin = _embed.default;
+
+var _form = _interopRequireDefault(__webpack_require__(/*! ./form */ "./node_modules/bootstrap-vue/es/components/form/index.js"));
+
+exports.FormPlugin = _form.default;
+
+var _formGroup = _interopRequireDefault(__webpack_require__(/*! ./form-group */ "./node_modules/bootstrap-vue/es/components/form-group/index.js"));
+
+exports.FormGroupPlugin = _formGroup.default;
+
+var _formCheckbox = _interopRequireDefault(__webpack_require__(/*! ./form-checkbox */ "./node_modules/bootstrap-vue/es/components/form-checkbox/index.js"));
+
+exports.FormCheckboxPlugin = _formCheckbox.default;
+
+var _formRadio = _interopRequireDefault(__webpack_require__(/*! ./form-radio */ "./node_modules/bootstrap-vue/es/components/form-radio/index.js"));
+
+exports.FormRadioPlugin = _formRadio.default;
+
+var _formInput = _interopRequireDefault(__webpack_require__(/*! ./form-input */ "./node_modules/bootstrap-vue/es/components/form-input/index.js"));
+
+exports.FormInputPlugin = _formInput.default;
+
+var _formTextarea = _interopRequireDefault(__webpack_require__(/*! ./form-textarea */ "./node_modules/bootstrap-vue/es/components/form-textarea/index.js"));
+
+exports.FormTextareaPlugin = _formTextarea.default;
+
+var _formFile = _interopRequireDefault(__webpack_require__(/*! ./form-file */ "./node_modules/bootstrap-vue/es/components/form-file/index.js"));
+
+exports.FormFilePlugin = _formFile.default;
+
+var _formSelect = _interopRequireDefault(__webpack_require__(/*! ./form-select */ "./node_modules/bootstrap-vue/es/components/form-select/index.js"));
+
+exports.FormSelectPlugin = _formSelect.default;
+
+var _image = _interopRequireDefault(__webpack_require__(/*! ./image */ "./node_modules/bootstrap-vue/es/components/image/index.js"));
+
+exports.ImagePlugin = _image.default;
+
+var _jumbotron = _interopRequireDefault(__webpack_require__(/*! ./jumbotron */ "./node_modules/bootstrap-vue/es/components/jumbotron/index.js"));
+
+exports.JumbotronPlugin = _jumbotron.default;
+
+var _link = _interopRequireDefault(__webpack_require__(/*! ./link */ "./node_modules/bootstrap-vue/es/components/link/index.js"));
+
+exports.LinkPlugin = _link.default;
+
+var _listGroup = _interopRequireDefault(__webpack_require__(/*! ./list-group */ "./node_modules/bootstrap-vue/es/components/list-group/index.js"));
+
+exports.ListGroupPlugin = _listGroup.default;
+
+var _media = _interopRequireDefault(__webpack_require__(/*! ./media */ "./node_modules/bootstrap-vue/es/components/media/index.js"));
+
+exports.MediaPlugin = _media.default;
+
+var _modal = _interopRequireDefault(__webpack_require__(/*! ./modal */ "./node_modules/bootstrap-vue/es/components/modal/index.js"));
+
+exports.ModalPlugin = _modal.default;
+
+var _nav = _interopRequireDefault(__webpack_require__(/*! ./nav */ "./node_modules/bootstrap-vue/es/components/nav/index.js"));
+
+exports.NavPlugin = _nav.default;
+
+var _navbar = _interopRequireDefault(__webpack_require__(/*! ./navbar */ "./node_modules/bootstrap-vue/es/components/navbar/index.js"));
+
+exports.NavbarPlugin = _navbar.default;
+
+var _pagination = _interopRequireDefault(__webpack_require__(/*! ./pagination */ "./node_modules/bootstrap-vue/es/components/pagination/index.js"));
+
+exports.PaginationPlugin = _pagination.default;
+
+var _paginationNav = _interopRequireDefault(__webpack_require__(/*! ./pagination-nav */ "./node_modules/bootstrap-vue/es/components/pagination-nav/index.js"));
+
+exports.PaginationNavPlugin = _paginationNav.default;
+
+var _popover = _interopRequireDefault(__webpack_require__(/*! ./popover */ "./node_modules/bootstrap-vue/es/components/popover/index.js"));
+
+exports.PopoverPlugin = _popover.default;
+
+var _progress = _interopRequireDefault(__webpack_require__(/*! ./progress */ "./node_modules/bootstrap-vue/es/components/progress/index.js"));
+
+exports.ProgressPlugin = _progress.default;
+
+var _spinner = _interopRequireDefault(__webpack_require__(/*! ./spinner */ "./node_modules/bootstrap-vue/es/components/spinner/index.js"));
+
+exports.SpinnerPlugin = _spinner.default;
+
+var _table = _interopRequireDefault(__webpack_require__(/*! ./table */ "./node_modules/bootstrap-vue/es/components/table/index.js"));
+
+exports.TablePlugin = _table.default;
+
+var _tabs = _interopRequireDefault(__webpack_require__(/*! ./tabs */ "./node_modules/bootstrap-vue/es/components/tabs/index.js"));
+
+exports.TabsPlugin = _tabs.default;
+
+var _toast = _interopRequireDefault(__webpack_require__(/*! ./toast */ "./node_modules/bootstrap-vue/es/components/toast/index.js"));
+
+exports.ToastPlugin = _toast.default;
+
+var _tooltip = _interopRequireDefault(__webpack_require__(/*! ./tooltip */ "./node_modules/bootstrap-vue/es/components/tooltip/index.js"));
+
+exports.TooltipPlugin = _tooltip.default;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap-vue/es/components/popover/index.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/bootstrap-vue/es/components/popover/index.js ***!
@@ -15105,6 +16229,8 @@ exports.default = void 0;
 
 var _popover = _interopRequireDefault(__webpack_require__(/*! ./popover */ "./node_modules/bootstrap-vue/es/components/popover/popover.js"));
 
+exports.BPopover = _popover.default;
+
 var _popover2 = _interopRequireDefault(__webpack_require__(/*! ../../directives/popover/popover */ "./node_modules/bootstrap-vue/es/directives/popover/popover.js"));
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
@@ -15115,7 +16241,7 @@ var components = {
   BPopover: _popover.default
 };
 var directives = {
-  BPopover: _popover2.default
+  VBPopover: _popover2.default
 };
 var _default = {
   install: (0, _plugins.installFactory)({
@@ -15146,10 +16272,17 @@ var _popover = _interopRequireDefault(__webpack_require__(/*! ../../utils/popove
 
 var _warn = _interopRequireDefault(__webpack_require__(/*! ../../utils/warn */ "./node_modules/bootstrap-vue/es/utils/warn.js"));
 
+var _config = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
+
+var _safeTypes = __webpack_require__(/*! ../../utils/safe-types */ "./node_modules/bootstrap-vue/es/utils/safe-types.js");
+
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 var _toolpop = _interopRequireDefault(__webpack_require__(/*! ../../mixins/toolpop */ "./node_modules/bootstrap-vue/es/mixins/toolpop.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var NAME = 'BPopover';
 var props = {
   title: {
     type: String,
@@ -15166,14 +16299,28 @@ var props = {
   placement: {
     type: String,
     default: 'right'
+  },
+  boundary: {
+    // String: scrollParent, window, or viewport
+    // Element: element reference
+    type: [String, _safeTypes.HTMLElement],
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'boundary');
+    }
+  },
+  boundaryPadding: {
+    type: Number,
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'boundaryPadding');
+    }
   } // @vue/component
 
 };
 exports.props = props;
 
-var _default = _vue.default.extend({
-  name: 'BPopover',
-  mixins: [_toolpop.default],
+var _default2 = _vue.default.extend({
+  name: NAME,
+  mixins: [_toolpop.default, _normalizeSlot.default],
   props: props,
   data: function data() {
     return {};
@@ -15205,13 +16352,13 @@ var _default = _vue.default.extend({
       }
     }, [h('div', {
       ref: 'title'
-    }, this.$slots.title), h('div', {
+    }, this.normalizeSlot('title')), h('div', {
       ref: 'content'
-    }, this.$slots.default)]);
+    }, this.normalizeSlot('default'))]);
   }
 });
 
-exports.default = _default;
+exports.default = _default2;
 
 /***/ }),
 
@@ -15230,7 +16377,11 @@ exports.default = void 0;
 
 var _progress = _interopRequireDefault(__webpack_require__(/*! ./progress */ "./node_modules/bootstrap-vue/es/components/progress/progress.js"));
 
+exports.BProgress = _progress.default;
+
 var _progressBar = _interopRequireDefault(__webpack_require__(/*! ./progress-bar */ "./node_modules/bootstrap-vue/es/components/progress/progress-bar.js"));
+
+exports.BProgressBar = _progressBar.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -15264,15 +16415,21 @@ exports.default = void 0;
 
 var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./node_modules/bootstrap-vue/es/utils/vue.js"));
 
+var _config = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
+
 var _html = __webpack_require__(/*! ../../utils/html */ "./node_modules/bootstrap-vue/es/utils/html.js");
 
 var _inspect = __webpack_require__(/*! ../../utils/inspect */ "./node_modules/bootstrap-vue/es/utils/inspect.js");
 
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// @vue/component
+var NAME = 'BProgressBar'; // @vue/component
+
 var _default2 = _vue.default.extend({
-  name: 'BProgressBar',
+  name: NAME,
+  mixins: [_normalizeSlot.default],
   inject: {
     bvProgress: {
       default: function _default()
@@ -15306,7 +16463,9 @@ var _default2 = _vue.default.extend({
     },
     variant: {
       type: String,
-      default: null
+      default: function _default() {
+        return (0, _config.getComponentConfig)(NAME, 'variant');
+      }
     },
     striped: {
       type: Boolean,
@@ -15370,8 +16529,8 @@ var _default2 = _vue.default.extend({
   render: function render(h) {
     var childNodes = h(false);
 
-    if (this.$slots.default) {
-      childNodes = this.$slots.default;
+    if (this.hasNormalizedSlot('default')) {
+      childNodes = this.normalizeSlot('default');
     } else if (this.label || this.labelHtml) {
       childNodes = h('span', {
         domProps: (0, _html.htmlOrText)(this.labelHtml, this.label)
@@ -15415,13 +16574,19 @@ exports.default = void 0;
 
 var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./node_modules/bootstrap-vue/es/utils/vue.js"));
 
+var _config = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
+
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 var _progressBar = _interopRequireDefault(__webpack_require__(/*! ./progress-bar */ "./node_modules/bootstrap-vue/es/components/progress/progress-bar.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// @vue/component
-var _default = _vue.default.extend({
-  name: 'BProgress',
+var NAME = 'BProgress'; // @vue/component
+
+var _default2 = _vue.default.extend({
+  name: NAME,
+  mixins: [_normalizeSlot.default],
   provide: function provide() {
     return {
       bvProgress: this
@@ -15431,7 +16596,9 @@ var _default = _vue.default.extend({
     // These props can be inherited via the child b-progress-bar(s)
     variant: {
       type: String,
-      default: null
+      default: function _default() {
+        return (0, _config.getComponentConfig)(NAME, 'variant');
+      }
     },
     striped: {
       type: Boolean,
@@ -15475,7 +16642,7 @@ var _default = _vue.default.extend({
     }
   },
   render: function render(h) {
-    var childNodes = this.$slots.default;
+    var childNodes = this.normalizeSlot('default');
 
     if (!childNodes) {
       childNodes = h(_progressBar.default, {
@@ -15499,7 +16666,7 @@ var _default = _vue.default.extend({
   }
 });
 
-exports.default = _default;
+exports.default = _default2;
 
 /***/ }),
 
@@ -15517,6 +16684,8 @@ exports.__esModule = true;
 exports.default = void 0;
 
 var _spinner = _interopRequireDefault(__webpack_require__(/*! ./spinner */ "./node_modules/bootstrap-vue/es/components/spinner/spinner.js"));
+
+exports.BSpinner = _spinner.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -15551,13 +16720,18 @@ var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./
 
 var _vueFunctionalDataMerge = __webpack_require__(/*! vue-functional-data-merge */ "./node_modules/vue-functional-data-merge/dist/lib.esm.js");
 
+var _config = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
+
+var _normalizeSlot = __webpack_require__(/*! ../../utils/normalize-slot */ "./node_modules/bootstrap-vue/es/utils/normalize-slot.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-// @vue/component
-var _default = _vue.default.extend({
-  name: 'BSpinner',
+var NAME = 'BSpinner'; // @vue/component
+
+var _default2 = _vue.default.extend({
+  name: NAME,
   functional: true,
   props: {
     type: {
@@ -15571,7 +16745,9 @@ var _default = _vue.default.extend({
     },
     variant: {
       type: String,
-      default: null
+      default: function _default() {
+        return (0, _config.getComponentConfig)(NAME, 'variant');
+      }
     },
     small: {
       type: Boolean,
@@ -15591,27 +16767,29 @@ var _default = _vue.default.extend({
 
     var props = _ref.props,
         data = _ref.data,
-        slots = _ref.slots;
-    var label = h(false);
-    var hasLabel = slots().label || props.label;
+        slots = _ref.slots,
+        scopedSlots = _ref.scopedSlots;
+    var $slots = slots();
+    var $scopedSlots = scopedSlots || {};
+    var label = (0, _normalizeSlot.normalizeSlot)('label', {}, $scopedSlots, $slots) || props.label;
 
-    if (hasLabel) {
+    if (label) {
       label = h('span', {
         staticClass: 'sr-only'
-      }, hasLabel);
+      }, label);
     }
 
     return h(props.tag, (0, _vueFunctionalDataMerge.mergeData)(data, {
       attrs: {
-        role: hasLabel ? props.role || 'status' : null,
-        'aria-hidden': hasLabel ? null : 'true'
+        role: label ? props.role || 'status' : null,
+        'aria-hidden': label ? null : 'true'
       },
       class: (_class = {}, _defineProperty(_class, "spinner-".concat(props.type), Boolean(props.type)), _defineProperty(_class, "spinner-".concat(props.type, "-sm"), props.small), _defineProperty(_class, "text-".concat(props.variant), Boolean(props.variant)), _class)
-    }), [label]);
+    }), [label || h(false)]);
   }
 });
 
-exports.default = _default;
+exports.default = _default2;
 
 /***/ }),
 
@@ -16640,13 +17818,15 @@ var _looseEqual = _interopRequireDefault(__webpack_require__(/*! ../../../utils/
 
 var _array = __webpack_require__(/*! ../../../utils/array */ "./node_modules/bootstrap-vue/es/utils/array.js");
 
+var _config = __webpack_require__(/*! ../../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
+
 var _sanitizeRow = _interopRequireDefault(__webpack_require__(/*! ./sanitize-row */ "./node_modules/bootstrap-vue/es/components/table/helpers/sanitize-row.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var _default = {
+var _default2 = {
   props: {
     selectable: {
       type: Boolean,
@@ -16658,7 +17838,9 @@ var _default = {
     },
     selectedVariant: {
       type: String,
-      default: 'primary'
+      default: function _default() {
+        return (0, _config.getComponentConfig)('BTable', 'selectedVariant');
+      }
     }
   },
   data: function data() {
@@ -16818,7 +18000,7 @@ var _default = {
     }
   }
 };
-exports.default = _default;
+exports.default = _default2;
 
 /***/ }),
 
@@ -17646,7 +18828,10 @@ exports.default = _default;
 
 exports.__esModule = true;
 exports.default = void 0;
-var _default = {
+
+var _config = __webpack_require__(/*! ../../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
+
+var _default2 = {
   props: {
     footClone: {
       type: Boolean,
@@ -17654,7 +18839,9 @@ var _default = {
     },
     footVariant: {
       type: String,
-      default: ''
+      default: function _default() {
+        return (0, _config.getComponentConfig)('BTable', 'footVariant');
+      }
     },
     tfootClass: {
       type: [String, Array, Object],
@@ -17668,7 +18855,7 @@ var _default = {
   computed: {
     footClasses: function footClasses() {
       var variant = this.footVariant || this.headVariant || null;
-      return [variant ? 'thead-' + variant : '', this.tfootClass];
+      return [variant ? "thead-".concat(variant) : '', this.tfootClass];
     }
   },
   methods: {
@@ -17679,7 +18866,7 @@ var _default = {
     }
   }
 };
-exports.default = _default;
+exports.default = _default2;
 
 /***/ }),
 
@@ -17696,9 +18883,11 @@ exports.default = _default;
 exports.__esModule = true;
 exports.default = void 0;
 
+var _keyCodes = _interopRequireDefault(__webpack_require__(/*! ../../../utils/key-codes */ "./node_modules/bootstrap-vue/es/utils/key-codes.js"));
+
 var _startcase = _interopRequireDefault(__webpack_require__(/*! ../../../utils/startcase */ "./node_modules/bootstrap-vue/es/utils/startcase.js"));
 
-var _keyCodes = _interopRequireDefault(__webpack_require__(/*! ../../../utils/key-codes */ "./node_modules/bootstrap-vue/es/utils/key-codes.js"));
+var _config = __webpack_require__(/*! ../../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
 
 var _html = __webpack_require__(/*! ../../../utils/html */ "./node_modules/bootstrap-vue/es/utils/html.js");
 
@@ -17712,11 +18901,13 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var _default = {
+var _default2 = {
   props: {
     headVariant: {
       type: String,
-      default: ''
+      default: function _default() {
+        return (0, _config.getComponentConfig)('BTable', 'headVariant');
+      }
     },
     theadClass: {
       type: [String, Array, Object],
@@ -17819,9 +19010,7 @@ var _default = {
         };
         var slot = isFoot && _this.hasNormalizedSlot("FOOT_".concat(field.key)) ? _this.normalizeSlot("FOOT_".concat(field.key), fieldScope) : _this.normalizeSlot("HEAD_".concat(field.key), fieldScope);
 
-        if (slot) {
-          slot = [slot];
-        } else {
+        if (!slot) {
           data.domProps = (0, _html.htmlOrText)(field.labelHtml);
         }
 
@@ -17866,7 +19055,7 @@ var _default = {
     }
   }
 };
-exports.default = _default;
+exports.default = _default2;
 
 /***/ }),
 
@@ -18214,6 +19403,8 @@ exports.default = void 0;
 
 var _table = _interopRequireDefault(__webpack_require__(/*! ./table */ "./node_modules/bootstrap-vue/es/components/table/table.js"));
 
+exports.BTable = _table.default;
+
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -18469,7 +19660,11 @@ exports.default = void 0;
 
 var _tabs = _interopRequireDefault(__webpack_require__(/*! ./tabs */ "./node_modules/bootstrap-vue/es/components/tabs/tabs.js"));
 
+exports.BTabs = _tabs.default;
+
 var _tab = _interopRequireDefault(__webpack_require__(/*! ./tab */ "./node_modules/bootstrap-vue/es/components/tabs/tab.js"));
+
+exports.BTab = _tab.default;
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
@@ -18505,6 +19700,8 @@ var _vue = _interopRequireDefault(__webpack_require__(/*! ../../utils/vue */ "./
 
 var _id = _interopRequireDefault(__webpack_require__(/*! ../../mixins/id */ "./node_modules/bootstrap-vue/es/mixins/id.js"));
 
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 var _warn = _interopRequireDefault(__webpack_require__(/*! ../../utils/warn */ "./node_modules/bootstrap-vue/es/utils/warn.js"));
 
 var _dom = __webpack_require__(/*! ../../utils/dom */ "./node_modules/bootstrap-vue/es/utils/dom.js");
@@ -18515,7 +19712,7 @@ var DEPRECATED_MSG = 'Setting prop "href" is deprecated. Use the <b-nav> compone
 
 var _default2 = _vue.default.extend({
   name: 'BTab',
-  mixins: [_id.default],
+  mixins: [_id.default, _normalizeSlot.default],
   inject: {
     bvTabs: {
       default: function _default() {
@@ -18652,7 +19849,7 @@ var _default2 = _vue.default.extend({
   updated: function updated() {
     // Force the tab button content to update (since slots are not reactive)
     // Only done if we have a title slot, as the title prop is reactive
-    if (this.$slots.title && this.bvTabs.updateButton) {
+    if (this.hasNormalizedSlot('title') && this.bvTabs.updateButton) {
       this.bvTabs.updateButton(this);
     }
   },
@@ -18709,7 +19906,7 @@ var _default2 = _vue.default.extend({
         'aria-labelledby': this.controlledBy || null
       }
     }, // Render content lazily if requested
-    [this.localActive || !this.computedLazy ? this.$slots.default : h(false)]);
+    [this.localActive || !this.computedLazy ? this.normalizeSlot('default') : h(false)]);
     return h('transition', {
       props: {
         mode: 'out-in',
@@ -18759,6 +19956,8 @@ var _observeDom = _interopRequireDefault(__webpack_require__(/*! ../../utils/obs
 var _object = __webpack_require__(/*! ../../utils/object */ "./node_modules/bootstrap-vue/es/utils/object.js");
 
 var _id = _interopRequireDefault(__webpack_require__(/*! ../../mixins/id */ "./node_modules/bootstrap-vue/es/mixins/id.js"));
+
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -18905,7 +20104,7 @@ var BTabButtonHelper = _vue.default.extend({
         click: this.handleEvt,
         keydown: this.handleEvt
       }
-    }, [this.tab.$slots.title || this.tab.title]);
+    }, [this.tab.normalizeSlot('title') || this.tab.title]);
     return h('li', {
       staticClass: 'nav-item',
       class: [this.tab.titleItemClass],
@@ -18919,7 +20118,7 @@ var BTabButtonHelper = _vue.default.extend({
 
 var _default2 = _vue.default.extend({
   name: 'BTabs',
-  mixins: [_id.default],
+  mixins: [_id.default, _normalizeSlot.default],
   provide: function provide() {
     return {
       bvTabs: this
@@ -19128,7 +20327,7 @@ var _default2 = _vue.default.extend({
       }
     },
     getTabs: function getTabs() {
-      return (this.$slots.default || []).map(function (vnode) {
+      return (this.normalizeSlot('default') || []).map(function (vnode) {
         return vnode.componentInstance;
       }).filter(function (tab) {
         return tab && tab._isTab;
@@ -19363,7 +20562,7 @@ var _default2 = _vue.default.extend({
         vertical: this.vertical,
         small: this.small
       }
-    }, [buttons, this.$slots.tabs]);
+    }, [buttons, this.normalizeSlot('tabs')]);
     nav = h('div', {
       key: 'bv-tabs-nav',
       class: [{
@@ -19380,7 +20579,7 @@ var _default2 = _vue.default.extend({
         class: ['tab-pane', 'active', {
           'card-body': this.card
         }]
-      }, this.$slots.empty);
+      }, this.normalizeSlot('empty'));
     } // Main content section
     // TODO: This container should be a helper component
 
@@ -19395,7 +20594,7 @@ var _default2 = _vue.default.extend({
       attrs: {
         id: this.safeId('_BV_tab_container_')
       }
-    }, [this.$slots.default, empty]); // Render final output
+    }, [this.normalizeSlot('default'), empty]); // Render final output
 
     return h(this.tag, {
       staticClass: 'tabs',
@@ -19428,6 +20627,8 @@ exports.__esModule = true;
 exports.default = void 0;
 
 var _vue = _interopRequireDefault(__webpack_require__(/*! ../../../utils/vue */ "./node_modules/bootstrap-vue/es/utils/vue.js"));
+
+var _array = __webpack_require__(/*! ../../../utils/array */ "./node_modules/bootstrap-vue/es/utils/array.js");
 
 var _config = __webpack_require__(/*! ../../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
 
@@ -19464,7 +20665,8 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 // --- Constants ---
-var PROP_NAME = '$bvToast'; // Base toast props that are allowed
+var PROP_NAME = '$bvToast';
+var PROP_NAME_PRIV = '_bv__toast'; // Base toast props that are allowed
 // Some may be ignored or overridden on some message boxes
 // Prop ID is allowed, but really only should be used for testing
 // We need to add it in explicitly as it comes from the `idMixin`
@@ -19525,6 +20727,7 @@ var BToastPop = _vue.default.extend({
     this.$once('hidden', handleDestroy); // Self destruct when toaster is destroyed
 
     this.listenOnRoot('bv::toaster::destroyed', function (toaster) {
+      /* istanbul ignore next: hard to test */
       if (toaster === self.toaster) {
         handleDestroy();
       }
@@ -19566,9 +20769,10 @@ var makeToast = function makeToast(props, $parent) {
         value = [$parent.$createElement('strong', {
           class: 'mr-2'
         }, value)];
-      }
+      } // Make sure slot value is an array for Vue 2.5.x compatability
 
-      toast.$slots[propsToSlots[prop]] = value;
+
+      toast.$slots[propsToSlots[prop]] = (0, _array.concat)(value);
     }
   }); // Create a mount point (a DIV)
   // TODO: this needs to target a portal-target
@@ -19643,20 +20847,20 @@ function () {
 
 
 var install = function install(_Vue) {
-  if (install._installed) {
+  if (install.installed) {
     // Only install once
 
     /* istanbul ignore next */
     return;
   }
 
-  install._installed = true; // Add our instance mixin
+  install.installed = true; // Add our instance mixin
 
   _Vue.mixin({
     beforeCreate: function beforeCreate() {
       // Because we need access to `$root` for `$emits`, and VM for parenting,
       // we have to create a fresh instance of `BvToast` for each VM
-      this._bv__toast = new BvToast(this);
+      this[PROP_NAME_PRIV] = new BvToast(this);
     }
   }); // Define our read-only `$bvToast` instance property
   // Placed in an if just in case in HMR mode
@@ -19665,13 +20869,21 @@ var install = function install(_Vue) {
   if (!_Vue.prototype.hasOwnProperty(PROP_NAME)) {
     (0, _object.defineProperty)(_Vue.prototype, PROP_NAME, {
       get: function get() {
-        return this._bv__toast;
+        /* istanbul ignore next */
+        if (!this || !this[PROP_NAME_PRIV]) {
+          (0, _warn.warn)("'".concat(PROP_NAME, "' must be accessed from a Vue instance 'this' context"));
+        }
+
+        return this[PROP_NAME_PRIV];
       }
     });
   }
 };
 
-var _default = install;
+install.installed = false;
+var _default = {
+  install: install
+};
 exports.default = _default;
 
 /***/ }),
@@ -19691,7 +20903,11 @@ exports.default = void 0;
 
 var _toast = _interopRequireDefault(__webpack_require__(/*! ./toast */ "./node_modules/bootstrap-vue/es/components/toast/toast.js"));
 
+exports.BToast = _toast.default;
+
 var _toaster = _interopRequireDefault(__webpack_require__(/*! ./toaster */ "./node_modules/bootstrap-vue/es/components/toast/toaster.js"));
+
+exports.BToaster = _toaster.default;
 
 var _bvToast = _interopRequireDefault(__webpack_require__(/*! ./helpers/bv-toast */ "./node_modules/bootstrap-vue/es/components/toast/helpers/bv-toast.js"));
 
@@ -19703,18 +20919,15 @@ var components = {
   BToast: _toast.default,
   BToaster: _toaster.default
 };
-
-var _install = (0, _plugins.installFactory)({
-  components: components
-});
-
+var plugins = {
+  // $bvToast injection
+  BVToastPlugin: _bvToast.default
+};
 var _default = {
-  install: function install(Vue) {
-    // Inject `$bvToast` into Vue prototype
-    (0, _bvToast.default)(Vue); // Install components
-
-    _install(Vue);
-  }
+  install: (0, _plugins.installFactory)({
+    components: components,
+    plugins: plugins
+  })
 };
 exports.default = _default;
 
@@ -19759,7 +20972,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-/* istanbul ignore file: for now until ready for testing */
 // --- Constants ---
 var NAME = 'BToast';
 var MIN_DURATION = 1000;
@@ -19776,14 +20988,16 @@ var props = {
     type: String,
     default: null
   },
-  variant: {
-    type: String,
-    default: null
-  },
   toaster: {
     type: String,
     default: function _default() {
-      return (0, _config.getComponentConfig)(NAME, 'toaster') || 'b-toaster-top-right';
+      return (0, _config.getComponentConfig)(NAME, 'toaster');
+    }
+  },
+  variant: {
+    type: String,
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'variant');
     }
   },
   isStatus: {
@@ -19801,7 +21015,9 @@ var props = {
   },
   autoHideDelay: {
     type: [Number, String],
-    default: 5000
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'autoHideDelay');
+    }
   },
   noCloseButton: {
     type: Boolean,
@@ -19821,15 +21037,21 @@ var props = {
   },
   toastClass: {
     type: [String, Object, Array],
-    default: ''
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'toastClass');
+    }
   },
   headerClass: {
     type: [String, Object, Array],
-    default: ''
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'headerClass');
+    }
   },
   bodyClass: {
     type: [String, Object, Array],
-    default: ''
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'bodyClass');
+    }
   },
   href: {
     type: String,
@@ -19903,6 +21125,9 @@ var _default2 = _vue.default.extend({
       // Minimum supported duration is 1 second
       return Math.max(parseInt(this.autoHideDelay, 10) || 0, MIN_DURATION);
     },
+    computedToaster: function computedToaster() {
+      return String(this.toaster);
+    },
     transitionHandlers: function transitionHandlers() {
       return {
         beforeEnter: this.onBeforeEnter,
@@ -19921,7 +21146,9 @@ var _default2 = _vue.default.extend({
         this.$emit('change', newVal);
       }
     },
-    toaster: function toaster(newVal) {
+    toaster: function toaster(newVal)
+    /* istanbul ignore next */
+    {
       var _this = this;
 
       // If toaster target changed, make sure toaster exists
@@ -19929,7 +21156,9 @@ var _default2 = _vue.default.extend({
         return _this.ensureToaster;
       });
     },
-    static: function _static(newVal) {
+    static: function _static(newVal)
+    /* istanbul ignore next */
+    {
       // If static changes to true, and the toast is showing,
       // ensure the toaster target exists
       if (newVal && this.localShow) {
@@ -19961,8 +21190,10 @@ var _default2 = _vue.default.extend({
       }
     }); // Make sure we hide when toaster is destroyed
 
+    /* istanbul ignore next: difficult to test */
+
     this.listenOnRoot('bv::toaster::destroyed', function (toaster) {
-      if (toaster === _this2.toaster) {
+      if (toaster === _this2.computedToaster) {
         _this2.hide();
       }
     });
@@ -20005,8 +21236,7 @@ var _default2 = _vue.default.extend({
         relatedTarget: null
       }, opts, {
         vueTarget: this,
-        componentId: this.id || null,
-        toastId: this.id || null
+        componentId: this.id || null
       }));
     },
     emitEvent: function emitEvent(bvEvt) {
@@ -20019,13 +21249,13 @@ var _default2 = _vue.default.extend({
         return;
       }
 
-      if (!_portalVue.Wormhole.hasTarget(this.toaster)) {
+      if (!_portalVue.Wormhole.hasTarget(this.computedToaster)) {
         var div = document.createElement('div');
-        document.body.append(div);
+        document.body.appendChild(div);
         var toaster = new _toaster.default({
           parent: this.$root,
           propsData: {
-            name: this.toaster
+            name: this.computedToaster
           }
         });
         toaster.$mount(div);
@@ -20195,7 +21425,7 @@ var _default2 = _vue.default.extend({
     return h(_portalVue.Portal, {
       props: {
         name: name,
-        to: this.toaster,
+        to: this.computedToaster,
         order: this.order,
         slim: true,
         disabled: this.static
@@ -20235,11 +21465,12 @@ var _portalVue = __webpack_require__(/*! portal-vue */ "./node_modules/portal-vu
 
 var _warn = _interopRequireDefault(__webpack_require__(/*! ../../utils/warn */ "./node_modules/bootstrap-vue/es/utils/warn.js"));
 
+var _config = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
+
 var _dom = __webpack_require__(/*! ../../utils/dom */ "./node_modules/bootstrap-vue/es/utils/dom.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* istanbul ignore file: for now until ready for testing */
 // --- Constants ---
 var NAME = 'BToaster';
 var props = {
@@ -20249,17 +21480,23 @@ var props = {
   },
   ariaLive: {
     type: String,
-    default: 'polite'
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'ariaLive');
+    }
   },
   ariaAtomic: {
     type: String,
-    default: 'true' // Allowed: 'true' or 'false'
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'ariaAtomic');
+    } // Allowed: 'true' or 'false'
 
   },
   role: {
     // Aria role
     type: String,
-    default: null
+    default: function _default() {
+      return (0, _config.getComponentConfig)(NAME, 'role');
+    }
     /*
     transition: {
       type: [Boolean, String, Object],
@@ -20273,9 +21510,6 @@ var props = {
 exports.props = props;
 
 var DefaultTransition = _vue.default.extend({
-  // functional: true,
-  // render(h, { children }) {
-  //   return h('transition-group', { props: { tag: 'div', name: 'b-toaster' } }, children)
   data: function data() {
     return {
       // Transition classes base name
@@ -20310,7 +21544,7 @@ var DefaultTransition = _vue.default.extend({
 
 exports.DefaultTransition = DefaultTransition;
 
-var _default = _vue.default.extend({
+var _default2 = _vue.default.extend({
   name: NAME,
   props: props,
   data: function data() {
@@ -20342,6 +21576,8 @@ var _default = _vue.default.extend({
   },
   destroyed: function destroyed() {
     // Remove from DOM if needed
+
+    /* istanbul ignore next: difficult to test */
     if (this.$el && this.$el.parentNode) {
       this.$el.parentNode.removeChild(this.$el);
     }
@@ -20357,7 +21593,8 @@ var _default = _vue.default.extend({
       var $target = h(_portalVue.PortalTarget, {
         staticClass: 'b-toaster-slot',
         attrs: {
-          role: this.role,
+          role: this.role || null,
+          // fallback to null to make sure attribute doesn't exist
           'aria-live': this.ariaLive,
           'aria-atomic': this.ariaAtomic
         },
@@ -20383,7 +21620,7 @@ var _default = _vue.default.extend({
   }
 });
 
-exports.default = _default;
+exports.default = _default2;
 
 /***/ }),
 
@@ -20402,6 +21639,8 @@ exports.default = void 0;
 
 var _tooltip = _interopRequireDefault(__webpack_require__(/*! ./tooltip */ "./node_modules/bootstrap-vue/es/components/tooltip/tooltip.js"));
 
+exports.BTooltip = _tooltip.default;
+
 var _tooltip2 = _interopRequireDefault(__webpack_require__(/*! ../../directives/tooltip/tooltip */ "./node_modules/bootstrap-vue/es/directives/tooltip/tooltip.js"));
 
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
@@ -20412,7 +21651,7 @@ var components = {
   BTooltip: _tooltip.default
 };
 var directives = {
-  BTooltip: _tooltip2.default
+  VBTooltip: _tooltip2.default
 };
 var _default = {
   install: (0, _plugins.installFactory)({
@@ -20443,14 +21682,21 @@ var _tooltip = _interopRequireDefault(__webpack_require__(/*! ../../utils/toolti
 
 var _warn = _interopRequireDefault(__webpack_require__(/*! ../../utils/warn */ "./node_modules/bootstrap-vue/es/utils/warn.js"));
 
+var _config = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
+
+var _safeTypes = __webpack_require__(/*! ../../utils/safe-types */ "./node_modules/bootstrap-vue/es/utils/safe-types.js");
+
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ../../mixins/normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 var _toolpop = _interopRequireDefault(__webpack_require__(/*! ../../mixins/toolpop */ "./node_modules/bootstrap-vue/es/mixins/toolpop.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// @vue/component
-var _default = _vue.default.extend({
-  name: 'BTooltip',
-  mixins: [_toolpop.default],
+var NAME = 'BTooltip'; // @vue/component
+
+var _default2 = _vue.default.extend({
+  name: NAME,
+  mixins: [_toolpop.default, _normalizeSlot.default],
   props: {
     title: {
       type: String,
@@ -20463,6 +21709,20 @@ var _default = _vue.default.extend({
     placement: {
       type: String,
       default: 'top'
+    },
+    boundary: {
+      // String: scrollParent, window, or viewport
+      // Element: element reference
+      type: [String, _safeTypes.HTMLElement],
+      default: function _default() {
+        return (0, _config.getComponentConfig)(NAME, 'boundary');
+      }
+    },
+    boundaryPadding: {
+      type: Number,
+      default: function _default() {
+        return (0, _config.getComponentConfig)(NAME, 'boundaryPadding');
+      }
     }
   },
   data: function data() {
@@ -20495,11 +21755,11 @@ var _default = _vue.default.extend({
       }
     }, [h('div', {
       ref: 'title'
-    }, this.$slots.default)]);
+    }, this.normalizeSlot('default'))]);
   }
 });
 
-exports.default = _default;
+exports.default = _default2;
 
 /***/ }),
 
@@ -20514,28 +21774,79 @@ exports.default = _default;
 
 
 exports.__esModule = true;
+var _exportNames = {};
+exports.default = void 0;
 
-var _toggle = _interopRequireDefault(__webpack_require__(/*! ./toggle */ "./node_modules/bootstrap-vue/es/directives/toggle/index.js"));
+var _plugins = __webpack_require__(/*! ../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
-exports.Toggle = _toggle.default;
+var directivePlugins = _interopRequireWildcard(__webpack_require__(/*! ./plugins */ "./node_modules/bootstrap-vue/es/directives/plugins.js"));
 
-var _modal = _interopRequireDefault(__webpack_require__(/*! ./modal */ "./node_modules/bootstrap-vue/es/directives/modal/index.js"));
+Object.keys(directivePlugins).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = directivePlugins[key];
+});
 
-exports.Modal = _modal.default;
+var _pluginsLegacy = __webpack_require__(/*! ./plugins-legacy */ "./node_modules/bootstrap-vue/es/directives/plugins-legacy.js");
 
-var _scrollspy = _interopRequireDefault(__webpack_require__(/*! ./scrollspy */ "./node_modules/bootstrap-vue/es/directives/scrollspy/index.js"));
+Object.keys(_pluginsLegacy).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _pluginsLegacy[key];
+});
 
-exports.Scrollspy = _scrollspy.default;
+var _toggle = __webpack_require__(/*! ./toggle */ "./node_modules/bootstrap-vue/es/directives/toggle/index.js");
 
-var _tooltip = _interopRequireDefault(__webpack_require__(/*! ./tooltip */ "./node_modules/bootstrap-vue/es/directives/tooltip/index.js"));
+Object.keys(_toggle).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _toggle[key];
+});
 
-exports.Tooltip = _tooltip.default;
+var _modal = __webpack_require__(/*! ./modal */ "./node_modules/bootstrap-vue/es/directives/modal/index.js");
 
-var _popover = _interopRequireDefault(__webpack_require__(/*! ./popover */ "./node_modules/bootstrap-vue/es/directives/popover/index.js"));
+Object.keys(_modal).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _modal[key];
+});
 
-exports.Popover = _popover.default;
+var _scrollspy = __webpack_require__(/*! ./scrollspy */ "./node_modules/bootstrap-vue/es/directives/scrollspy/index.js");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+Object.keys(_scrollspy).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _scrollspy[key];
+});
+
+var _tooltip = __webpack_require__(/*! ./tooltip */ "./node_modules/bootstrap-vue/es/directives/tooltip/index.js");
+
+Object.keys(_tooltip).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _tooltip[key];
+});
+
+var _popover = __webpack_require__(/*! ./popover */ "./node_modules/bootstrap-vue/es/directives/popover/index.js");
+
+Object.keys(_popover).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  exports[key] = _popover[key];
+});
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+// Export all directive group plugins as named exports
+// Export all legacy named directive group plugins as named exports
+// Named exports of all directives
+// Default export is a plugin that installs all plugins
+var _default = {
+  install: (0, _plugins.installFactory)({
+    plugins: directivePlugins
+  })
+};
+exports.default = _default;
 
 /***/ }),
 
@@ -20554,12 +21865,14 @@ exports.default = void 0;
 
 var _modal = _interopRequireDefault(__webpack_require__(/*! ./modal */ "./node_modules/bootstrap-vue/es/directives/modal/modal.js"));
 
+exports.VBModal = _modal.default;
+
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var directives = {
-  BModal: _modal.default
+  VBModal: _modal.default
 };
 var _default = {
   install: (0, _plugins.installFactory)({
@@ -20631,6 +21944,80 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ "./node_modules/bootstrap-vue/es/directives/plugins-legacy.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/bootstrap-vue/es/directives/plugins-legacy.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.BPopover = exports.BTooltip = exports.BScrollspy = exports.BModal = exports.BToggle = void 0;
+
+var _toggle = _interopRequireDefault(__webpack_require__(/*! ./toggle */ "./node_modules/bootstrap-vue/es/directives/toggle/index.js"));
+
+exports.BToggle = _toggle.default;
+
+var _modal = _interopRequireDefault(__webpack_require__(/*! ./modal */ "./node_modules/bootstrap-vue/es/directives/modal/index.js"));
+
+exports.BModal = _modal.default;
+
+var _scrollspy = _interopRequireDefault(__webpack_require__(/*! ./scrollspy */ "./node_modules/bootstrap-vue/es/directives/scrollspy/index.js"));
+
+exports.BScrollspy = _scrollspy.default;
+
+var _tooltip = _interopRequireDefault(__webpack_require__(/*! ./tooltip */ "./node_modules/bootstrap-vue/es/directives/tooltip/index.js"));
+
+exports.BTooltip = _tooltip.default;
+
+var _popover = _interopRequireDefault(__webpack_require__(/*! ./popover */ "./node_modules/bootstrap-vue/es/directives/popover/index.js"));
+
+exports.BPopover = _popover.default;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap-vue/es/directives/plugins.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/bootstrap-vue/es/directives/plugins.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.VBPopoverPlugin = exports.VBTooltipPlugin = exports.VBScrollspyPlugin = exports.VBModalPlugin = exports.VBTogglePlugin = void 0;
+
+var _toggle = _interopRequireDefault(__webpack_require__(/*! ./toggle */ "./node_modules/bootstrap-vue/es/directives/toggle/index.js"));
+
+exports.VBTogglePlugin = _toggle.default;
+
+var _modal = _interopRequireDefault(__webpack_require__(/*! ./modal */ "./node_modules/bootstrap-vue/es/directives/modal/index.js"));
+
+exports.VBModalPlugin = _modal.default;
+
+var _scrollspy = _interopRequireDefault(__webpack_require__(/*! ./scrollspy */ "./node_modules/bootstrap-vue/es/directives/scrollspy/index.js"));
+
+exports.VBScrollspyPlugin = _scrollspy.default;
+
+var _tooltip = _interopRequireDefault(__webpack_require__(/*! ./tooltip */ "./node_modules/bootstrap-vue/es/directives/tooltip/index.js"));
+
+exports.VBTooltipPlugin = _tooltip.default;
+
+var _popover = _interopRequireDefault(__webpack_require__(/*! ./popover */ "./node_modules/bootstrap-vue/es/directives/popover/index.js"));
+
+exports.VBPopoverPlugin = _popover.default;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap-vue/es/directives/popover/index.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/bootstrap-vue/es/directives/popover/index.js ***!
@@ -20646,12 +22033,14 @@ exports.default = void 0;
 
 var _popover = _interopRequireDefault(__webpack_require__(/*! ./popover */ "./node_modules/bootstrap-vue/es/directives/popover/popover.js"));
 
+exports.VBPopover = _popover.default;
+
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var directives = {
-  BPopover: _popover.default
+  VBPopover: _popover.default
 };
 var _default = {
   install: (0, _plugins.installFactory)({
@@ -20680,6 +22069,8 @@ var _popper = _interopRequireDefault(__webpack_require__(/*! popper.js */ "./nod
 var _popover = _interopRequireDefault(__webpack_require__(/*! ../../utils/popover.class */ "./node_modules/bootstrap-vue/es/utils/popover.class.js"));
 
 var _warn = _interopRequireDefault(__webpack_require__(/*! ../../utils/warn */ "./node_modules/bootstrap-vue/es/utils/warn.js"));
+
+var _config = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
 
 var _env = __webpack_require__(/*! ../../utils/env */ "./node_modules/bootstrap-vue/es/utils/env.js");
 
@@ -20710,8 +22101,12 @@ var validTriggers = {
 var parseBindings = function parseBindings(bindings)
 /* istanbul ignore next: not easy to test */
 {
-  // We start out with a blank config
-  var config = {}; // Process bindings.value
+  // We start out with a basic config
+  var config = {
+    boundary: String((0, _config.getComponentConfig)('BPopover', 'boundary')),
+    boundaryPadding: parseInt((0, _config.getComponentConfig)('BPopover', 'boundaryPadding'), 10) || 0 // Process bindings.value
+
+  };
 
   if ((0, _inspect.isString)(bindings.value)) {
     // Value is popover content (html optionally supported)
@@ -20742,7 +22137,7 @@ var parseBindings = function parseBindings(bindings)
     } else if (/^(auto|top(left|right)?|bottom(left|right)?|left(top|bottom)?|right(top|bottom)?)$/.test(mod)) {
       // placement of popover
       config.placement = mod;
-    } else if (/^(window|viewport)$/.test(mod)) {
+    } else if (/^(window|viewport|scrollParent)$/.test(mod)) {
       // Boundary of popover
       config.boundary = mod;
     } else if (/^d\d+$/.test(mod)) {
@@ -20875,12 +22270,14 @@ exports.default = void 0;
 
 var _scrollspy = _interopRequireDefault(__webpack_require__(/*! ./scrollspy */ "./node_modules/bootstrap-vue/es/directives/scrollspy/scrollspy.js"));
 
+exports.VBScrollspy = _scrollspy.default;
+
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var directives = {
-  BScrollspy: _scrollspy.default
+  VBScrollspy: _scrollspy.default
 };
 var _default = {
   install: (0, _plugins.installFactory)({
@@ -21588,12 +22985,14 @@ exports.default = void 0;
 
 var _toggle = _interopRequireDefault(__webpack_require__(/*! ./toggle */ "./node_modules/bootstrap-vue/es/directives/toggle/toggle.js"));
 
+exports.VBToggle = _toggle.default;
+
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var directives = {
-  BToggle: _toggle.default
+  VBToggle: _toggle.default
 };
 var _default = {
   install: (0, _plugins.installFactory)({
@@ -21617,11 +23016,15 @@ exports.default = _default;
 exports.__esModule = true;
 exports.default = void 0;
 
+var _looseEqual = _interopRequireDefault(__webpack_require__(/*! ../../utils/loose-equal */ "./node_modules/bootstrap-vue/es/utils/loose-equal.js"));
+
 var _dom = __webpack_require__(/*! ../../utils/dom */ "./node_modules/bootstrap-vue/es/utils/dom.js");
 
 var _env = __webpack_require__(/*! ../../utils/env */ "./node_modules/bootstrap-vue/es/utils/env.js");
 
 var _target = __webpack_require__(/*! ../../utils/target */ "./node_modules/bootstrap-vue/es/utils/target.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Target listen types
 var listenTypes = {
@@ -21639,11 +23042,22 @@ var EVENT_STATE = 'bv::collapse::state'; // Private event emitted on $root to en
 // Gets emitted even if the state of b-collapse has not changed.
 // This event is NOT to be documented as people should not be using it.
 
-var EVENT_STATE_SYNC = 'bv::collapse::sync::state'; // Reset and remove a property from the provided element
+var EVENT_STATE_SYNC = 'bv::collapse::sync::state'; // Private event we send to collapse to request state update sync event
+
+var EVENT_STATE_REQUEST = 'bv::request::collapse::state'; // Reset and remove a property from the provided element
 
 var resetProp = function resetProp(el, prop) {
   el[prop] = null;
   delete el[prop];
+}; // Handle targets update
+
+
+var handleTargets = function handleTargets(_ref) {
+  var targets = _ref.targets,
+      vnode = _ref.vnode;
+  targets.forEach(function (target) {
+    vnode.context.$root.$emit(EVENT_TOGGLE, target);
+  });
 }; // Handle directive updates
 
 /* istanbul ignore next: not easy to test */
@@ -21652,6 +23066,23 @@ var resetProp = function resetProp(el, prop) {
 var handleUpdate = function handleUpdate(el, binding, vnode) {
   if (!_env.isBrowser) {
     return;
+  }
+
+  if (!(0, _looseEqual.default)((0, _target.getTargets)(binding), el[BV_TOGGLE_TARGETS])) {
+    // Targets have changed, so update accordingly
+    (0, _target.unbindTargets)(vnode, binding, listenTypes);
+    var targets = (0, _target.bindTargets)(vnode, binding, listenTypes, handleTargets); // Update targets array to element
+
+    el[BV_TOGGLE_TARGETS] = targets; // Add aria attributes to element
+
+    el[BV_TOGGLE_CONTROLS] = targets.join(' '); // ensure aria-controls is up to date
+
+    (0, _dom.setAttr)(el, 'aria-controls', el[BV_TOGGLE_CONTROLS]); // Request a state update from targets so that we can ensure
+    // expanded state is correct
+
+    targets.forEach(function (target) {
+      vnode.context.$root.$emit(EVENT_STATE_REQUEST, target);
+    });
   } // Ensure the collapse class and aria-* attributes persist
   // after element is updated (either by parent re-rendering
   // or changes to this element or it's contents
@@ -21674,13 +23105,7 @@ var handleUpdate = function handleUpdate(el, binding, vnode) {
 
 var _default = {
   bind: function bind(el, binding, vnode) {
-    var targets = (0, _target.bindTargets)(vnode, binding, listenTypes, function (_ref) {
-      var targets = _ref.targets,
-          vnode = _ref.vnode;
-      targets.forEach(function (target) {
-        vnode.context.$root.$emit(EVENT_TOGGLE, target);
-      });
-    });
+    var targets = (0, _target.bindTargets)(vnode, binding, listenTypes, handleTargets);
 
     if (_env.isBrowser && vnode.context && targets.length > 0) {
       // Add targets array to element
@@ -21763,12 +23188,14 @@ exports.default = void 0;
 
 var _tooltip = _interopRequireDefault(__webpack_require__(/*! ./tooltip */ "./node_modules/bootstrap-vue/es/directives/tooltip/tooltip.js"));
 
+exports.VBTooltip = _tooltip.default;
+
 var _plugins = __webpack_require__(/*! ../../utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var directives = {
-  BTooltip: _tooltip.default
+  VBTooltip: _tooltip.default
 };
 var _default = {
   install: (0, _plugins.installFactory)({
@@ -21797,6 +23224,8 @@ var _popper = _interopRequireDefault(__webpack_require__(/*! popper.js */ "./nod
 var _tooltip = _interopRequireDefault(__webpack_require__(/*! ../../utils/tooltip.class */ "./node_modules/bootstrap-vue/es/utils/tooltip.class.js"));
 
 var _warn = _interopRequireDefault(__webpack_require__(/*! ../../utils/warn */ "./node_modules/bootstrap-vue/es/utils/warn.js"));
+
+var _config = __webpack_require__(/*! ../../utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
 
 var _env = __webpack_require__(/*! ../../utils/env */ "./node_modules/bootstrap-vue/es/utils/env.js");
 
@@ -21827,8 +23256,12 @@ var validTriggers = {
 var parseBindings = function parseBindings(bindings)
 /* istanbul ignore next: not easy to test */
 {
-  // We start out with a blank config
-  var config = {}; // Process bindings.value
+  // We start out with a basic config
+  var config = {
+    boundary: String((0, _config.getComponentConfig)('BTooltip', 'boundary')),
+    boundaryPadding: parseInt((0, _config.getComponentConfig)('BTooltip', 'boundaryPadding'), 10) || 0 // Process bindings.value
+
+  };
 
   if ((0, _inspect.isString)(bindings.value)) {
     // Value is tooltip content (html optionally supported)
@@ -21859,7 +23292,7 @@ var parseBindings = function parseBindings(bindings)
     } else if (/^(auto|top(left|right)?|bottom(left|right)?|left(top|bottom)?|right(top|bottom)?)$/.test(mod)) {
       // Placement of tooltip
       config.placement = mod;
-    } else if (/^(window|viewport)$/.test(mod)) {
+    } else if (/^(window|viewport|scrollParent)$/.test(mod)) {
       // Boundary of tooltip
       config.boundary = mod;
     } else if (/^d\d+$/.test(mod)) {
@@ -21986,20 +23419,29 @@ exports.default = _default;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/*!
+ * BoostrapVue 2.0.0-rc.20
+ *
+ * @link https://bootstrap-vue.js.org
+ * @source https://github.com/bootstrap-vue/bootstrap-vue
+ * @copyright (c) 2016-2019 BootstrapVue
+ * @license MIT
+ * https://github.com/bootstrap-vue/bootstrap-vue/blob/master/LICENSE
+ */
 
 
 exports.__esModule = true;
 exports.default = void 0;
 
-var componentPlugins = _interopRequireWildcard(__webpack_require__(/*! ./components */ "./node_modules/bootstrap-vue/es/components/index.js"));
+var _components = _interopRequireDefault(__webpack_require__(/*! ./components */ "./node_modules/bootstrap-vue/es/components/index.js"));
 
-var directivePlugins = _interopRequireWildcard(__webpack_require__(/*! ./directives */ "./node_modules/bootstrap-vue/es/directives/index.js"));
+var _directives = _interopRequireDefault(__webpack_require__(/*! ./directives */ "./node_modules/bootstrap-vue/es/directives/index.js"));
 
 var _plugins = __webpack_require__(/*! ./utils/plugins */ "./node_modules/bootstrap-vue/es/utils/plugins.js");
 
 var _config = __webpack_require__(/*! ./utils/config */ "./node_modules/bootstrap-vue/es/utils/config.js");
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var install = function install(Vue) {
   var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -22011,11 +23453,11 @@ var install = function install(Vue) {
 
   install.installed = true; // Configure BootstrapVue
 
-  (0, _config.setConfig)(config); // Register component plugins
+  (0, _config.setConfig)(config); // Install all component plugins
 
-  (0, _plugins.registerPlugins)(Vue, componentPlugins); // Register directive plugins
+  Vue.use(_components.default); // Install all directive plugins
 
-  (0, _plugins.registerPlugins)(Vue, directivePlugins);
+  Vue.use(_directives.default);
 };
 
 install.installed = false;
@@ -22174,16 +23616,16 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 // Return an Array of visible items
-function filterVisible(els) {
+function filterVisibles(els) {
   return (els || []).filter(_dom.isVisible);
 } // Dropdown item CSS selectors
-// TODO: .dropdown-form handling
 
 
 var Selector = {
   FORM_CHILD: '.dropdown form',
-  NAVBAR_NAV: '.navbar-nav',
-  ITEM_SELECTOR: '.dropdown-item:not(.disabled):not([disabled])' // Popper attachment positions
+  ITEM_SELECTOR: ['.dropdown-item', '.b-dropdown-form'].map(function (selector) {
+    return "".concat(selector, ":not(.disabled):not([disabled])");
+  }).join(', ') // Popper attachment positions
 
 };
 var AttachmentMap = {
@@ -22361,6 +23803,8 @@ var _default2 = {
       this.$root.$emit('bv::dropdown::shown', this); // Are we in a navbar ?
 
       if ((0, _inspect.isNull)(this.inNavbar) && this.isNav) {
+        // We should use an injection for this
+
         /* istanbul ignore next */
         this.inNavbar = Boolean((0, _dom.closest)('.navbar', this.$el));
       } // Disable totally Popper.js for Dropdown in Navbar
@@ -22537,11 +23981,6 @@ var _default2 = {
       if (key === _keyCodes.default.ESC) {
         // Close on ESC
         this.onEsc(evt);
-      } else if (key === _keyCodes.default.TAB) {
-        // Close on tab out
-
-        /* istanbul ignore next: not used and should be removed */
-        this.onTab(evt);
       } else if (key === _keyCodes.default.DOWN) {
         // Down Arrow
         this.focusNext(evt, false);
@@ -22558,16 +23997,6 @@ var _default2 = {
 
         this.$once('hidden', this.focusToggler);
       }
-    },
-    onTab: function onTab(evt)
-    /* istanbul ignore next: not easy to test */
-    {// TODO: Need special handler for dealing with form inputs
-      // Tab, if in a text-like input, we should just focus next item in the dropdown
-      // Note: Inputs are in a special .dropdown-form container
-    },
-    onMouseOver: function onMouseOver(evt)
-    /* istanbul ignore next: not easy to test */
-    {// Removed mouseover focus handler
     },
     // Document click out listener
     clickOutHandler: function clickOutHandler() {
@@ -22586,7 +24015,9 @@ var _default2 = {
     focusNext: function focusNext(evt, up) {
       var _this2 = this;
 
-      if (!this.visible) {
+      if (!this.visible || evt && (0, _dom.closest)(Selector.FORM_CHILD, evt.target)) {
+        // Ignore key up/down on form elements
+
         /* istanbul ignore next: should never happen */
         return;
       }
@@ -22622,13 +24053,13 @@ var _default2 = {
         return i === idx;
       });
 
-      if (el && (0, _dom.getAttr)(el, 'tabindex') !== '-1') {
+      if (el && el.focus) {
         el.focus();
       }
     },
     getItems: function getItems() {
       // Get all items
-      return filterVisible((0, _dom.selectAll)(Selector.ITEM_SELECTOR, this.$refs.menu));
+      return filterVisibles((0, _dom.selectAll)(Selector.ITEM_SELECTOR, this.$refs.menu));
     },
     focusMenu: function focusMenu() {
       this.$refs.menu.focus && this.$refs.menu.focus();
@@ -22858,6 +24289,8 @@ exports.default = void 0;
 
 var _html = __webpack_require__(/*! ../utils/html */ "./node_modules/bootstrap-vue/es/utils/html.js");
 
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ./normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
 var _formCheckbox = _interopRequireDefault(__webpack_require__(/*! ../components/form-checkbox/form-checkbox */ "./node_modules/bootstrap-vue/es/components/form-checkbox/form-checkbox.js"));
 
 var _formRadio = _interopRequireDefault(__webpack_require__(/*! ../components/form-radio/form-radio */ "./node_modules/bootstrap-vue/es/components/form-radio/form-radio.js"));
@@ -22866,6 +24299,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // @vue/component
 var _default = {
+  mixins: [_normalizeSlot.default],
   model: {
     prop: 'checked',
     event: 'input'
@@ -22935,7 +24369,6 @@ var _default = {
   render: function render(h) {
     var _this = this;
 
-    var $slots = this.$slots;
     var inputs = this.formOptions.map(function (option, idx) {
       var uid = "_BV_option_".concat(idx, "_");
       return h(_this.is_RadioGroup ? _formRadio.default : _formCheckbox.default, {
@@ -22964,7 +24397,7 @@ var _default = {
         'aria-required': this.required ? 'true' : null,
         'aria-invalid': this.computedAriaInvalid
       }
-    }, [$slots.first, inputs, $slots.default]);
+    }, [this.normalizeSlot('first'), inputs, this.normalizeSlot('default')]);
   }
 };
 exports.default = _default;
@@ -22984,10 +24417,15 @@ exports.default = _default;
 exports.__esModule = true;
 exports.default = void 0;
 
+var _normalizeSlot = _interopRequireDefault(__webpack_require__(/*! ./normalize-slot */ "./node_modules/bootstrap-vue/es/mixins/normalize-slot.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 // @vue/component
 var _default = {
+  mixins: [_normalizeSlot.default],
   model: {
     prop: 'checked',
     event: 'input'
@@ -23142,7 +24580,7 @@ var _default = {
     }
   },
   render: function render(h) {
-    var defaultSlot = this.$slots.default; // Generate the input element
+    var defaultSlot = this.normalizeSlot('default'); // Generate the input element
 
     var on = {
       change: this.handleChange
@@ -23521,8 +24959,8 @@ var _default = {
     }
   },
   watch: {
-    value: function value(newVal, oldVal) {
-      if (newVal !== oldVal && newVal !== this.localValue) {
+    value: function value(newVal) {
+      if (newVal !== this.localValue) {
         this.localValue = this.stringifyValue(newVal);
       }
     }
@@ -23539,12 +24977,12 @@ var _default = {
     stringifyValue: function stringifyValue(value) {
       return (0, _inspect.isUndefined)(value) || (0, _inspect.isNull)(value) ? '' : String(value);
     },
-    getFormatted: function getFormatted(value, event) {
+    getFormatted: function getFormatted(value, evt) {
       var force = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
       value = this.stringifyValue(value);
 
       if ((!this.lazyFormatter || force) && (0, _inspect.isFunction)(this.formatter)) {
-        value = this.formatter(value, event);
+        value = this.formatter(value, evt);
       }
 
       return value;
@@ -23552,25 +24990,31 @@ var _default = {
     updateValue: function updateValue(value) {
       value = this.stringifyValue(value);
 
-      if (this.localValue !== value) {
-        // keep the input set to the value before modifiers
+      if (value !== this.localValue) {
+        // Keep the input set to the value before modifiers
         this.localValue = value;
 
         if (this.number) {
-          // Emulate .number modifier behaviour
+          // Emulate `.number` modifier behaviour
           var num = parseFloat(value);
           value = isNaN(num) ? value : num;
         } else if (this.trim) {
-          // Emulate .trim modifier behaviour
+          // Emulate `.trim` modifier behaviour
           value = value.trim();
         } // Update the v-model
 
 
         this.$emit('update', value);
+      } else if (value !== this.$refs.input.value) {
+        // When the `localValue` hasn't changed but the actual input value
+        // is out of sync, make sure to change it to the given one
+
+        /* istanbul ignore next: hard to test */
+        this.$refs.input.value = value;
       }
     },
     onInput: function onInput(evt) {
-      // evt.target.composing is set by Vue
+      // `evt.target.composing` is set by Vue
       // https://github.com/vuejs/vue/blob/dev/src/platforms/web/runtime/directives/model.js
 
       /* istanbul ignore if: hard to test composition events */
@@ -23578,9 +25022,11 @@ var _default = {
         return;
       }
 
-      var formatted = this.getFormatted(evt.target.value, evt);
+      var formatted = this.getFormatted(evt.target.value, evt); // Exit when the `formatter` function strictly returned `false`
+      // or prevented the input event
 
       if (formatted === false || evt.defaultPrevented) {
+        /* istanbul ignore next */
         evt.preventDefault();
         return;
       }
@@ -23589,7 +25035,7 @@ var _default = {
       this.$emit('input', formatted);
     },
     onChange: function onChange(evt) {
-      // evt.target.composing is set by Vue
+      // `evt.target.composing` is set by Vue
       // https://github.com/vuejs/vue/blob/dev/src/platforms/web/runtime/directives/model.js
 
       /* istanbul ignore if: hard to test composition events */
@@ -23597,9 +25043,12 @@ var _default = {
         return;
       }
 
-      var formatted = this.getFormatted(evt.target.value, evt);
+      var formatted = this.getFormatted(evt.target.value, evt); // Exit when the `formatter` function strictly returned `false`
+      // or prevented the input event
 
-      if (formatted === false) {
+      if (formatted === false || evt.defaultPrevented) {
+        /* istanbul ignore next */
+        evt.preventDefault();
         return;
       }
 
@@ -23607,9 +25056,9 @@ var _default = {
       this.$emit('change', formatted);
     },
     onBlur: function onBlur(evt) {
-      // lazy formatter
+      // Lazy formatter
       if (this.lazyFormatter) {
-        var formatted = this.getFormatted(evt.target.value, evt, true);
+        var formatted = this.getFormatted(evt.target.value, evt, true); // Exit when the `formatter` function strictly returned `false`
 
         if (formatted === false) {
           return;
@@ -23928,23 +25377,21 @@ exports.default = _default;
 exports.__esModule = true;
 exports.default = void 0;
 
-var _normalizeSlot2 = _interopRequireDefault(__webpack_require__(/*! ../utils/normalize-slot */ "./node_modules/bootstrap-vue/es/utils/normalize-slot.js"));
+var _normalizeSlot2 = __webpack_require__(/*! ../utils/normalize-slot */ "./node_modules/bootstrap-vue/es/utils/normalize-slot.js");
 
 var _array = __webpack_require__(/*! ../utils/array */ "./node_modules/bootstrap-vue/es/utils/array.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _default = {
   methods: {
     hasNormalizedSlot: function hasNormalizedSlot(name) {
       // Returns true if the either a $scopedSlot or $slot exists with the specified name
-      return Boolean(this.$scopedSlots[name] || this.$slots[name]);
+      return (0, _normalizeSlot2.hasNormalizedSlot)(name, this.$scopedSlots, this.$slots);
     },
     normalizeSlot: function normalizeSlot(name) {
       var scope = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       // Returns an array of rendered vNodes if slot found.
       // Returns undefined if not found.
-      var vNodes = (0, _normalizeSlot2.default)(name, scope, this.$scopedSlots, this.$slots);
+      var vNodes = (0, _normalizeSlot2.normalizeSlot)(name, scope, this.$scopedSlots, this.$slots);
       return vNodes ? (0, _array.concat)(vNodes) : vNodes;
     }
   }
@@ -24085,7 +25532,8 @@ var props = {
   },
   firstText: {
     type: String,
-    default: '«'
+    default: "\xAB" // '«'
+
   },
   labelPrevPage: {
     type: String,
@@ -24093,7 +25541,8 @@ var props = {
   },
   prevText: {
     type: String,
-    default: '‹'
+    default: "\u2039" // '‹'
+
   },
   labelNextPage: {
     type: String,
@@ -24101,7 +25550,8 @@ var props = {
   },
   nextText: {
     type: String,
-    default: '›'
+    default: "\u203A" // '›'
+
   },
   labelLastPage: {
     type: String,
@@ -24109,7 +25559,8 @@ var props = {
   },
   lastText: {
     type: String,
-    default: '»'
+    default: "\xBB" // '»'
+
   },
   labelPage: {
     type: [String, Function],
@@ -24121,7 +25572,8 @@ var props = {
   },
   ellipsisText: {
     type: String,
-    default: '…'
+    default: "\u2026" // '…'
+
   } // @vue/component
 
 };
@@ -24622,16 +26074,6 @@ var _default = {
       type: String,
       default: null
     },
-    boundary: {
-      // String: scrollParent, window, or viewport
-      // Element: element reference
-      type: [String, _safeTypes.HTMLElement],
-      default: 'scrollParent'
-    },
-    boundaryPadding: {
-      type: Number,
-      default: 5
-    },
     show: {
       type: Boolean,
       default: false
@@ -25036,7 +26478,8 @@ function () {
       nativeEvent: (0, _object.readonlyDescriptor)(),
       target: (0, _object.readonlyDescriptor)(),
       relatedTarget: (0, _object.readonlyDescriptor)(),
-      vueTarget: (0, _object.readonlyDescriptor)()
+      vueTarget: (0, _object.readonlyDescriptor)(),
+      componentId: (0, _object.readonlyDescriptor)()
     }); // Create a private variable using closure scoping.
 
     var defaultPrevented = false; // Recreate preventDefault method. One way setter.
@@ -25066,7 +26509,8 @@ function () {
         nativeEvent: null,
         target: null,
         relatedTarget: null,
-        vueTarget: null
+        vueTarget: null,
+        componentId: null
       };
     }
   }]);
@@ -25220,7 +26664,8 @@ var DEFAULTS = {
   },
   BDropdown: {
     toggleText: 'Toggle Dropdown',
-    variant: 'secondary'
+    variant: 'secondary',
+    splitVariant: null
   },
   BFormFile: {
     browseText: 'Browse',
@@ -25237,18 +26682,73 @@ var DEFAULTS = {
   BImgLazy: {
     blankColor: 'transparent'
   },
+  BJumbotron: {
+    bgVariant: null,
+    borderVariant: null,
+    textVariant: null
+  },
+  BListGroupItem: {
+    variant: null
+  },
   BModal: {
+    titleTag: 'h5',
+    size: 'md',
+    headerBgVariant: null,
+    headerBorderVariant: null,
+    headerTextVariant: null,
+    headerCloseVariant: null,
+    bodyBgVariant: null,
+    bodyTextVariant: null,
+    footerBgVariant: null,
+    footerBorderVariant: null,
+    footerTextVariant: null,
     cancelTitle: 'Cancel',
     cancelVariant: 'secondary',
     okTitle: 'OK',
     okVariant: 'primary',
     headerCloseLabel: 'Close'
   },
+  BNavbar: {
+    variant: null
+  },
   BNavbarToggle: {
     label: 'Toggle navigation'
   },
+  BProgress: {
+    variant: null
+  },
+  BProgressBar: {
+    variant: null
+  },
+  BSpinner: {
+    variant: null
+  },
+  BTable: {
+    selectedVariant: 'primary',
+    headVariant: null,
+    footVariant: null
+  },
   BToast: {
-    toaster: 'b-toaster-top-right'
+    toaster: 'b-toaster-top-right',
+    autoHideDelay: 5000,
+    variant: null,
+    toastClass: null,
+    headerClass: null,
+    bodyClass: null,
+    solid: false
+  },
+  BToaster: {
+    ariaLive: 'polite',
+    ariaAtomic: 'true',
+    role: null
+  },
+  BTooltip: {
+    boundary: 'scrollParent',
+    boundaryPadding: 5
+  },
+  BPopover: {
+    boundary: 'scrollParent',
+    boundaryPadding: 5
   } // This contains user defined configuration
 
 };
@@ -26411,10 +27911,29 @@ exports.default = _default;
 
 
 exports.__esModule = true;
-exports.default = void 0;
+exports.default = exports.normalizeSlot = exports.hasNormalizedSlot = void 0;
 
 var _inspect = __webpack_require__(/*! ./inspect */ "./node_modules/bootstrap-vue/es/utils/inspect.js");
 
+// Note for functional components:
+// In functional components, `slots` is a function so it must be called
+// first before passing to the below methods. `scopedSlots` is always an
+// object and may be undefined (for Vue < 2.6.x)
+
+/**
+ * Returns true if either scoped or unscoped named slot eists
+ *
+ * @param {String} name
+ * @param {Object} scopedSlots
+ * @param {Object} slots
+ * @returns {Array|undefined} vNodes
+ */
+var hasNormalizedSlot = function hasNormalizedSlot(name) {
+  var $scopedSlots = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var $slots = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  // Returns true if the either a $scopedSlot or $slot exists with the specified name
+  return Boolean($scopedSlots[name] || $slots[name]);
+};
 /**
  * Returns vNodes for named slot either scoped or unscoped
  *
@@ -26424,6 +27943,10 @@ var _inspect = __webpack_require__(/*! ./inspect */ "./node_modules/bootstrap-vu
  * @param {Object} slots
  * @returns {Array|undefined} vNodes
  */
+
+
+exports.hasNormalizedSlot = hasNormalizedSlot;
+
 var normalizeSlot = function normalizeSlot(name) {
   var scope = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var $scopedSlots = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -26431,8 +27954,11 @@ var normalizeSlot = function normalizeSlot(name) {
   // Note: in Vue 2.6.x, all names slots are also scoped slots
   var slot = $scopedSlots[name] || $slots[name];
   return (0, _inspect.isFunction)(slot) ? slot(scope) : slot;
-};
+}; // Named exports
 
+
+exports.normalizeSlot = normalizeSlot;
+// Default export (backwards compatability)
 var _default = normalizeSlot;
 exports.default = _default;
 
@@ -26686,17 +28212,41 @@ exports.default = _default;
 
 
 exports.__esModule = true;
-exports.vueUse = exports.registerDirectives = exports.registerDirective = exports.registerComponents = exports.registerComponent = exports.registerPlugins = exports.installFactory = void 0;
+exports.vueUse = exports.registerDirectives = exports.registerDirective = exports.registerComponents = exports.registerComponent = exports.registerPlugins = exports.installFactory = exports.checkMultipleVue = void 0;
+
+var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js"));
+
+var _warn = _interopRequireDefault(__webpack_require__(/*! ./warn */ "./node_modules/bootstrap-vue/es/utils/warn.js"));
 
 var _config = __webpack_require__(/*! ./config */ "./node_modules/bootstrap-vue/es/utils/config.js");
 
 var _env = __webpack_require__(/*! ./env */ "./node_modules/bootstrap-vue/es/utils/env.js");
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var MULTIPLE_VUE_WARNING = "Multiple instances of Vue detected!\nSee: https://bootstrap-vue.js.org/docs#using-module-bundlers";
+var checkMultipleVueWarned = false;
+/**
+ * Checks if there are multiple instances of Vue, and warns (once) about issues.
+ * @param {object} Vue
+ */
+
+var checkMultipleVue = function checkMultipleVue(Vue) {
+  /* istanbul ignore next */
+  if (!checkMultipleVueWarned && _vue.default !== Vue) {
+    (0, _warn.default)(MULTIPLE_VUE_WARNING);
+    checkMultipleVueWarned = true;
+  }
+};
 /**
  * Plugin install factory function.
  * @param {object} { components, directives }
  * @returns {function} plugin install function
  */
+
+
+exports.checkMultipleVue = checkMultipleVue;
+
 var installFactory = function installFactory(_ref) {
   var components = _ref.components,
       directives = _ref.directives,
@@ -26711,6 +28261,7 @@ var installFactory = function installFactory(_ref) {
     }
 
     install.installed = true;
+    checkMultipleVue(Vue);
     (0, _config.setConfig)(config);
     registerComponents(Vue, components);
     registerDirectives(Vue, directives);
@@ -26781,7 +28332,9 @@ exports.registerComponents = registerComponents;
 
 var registerDirective = function registerDirective(Vue, name, def) {
   if (Vue && name && def) {
-    Vue.directive(name, def);
+    // Ensure that any leading V is removed from the
+    // name, as Vue adds it automatically
+    Vue.directive(name.replace(/^VB/, 'B'), def);
   }
 };
 /**
@@ -27413,7 +28966,7 @@ exports.default = _default;
 
 
 exports.__esModule = true;
-exports.default = exports.unbindTargets = exports.bindTargets = void 0;
+exports.default = exports.getTargets = exports.unbindTargets = exports.bindTargets = void 0;
 
 var _object = __webpack_require__(/*! ./object */ "./node_modules/bootstrap-vue/es/utils/object.js");
 
@@ -27426,7 +28979,7 @@ var allListenTypes = {
 };
 var BVBoundListeners = '__BV_boundEventListeners__';
 
-var bindTargets = function bindTargets(vnode, binding, listenTypes, fn) {
+var getTargets = function getTargets(binding) {
   var targets = (0, _object.keys)(binding.modifiers || {}).filter(function (t) {
     return !allListenTypes[t];
   });
@@ -27434,6 +28987,14 @@ var bindTargets = function bindTargets(vnode, binding, listenTypes, fn) {
   if (binding.value) {
     targets.push(binding.value);
   }
+
+  return targets;
+};
+
+exports.getTargets = getTargets;
+
+var bindTargets = function bindTargets(vnode, binding, listenTypes, fn) {
+  var targets = getTargets(binding);
 
   var listener = function listener() {
     fn({
@@ -27607,7 +29168,8 @@ var Defaults = {
   container: false,
   fallbackPlacement: 'flip',
   callbacks: {},
-  boundary: 'scrollParent' // Transition event names
+  boundary: 'scrollParent',
+  boundaryPadding: 5 // Transition event names
 
 };
 var TransitionEndEvents = {
@@ -28802,7 +30364,7 @@ exports.default = _default;
 
 
 exports.__esModule = true;
-exports.default = exports.warnNoMutationObserverSupport = exports.warnNoPromiseSupport = exports.warnNotClient = void 0;
+exports.default = exports.warnNoMutationObserverSupport = exports.warnNoPromiseSupport = exports.warnNotClient = exports.warn = void 0;
 
 var _env = __webpack_require__(/*! ./env */ "./node_modules/bootstrap-vue/es/utils/env.js");
 
@@ -28823,6 +30385,8 @@ var warn = function warn(message)
  * @returns {boolean} warned
  */
 
+
+exports.warn = warn;
 
 var warnNotClient = function warnNotClient(source) {
   /* istanbul ignore else */
@@ -34770,7 +36334,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.nav-item__link[data-v-25f99bfe] {\n  font-weight: 700;\n  font-family: \"Muli\", sans-serif;\n  letter-spacing: 0.05em;\n  padding-right: 0.9375rem !important;\n  padding-left: 0.9375rem !important;\n}\n.nav-item__link[data-v-25f99bfe]:first-child {\n  padding-left: 0 !important;\n}\n.dropdown-custom__menu[data-v-25f99bfe] {\n  margin-top: -1px;\n  padding: 0.9375rem !important;\n}\n.dropdown-custom__menu[data-v-25f99bfe]::after {\n  content: '';\n  position: absolute;\n  width: 0;\n  height: 0;\n  top: -0.84375rem;\n  border-left: 0.9375rem solid transparent;\n  border-bottom: 0.9375rem solid #00A6AC;\n}\n.dropdown-custom__item[data-v-25f99bfe] {\n  font-family: \"Muli\", sans-serif;\n  font-size: 0.75rem;\n  letter-spacing: 0.05em;\n  padding: 0;\n}\n", ""]);
+exports.push([module.i, "\n.nav-item__link[data-v-25f99bfe] {\n  font-weight: 700;\n  font-family: \"Muli\", sans-serif;\n  letter-spacing: 0.05em;\n  padding-right: 0.9375rem !important;\n  padding-left: 0.9375rem !important;\n}\n.nav-item__link[data-v-25f99bfe]:first-child {\n  padding-left: 0 !important;\n}\n.dropdown-custom__menu[data-v-25f99bfe] {\n  margin-top: -1px;\n  padding: 0.9375rem !important;\n}\n.dropdown-custom__menu[data-v-25f99bfe]::after {\n  content: '';\n  position: absolute;\n  width: 0;\n  height: 0;\n  top: -0.84375rem;\n  border-left: 0.9375rem solid transparent;\n  border-bottom: 0.9375rem solid #00A6AC;\n}\n.dropdown-custom__item[data-v-25f99bfe] {\n  font-family: \"Muli\", sans-serif;\n  font-size: 0.75rem;\n  letter-spacing: 0.05em;\n  padding: 0;\n  transition: all 0.2s ease-in-out;\n}\n.dropdown-custom__item[data-v-25f99bfe]:hover {\n  color: #4c4c4c;\n  transition: all 0.2s ease-in-out;\n}\n", ""]);
 
 // exports
 
@@ -96353,53 +97917,66 @@ var render = function() {
           [_vm._v("\n        " + _vm._s(_vm.page.title) + "\n    ")]
         )
       ])
-    : _c("li", { staticClass: "nav-item dropdown dropdown-custom" }, [
-        _c(
-          "a",
-          {
-            staticClass:
-              "nav-link dropdown-toggle nav-item__link dropdown-custom__toggle",
-            attrs: {
-              href: "#",
-              id: "navbarDropdown",
-              role: "button",
-              "data-toggle": "dropdown",
-              "aria-haspopup": "true",
-              "aria-expanded": "false"
-            }
-          },
-          [_vm._v("\n        " + _vm._s(_vm.page.title) + "\n    ")]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "dropdown-menu dropdown-custom__menu",
-            attrs: { "aria-labelledby": "navbarDropdown" }
-          },
-          _vm._l(_vm.page.sub_pages, function(subpage) {
-            return _c(
-              "a",
-              {
-                staticClass: "dropdown-item dropdown-custom__item",
-                attrs: {
-                  href: "/" + _vm.page.slug.slug + "/" + subpage.slug.slug
-                },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.$root.goToWithParams("subpage", {
-                      subpage: _vm.page.slug.slug
-                    })
+    : _c(
+        "li",
+        {
+          staticClass: "nav-item dropdown dropdown-custom",
+          class: _vm.dropdownStatus,
+          on: { mouseover: _vm.showDropdown, mouseleave: _vm.hideDropdown }
+        },
+        [
+          _c(
+            "a",
+            {
+              staticClass:
+                "nav-link dropdown-toggle nav-item__link dropdown-custom__toggle",
+              attrs: {
+                href: "#",
+                id: "navbarDropdown",
+                role: "button",
+                "data-toggle": "dropdown",
+                "aria-haspopup": "true",
+                "aria-expanded": "false"
+              }
+            },
+            [_vm._v("\n        " + _vm._s(_vm.page.title) + "\n    ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "dropdown-menu dropdown-custom__menu",
+              class: _vm.dropdownStatus,
+              attrs: { "aria-labelledby": "navbarDropdown" }
+            },
+            _vm._l(_vm.page.sub_pages, function(subpage) {
+              return _c(
+                "a",
+                {
+                  staticClass: "dropdown-item dropdown-custom__item",
+                  attrs: {
+                    href: "/" + _vm.page.slug.slug + "/" + subpage.slug.slug
+                  },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.$root.goToWithParams("subpage", {
+                        subpage: _vm.page.slug.slug
+                      })
+                    }
                   }
-                }
-              },
-              [_vm._v("\n            " + _vm._s(subpage.title) + "\n        ")]
-            )
-          }),
-          0
-        )
-      ])
+                },
+                [
+                  _vm._v(
+                    "\n            " + _vm._s(subpage.title) + "\n        "
+                  )
+                ]
+              )
+            }),
+            0
+          )
+        ]
+      )
 }
 var staticRenderFns = []
 render._withStripped = true
