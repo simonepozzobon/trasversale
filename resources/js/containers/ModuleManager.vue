@@ -2,6 +2,7 @@
     <div>
         <ui-title
             v-if="module.type == 'title'"
+            ref="title"
             :title="content.content"
             :is-column="content.hasOwnProperty('isColumn') ? content.isColumn : null "
             :uppercase="content.hasOwnProperty('uppercase') ? content.uppercase : null "
@@ -71,10 +72,22 @@ export default {
         this.$options.components.UiSimpleGrid = require('../ui/UiSimpleGrid.vue').default
     },
     mounted: function() {
+        // console.log(this.module);
+        if (this.module.type == 'title') {
+            let height = this.$refs.title.$el.offsetHeight + 'px'
+            this.$root.sidebarPaddingTop = height
+            this.$emit('title', height)
+        }
         // if (this.module.type == 'grid') {
         //     console.log(this.content.blocks[0]);
         // }
         // console.log(this.content[0]);
+    },
+    beforeDestroy: function() {
+        if (this.module.type == 'title') {
+            this.$root.sidebarPaddingTop = false
+            this.$emit('title', false)
+        }
     }
 }
 </script>

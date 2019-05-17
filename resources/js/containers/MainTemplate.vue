@@ -6,7 +6,7 @@
                 <div class="col-md-9 custom-green main-content__content">
                     <router-view />
                 </div>
-                <div class="col-md-3 custom-red main-content__sidebar">
+                <div class="col-md-3 custom-red main-content__sidebar" ref="sidebar">
                     <ui-sidebar-image
                         src="/dummies/il-team/img-1.png"
                         alt="titolo"/>
@@ -34,6 +34,15 @@ export default {
         pages: {
             type: String,
             default: function() {}
+        }
+    },
+    watch: {
+        '$root.sidebarPaddingTop': function(h) {
+            if (h) {
+                this.$refs.sidebar.style.paddingTop = h
+            } else {
+                delete this.$refs.sidebar.style.paddingTop
+            }
         }
     },
     computed: {

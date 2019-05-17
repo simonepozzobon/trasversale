@@ -1932,6 +1932,15 @@ __webpack_require__.r(__webpack_exports__);
       default: function () {}
     }
   },
+  watch: {
+    '$root.sidebarPaddingTop': function (h) {
+      if (h) {
+        this.$refs.sidebar.style.paddingTop = h;
+      } else {
+        delete this.$refs.sidebar.style.paddingTop;
+      }
+    }
+  },
   computed: {
     parsedPages: function () {
       if (this.pages) {
@@ -2079,6 +2088,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'ModuleManager',
   components: {},
@@ -2106,10 +2116,23 @@ __webpack_require__.r(__webpack_exports__);
     this.$options.components.UiTeam = __webpack_require__(/*! ../ui/UiTeam.vue */ "./resources/js/ui/UiTeam.vue").default;
     this.$options.components.UiSimpleGrid = __webpack_require__(/*! ../ui/UiSimpleGrid.vue */ "./resources/js/ui/UiSimpleGrid.vue").default;
   },
-  mounted: function () {// if (this.module.type == 'grid') {
+  mounted: function () {
+    // console.log(this.module);
+    if (this.module.type == 'title') {
+      let height = this.$refs.title.$el.offsetHeight + 'px';
+      this.$root.sidebarPaddingTop = height;
+      this.$emit('title', height);
+    } // if (this.module.type == 'grid') {
     //     console.log(this.content.blocks[0]);
     // }
     // console.log(this.content[0]);
+
+  },
+  beforeDestroy: function () {
+    if (this.module.type == 'title') {
+      this.$root.sidebarPaddingTop = false;
+      this.$emit('title', false);
+    }
   }
 });
 
@@ -4326,6 +4349,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4338,13 +4362,16 @@ __webpack_require__.r(__webpack_exports__);
     return {
       name: null,
       modules: null,
-      booking: 'pay-direct'
+      booking: 'pay-direct',
+      title: false,
+      paddingTopTitle: 0
     };
   },
   watch: {
     '$route': function (v) {
       this.init();
-    }
+    },
+    title: function () {}
   },
   methods: {
     init: function () {
@@ -4354,13 +4381,18 @@ __webpack_require__.r(__webpack_exports__);
     getData: function (url) {
       if (url) {
         this.$http.get(url).then(response => {
-          console.log(response.data);
-
+          // console.log(response.data);
           if (response.data.success) {
             this.name = response.data.item.title;
             this.modules = response.data.item.modules;
           }
         });
+      }
+    },
+    changeTitle: function (height) {
+      if (!this.title) {
+        this.title = true;
+        this.$refs.info.style.paddingTop = height;
       }
     }
   },
@@ -4416,8 +4448,7 @@ __webpack_require__.r(__webpack_exports__);
     getData: function (url) {
       if (url) {
         this.$http.get(url).then(response => {
-          console.log(response.data);
-
+          // console.log(response.data);
           if (response.data.success) {
             this.name = response.data.item.title;
             this.modules = response.data.item.modules;
@@ -37989,7 +38020,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.ui-sidebar-image[data-v-78644780] {\n  padding-top: 1.40625rem;\n}\n", ""]);
+exports.push([module.i, "", ""]);
 
 // exports
 
@@ -99837,7 +99868,10 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            { staticClass: "col-md-3 custom-red main-content__sidebar" },
+            {
+              ref: "sidebar",
+              staticClass: "col-md-3 custom-red main-content__sidebar"
+            },
             [
               _c("ui-sidebar-image", {
                 attrs: { src: "/dummies/il-team/img-1.png", alt: "titolo" }
@@ -100550,6 +100584,7 @@ var render = function() {
     [
       _vm.module.type == "title"
         ? _c("ui-title", {
+            ref: "title",
             attrs: {
               title: _vm.content.content,
               "is-column": _vm.content.hasOwnProperty("isColumn")
@@ -100652,7 +100687,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-md-4" }, [
+    _c("div", { ref: "info", staticClass: "col-md-4" }, [
       _vm._m(0),
       _vm._v(" "),
       _vm._m(1),
@@ -100795,7 +100830,8 @@ var render = function() {
       _vm._l(this.modules, function(module) {
         return _c("module-manager", {
           key: module.id,
-          attrs: { module: module }
+          attrs: { module: module },
+          on: { title: _vm.changeTitle }
         })
       }),
       1
@@ -117156,6 +117192,11 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3___default.a({
   components: {
     MainTemplate: _containers_MainTemplate_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
+  data: function data() {
+    return {
+      sidebarPaddingTop: false
+    };
+  },
   methods: {
     goTo: function goTo(name) {
       this.$router.push({
@@ -117163,15 +117204,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3___default.a({
       });
     },
     goToWithParams: function goToWithParams(name, params) {
-      console.log(name, params);
+      // console.log(name, params);
       this.$router.push({
         name: name,
         params: params
       });
     }
   },
-  mounted: function mounted() {
-    console.log(this.$route.name);
+  mounted: function mounted() {// console.log(this.$route.name);
   }
 }).$mount('#app');
 /* WEBPACK VAR INJECTION */}.call(this, "/"))

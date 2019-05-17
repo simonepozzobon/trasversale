@@ -24,6 +24,6 @@ export default {
 @import '~styles/shared';
 
 .ui-sidebar-image {
-    padding-top: $spacer * $line-height-base;
+    // padding-top: $spacer * $line-height-base;
 }
 </style>

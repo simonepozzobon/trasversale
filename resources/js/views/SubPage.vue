@@ -33,7 +33,7 @@ export default {
         getData: function(url) {
             if (url) {
                 this.$http.get(url).then(response => {
-                    console.log(response.data);
+                    // console.log(response.data);
                     if (response.data.success) {
                         this.name = response.data.item.title
                         this.modules = response.data.item.modules

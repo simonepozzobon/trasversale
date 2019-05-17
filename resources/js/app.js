@@ -26,16 +26,21 @@ const app = new Vue({
     components: {
         MainTemplate,
     },
+    data: function() {
+        return {
+            sidebarPaddingTop: false,
+        }
+    },
     methods: {
         goTo: function(name) {
             this.$router.push({ name: name })
         },
         goToWithParams: function(name, params) {
-            console.log(name, params);
+            // console.log(name, params);
             this.$router.push({ name: name, params: params })
         }
     },
     mounted: function() {
-        console.log(this.$route.name);
+        // console.log(this.$route.name);
     }
 }).$mount('#app');

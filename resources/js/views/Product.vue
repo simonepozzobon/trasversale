@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4" ref="info">
             <div class="ui-sidebar-content">
                 <div class="ui-sidebar-content__title">
                     Date
@@ -69,7 +69,8 @@
             <module-manager
                 v-for="module in this.modules"
                 :key="module.id"
-                :module="module"/>
+                :module="module"
+                @title="changeTitle"/>
         </div>
     </div>
 </template>
@@ -89,11 +90,16 @@ export default {
             name: null,
             modules: null,
             booking: 'pay-direct',
+            title: false,
+            paddingTopTitle: 0,
         }
     },
     watch: {
         '$route': function(v) {
             this.init()
+        },
+        title: function() {
+
         }
     },
     methods: {
@@ -104,12 +110,18 @@ export default {
         getData: function(url) {
             if (url) {
                 this.$http.get(url).then(response => {
-                    console.log(response.data);
+                    // console.log(response.data);
                     if (response.data.success) {
                         this.name = response.data.item.title
                         this.modules = response.data.item.modules
                     }
                 })
+            }
+        },
+        changeTitle: function(height) {
+            if (!this.title) {
+                this.title = true
+                this.$refs.info.style.paddingTop = height
             }
         }
     },
