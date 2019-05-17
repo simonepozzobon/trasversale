@@ -1,23 +1,50 @@
 import Home from './views/Home.vue'
+import HomeContainer from './views/HomeContainer.vue'
+import PageContainer from './views/PageContainer.vue'
+import SubPageContainer from './views/SubPageContainer.vue'
+import Product from './views/Product.vue'
+import Page from './views/Page.vue'
+import SubPage from './views/SubPage.vue'
 
 const routes = [
     {
         path: '/',
-        name: 'home',
-        component: Home,
-    },
-    {
-        path: '/:page',
-        name: 'page',
-        component: Home,
+        component: HomeContainer,
         children: [
             {
-                path: ':subpage',
-                name: 'subpage',
+                path: '',
+                name: 'home',
                 component: Home,
+            },
+            {
+                path: ':page',
+                component: PageContainer,
+                children: [
+                    {
+                        path: '',
+                        name: 'page',
+                        component: Page,
+                    },
+                    {
+                        path: ':subpage',
+                        component: SubPageContainer,
+                        children: [
+                            {
+                                path: '',
+                                name: 'subpage',
+                                component: SubPage,
+                            },
+                            {
+                                path: ':item',
+                                name: 'item',
+                                component: Product,
+                            }
+                        ]
+                    }
+                ]
             }
         ]
-    }
+    },
 ]
 
 export default routes

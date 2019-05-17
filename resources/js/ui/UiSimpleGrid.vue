@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import UiBlock from './UiBlock.vue'
 import UiSimpleGridItem from './UiSimpleGridItem.vue'
 import UiRow from './UiRow.vue'
 export default {
@@ -18,7 +17,6 @@ export default {
     components: {
         UiRow,
         UiSimpleGridItem,
-        UiBlock,
     },
     props: {
         blocks: {

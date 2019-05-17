@@ -31,7 +31,11 @@ const app = new Vue({
             this.$router.push({ name: name })
         },
         goToWithParams: function(name, params) {
+            console.log(name, params);
             this.$router.push({ name: name, params: params })
         }
     },
+    mounted: function() {
+        console.log(this.$route.name);
+    }
 }).$mount('#app');

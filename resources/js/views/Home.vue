@@ -35,7 +35,20 @@ export default {
                     break;
 
                 case 'subpage':
-                    url = '/api/get-page/' + this.$route.params.subpage
+                    this.$root.goToWithParams('subpage', {
+                        page: this.$route.params.page,
+                        subpage: this.$route.params.subpage
+                    })
+
+                    break;
+
+                case 'item':
+                console.log('djslksjflkjdflk');
+                    this.$root.goToWithParams('item', {
+                        page: this.$route.params.page,
+                        subpage: this.$route.params.subpage,
+                        item: this.$route.params.item
+                    })
                     break;
 
                 default:
@@ -47,6 +60,7 @@ export default {
         getData: function(url) {
             if (url) {
                 this.$http.get(url).then(response => {
+                    // console.log(response.data);
                     if (response.data.success) {
                         this.name = response.data.item.title
                         this.modules = response.data.item.modules

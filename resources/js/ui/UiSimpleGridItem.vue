@@ -20,7 +20,10 @@
                 {{ content.price.toFixed(2) }} €
             </div>
             <div class="grid-product__action">
-                <a href="#" class="grid-product__link">Vedi il programma e iscriviti</a>
+                <a
+                    href=""
+                    class="grid-product__link"
+                    @click.prevent="goToProduct">Vedi il programma e iscriviti</a>
             </div>
         </div>
     </ui-block>
@@ -45,8 +48,17 @@ export default {
             return JSON.parse(this.block.content)
         },
     },
+    methods: {
+        goToProduct: function() {
+            // console.log(this.$route.params.page);
+            this.$root.goToWithParams('item', {
+                page: this.$route.params.page,
+                subpage: this.$route.params.subpage,
+                item: this.content.slug.slug
+            })
+        },
+    },
     mounted: function() {
-        console.log(this.content);
     },
 }
 </script>

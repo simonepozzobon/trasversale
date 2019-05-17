@@ -17,22 +17,32 @@ class MainController extends Controller
     }
 
     public function test() {
-        $item = Slug::where('slug', 'educational-formazione')->with('sluggable.modules')->first();
-        if ($item) {
-            if ($item->sluggable->modules->count() > 0) {
-                $item->sluggable->modules = $this->format_complex_modules($item->sluggable->modules);
-            }
-            dd('guiodf');
-            return [
-                'success' => true,
-                'debug' => $item->sluggable->modules,
-                'item' => $item->sluggable,
-            ];
-        }
+        $test = $this->get_dynamic_item('educational', 'tutor-dsa', null);
+        dd($test);
     }
 
-    public function get_dynamic_item($slug) {
-        $item = Slug::where('slug', $slug)->with('sluggable.modules')->first();
+    public function get_dynamic_item($page = null, $subpage = null, $slug = null) {
+        if ($slug) {
+            $item = Slug::where([
+                ['slug', '=', $slug],
+                ['sluggable_type', '!=', 'App\\StaticPage'],
+                ['sluggable_type', '!=', 'App\\SubPage'],
+            ])->with('sluggable.modules')->first();
+        }
+
+        else if ($subpage) {
+            $item = Slug::where([
+                ['slug', '=', $subpage],
+                ['sluggable_type', '!=', 'App\\StaticPage'],
+            ])->with('sluggable.modules')->first();
+        }
+
+        else {
+            $item = Slug::where([
+                ['slug', '=', $page],
+            ])->with('sluggable.modules')->first();
+        }
+
         if ($item) {
             if ($item->sluggable->modules->count() > 0) {
                 $item->sluggable->modules = $this->format_complex_modules($item->sluggable->modules);
@@ -103,6 +113,7 @@ class MainController extends Controller
                                 break;
 
                             case 'product':
+                                $block->slug = $block->slug;
                                 $grid_block['img'] = $block->thumb;
                                 $grid_block['content'] = json_encode($block);
                                 break;
@@ -112,7 +123,6 @@ class MainController extends Controller
                                 // dd($grid_block['content']);
                                 break;
                         }
-
                         array_push($blocks, $grid_block);
                     }
 

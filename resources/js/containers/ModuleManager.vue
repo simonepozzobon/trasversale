@@ -71,9 +71,9 @@ export default {
         this.$options.components.UiSimpleGrid = require('../ui/UiSimpleGrid.vue').default
     },
     mounted: function() {
-        if (this.module.type == 'grid') {
-            console.log(this.content.blocks[0]);
-        }
+        // if (this.module.type == 'grid') {
+        //     console.log(this.content.blocks[0]);
+        // }
         // console.log(this.content[0]);
     }
 }

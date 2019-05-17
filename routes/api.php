@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('get-page/{slug}', 'MainController@get_dynamic_item');
+Route::get('get-page/{page}/{subpage?}/{slug?}', 'MainController@get_dynamic_item');
 
 Route::prefix('admin')->group(function() {
     Route::post('save-component', 'AdminController@save_component');
