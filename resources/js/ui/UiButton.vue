@@ -53,6 +53,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        isActive: {
+            type: Boolean,
+            default: false,
+        },
         display: {
             type: String,
             default: null,
@@ -75,12 +79,22 @@ export default {
         },
         eventParams: [String, Object, Array, Number],
     },
-    computed: {
-        colorClass: function() {
-            if (this.color) {
-                return 'btn-outline-'+this.color
-            }
+    data: function() {
+        return {
+            colorClass: null,
+        }
+    },
+    watch: {
+        isActive: function(value) {
+            this.setStatus()
         },
+    },
+    computed: {
+        // colorClass: function() {
+        //     if (this.color) {
+        //         return 'btn-outline-'+this.color
+        //     }
+        // },
         blockClass: function() {
             if (this.block) {
                 return 'btn-block'
@@ -112,7 +126,17 @@ export default {
             if (!this.disable) {
                 this.$emit('click', this.eventParams)
             }
+        },
+        setStatus: function() {
+            if (!this.disable && this.isActive) {
+                this.colorClass = 'btn-' + this.color
+            } else {
+                this.colorClass = 'btn-outline-' + this.color
+            }
         }
+    },
+    created: function() {
+        this.setStatus()
     },
 
 }

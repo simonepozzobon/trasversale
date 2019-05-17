@@ -1,0 +1,114 @@
+<template lang="html">
+    <div class="grid-product">
+        <div class="grid-product__image">
+            <img
+                class="grid-product__figure"
+                :src="content.thumb"
+                :alt="content.title" />
+        </div>
+        <div class="grid-product__details">
+            <div class="grid-product__title">
+                {{ content.title }}
+            </div>
+            <div class="grid-product__reviews">
+                *****
+            </div>
+            <div class="grid-product__price">
+                {{ content.price.toFixed(2) }} €
+            </div>
+            <div class="grid-product__action">
+                <a
+                    href=""
+                    class="grid-product__link"
+                    @click.prevent="goToProduct">Vedi il programma e iscriviti</a>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import UiBlock from './UiBlock.vue'
+
+export default {
+    name: 'UiSimpleGrid',
+    components: {
+        UiBlock,
+    },
+    props: {
+        block: {
+            type: Object,
+            default: function() {},
+        },
+    },
+    computed: {
+        content: function() {
+            return JSON.parse(this.block.content)
+        },
+    },
+    methods: {
+        goToProduct: function() {
+            // console.log(this.$route.params.page);
+            this.$root.goToWithParams('item', {
+                page: this.$route.params.page,
+                subpage: this.$route.params.subpage,
+                item: this.content.slug.slug
+            })
+        },
+    },
+    mounted: function() {
+    },
+}
+</script>
+
+<style lang="scss" scoped>
+@import '~styles/shared';
+
+.grid-product {
+
+    &__image {}
+
+    &__figure {
+        max-width: 100%;
+        max-height: 100%;
+        width: 100%;
+        height: auto;
+    }
+
+    &__details {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: $spacer;
+    }
+
+    &__title,
+    &__reviews,
+    &__price,
+    &__action {
+        text-align: center;
+    }
+
+    &__title {
+        font-family: $font-family-sans-serif-var;
+        font-size: $font-size-base * 0.8;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    &__price {
+        font-weight: $font-weight-bold;
+    }
+
+    &__link {
+        color: $orange;
+        transition: $transition-base;
+    }
+
+    &__link:hover {
+        text-decoration: underline;
+        transition: $transition-base;
+    }
+}
+</style>

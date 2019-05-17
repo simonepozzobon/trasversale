@@ -1,0 +1,47 @@
+<template lang="html">
+    <ui-block
+        class="grid-product"
+        :size="block.hasOwnProperty('width') ? block.width : null">
+
+        <ui-simple-grid-product
+            v-if="block.type == 'product'"
+            :block="block"/>
+
+        <ui-simple-grid-news
+            v-if="block.type == 'news'"
+            :block="block"/>
+    </ui-block>
+</template>
+
+<script>
+import UiBlock from './UiBlock.vue'
+import UiSimpleGridProduct from './UiSimpleGridProduct.vue'
+import UiSimpleGridNews from './UiSimpleGridNews.vue'
+
+export default {
+    name: 'UiSimpleGridLoop',
+    components: {
+        UiBlock,
+        UiSimpleGridProduct,
+        UiSimpleGridNews,
+    },
+    props: {
+        block: {
+            type: Object,
+            default: function() {},
+        },
+    },
+    computed: {
+        content: function() {
+            return JSON.parse(this.block.content)
+        },
+    },
+    mounted: function() {
+        this.$emit('category', this.content.category, this.block.id)
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+@import '~styles/shared';
+</style>

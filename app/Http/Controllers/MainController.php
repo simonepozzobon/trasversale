@@ -17,7 +17,7 @@ class MainController extends Controller
     }
 
     public function test() {
-        $test = $this->get_dynamic_item('educational', 'coaching-per-gli-insegnanti', null);
+        $test = $this->get_dynamic_item('notizie', null, null);
         dd($test);
     }
 
@@ -50,7 +50,7 @@ class MainController extends Controller
             }
             return [
                 'success' => true,
-                'debug' => $item->sluggable->modules,
+                'debug' => $item->sluggable->modules[0],
                 'item' => $item->sluggable,
             ];
         }
@@ -102,6 +102,7 @@ class MainController extends Controller
                             'height' => $options->height,
                             'bgColor' => $options->color,
                             'img' => $options->img,
+                            'created_at' => $block->created_at,
                         ];
 
                         switch ($type) {
@@ -115,6 +116,14 @@ class MainController extends Controller
 
                             case 'product':
                                 $block->slug = $block->slug;
+                                $block->category = $block->category;
+                                $grid_block['img'] = $block->thumb;
+                                $grid_block['content'] = json_encode($block);
+                                break;
+
+                            case 'news':
+                                $block->slug = $block->slug;
+                                $block->category = $block->category;
                                 $grid_block['img'] = $block->thumb;
                                 $grid_block['content'] = json_encode($block);
                                 break;

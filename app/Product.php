@@ -19,4 +19,8 @@ class Product extends Model
     public function elements() {
         return $this->morphMany(Element::class, 'elementable');
     }
+
+    public function category() {
+        return $this->belongsTo(Category::class);
+    }
 }
