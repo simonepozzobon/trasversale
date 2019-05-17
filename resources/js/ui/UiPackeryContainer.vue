@@ -7,9 +7,12 @@
             ref="item"
             v-for="item in this.items"
             :key="item.id"
+            :type="item.type"
+            :sub-type="item.hasOwnProperty('sub_type') ? item.sub_type : null"
             :width="item.width"
             :height="item.height"
-            :color="item.bgColor"
+            :color="item.hasOwnProperty('color') ? item.color : null"
+            :bg-color="item.bgColor"
             :content="item.content"
             :gutter="gutter"
             :img="item.img"/>
@@ -25,10 +28,7 @@ export default {
         UiPackeryItem,
     },
     props: {
-        items: {
-            type: Array,
-            default: function() {}
-        },
+        items: [Array, Object],
         units: {
             type: Number,
             default: 12,

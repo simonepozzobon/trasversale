@@ -17,6 +17,11 @@
             v-else-if="module.type == 'team'"
             :people="content.people"
             :grid-col="content.gridCol"/>
+        <ui-packery-container
+            v-else-if="module.type == 'grid' && this.content.length > 0"
+            :items="this.content"
+            :gutter="8"
+            :units="12"/>
         <div v-else>
             {{ module }}
         </div>
@@ -24,7 +29,7 @@
 </template>
 
 <script>
-import { UiButton, UiImage, UiParagraph, UiTitle } from '../ui'
+import { UiButton, UiImage, UiPackeryContainer, UiParagraph, UiTitle } from '../ui'
 import UiTeam from '../ui/UiTeam.vue'
 
 export default {
@@ -32,6 +37,7 @@ export default {
     components: {
         UiButton,
         UiImage,
+        UiPackeryContainer,
         UiParagraph,
         UiTeam,
         UiTitle,
@@ -51,6 +57,9 @@ export default {
             return JSON.parse(this.module.content)
         }
     },
+    mounted: function() {
+        // console.log(this.content[0]);
+    }
 }
 </script>
 

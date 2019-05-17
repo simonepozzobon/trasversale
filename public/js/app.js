@@ -2064,6 +2064,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2071,6 +2076,7 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     UiButton: _ui__WEBPACK_IMPORTED_MODULE_0__["UiButton"],
     UiImage: _ui__WEBPACK_IMPORTED_MODULE_0__["UiImage"],
+    UiPackeryContainer: _ui__WEBPACK_IMPORTED_MODULE_0__["UiPackeryContainer"],
     UiParagraph: _ui__WEBPACK_IMPORTED_MODULE_0__["UiParagraph"],
     UiTeam: _ui_UiTeam_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     UiTitle: _ui__WEBPACK_IMPORTED_MODULE_0__["UiTitle"]
@@ -2088,6 +2094,8 @@ __webpack_require__.r(__webpack_exports__);
     content: function () {
       return JSON.parse(this.module.content);
     }
+  },
+  mounted: function () {// console.log(this.content[0]);
   }
 });
 
@@ -2539,6 +2547,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'PackeryContainer',
@@ -2546,10 +2557,7 @@ __webpack_require__.r(__webpack_exports__);
     UiPackeryItem: _UiPackeryItem_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: {
-    items: {
-      type: Array,
-      default: function () {}
-    },
+    items: [Array, Object],
     units: {
       type: Number,
       default: 12
@@ -2602,6 +2610,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _UiParagraph_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UiParagraph.vue */ "./resources/js/ui/UiParagraph.vue");
 //
 //
 //
@@ -2619,9 +2628,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'UiPackeryItem',
+  components: {
+    UiParagraph: _UiParagraph_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   props: {
+    type: {
+      type: String,
+      default: null
+    },
+    subType: {
+      type: String,
+      default: null
+    },
     width: {
       type: Number,
       default: null
@@ -2635,6 +2667,10 @@ __webpack_require__.r(__webpack_exports__);
       default: null
     },
     color: {
+      type: String,
+      default: null
+    },
+    bgColor: {
       type: String,
       default: null
     },
@@ -2652,8 +2688,6 @@ __webpack_require__.r(__webpack_exports__);
       if (this.img) {
         return 'has-image-bg';
       }
-
-      return null;
     },
     widthClass: function () {
       if (this.width) {
@@ -2669,21 +2703,27 @@ __webpack_require__.r(__webpack_exports__);
 
       return null;
     },
-    colorClass: function () {
-      if (this.color && !this.img) {
-        return 'bg-' + this.color;
+    bgColorClass: function () {
+      if (this.bgColor && !this.img) {
+        return 'bg-' + this.bgColor;
       }
 
       return null;
     }
   },
   data: function () {
-    return {};
+    return {
+      debug: true
+    };
   },
   methods: {
     setBackground: function () {
       if (this.img) {
         this.$refs.item.style.backgroundImage = 'url(' + this.img + ')';
+      }
+
+      if (this.type == 'module' && this.subType) {
+        console.log(this.type, this.subType);
       }
     },
     setUnitHeight: function (height) {
@@ -2721,12 +2761,80 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'UiParagraph',
   props: {
+    align: {
+      type: String,
+      default: null
+    },
+    hasPadding: {
+      type: Boolean,
+      default: false
+    },
+    padding: {
+      type: String,
+      default: null
+    },
+    color: {
+      type: String,
+      default: null
+    },
+    size: {
+      type: String,
+      default: null
+    },
+    fullWidth: {
+      type: Boolean,
+      default: false
+    },
     content: {
       type: String,
       default: null
+    }
+  },
+  computed: {
+    alignClass: function () {
+      if (this.align == 'center') {
+        return 'ui-paragraph--align-center';
+      } else if (this.align == 'justify') {
+        return 'ui-paragraph--align-justify';
+      }
+
+      return null;
+    },
+    noPaddingClass: function () {
+      if (!this.hasPadding) {
+        return 'ui-paragraph--no-padding';
+      }
+    },
+    colorClass: function () {
+      if (this.color) {
+        return 'text-' + this.color;
+      }
+    },
+    sizeClass: function () {
+      if (this.size) {
+        return 'ui-paragraph--size-' + this.size;
+      }
+    },
+    fullWidthClass: function () {
+      if (this.fullWidth) {
+        return 'ui-paragraph--full-width';
+      }
     }
   }
 });
@@ -3200,20 +3308,22 @@ __webpack_require__.r(__webpack_exports__);
           url = '/api/get-page/' + this.$route.params.subpage;
           break;
 
-        default: // home
-
+        default:
+          // home
+          url = '/api/get-page/home';
       }
 
       this.getData(url);
     },
     getData: function (url) {
-      this.$http.get(url).then(response => {
-        if (response.data.success) {
-          this.name = response.data.item.title;
-          this.modules = response.data.item.modules;
-          console.log(this.modules);
-        }
-      });
+      if (url) {
+        this.$http.get(url).then(response => {
+          if (response.data.success) {
+            this.name = response.data.item.title;
+            this.modules = response.data.item.modules;
+          }
+        });
+      }
     }
   },
   created: function () {
@@ -36277,7 +36387,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.packery-item__item[data-v-00a877d5] {\n  max-width: 100%;\n  height: 100%;\n}\n.packery-item__item.has-image-bg[data-v-00a877d5] {\n    background-position: center;\n    background-size: cover;\n    background-repeat: no-repeat;\n}\n", ""]);
+exports.push([module.i, "\n.packery-item__item[data-v-00a877d5] {\n  max-width: 100%;\n  height: 100%;\n}\n.packery-item__item.has-image-bg[data-v-00a877d5] {\n    background-position: center;\n    background-size: cover;\n    background-repeat: no-repeat;\n}\n.packery-item__paragraph[data-v-00a877d5] {\n  padding: 0.9375rem;\n}\n", ""]);
 
 // exports
 
@@ -36543,7 +36653,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.ui-paragraph[data-v-6712649d] {\n  padding-top: 1.40625rem;\n}\n", ""]);
+exports.push([module.i, "\n.ui-paragraph[data-v-6712649d] {\n  z-index: 1;\n}\n.ui-paragraph__content[data-v-6712649d] {\n    padding-left: 0;\n    padding-right: 0;\n    padding-bottom: 0;\n    padding-top: 1.40625rem;\n    margin: 0;\n}\n.ui-paragraph--align-center[data-v-6712649d] {\n    text-align: center;\n}\n.ui-paragraph--no-padding .ui-paragraph__content[data-v-6712649d] {\n    padding: 0;\n}\n.ui-paragraph--size-small[data-v-6712649d] {\n    font-size: 0.82031rem;\n}\n.ui-paragraph--align-justify[data-v-6712649d] {\n    text-align: justify;\n}\n.ui-paragraph--full-width[data-v-6712649d] {\n    width: 100%;\n}\n", ""]);
 
 // exports
 
@@ -97803,16 +97913,31 @@ var render = function() {
       directives: [{ name: "packery-item", rawName: "v-packery-item" }],
       ref: "container",
       staticClass: "packery-item",
-      class: _vm.widthClass + " " + _vm.colorClass + " "
+      class: [_vm.widthClass, _vm.bgColorClass]
     },
     [
-      _c("div", {
-        ref: "item",
-        staticClass: "packery-item__item",
-        class: {
-          "has-image-bg": this.img
-        }
-      })
+      _c(
+        "div",
+        {
+          ref: "item",
+          staticClass: "packery-item__item",
+          class: [_vm.bgClass]
+        },
+        [
+          _vm.type == "module" && _vm.subType == "paragraph"
+            ? _c("ui-paragraph", {
+                ref: "item",
+                staticClass: "packery-item__paragraph",
+                attrs: {
+                  "has-padding": false,
+                  color: this.color,
+                  content: _vm.content
+                }
+              })
+            : _vm._e()
+        ],
+        1
+      )
     ]
   )
 }
@@ -98532,14 +98657,31 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.content
-    ? _c("div", { staticClass: "ui-paragraph" }, [
-        _c("p", {
+  return _c(
+    "div",
+    {
+      staticClass: "ui-paragraph",
+      class: [
+        _vm.sizeClass,
+        _vm.alignClass,
+        _vm.noPaddingClass,
+        _vm.padding,
+        _vm.fullWidthClass
+      ]
+    },
+    [
+      _c(
+        "p",
+        {
           staticClass: "ui-paragraph__content",
+          class: [_vm.colorClass],
           domProps: { innerHTML: _vm._s(_vm.content) }
-        })
-      ])
-    : _vm._e()
+        },
+        [_vm._t("default")],
+        2
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -98582,6 +98724,10 @@ var render = function() {
               people: _vm.content.people,
               "grid-col": _vm.content.gridCol
             }
+          })
+        : _vm.module.type == "grid" && this.content.length > 0
+        ? _c("ui-packery-container", {
+            attrs: { items: this.content, gutter: 8, units: 12 }
           })
         : _c("div", [_vm._v("\n        " + _vm._s(_vm.module) + "\n    ")])
     ],
@@ -98857,9 +99003,12 @@ var render = function() {
         ref: "item",
         refInFor: true,
         attrs: {
+          type: item.type,
+          "sub-type": item.hasOwnProperty("sub_type") ? item.sub_type : null,
           width: item.width,
           height: item.height,
-          color: item.bgColor,
+          color: item.hasOwnProperty("color") ? item.color : null,
+          "bg-color": item.bgColor,
           content: item.content,
           gutter: _vm.gutter,
           img: item.img

@@ -1,6 +1,19 @@
 <template lang="html">
-    <div v-if="content" class="ui-paragraph">
-        <p v-html="content" class="ui-paragraph__content"></p>
+    <div
+        class="ui-paragraph"
+        :class="[
+            sizeClass,
+            alignClass,
+            noPaddingClass,
+            padding,
+            fullWidthClass,
+        ]">
+        <p
+            v-html="content"
+            class="ui-paragraph__content"
+            :class="[colorClass]">
+            <slot></slot>
+        </p>
     </div>
 </template>
 
@@ -8,10 +21,64 @@
 export default {
     name: 'UiParagraph',
     props: {
+        align: {
+            type: String,
+            default: null,
+        },
+        hasPadding: {
+            type: Boolean,
+            default: false,
+        },
+        padding: {
+            type: String,
+            default: null,
+        },
+        color: {
+            type: String,
+            default: null,
+        },
+        size: {
+            type: String,
+            default: null,
+        },
+        fullWidth: {
+            type: Boolean,
+            default: false,
+        },
         content: {
             type: String,
-            default: null
-        }
+            default: null,
+        },
+    },
+    computed: {
+        alignClass: function() {
+            if (this.align == 'center') {
+                return 'ui-paragraph--align-center'
+            } else if (this.align == 'justify') {
+                return 'ui-paragraph--align-justify'
+            }
+            return null
+        },
+        noPaddingClass: function() {
+            if (!this.hasPadding) {
+                return 'ui-paragraph--no-padding'
+            }
+        },
+        colorClass: function() {
+            if (this.color) {
+                return 'text-' + this.color
+            }
+        },
+        sizeClass: function() {
+            if (this.size) {
+                return 'ui-paragraph--size-' + this.size
+            }
+        },
+        fullWidthClass: function() {
+            if (this.fullWidth) {
+                return 'ui-paragraph--full-width'
+            }
+        },
     }
 }
 </script>
@@ -20,7 +87,38 @@ export default {
 @import '~styles/shared';
 
 .ui-paragraph {
-    padding-top: $spacer * $line-height-base;
-    
+    $self: &;
+    // padding-left: $spacer * 4;
+    // padding-right: $spacer * 4;
+    // margin-bottom: $spacer * 1.5;
+    z-index: 1;
+
+    &__content {
+        padding-left: 0;
+        padding-right: 0;
+        padding-bottom: 0;
+        padding-top: $spacer * $line-height-base;
+        margin: 0;
+    }
+
+    &--align-center {
+        text-align: center;
+    }
+
+    &--no-padding &__content {
+        padding: 0;
+    }
+
+    &--size-small {
+        font-size: $font-size-sm;
+    }
+
+    &--align-justify {
+        text-align: justify;
+    }
+
+    &--full-width {
+        width: 100%;
+    }
 }
 </style>

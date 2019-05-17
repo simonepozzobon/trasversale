@@ -40,17 +40,19 @@ export default {
 
                 default:
                     // home
+                    url = '/api/get-page/home'
             }
             this.getData(url)
         },
         getData: function(url) {
-            this.$http.get(url).then(response => {
-                if (response.data.success) {
-                    this.name = response.data.item.title
-                    this.modules = response.data.item.modules
-                    console.log(this.modules);
-                }
-            })
+            if (url) {
+                this.$http.get(url).then(response => {
+                    if (response.data.success) {
+                        this.name = response.data.item.title
+                        this.modules = response.data.item.modules
+                    }
+                })
+            }
         }
     },
     created: function() {

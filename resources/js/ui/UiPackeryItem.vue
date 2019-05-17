@@ -3,22 +3,46 @@
         ref="container"
         v-packery-item
         class="packery-item"
-        :class="widthClass + ' ' + colorClass + ' '">
+        :class="[
+            widthClass,
+            bgColorClass
+        ]">
 
-        <div ref="item"
+        <div
+            ref="item"
             class="packery-item__item"
-            :class="{
-                'has-image-bg': this.img
-            }">
-
+            :class="[
+                bgClass,
+            ]">
+            <ui-paragraph
+                v-if="type == 'module' && subType == 'paragraph'"
+                class="packery-item__paragraph"
+                ref="item"
+                :has-padding="false"
+                :color="this.color"
+                :content="content"/>
         </div>
+
     </div>
 </template>
 
 <script>
+import UiParagraph from './UiParagraph.vue'
+
 export default {
     name: 'UiPackeryItem',
+    components: {
+        UiParagraph,
+    },
     props: {
+        type: {
+            type: String,
+            default: null,
+        },
+        subType: {
+            type: String,
+            default: null,
+        },
         width: {
             type: Number,
             default: null,
@@ -32,6 +56,10 @@ export default {
             default: null,
         },
         color: {
+            type: String,
+            default: null,
+        },
+        bgColor: {
             type: String,
             default: null,
         },
@@ -49,7 +77,6 @@ export default {
             if (this.img) {
                 return 'has-image-bg'
             }
-            return null
         },
         widthClass: function() {
             if (this.width) {
@@ -63,21 +90,26 @@ export default {
             }
             return null
         },
-        colorClass: function() {
-            if (this.color && !this.img) {
-                return 'bg-'+this.color
+        bgColorClass: function() {
+            if (this.bgColor && !this.img) {
+                return 'bg-'+this.bgColor
             }
             return null
         },
     },
     data: function() {
         return {
+            debug: true,
         }
     },
     methods: {
         setBackground: function() {
             if (this.img) {
                 this.$refs.item.style.backgroundImage = 'url('+this.img+')'
+            }
+
+            if (this.type == 'module' && this.subType) {
+                console.log(this.type, this.subType);
             }
         },
         setUnitHeight: function(height) {
@@ -114,6 +146,10 @@ export default {
             background-size: cover;
             background-repeat: no-repeat;
         }
+    }
+
+    &__paragraph {
+        padding: $spacer;
     }
 }
 </style>
