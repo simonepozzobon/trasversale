@@ -343,6 +343,7 @@ export default {
     flex-direction: column;
     align-items: center;
     max-width: 70rem;
+    margin-bottom: $spacer * $line-height-base;
 
     &__header {
         width: 100%;

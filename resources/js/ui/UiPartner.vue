@@ -1,6 +1,6 @@
 <template lang="html">
-    <div ref="container">
-        <img :src="img" :alt="title" class="img-fluid">
+    <div ref="container" class="ui-partner">
+        <img :src="img" :alt="title" class="ui-partner__img">
     </div>
 </template>
 
@@ -34,4 +34,13 @@ export default {
 
 <style lang="scss" scoped>
 @import '~styles/shared';
+
+.ui-partner {
+    margin-bottom: $spacer * $line-height-base / 2;
+
+    &__img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+}
 </style>

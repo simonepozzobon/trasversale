@@ -12,6 +12,17 @@
                         alt="titolo"/>
                     <ui-sidebar-paragraph
                         content="Apparently we had reached a great height in the atmosphere, for the sky was a dead black, and the stars had ceased to twinkle. By the same illusion which lifts the horizon of the sea to the level of the spectator on a hillside, the sable cloud beneath was dished out, and the car seemed to float in the middle of an immense dark sphere, whose upper half was strewn with silver."/>
+                    <ui-calendar
+                        />
+                    <ui-sidebar-title
+                        title="Partner Istituzionali"/>
+                    <ui-partner
+                        v-for="partner in partners"
+                        :key="partner.id"
+                        :title="partner.title"
+                        :img="partner.img"
+                        :size="60"
+                        />
                 </div>
             </div>
         </div>
@@ -19,21 +30,30 @@
 </template>
 
 <script>
+import Partners from '../contents/Partners'
 import MainMenu from './MainMenu.vue'
-import { UiSidebarImage, UiSidebarParagraph, UiTitle, } from '../ui'
+import { UiCalendar, UiPartner, UiSidebarImage, UiSidebarParagraph, UiSidebarTitle, UiTitle, } from '../ui'
 
 export default {
     name: 'MainTemplate',
     components: {
         MainMenu,
+        UiCalendar,
+        UiPartner,
         UiSidebarImage,
         UiSidebarParagraph,
+        UiSidebarTitle,
         UiTitle,
     },
     props: {
         pages: {
             type: String,
             default: function() {}
+        }
+    },
+    data: function() {
+        return {
+            partners: Partners,
         }
     },
     watch: {

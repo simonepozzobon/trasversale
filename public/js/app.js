@@ -1894,8 +1894,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _MainMenu_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MainMenu.vue */ "./resources/js/containers/MainMenu.vue");
-/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ui */ "./resources/js/ui/index.js");
+/* harmony import */ var _contents_Partners__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../contents/Partners */ "./resources/js/contents/Partners.js");
+/* harmony import */ var _MainMenu_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MainMenu.vue */ "./resources/js/containers/MainMenu.vue");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ui */ "./resources/js/ui/index.js");
 //
 //
 //
@@ -1916,21 +1917,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'MainTemplate',
   components: {
-    MainMenu: _MainMenu_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    UiSidebarImage: _ui__WEBPACK_IMPORTED_MODULE_1__["UiSidebarImage"],
-    UiSidebarParagraph: _ui__WEBPACK_IMPORTED_MODULE_1__["UiSidebarParagraph"],
-    UiTitle: _ui__WEBPACK_IMPORTED_MODULE_1__["UiTitle"]
+    MainMenu: _MainMenu_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    UiCalendar: _ui__WEBPACK_IMPORTED_MODULE_2__["UiCalendar"],
+    UiPartner: _ui__WEBPACK_IMPORTED_MODULE_2__["UiPartner"],
+    UiSidebarImage: _ui__WEBPACK_IMPORTED_MODULE_2__["UiSidebarImage"],
+    UiSidebarParagraph: _ui__WEBPACK_IMPORTED_MODULE_2__["UiSidebarParagraph"],
+    UiSidebarTitle: _ui__WEBPACK_IMPORTED_MODULE_2__["UiSidebarTitle"],
+    UiTitle: _ui__WEBPACK_IMPORTED_MODULE_2__["UiTitle"]
   },
   props: {
     pages: {
       type: String,
       default: function () {}
     }
+  },
+  data: function () {
+    return {
+      partners: _contents_Partners__WEBPACK_IMPORTED_MODULE_0__["default"]
+    };
   },
   watch: {
     '$root.sidebarPaddingTop': function (h) {
@@ -37583,7 +37604,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n.ui-partner[data-v-067f34b7] {\n  margin-bottom: 0.70312rem;\n}\n.ui-partner__img[data-v-067f34b7] {\n    max-width: 100%;\n    max-height: 100%;\n}\n", ""]);
 
 // exports
 
@@ -37716,7 +37737,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.sidebar-title[data-v-2d6ef9fd] {\n  border-top: 2px solid #4c4c4c;\n}\n.sidebar-title__content[data-v-2d6ef9fd] {\n    padding-top: 0.15625rem;\n    font-size: 0.82031rem;\n    text-transform: uppercase;\n}\n", ""]);
+exports.push([module.i, "\n.sidebar-title[data-v-2d6ef9fd] {\n  margin-bottom: 0.70312rem;\n  border-top: 2px solid #4c4c4c;\n}\n.sidebar-title__content[data-v-2d6ef9fd] {\n    padding-top: 0.15625rem;\n    font-size: 0.82031rem;\n    text-transform: uppercase;\n}\n", ""]);
 
 // exports
 
@@ -37830,7 +37851,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.ui-sidebar-paragraph[data-v-49dbd793] {\n  padding-top: 1.40625rem;\n}\n", ""]);
+exports.push([module.i, "\n.ui-sidebar-paragraph[data-v-49dbd793] {\n  margin-bottom: 1.40625rem;\n}\n", ""]);
 
 // exports
 
@@ -38020,7 +38041,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\n.ui-sidebar-image[data-v-78644780] {\n  margin-bottom: 1.40625rem;\n}\n", ""]);
 
 // exports
 
@@ -38096,7 +38117,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.b-calendar[data-v-a5487f42] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  max-width: 70rem;\n}\n.b-calendar__header[data-v-a5487f42] {\n    width: 100%;\n    border-top: 1px solid #4c4c4c;\n}\n.b-calendar__header span[data-v-a5487f42] {\n      text-transform: uppercase;\n}\n.b-calendar__weekdays[data-v-a5487f42] {\n    border-top: 1px solid #4c4c4c;\n    width: 100%;\n    display: flex;\n    justify-content: space-between;\n}\n.b-calendar__weekdays .weekday[data-v-a5487f42] {\n      width: calc(100% / 7);\n      display: flex;\n      justify-content: center;\n      align-items: center;\n}\n.b-calendar__calendar[data-v-a5487f42] {\n    border-top: 1px solid #4c4c4c;\n    width: 100%;\n}\n.b-calendar__dates[data-v-a5487f42] {\n    display: flex;\n    flex-wrap: wrap;\n    position: relative;\n}\n.b-calendar__dates .date[data-v-a5487f42] {\n      width: calc(100% / 7);\n      height: 1.875rem;\n      border-bottom: 1px solid #4c4c4c;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n}\n.b-calendar__dates .date.selected[data-v-a5487f42] {\n        position: relative;\n}\n.b-calendar__dates .date.selected[data-v-a5487f42]::before {\n          content: '';\n          width: 1.5rem;\n          height: 1.5rem;\n          position: absolute;\n          border-radius: 50%;\n          background-color: rgba(220, 53, 69, 0.8);\n          top: 50%;\n          left: 50%;\n          transform: translate(-50%, -50%);\n          z-index: -1;\n}\n.b-calendar__dates .date .weekday[data-v-a5487f42] {\n        display: none;\n}\n.b-calendar__dates .date__information.today[data-v-a5487f42] {\n        position: relative;\n}\n.b-calendar__dates .date__information.today[data-v-a5487f42]::before {\n          content: '';\n          width: 1.78125rem;\n          height: 1.78125rem;\n          position: absolute;\n          border-radius: 50%;\n          background-color: rgba(0, 166, 172, 0.5);\n          top: 50%;\n          left: 50%;\n          transform: translate(-50%, -50%);\n          z-index: -1;\n}\n.b-calendar__dates .date__information.blank[data-v-a5487f42] {\n        opacity: 0;\n}\n.b-calendar__previous[data-v-a5487f42] {\n    width: 100%;\n}\n", ""]);
+exports.push([module.i, "\n.b-calendar[data-v-a5487f42] {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  max-width: 70rem;\n  margin-bottom: 1.40625rem;\n}\n.b-calendar__header[data-v-a5487f42] {\n    width: 100%;\n    border-top: 1px solid #4c4c4c;\n}\n.b-calendar__header span[data-v-a5487f42] {\n      text-transform: uppercase;\n}\n.b-calendar__weekdays[data-v-a5487f42] {\n    border-top: 1px solid #4c4c4c;\n    width: 100%;\n    display: flex;\n    justify-content: space-between;\n}\n.b-calendar__weekdays .weekday[data-v-a5487f42] {\n      width: calc(100% / 7);\n      display: flex;\n      justify-content: center;\n      align-items: center;\n}\n.b-calendar__calendar[data-v-a5487f42] {\n    border-top: 1px solid #4c4c4c;\n    width: 100%;\n}\n.b-calendar__dates[data-v-a5487f42] {\n    display: flex;\n    flex-wrap: wrap;\n    position: relative;\n}\n.b-calendar__dates .date[data-v-a5487f42] {\n      width: calc(100% / 7);\n      height: 1.875rem;\n      border-bottom: 1px solid #4c4c4c;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n}\n.b-calendar__dates .date.selected[data-v-a5487f42] {\n        position: relative;\n}\n.b-calendar__dates .date.selected[data-v-a5487f42]::before {\n          content: '';\n          width: 1.5rem;\n          height: 1.5rem;\n          position: absolute;\n          border-radius: 50%;\n          background-color: rgba(220, 53, 69, 0.8);\n          top: 50%;\n          left: 50%;\n          transform: translate(-50%, -50%);\n          z-index: -1;\n}\n.b-calendar__dates .date .weekday[data-v-a5487f42] {\n        display: none;\n}\n.b-calendar__dates .date__information.today[data-v-a5487f42] {\n        position: relative;\n}\n.b-calendar__dates .date__information.today[data-v-a5487f42]::before {\n          content: '';\n          width: 1.78125rem;\n          height: 1.78125rem;\n          position: absolute;\n          border-radius: 50%;\n          background-color: rgba(0, 166, 172, 0.5);\n          top: 50%;\n          left: 50%;\n          transform: translate(-50%, -50%);\n          z-index: -1;\n}\n.b-calendar__dates .date__information.blank[data-v-a5487f42] {\n        opacity: 0;\n}\n.b-calendar__previous[data-v-a5487f42] {\n    width: 100%;\n}\n", ""]);
 
 // exports
 
@@ -99448,9 +99469,9 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { ref: "container" }, [
+  return _c("div", { ref: "container", staticClass: "ui-partner" }, [
     _c("img", {
-      staticClass: "img-fluid",
+      staticClass: "ui-partner__img",
       attrs: { src: _vm.img, alt: _vm.title }
     })
   ])
@@ -99882,9 +99903,22 @@ var render = function() {
                   content:
                     "Apparently we had reached a great height in the atmosphere, for the sky was a dead black, and the stars had ceased to twinkle. By the same illusion which lifts the horizon of the sea to the level of the spectator on a hillside, the sable cloud beneath was dished out, and the car seemed to float in the middle of an immense dark sphere, whose upper half was strewn with silver."
                 }
+              }),
+              _vm._v(" "),
+              _c("ui-calendar"),
+              _vm._v(" "),
+              _c("ui-sidebar-title", {
+                attrs: { title: "Partner Istituzionali" }
+              }),
+              _vm._v(" "),
+              _vm._l(_vm.partners, function(partner) {
+                return _c("ui-partner", {
+                  key: partner.id,
+                  attrs: { title: partner.title, img: partner.img, size: 60 }
+                })
               })
             ],
-            1
+            2
           )
         ])
       ])
@@ -117473,6 +117507,28 @@ if (false) {}
 
 /* harmony default export */ __webpack_exports__["default"] = (Component.exports);
 
+
+/***/ }),
+
+/***/ "./resources/js/contents/Partners.js":
+/*!*******************************************!*\
+  !*** ./resources/js/contents/Partners.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var Partners = [{
+  id: 1,
+  title: 'Regione Lazio',
+  img: '/dummies/partners/logo-1.png'
+}, {
+  id: 2,
+  title: 'Provincia di Viterbo',
+  img: '/dummies/partners/logo-2.png'
+}];
+/* harmony default export */ __webpack_exports__["default"] = (Partners);
 
 /***/ }),
 

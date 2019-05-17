@@ -20,8 +20,7 @@ export default {
 @import '~styles/shared';
 
 .ui-sidebar-paragraph {
-    padding-top: $spacer * $line-height-base;
-
+    margin-bottom: $spacer * $line-height-base;
     &__content {}
 }
 </style>
