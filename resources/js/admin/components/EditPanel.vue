@@ -7,10 +7,8 @@
         </div>
         <hr>
         <div class="edit-panel__content">
-            <m-title v-if="idx == 1 " @changed="setObj"/>
-            <m-paragraph v-if="idx == 2" @changed="setObj"/>
-            <m-image v-if="idx == 3" @changed="setObj"/>
-            <m-video v-if="idx == 4" @changed="setObj"/>
+            <dynamic-module
+                :name="name"/>
         </div>
         <hr>
         <div class="edit-panel__footer">
@@ -31,19 +29,16 @@
 </template>
 
 <script>
-import { MImage, MParagraph, MTitle, MVideo } from '../modules'
+import DynamicModule from './DynamicModule.vue'
 
 export default {
     name: 'EditPanel',
     components: {
-        MImage,
-        MParagraph,
-        MTitle,
-        MVideo,
+        DynamicModule
     },
     props: {
-        idx: {
-            type: Number,
+        name: {
+            type: String,
             default: null,
         }
     },

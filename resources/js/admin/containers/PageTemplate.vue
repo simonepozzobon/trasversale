@@ -2,7 +2,7 @@
     <div class="page-template">
         <edit-panel
             v-if="this.panel"
-            :idx="this.componentId"/>
+            :name="this.componentId"/>
 
         <div class="page-template__container">
             <div class="page-template__head">
@@ -32,12 +32,13 @@
             <div class="form-group">
                 <label for="component">Seleziona Componente</label>
                 <select name="component" class="form-control" v-model="componentId">
-                    <option :value="0">Nessun Componente</option>
-                    <option :value="1">Titolo</option>
-                    <option :value="2">Paragrafo</option>
-                    <option :value="3">Immagine</option>
-                    <option :value="4">Video</option>
-                    <option :value="5">Citazione</option>
+                    <option :value="null">Nessun Componente</option>
+                    <option value="title">Titolo</option>
+                    <option value="paragraph">Paragrafo</option>
+                    <option value="image">Immagine</option>
+                    <option value="video">Video</option>
+                    <option value="quote">Citazione</option>
+                    <option value="grid">Griglia / Colonne</option>
                 </select>
             </div>
 
@@ -55,6 +56,7 @@
 
 <script>
 import EditPanel from '../components/EditPanel.vue'
+import DynamicParams from '../DynamicParams'
 
 export default {
     name: 'PageTemplate',
@@ -71,12 +73,13 @@ export default {
         return {
             panel: false,
             component: null,
-            componentId: 0,
+            componentId: null,
+            moduleOpts: DynamicParams,
         }
     },
     methods: {
         debug: function() {
-            this.componentId = 4
+            this.componentId = 'image'
             this.panel = true
         },
         addComponent: function() {
