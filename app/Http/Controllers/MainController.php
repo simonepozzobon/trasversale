@@ -17,12 +17,12 @@ class MainController extends Controller
     }
 
     public function test() {
-        $item = Slug::where('slug', 'educational')->with('sluggable.modules')->first();
+        $item = Slug::where('slug', 'educational-formazione')->with('sluggable.modules')->first();
         if ($item) {
             if ($item->sluggable->modules->count() > 0) {
                 $item->sluggable->modules = $this->format_complex_modules($item->sluggable->modules);
             }
-            dd('guiodf'.$item->sluggable);
+            dd('guiodf');
             return [
                 'success' => true,
                 'debug' => $item->sluggable->modules,
@@ -102,16 +102,26 @@ class MainController extends Controller
                                 $grid_block['content'] = $sub_module->content;
                                 break;
 
+                            case 'product':
+                                $grid_block['img'] = $block->thumb;
+                                $grid_block['content'] = json_encode($block);
+                                break;
+
                             default:
                                 $grid_block['content'] = $block[$options->content];
                                 // dd($grid_block['content']);
                                 break;
                         }
 
-
                         array_push($blocks, $grid_block);
                     }
-                    $module->content = json_encode($blocks);
+
+                    $data = [
+                        'blocks' => $blocks,
+                        'type' => $grid->type,
+                        'options' => $grid->options,
+                    ];
+                    $module->content = json_encode($data);
             }
 
             else if ($module->type == 'row') {

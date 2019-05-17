@@ -22,10 +22,13 @@
             :people="content.people"
             :grid-col="content.gridCol"/>
         <ui-packery-container
-            v-else-if="module.type == 'grid' && this.content.length > 0"
-            :items="this.content"
+            v-else-if="module.type == 'grid' && this.content.type == 'packery' && this.content.blocks.length > 0"
+            :items="this.content.blocks"
             :gutter="8"
             :units="12"/>
+        <ui-simple-grid
+            v-else-if="module.type == 'grid' && this.content.type == 'simple' && this.content.blocks.length > 0"
+            :blocks="this.content.blocks"/>
         <ui-module-row
             v-else-if="module.type == 'row'"
             :columns="this.content"/>
@@ -65,11 +68,12 @@ export default {
         this.$options.components.UiPackeryContainer = require('../ui/UiPackeryContainer.vue').default
         this.$options.components.UiTitle = require('../ui/UiTitle.vue').default
         this.$options.components.UiTeam = require('../ui/UiTeam.vue').default
+        this.$options.components.UiSimpleGrid = require('../ui/UiSimpleGrid.vue').default
     },
     mounted: function() {
-        // if (this.module.type == 'title') {
-        //     console.log(this.content);
-        // }
+        if (this.module.type == 'grid') {
+            console.log(this.content.blocks[0]);
+        }
         // console.log(this.content[0]);
     }
 }

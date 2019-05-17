@@ -11,6 +11,7 @@ import UiPartner from './UiPartner.vue'
 import UiSidebarImage from './UiSidebarImage.vue'
 import UiSidebarParagraph from './UiSidebarParagraph.vue'
 import UiSidebarTitle from './UiSidebarTitle.vue'
+import UiSimpleGrid from './UiSimpleGrid.vue'
 import UiRow from './UiRow.vue'
 import UiTitle from './UiTitle.vue'
 
@@ -28,6 +29,7 @@ export {
     UiSidebarImage,
     UiSidebarParagraph,
     UiSidebarTitle,
+    UiSimpleGrid,
     UiRow,
     UiTitle,
 }
