@@ -1,11 +1,14 @@
 <template lang="html">
     <div class="grid-news">
-        <div class="grid-news__image">
+        <ui-image
+            :src="content.thumb"
+            :alt="content.title"/>
+        <!-- <div class="grid-news__image">
             <img
                 class="grid-news__figure"
                 :src="content.thumb"
                 :alt="content.title" />
-        </div>
+        </div> -->
         <div class="grid-news__details">
             <div class="grid-news__category">
                 <span
@@ -34,11 +37,13 @@
 
 <script>
 import UiBlock from './UiBlock.vue'
+import UiImage from './UiImage.vue'
 
 export default {
     name: 'UiSimpleGridNews',
     components: {
         UiBlock,
+        UiImage,
     },
     props: {
         block: {

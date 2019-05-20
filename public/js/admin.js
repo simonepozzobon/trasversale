@@ -3244,12 +3244,21 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Utilities */ "./resources/js/Utilities.js");
 //
 //
 //
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'UiImage',
   props: {
@@ -3261,7 +3270,44 @@ __webpack_require__.r(__webpack_exports__);
       type: String,
       default: 'Image'
     }
-  }
+  },
+  data: function () {
+    return {
+      ready: false,
+      source: null
+    };
+  },
+  methods: {
+    appendToDOM: function (img) {
+      this.ready = true;
+      let container = this.$refs.container;
+      container.appendChild(img);
+      this.$nextTick(() => {
+        container.classList.add('ui-image--loaded');
+      });
+    },
+    loader: function () {
+      let img = new Image();
+      img.addEventListener('load', () => {
+        if (!this.ready) {
+          this.appendToDOM(img);
+        }
+      });
+      img.src = this.src;
+      img.alt = this.alt;
+      img.classList.add('img-fluid', 'ui-image__content');
+
+      if (img.complete) {
+        this.$nextTick(() => {
+          this.appendToDOM(img);
+        });
+      }
+    }
+  },
+  created: function () {
+    this.loader();
+  },
+  mounted: function () {}
 });
 
 /***/ }),
@@ -4506,6 +4552,10 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UiBlock_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UiBlock.vue */ "./resources/js/ui/UiBlock.vue");
+/* harmony import */ var _UiImage_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UiImage.vue */ "./resources/js/ui/UiImage.vue");
+//
+//
+//
 //
 //
 //
@@ -4541,10 +4591,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'UiSimpleGridNews',
   components: {
-    UiBlock: _UiBlock_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+    UiBlock: _UiBlock_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+    UiImage: _UiImage_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   props: {
     block: {
@@ -38168,7 +38220,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.ui-image[data-v-1f2ee98a] {\n  padding-top: 1.40625rem;\n}\n", ""]);
+exports.push([module.i, "\n.ui-image[data-v-1f2ee98a] {\n  margin-top: 1.40625rem;\n  position: relative;\n  min-height: 100px;\n  height: 100px;\n  overflow: hidden;\n  transition: all 0.2s ease-in-out;\n}\n.ui-image__placeholder[data-v-1f2ee98a] {\n    position: absolute;\n    left: 0;\n    top: 0;\n    width: 100%;\n    height: 100%;\n    background-color: #f8f9fa;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    transition: all 0.2s ease-in-out;\n}\n.ui-image__content[data-v-1f2ee98a] {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 0;\n    opacity: 0;\n    transition: all 0.2s ease-in-out;\n}\n.ui-image--loaded[data-v-1f2ee98a] {\n    height: 100%;\n    transition: all 0.2s ease-in-out;\n}\n.ui-image--loaded .ui-image__placeholder[data-v-1f2ee98a] {\n    height: 0;\n    opacity: 0;\n    transition: all 0.2s ease-in-out;\n}\n.ui-image--loaded .ui-image__content[data-v-1f2ee98a] {\n    opacity: 1;\n    height: 100%;\n    transition: all 0.2s ease-in-out;\n}\n", ""]);
 
 // exports
 
@@ -97743,53 +97795,55 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "grid-news" }, [
-    _c("div", { staticClass: "grid-news__image" }, [
-      _c("img", {
-        staticClass: "grid-news__figure",
+  return _c(
+    "div",
+    { staticClass: "grid-news" },
+    [
+      _c("ui-image", {
         attrs: { src: _vm.content.thumb, alt: _vm.content.title }
-      })
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "grid-news__details" }, [
-      _c("div", { staticClass: "grid-news__category" }, [
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "grid-news__details" }, [
+        _c("div", { staticClass: "grid-news__category" }, [
+          _c(
+            "span",
+            {
+              staticClass: "badge badge-light grid-news__badge",
+              on: { click: _vm.filterCategory }
+            },
+            [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.content.category.title) +
+                  "\n            "
+              )
+            ]
+          )
+        ]),
+        _vm._v(" "),
         _c(
-          "span",
-          {
-            staticClass: "badge badge-light grid-news__badge",
-            on: { click: _vm.filterCategory }
-          },
-          [
-            _vm._v(
-              "\n                " +
-                _vm._s(_vm.content.category.title) +
-                "\n            "
-            )
-          ]
-        )
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "grid-news__title", on: { click: _vm.goToNews } },
-        [_vm._v("\n            " + _vm._s(_vm.content.title) + "\n        ")]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "grid-news__author" }, [
-        _vm._v("\n            " + _vm._s(_vm.content.author) + "\n        ")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "grid-news__date" }, [
-        _vm._v("\n            26.05.19\n        ")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "grid-news__description" }, [
-        _vm._v(
-          "\n            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud...\n        "
-        )
+          "div",
+          { staticClass: "grid-news__title", on: { click: _vm.goToNews } },
+          [_vm._v("\n            " + _vm._s(_vm.content.title) + "\n        ")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "grid-news__author" }, [
+          _vm._v("\n            " + _vm._s(_vm.content.author) + "\n        ")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "grid-news__date" }, [
+          _vm._v("\n            26.05.19\n        ")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "grid-news__description" }, [
+          _vm._v(
+            "\n            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud...\n        "
+          )
+        ])
       ])
-    ])
-  ])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -97813,14 +97867,11 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.src
-    ? _c("div", { staticClass: "ui-image" }, [
-        _c("img", {
-          staticClass: "img-fluid ui-image__content",
-          attrs: { src: _vm.src, alt: _vm.alt }
-        })
-      ])
-    : _vm._e()
+  return _c("div", { ref: "container", staticClass: "ui-image" }, [
+    _c("div", { ref: "holder", staticClass: "ui-image__placeholder" }, [
+      _c("div", { ref: "loader", staticClass: "spinner-border text-primary" })
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -115631,6 +115682,52 @@ module.exports = function(module) {
 		module.webpackPolyfill = 1;
 	}
 	return module;
+};
+
+
+/***/ }),
+
+/***/ "./resources/js/Utilities.js":
+/*!***********************************!*\
+  !*** ./resources/js/Utilities.js ***!
+  \***********************************/
+/*! exports provided: SizeUtil */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SizeUtil", function() { return SizeUtil; });
+var SizeUtil = {
+  get: function get(el) {
+    var rect = el.getBoundingClientRect();
+    var computedStyle = getComputedStyle(el);
+    var height = rect.height;
+    var width = rect.width;
+    var paddingY = 0;
+    var paddingX = 0;
+    var marginY = 0;
+    var marginX = 0; // console.dir(rect);
+
+    if (getComputedStyle) {
+      paddingY = parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom);
+      paddingX = parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
+      marginY = parseFloat(computedStyle.marginTop) + parseFloat(computedStyle.marginBottom);
+      marginX = parseFloat(computedStyle.marginLeft) + parseFloat(computedStyle.marginRight);
+      height -= paddingY;
+      width -= paddingX;
+    }
+
+    return {
+      w: rect.width,
+      h: rect.height,
+      wClean: width,
+      hClean: height,
+      paddingX: paddingX,
+      paddingY: paddingY,
+      marginX: marginX,
+      marginY: marginY
+    };
+  }
 };
 
 
