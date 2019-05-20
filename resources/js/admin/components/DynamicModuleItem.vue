@@ -1,5 +1,5 @@
 <template lang="html">
-    <div>
+    <div class="form">
         <div class="form-group row" v-if="option.type == 'text'">
             <label :for="option.key" class="col-md-3">{{ option.label }}</label>
             <div class="col-md-9">
@@ -19,7 +19,12 @@
         <div class="form-group form__field row" v-else-if="option.type == 'color-picker'">
             <label :for="option.key" class="col-md-3">{{ option.label }}</label>
             <div class="form__input col-md-9">
-                <swatches v-model="value" :colors="colors" inline></swatches>
+                <swatches
+                    v-model="value"
+                    :colors="colors"
+                    background-color="transparent"
+                    :wrapper-style="swatchesWrapperStyle"
+                    inline />
             </div>
         </div>
         <div class="form-group row" v-else-if="option.type == 'file-input'">
@@ -51,6 +56,13 @@
                 <img :src="src" alt="" class="preview-image">
             </div>
         </div>
+        <div class="form-group row" v-else-if="option.type == 'wysiwyg'">
+            <label class="col-md-3">{{ option.label }}</label>
+            <div class="col-md-9">
+                <text-editor
+                    @update="updateEditor"/>
+            </div>
+        </div>
 
 
         <div v-else>
@@ -63,11 +75,13 @@
 import Swatches from 'vue-swatches'
 import "vue-swatches/dist/vue-swatches.min.css"
 
+import TextEditor from './TextEditor.vue'
 
 export default {
     name: 'DynamicModuleItem',
     components: {
         Swatches,
+        TextEditor,
     },
     props: {
         option: {
@@ -80,6 +94,12 @@ export default {
             value: null,
             colors: [],
             src: null,
+            swatchesWrapperStyle: {
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                borderRadius: '10px',
+                overflow: 'hidden',
+            },
+            debugEditor: null,
         }
     },
     watch: {
@@ -108,14 +128,22 @@ export default {
         previewFile: function () {
             this.value = this.$refs.file.files[0]
         },
+        updateEditor: function(json, html) {
+            let paragraph = json.content
+            this.value = html
+            // this.debugEditor = paragraph
+
+            console.log(html);
+        }
     },
     created: function() {
         this.getColors()
-    }
+    },
+
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~styles/shared';
 
 .preview-image {

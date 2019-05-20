@@ -13765,7 +13765,7 @@ body {
   text-rendering: optimizelegibility;
 }
 
-* {
+.editor * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -13780,59 +13780,59 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-*:focus {
+.editor *:focus {
   outline: none;
 }
 
-*::after,
-*::before {
+.editor *::after,
+.editor *::before {
   box-sizing: border-box;
 }
 
-a {
+.editor a {
   color: inherit;
 }
 
-blockquote,
-h1,
-h2,
-h3,
-ol,
-p,
-pre,
-ul {
+.editor blockquote,
+.editor h1,
+.editor h2,
+.editor h3,
+.editor ol,
+.editor p,
+.editor pre,
+.editor ul {
   margin: 1rem 0;
 }
 
-blockquote:first-child,
-h1:first-child,
-h2:first-child,
-h3:first-child,
-ol:first-child,
-p:first-child,
-pre:first-child,
-ul:first-child {
+.editor blockquote:first-child,
+.editor h1:first-child,
+.editor h2:first-child,
+.editor h3:first-child,
+.editor ol:first-child,
+.editor p:first-child,
+.editor pre:first-child,
+.editor ul:first-child {
   margin-top: 0;
 }
 
-blockquote:last-child,
-h1:last-child,
-h2:last-child,
-h3:last-child,
-ol:last-child,
-p:last-child,
-pre:last-child,
-ul:last-child {
+.editor blockquote:last-child,
+.editor h1:last-child,
+.editor h2:last-child,
+.editor h3:last-child,
+.editor ol:last-child,
+.editor p:last-child,
+.editor pre:last-child,
+.editor ul:last-child {
   margin-bottom: 0;
 }
 
-h1,
-h2,
-h3 {
+.editor h1,
+.editor h2,
+.editor h3 {
   line-height: 1.3;
 }
 
-.button {
+.editor .button {
   font-weight: bold;
   display: inline-flex;
   background: transparent;
@@ -13845,7 +13845,7 @@ h3 {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-.message {
+.editor .message {
   background-color: rgba(0, 0, 0, 0.05);
   color: rgba(0, 0, 0, 0.7);
   padding: 1rem;
@@ -14002,9 +14002,9 @@ h3 {
 .menubar__button {
   font-weight: bold;
   display: inline-flex;
-  background: transparent;
+  background: #fff;
   border: 0;
-  color: #000000;
+  color: #4c4c4c;
   padding: 0.2rem 0.5rem;
   margin-right: 0.2rem;
   border-radius: 3px;

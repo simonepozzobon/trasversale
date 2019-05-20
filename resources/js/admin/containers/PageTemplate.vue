@@ -79,7 +79,7 @@ export default {
     },
     methods: {
         debug: function() {
-            this.componentId = 'image'
+            this.componentId = 'paragraph'
             this.panel = true
         },
         addComponent: function() {
