@@ -17,7 +17,7 @@ class MainController extends Controller
     }
 
     public function test() {
-        $test = $this->get_dynamic_item('notizie', null, null);
+        $test = $this->get_dynamic_item('notizie', 'modello-trento', null);
         dd($test);
     }
 
@@ -34,6 +34,9 @@ class MainController extends Controller
             $item = Slug::where([
                 ['slug', '=', $subpage],
                 ['sluggable_type', '=', 'App\\SubPage'],
+            ])->orWhere([
+                ['slug', '=', $subpage],
+                ['sluggable_type', '=', 'App\\News'],
             ])->with('sluggable.modules')->first();
         }
 
@@ -48,9 +51,13 @@ class MainController extends Controller
             if ($item->sluggable->modules->count() > 0) {
                 $item->sluggable->modules = $this->format_complex_modules($item->sluggable->modules);
             }
+
+            $item->sluggable->model = $this->stringify_class($item->sluggable);
+
+
             return [
                 'success' => true,
-                'debug' => $item->sluggable->modules[0],
+                'debug' => $this->stringify_class($item->sluggable),
                 'item' => $item->sluggable,
             ];
         }
@@ -156,6 +163,13 @@ class MainController extends Controller
 
             return $module;
         })->all();
+    }
+
+    public function stringify_class($item) {
+        $string = get_class($item);
+        $string = str_replace('App\\', '', $string);
+        $string = strtolower($string);
+        return $string;
     }
 
 }

@@ -4,20 +4,25 @@
             v-for="module in this.modules"
             :key="module.id"
             :module="module"/>
+
+        <ui-sharing v-if="isNews"/>
     </div>
 </template>
 
 <script>
 import ModuleManager from '../containers/ModuleManager.vue'
+import { UiSharing } from '../ui'
 export default {
     name: 'Subpage',
     components: {
         ModuleManager,
+        UiSharing,
     },
     data: function() {
         return {
             name: null,
             modules: null,
+            isNews: false,
         }
     },
     watch: {
@@ -37,6 +42,7 @@ export default {
                     if (response.data.success) {
                         this.name = response.data.item.title
                         this.modules = response.data.item.modules
+                        this.isNews = response.data.item.model == 'news' ? true : false
                     }
                 })
             }

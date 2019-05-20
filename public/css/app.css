@@ -14076,6 +14076,7 @@ h3 {
 
 .ui-icon__path {
   transition: all 0.2s ease-in-out;
+  fill: #4c4c4c;
 }
 
 .ui-icon--cyan .ui-icon__path {
@@ -14096,6 +14097,11 @@ h3 {
 
 .ui-icon--hover-darker:hover .ui-icon__path {
   fill: rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease-in-out;
+}
+
+.ui-icon--hover-primary:hover .ui-icon__path {
+  fill: rgba(0, 166, 172, 0.6);
   transition: all 0.2s ease-in-out;
 }
 

@@ -38,9 +38,9 @@ const routes = [
                                 path: ':item',
                                 name: 'item',
                                 component: Product,
-                            }
+                            },
                         ]
-                    }
+                    },
                 ]
             }
         ]

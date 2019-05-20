@@ -9,7 +9,8 @@
 
         <ui-simple-grid-news
             v-if="block.type == 'news'"
-            :block="block"/>
+            :block="block"
+            @filter-category="filterCategory"/>
     </ui-block>
 </template>
 
@@ -34,6 +35,13 @@ export default {
     computed: {
         content: function() {
             return JSON.parse(this.block.content)
+        },
+    },
+    methods: {
+        filterCategory: function(id) {
+            this.$nextTick(() => {
+                this.$emit('filter-category', id)
+            })
         },
     },
     mounted: function() {

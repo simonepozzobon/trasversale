@@ -23,7 +23,8 @@
                 v-for="block in filtered"
                 :key="block.id"
                 :block="block"
-                @category="addCategory"/>
+                @category="addCategory"
+                @filter-category="filterNews"/>
         </ui-row>
     </div>
 </template>
@@ -77,9 +78,10 @@ export default {
                 }
             }
 
-            console.log(this.categories);
+            // console.log(this.categories);
         },
         filterNews: function(id) {
+            // console.log(id);
             let category = this.categories.filter(category => category.id == id)[0]
             if (category) {
                 if (category.id != this.currentId) {

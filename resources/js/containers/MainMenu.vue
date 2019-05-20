@@ -12,13 +12,43 @@
             <div class="navbar-main__topbar">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">F</a>
+                        <ui-link
+                            class="nav-link"
+                            :has-margin="false"
+                            :is-simple="true">
+                            <facebook
+                                width="32px"
+                                height="32px"
+                                :hoverable="true"
+                                hover-color="primary"/>
+                        </ui-link>
+                        <!-- <a class="nav-link" href="#">F</a> -->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">T</a>
+                        <ui-link
+                            class="nav-link"
+                            :has-margin="false"
+                            :is-simple="true">
+                            <twitter
+                                width="32px"
+                                height="32px"
+                                :hoverable="true"
+                                hover-color="primary"/>
+                        </ui-link>
+                        <!-- <a class="nav-link" href="#">T</a> -->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Ln</a>
+                        <ui-link
+                            class="nav-link"
+                            :has-margin="false"
+                            :is-simple="true">
+                            <linkedin
+                                width="32px"
+                                height="32px"
+                                :hoverable="true"
+                                hover-color="primary"/>
+                        </ui-link>
+                        <!-- <a class="nav-link" href="#">Ln</a> -->
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
@@ -60,11 +90,17 @@
 
 <script>
 import MenuItem from './MenuItem.vue'
+import { UiLink } from '../ui'
+import { Facebook, Linkedin, Twitter } from '../icons'
 
 export default {
     name: 'MainMenu',
     components: {
         MenuItem,
+        UiLink,
+        Facebook,
+        Linkedin,
+        Twitter
     },
     props: {
         pages: {

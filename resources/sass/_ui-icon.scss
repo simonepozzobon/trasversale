@@ -2,6 +2,7 @@
 .ui-icon {
     &__path {
         transition: $transition-base;
+        fill: $black;
     }
 
     &--cyan &__path {
@@ -23,6 +24,13 @@
     &--hover-darker:hover & {
         &__path {
             fill: rgba($white, .6);
+            transition: $transition-base;
+        }
+    }
+
+    &--hover-primary:hover & {
+        &__path {
+            fill: rgba($primary, .6);
             transition: $transition-base;
         }
     }

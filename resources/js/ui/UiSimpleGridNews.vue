@@ -8,9 +8,13 @@
         </div>
         <div class="grid-news__details">
             <div class="grid-news__category">
-                <span class="badge badge-light">{{ content.category.title }}</span>
+                <span
+                    class="badge badge-light grid-news__badge"
+                    @click="filterCategory">
+                    {{ content.category.title }}
+                </span>
             </div>
-            <div class="grid-news__title">
+            <div class="grid-news__title" @click="goToNews">
                 {{ content.title }}
             </div>
             <div class="grid-news__author">
@@ -32,7 +36,7 @@
 import UiBlock from './UiBlock.vue'
 
 export default {
-    name: 'UiSimpleGrid',
+    name: 'UiSimpleGridNews',
     components: {
         UiBlock,
     },
@@ -48,14 +52,19 @@ export default {
         },
     },
     methods: {
-        goToProduct: function() {
-            // console.log(this.$route.params.page);
-            this.$root.goToWithParams('item', {
+        goToNews: function() {
+            // console.log({
+            //     page: this.$route.params.page,
+            //     news: this.content.slug.slug,
+            // });
+            this.$root.goToWithParams('subpage', {
                 page: this.$route.params.page,
-                subpage: this.$route.params.subpage,
-                item: this.content.slug.slug
+                subpage: this.content.slug.slug,
             })
         },
+        filterCategory: function() {
+            this.$emit('filter-category', this.content.category_id)
+        }
     },
     mounted: function() {
         // console.log(this.block, this.content);
@@ -95,6 +104,11 @@ export default {
         font-weight: $font-weight-bold;
         letter-spacing: 0.05em;
         margin-bottom: $spacer * $line-height-base / 2;
+        cursor: pointer;
+    }
+
+    &__title:hover {
+        text-decoration: underline;
     }
 
     &__author {
@@ -115,6 +129,15 @@ export default {
 
             &.badge-light {
                 background-color: #DCDEE0;
+                color: color-yiq($light);
+                transition: $transition-base;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: $primary;
+                    color: $white;
+                    transition: $transition-base;
+                }
             }
         }
     }
