@@ -83,40 +83,25 @@ export default {
     },
     methods: {
         setObj: function(obj) {
+            // console.log(obj);
             this.obj = obj
         },
         saveComponent: function() {
-            let request, url
-
-            if (this.isEdit) {
-                request = {
-                    id: this.moduleId,
-                    model_id: this.modelIdx,
-                    model: this.model,
-                    module: this.name,
-                    data: this.obj,
-                }
-
-                url = '/api/admin/update-component'
-            } else {
-                request = {
-                    model_id: this.modelIdx,
-                    model: this.model,
-                    module: this.name,
-                    data: this.obj,
-                }
-                url = '/api/admin/save-component'
+            let request = {
+                id: this.moduleId,
+                model_id: this.modelIdx,
+                model: this.model,
+                module: this.name,
+                data: this.obj,
             }
-
             let data = this.formatRequest(request)
 
-            // console.log(data.data.src instanceof File);
-
-            this.$http.post(url, data).then(response => {
-                // console.log(response.data.debug);
-                if (response.data.success) {
-                    this.$emit('saved', response.data.module)
-                }
+            console.log(request.data);
+            this.$http.post('/api/admin/save-component', data).then(response => {
+                console.log(response.data.debug);
+                // if (response.data.success) {
+                //     this.$emit('saved', response.data.module)
+                // }
             })
         },
         formatRequest: function(obj) {

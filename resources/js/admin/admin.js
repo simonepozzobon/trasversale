@@ -6,8 +6,10 @@ import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import VueRouter from 'vue-router'
 import routes from './adminroutes'
+import VuePackeryPlugin from 'vue-packery-plugin'
 
 Vue.use(VueRouter)
+Vue.use(VuePackeryPlugin)
 Vue.use(BootstrapVue)
 Vue.prototype.$http = axios
 

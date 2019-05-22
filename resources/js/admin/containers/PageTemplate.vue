@@ -100,7 +100,7 @@ export default {
     },
     methods: {
         debug: function() {
-            this.moduleType = 'image'
+            this.moduleType = 'grid'
             this.panel = true
         },
         addComponent: function() {
@@ -152,7 +152,7 @@ export default {
         }
     },
     mounted: function() {
-        this.debug()
+        // this.debug()
     }
 }
 </script>

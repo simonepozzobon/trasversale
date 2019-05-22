@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\News;
+use App\Grid;
 use App\Module;
 use App\Product;
 use App\Element;
@@ -28,19 +29,19 @@ class AdminController extends Controller
 
         switch ($type) {
             case 'news':
-                $news = News::with('modules', 'slug', 'category')->get();
+                $news = News::with('slug', 'category')->get();
                 $elements = $this->uniform_and_merge($news);
                 break;
 
             case 'products':
-                $products = Product::with('modules', 'slug', 'category')->get();
+                $products = Product::with('slug', 'category')->get();
                 $elements = $this->uniform_and_merge($products);
                 break;
 
             default:
-                $posts = Post::with('modules', 'slug')->get();
-                $news = News::with('modules', 'slug', 'category')->get();
-                $products = Product::with('modules', 'slug', 'category')->get();
+                $posts = Post::with('slug')->get();
+                $news = News::with('slug', 'category')->get();
+                $products = Product::with('slug', 'category')->get();
                 $elements = $this->uniform_and_merge($posts, $news, $products);
                 break;
         }
@@ -53,12 +54,17 @@ class AdminController extends Controller
 
     public function save_component(Request $request) {
 
-        $module = new Module();
+        if ($request->id == 'null') {
+            $module = new Module();
+        } else {
+            $module = Module::find($request->id);
+        }
         $module = $this->set_module($module, $request);
 
         return [
             'success' => true,
-            'module' => $module,
+            // 'module' => $module,
+            'debug' => $module,
         ];
     }
 
@@ -85,7 +91,8 @@ class AdminController extends Controller
 
     public function get_sub_page($id) {
         $page = SubPage::find($id);
-        $page->modules = $page->modules()->get();
+        $page->modules = Utility::format_complex_modules($page->modules()->get());
+
         return $page;
     }
 
@@ -117,7 +124,38 @@ class AdminController extends Controller
     public function set_module($module, $request) {
         $content = $request->data;
 
-        if ($request->module == 'image' && $request->hasFile('file')) {
+        if ($request->module == 'grid') {
+            $content = json_decode($request->data);
+
+            $grid = new Grid();
+            $grid->title = $content->title;
+            $grid->type = $content->type;
+            $grid->save();
+
+            foreach ($content->elements->items as $key => $item) {
+                $model = 'App\\'.ucfirst($item->type);
+                $options = [
+                    'width' => $item->w,
+                    'height' => $item->h,
+                    'color' => 'primary',
+                    'content' => 'title',
+                    'img' => $item->thumb,
+                ];
+
+                $element = new Element();
+                $element->grid_id = $grid->id;
+                $element->elementable_type = $model;
+                $element->elementable_id = $item->id;
+                $element->options = json_encode($options);
+                $element->save();
+            }
+
+            $content = json_encode([
+                'id' => $grid->id
+            ]);
+        }
+
+        else if ($request->module == 'image' && $request->hasFile('file')) {
             $file = $request->file('file');
             $media = Utility::save_image($file);
 
@@ -125,6 +163,8 @@ class AdminController extends Controller
             $content->src = $media->landscape;
             $content = json_encode($content);
         }
+
+
 
         $module->type = $request->module;
         $module->modulable_type = $request->model;

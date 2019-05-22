@@ -120,7 +120,8 @@ export default {
 
         &__content {
             opacity: 1;
-            height: 100%;
+            width: 100%;
+            height: auto;
             transition: $transition-base;
         }
     }

@@ -46,6 +46,7 @@ export default {
             this.$http.get('/api/admin/sub-page/'+id).then(response => {
                 this.title = response.data.title
                 this.modules = response.data.modules
+                console.log(this.modules);
             })
         },
         saved: function(module) {

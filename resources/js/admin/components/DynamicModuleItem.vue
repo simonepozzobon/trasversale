@@ -87,7 +87,8 @@
 
         <dynamic-module
             v-else-if="option.type == 'multiple'"
-            :options="option.childrens"/>
+            :options="option.childrens"
+            @changed="changed"/>
 
         <div class="form-group row" v-else-if="option.type == 'post-select'">
             <label :for="option.key" class="col-md-3">Anteprima</label>
@@ -242,6 +243,9 @@ export default {
         },
     },
     methods: {
+        changed: function(subModuleObj) {
+            this.value = subModuleObj
+        },
         setDefault: function() {
             if (this.option.hasOwnProperty('default') && !this.edit) {
                 this.value = this.option.default
