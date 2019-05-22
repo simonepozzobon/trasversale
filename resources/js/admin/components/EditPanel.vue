@@ -96,12 +96,12 @@ export default {
             }
             let data = this.formatRequest(request)
 
-            console.log(request.data);
+            // console.log(request.data);
             this.$http.post('/api/admin/save-component', data).then(response => {
-                console.log(response.data.debug);
-                // if (response.data.success) {
-                //     this.$emit('saved', response.data.module)
-                // }
+                // console.log(response.data.debug);
+                if (response.data.success) {
+                    this.$emit('saved', response.data.module)
+                }
             })
         },
         formatRequest: function(obj) {

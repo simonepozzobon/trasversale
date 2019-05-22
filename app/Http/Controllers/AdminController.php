@@ -38,6 +38,12 @@ class AdminController extends Controller
                 $elements = $this->uniform_and_merge($products);
                 break;
 
+            case 'last-mix':
+                $products = Product::with('slug', 'category')->get();
+                $news = News::with('slug', 'category')->get();
+                $elements = $this->uniform_and_merge($news, $products);
+                break;
+
             default:
                 $posts = Post::with('slug')->get();
                 $news = News::with('slug', 'category')->get();

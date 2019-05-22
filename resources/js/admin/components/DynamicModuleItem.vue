@@ -85,6 +85,24 @@
             </div>
         </div>
 
+        <div class="form-group row" v-else-if="option.type == 'counter' && visible">
+            <label :for="option.key" class="col-md-3">{{ option.label }}</label>
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="input-group col-md-3">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-primary" @click="value++">+</button>
+                        </div>
+                        <input type="text" :name="option.key" class="form-control" v-model="value">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" @click="value--">-</button>
+                        </div>
+                    </div>
+                </div>
+                <small class="text-muted" v-if="option.hasOwnProperty('info')">{{ option.info }}</small>
+            </div>
+        </div>
+
         <dynamic-module
             v-else-if="option.type == 'multiple'"
             :options="option.childrens"
@@ -120,7 +138,7 @@
                             class="element-item__container"
                             :style="'background-image: url('+ element.thumb +')'">
 
-                            <div class="element-item__tools">
+                            <div class="element-item__tools" v-if="!disableTable">
                                 <button
                                     class="btn btn-outline-danger"
                                     @click="removeElement(element)">
@@ -133,11 +151,11 @@
             </div>
         </div>
 
-        <div v-else>
+        <!-- <div v-else>
             {{ option }}
-        </div>
+        </div> -->
 
-        <div class="form-group row" v-if="option.type == 'post-select'">
+        <div class="form-group row" v-if="option.type == 'post-select' && !disableTable">
             <label :for="option.key" class="col-md-3">{{ option.label }}</label>
             <div class="col-md-9">
                 <b-table
@@ -206,6 +224,8 @@ export default {
             elements: [], // elements on the grid
             items: [], // items from post query
             fields: PostFields,
+            visible: true,
+            disableTable: false,
             src: null,
             swatchesWrapperStyle: {
                 backgroundColor: 'rgba(255, 255, 255, 0.5)',
@@ -230,8 +250,14 @@ export default {
             }
             return false
         },
+        relatedType: function() {
+            if (this.hasRelated) {
+                return typeof this.option.relatedKey
+            }
+            return null
+        },
         related: function() {
-            if (this.option.hasOwnProperty('relatedKey')) {
+            if (this.hasRelated) {
                 let options = this.$parent.options
                 let idx = options.findIndex(option => option.key ==  this.option.relatedKey)
 
@@ -241,6 +267,14 @@ export default {
             }
             return null
         },
+        relatedValue: function() {
+            if (this.hasRelated) {
+                if (this.related) {
+                    return this.related.value
+                }
+            }
+            return false
+        }
     },
     methods: {
         changed: function(subModuleObj) {
@@ -249,6 +283,53 @@ export default {
         setDefault: function() {
             if (this.option.hasOwnProperty('default') && !this.edit) {
                 this.value = this.option.default
+            }
+
+            this.setWatchers()
+        },
+        setWatchers: function() {
+            if (this.hasRelated) {
+                switch (this.relatedType) {
+                    case 'string':
+                        this.setWatcher(this.option.relatedKey)
+                        break;
+                    case 'object':
+                        for (let i = 0; i < this.option.relatedKey.length; i++) {
+                            this.setWatcher(this.option.relatedKey[i])
+                        }
+                        break;
+                }
+            }
+        },
+        setWatcher: function(relatedKey) {
+            if (this.option.type == 'counter') {
+            }
+            // set watcher for related key
+            let watcher = 'dataObj.' + relatedKey
+
+            this.$watch(watcher, (value) => {
+                if (this.option.type == 'post-select') {
+                    this.getElements(value, relatedKey)
+                }
+
+                if (this.option.type == 'counter' && this.relatedValue) {
+                    if (this.relatedValue == 'last-mix') {
+                        this.visible = true
+                    } else {
+                        this.visible = false
+                    }
+                }
+            })
+
+            this.setRelated(relatedKey)
+        },
+        setRelated: function(relatedKey) {
+            // set initial value if related has one
+            let related = this.dataObj[relatedKey]
+            if (related) {
+                if (this.option.type == 'post-select') {
+                    this.getElements(related, relatedKey)
+                }
             }
         },
         getColors: function() {
@@ -277,15 +358,33 @@ export default {
             // this.debugEditor = paragraph
             // console.log(html);
         },
-        getElements: function(value) {
-            // console.log(value);
-
+        getElements: function(value, relatedKey) {
             let url = '/api/admin/grid-elements/' + value
             this.$http.get(url).then(response => {
-                // console.log(response.data);
+                // console.log(response.data.elements);
                 if (response.data.success) {
                     this.items = response.data.elements
                     // this.debug()
+                    if (relatedKey == 'post_count') {
+                        let options = this.$parent.options
+                        let idx = options.findIndex(option => option.key == relatedKey)
+                        let parent = this.$parent.$refs.module[idx]
+                        let parentValue = parent.value
+                        // console.log(this.disableTable);
+                        this.elements = []
+
+                        this.$nextTick(() => {
+                            for (let i = 0; i < parentValue; i++) {
+                                this.selectPost(this.items[i])
+                            }
+                        })
+                    }
+
+                    if (relatedKey == 'model' && value == 'last-mix') {
+                        this.disableTable = true
+                    } else {
+                        this.disableTable = false
+                    }
                 }
             })
         },
@@ -362,21 +461,6 @@ export default {
     created: function() {
         this.getColors()
         this.setDefault()
-
-        if (this.hasRelated) {
-            // set watcher for related key
-            let watcher = 'dataObj.' + this.option.relatedKey
-            this.$watch(watcher, (value) => {
-                this.getElements(value)
-            })
-
-            // set initial value if related has one
-            let related = this.dataObj[this.option.relatedKey]
-            if (related) {
-                this.getElements(related)
-            }
-        }
-
         if (this.initial) {
             this.value = this.initial
         }

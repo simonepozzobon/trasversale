@@ -34,16 +34,36 @@ const Grid = {
                         { value: 'manual', label: 'Manuale' },
                         { value: 'news', label: 'Notizie' },
                         { value: 'products', label: 'Prodotti' },
-                        { value: 'last', label: 'Ultimi Prodotti e Notizie' },
+                        { value: 'last-mix', label: 'Ultimi Prodotti e Notizie' },
                     ],
-                    default: 'manual',
+                    default: 'last-mix',
+                },
+                {
+                    key: 'post_count',
+                    required: false,
+                    label: 'Numero di post',
+                    type: 'counter',
+                    relatedKey: 'model',
+                    default: 10,
+                    visible: related => {
+                        if (related == 'last-mix') {
+                            return true
+                        }
+                        return false
+                    },
                 },
                 {
                     key: 'items',
                     required: true,
                     label: 'Elementi',
                     type: 'post-select',
-                    relatedKey: 'model',
+                    relatedKey: ['model', 'post_count'],
+                    visible: related => {
+                        if (related && related != 'last-mix') {
+                            return true
+                        }
+                        return false
+                    }
                 }
             ],
         }

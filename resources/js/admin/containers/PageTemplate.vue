@@ -47,7 +47,7 @@
                     <option value="image">Immagine</option>
                     <option value="video">Video</option>
                     <option value="quote">Citazione</option>
-                    <option value="grid">Griglia / Colonne</option>
+                    <option value="grid">Griglia</option>
                 </select>
             </div>
 
@@ -152,7 +152,7 @@ export default {
         }
     },
     mounted: function() {
-        // this.debug()
+        this.debug()
     }
 }
 </script>
