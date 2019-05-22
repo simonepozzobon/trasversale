@@ -163,7 +163,8 @@ $opacity-test: 0.6 !default;
 
 .page-template {
     padding-top: $spacer;
-    min-height: 100%;
+    min-height: 100vh;
+    height: 100%;
 
     background: linear-gradient(
         45deg,
