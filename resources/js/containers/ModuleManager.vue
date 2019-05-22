@@ -1,5 +1,11 @@
 <template lang="html">
-    <div>
+    <div
+        class="module-manager"
+        :class="[
+            isAdminClass,
+        ]"
+        @click="selected">
+
         <ui-title
             v-if="module.type == 'title'"
             ref="title"
@@ -50,7 +56,11 @@ export default {
         module: {
             type: Object,
             default: function() {}
-        }
+        },
+        isAdmin: {
+            type: Boolean,
+            default: false,
+        },
     },
     data: function() {
         return {
@@ -59,6 +69,18 @@ export default {
     computed: {
         content: function() {
             return JSON.parse(this.module.content)
+        },
+        isAdminClass: function() {
+            if (this.isAdmin) {
+                return 'module-manager--is-admin'
+            }
+        }
+    },
+    methods: {
+        selected: function() {
+            if (this.isAdmin) {
+                this.$emit('selected', this.module)
+            }
         }
     },
     beforeCreate: function() {
@@ -94,4 +116,15 @@ export default {
 
 <style lang="scss" scoped>
 @import '~styles/shared';
+
+.module-manager {
+    &--is-admin {
+        cursor: pointer;
+    }
+
+    &--is-admin:hover {
+        @include border-radius(10px);
+        background-color: rgba($black, .1);
+    }
+}
 </style>

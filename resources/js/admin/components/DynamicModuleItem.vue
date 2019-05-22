@@ -196,6 +196,7 @@ export default {
             type: Boolean,
             default: false,
         },
+        initial: [Object, String, Number, Array, Boolean],
     },
     data: function() {
         return {
@@ -370,6 +371,10 @@ export default {
             if (related) {
                 this.getElements(related)
             }
+        }
+
+        if (this.initial) {
+            this.value = this.initial
         }
     },
 }

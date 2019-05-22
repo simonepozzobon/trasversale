@@ -4,6 +4,7 @@
             ref="module"
             v-for="(option, i) in options"
             :key="i"
+            :initial="setInitial(option)"
             :option="option"
             :data-obj="dataObj"
             @changed="changed"/>
@@ -26,6 +27,14 @@ export default {
         options: {
             type: Array,
             default: function() { return [] },
+        },
+        values: {
+            type: Object,
+            default: function() { return {} },
+        },
+        isEdit: {
+            type: Boolean,
+            default: false,
         }
     },
     data: function() {
@@ -37,16 +46,21 @@ export default {
         setModule: function() {
             let fields = this.options
             let dataObj = {}
-
             for (let i = 0; i < fields.length; i++) {
                 let field = fields[i]
                 dataObj[field.key] = field.hasOwnProperty('default') ? field.default : null
             }
-
             this.dataObj = dataObj
+        },
+        setInitial: function(option) {
+            if (this.isEdit) {
+                let key = option.key
+                return this.values[key] ? this.values[key] : null
+            }
         },
         changed: function(key, value, type) {
             this.dataObj[key] = value
+            this.$emit('changed', this.dataObj)
             // console.log(key, value, type);
             if (type == 'file-input' || type == 'text') {
                 // cerco se ha un modulo preview

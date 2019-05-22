@@ -52,8 +52,42 @@ class AdminController extends Controller
     }
 
     public function save_component(Request $request) {
+
+        $module = new Module();
+        $module->type = $request->module;
+        $module->modulable_type = $request->model;
+        $module->modulable_id = $request->model_id;
+        $module->content = json_encode($request->data);
+        $module->save();
+
         return [
             'success' => true,
+            'module' => $module,
+        ];
+    }
+
+    public function update_component(Request $request) {
+
+        $module = Module::find($request->id);
+        $module->type = $request->module;
+        $module->modulable_type = $request->model;
+        $module->modulable_id = $request->model_id;
+        $module->content = json_encode($request->data);
+        $module->save();
+
+        return [
+            'success' => true,
+            'module' => $module,
+        ];
+    }
+
+    public function delete_component($id) {
+        $module = Module::find($id);
+        $module->delete();
+
+        return [
+            'success' => true,
+            'module' => $module,
         ];
     }
 

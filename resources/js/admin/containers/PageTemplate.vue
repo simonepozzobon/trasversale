@@ -2,8 +2,16 @@
     <div class="page-template">
         <edit-panel
             v-if="this.panel"
-            :name="this.componentId"
-            :edit="false"/>
+            ref="panel"
+            :name="this.moduleType"
+            :model="model"
+            :model-idx="modelIdx"
+            :is-edit="isEdit"
+            :module-id="moduleId"
+            :values="values"
+            @saved="saved"
+            @undo="undo"
+            @deleted="deleted"/>
 
         <div class="page-template__container">
             <div class="page-template__head">
@@ -32,7 +40,7 @@
         <b-modal ref="componentSelector" title="Seleziona il componente">
             <div class="form-group">
                 <label for="component">Seleziona Componente</label>
-                <select name="component" class="form-control" v-model="componentId">
+                <select name="component" class="form-control" v-model="moduleType">
                     <option :value="null">Nessun Componente</option>
                     <option value="title">Titolo</option>
                     <option value="paragraph">Paragrafo</option>
@@ -68,19 +76,31 @@ export default {
         title: {
             type: String,
             default: 'titolo'
-        }
+        },
+        model: {
+            type: String,
+            default: null,
+        },
+        modelIdx: {
+            type: Number,
+            default: 0,
+        },
     },
     data: function() {
         return {
             panel: false,
             component: null,
-            componentId: null,
+            moduleType: null,
             moduleOpts: DynamicParams,
+            isEdit: false,
+            values: null,
+            module: null,
+            moduleId: null,
         }
     },
     methods: {
         debug: function() {
-            this.componentId = 'grid'
+            this.moduleType = 'title'
             this.panel = true
         },
         addComponent: function() {
@@ -90,12 +110,49 @@ export default {
             this.$refs.componentSelector.hide()
         },
         newComponent: function() {
+            this.isEdit = false
+
             this.dismissModal()
+
             this.panel = true
+        },
+        setModule: function(module) {
+            this.isEdit = true
+
+            this.module = module
+            this.moduleId = module.id
+            this.moduleType = module.type
+            this.values = JSON.parse(module.content)
+
+            this.panel = true
+        },
+        saved: function(module) {
+            this.panel = false
+
+            this.module = null
+            this.moduleId = null
+            this.moduleType = null
+
+            this.$emit('saved', module)
+        },
+        undo: function() {
+            this.panel = false
+            this.module = null
+            this.moduleId = null
+            this.moduleType = null
+        },
+        deleted: function(module) {
+            this.panel = false
+
+            this.module = null
+            this.moduleId = null
+            this.moduleType = null
+
+            this.$emit('deleted', module)
         }
     },
     mounted: function() {
-        this.debug()
+        // this.debug()
     }
 }
 </script>
