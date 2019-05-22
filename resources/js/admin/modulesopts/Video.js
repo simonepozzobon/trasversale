@@ -13,7 +13,7 @@ const Video = {
             label: 'Hosting',
             required: true,
             type: 'select',
-            childrens: [
+            options: [
                 { value: 'youtube', label: 'YouTube'},
                 { value: 'vimeo', label: 'Vimeo'},
             ],
