@@ -54,11 +54,7 @@ class AdminController extends Controller
     public function save_component(Request $request) {
 
         $module = new Module();
-        $module->type = $request->module;
-        $module->modulable_type = $request->model;
-        $module->modulable_id = $request->model_id;
-        $module->content = json_encode($request->data);
-        $module->save();
+        $module = $this->set_module($module, $request);
 
         return [
             'success' => true,
@@ -69,11 +65,7 @@ class AdminController extends Controller
     public function update_component(Request $request) {
 
         $module = Module::find($request->id);
-        $module->type = $request->module;
-        $module->modulable_type = $request->model;
-        $module->modulable_id = $request->model_id;
-        $module->content = json_encode($request->data);
-        $module->save();
+        $module = $this->set_module($module, $request);
 
         return [
             'success' => true,
@@ -120,5 +112,26 @@ class AdminController extends Controller
             return $item;
         });
         return $collection;
+    }
+
+    public function set_module($module, $request) {
+        $content = $request->data;
+
+        if ($request->module == 'image' && $request->hasFile('file')) {
+            $file = $request->file('file');
+            $media = Utility::save_image($file);
+
+            $content = json_decode($request->data);
+            $content->src = $media->landscape;
+            $content = json_encode($content);
+        }
+
+        $module->type = $request->module;
+        $module->modulable_type = $request->model;
+        $module->modulable_id = $request->model_id;
+        $module->content = $content;
+        $module->save();
+
+        return $module;
     }
 }

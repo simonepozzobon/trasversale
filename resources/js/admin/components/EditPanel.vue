@@ -86,34 +86,69 @@ export default {
             this.obj = obj
         },
         saveComponent: function() {
-            let data, url
+            let request, url
 
             if (this.isEdit) {
-                data = {
+                request = {
                     id: this.moduleId,
                     model_id: this.modelIdx,
                     model: this.model,
                     module: this.name,
-                    data: this.obj
+                    data: this.obj,
                 }
 
                 url = '/api/admin/update-component'
             } else {
-                data = {
+                request = {
                     model_id: this.modelIdx,
                     model: this.model,
                     module: this.name,
-                    data: this.obj
+                    data: this.obj,
                 }
-
                 url = '/api/admin/save-component'
             }
 
+            let data = this.formatRequest(request)
+
+            // console.log(data.data.src instanceof File);
+
             this.$http.post(url, data).then(response => {
+                // console.log(response.data.debug);
                 if (response.data.success) {
                     this.$emit('saved', response.data.module)
                 }
             })
+        },
+        formatRequest: function(obj) {
+            let form = new FormData()
+
+            // inserisco i campi normali
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    if (key == 'data') {
+                        let content = obj[key]
+                        let hasFile = this.hasFile(content)
+                        // se nel contenuto del modulo c'è un file
+                        if (hasFile) {
+                            form.append('file', content[hasFile])
+                        }
+                        form.append(key, JSON.stringify(content))
+                    } else {
+                        form.append(key, obj[key])
+                    }
+                }
+            }
+
+            return form
+        },
+        hasFile: function(obj) {
+            // https://stackoverflow.com/questions/31525667/check-if-variable-holds-file-or-blob
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key) && obj[key] instanceof File) {
+                    return key
+                }
+            }
+            return false
         },
         undoComponent: function() {
             this.$emit('undo')
