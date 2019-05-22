@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="main">
-        <div class="container">
+        <div class="container mb-4">
             <main-menu :pages="parsedPages"/>
             <div>
                 <div class="row custom-blue main-content">
