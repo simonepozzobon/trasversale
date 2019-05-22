@@ -15,7 +15,8 @@
                         class="nav-link"
                         :href="'#collapse-'+page.id"
                         data-toggle="collapse"
-                        :data-target="'#collapse-'+page.id">
+                        :data-target="'#collapse-'+page.id"
+                        @click.prevent="$root.goToWithParams('page', { page: page.id })">
 
                         {{ page.title }} <span v-if="page.sub_pages.length > 0">+</span>
                     </a>
@@ -25,7 +26,7 @@
                                 class="nav-item"
                                 v-for="sub in page.sub_pages"
                                 :key="sub.id">
-                                <a class="nav-link" href="#" @click="goToSub($event, sub)">
+                                <a class="nav-link" href="#" @click.prevent="$root.goToWithParams('sub', { page: page.id, sub: sub.id })">
                                     {{ sub.title }}
                                 </a>
                             </li>

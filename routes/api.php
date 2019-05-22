@@ -29,4 +29,8 @@ Route::prefix('admin')->group(function() {
     Route::prefix('sub-page')->group(function() {
         Route::get('/{id}', 'AdminController@get_sub_page');
     });
+
+    Route::prefix('page')->group(function() {
+        Route::get('/{id}', 'AdminController@get_page');
+    });
 });

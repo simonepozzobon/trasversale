@@ -36,7 +36,7 @@ export default {
     },
     watch: {
         '$route.params': function(params) {
-            this.getPage(params.id)
+            this.getPage(params.sub)
         }
     },
     methods: {
@@ -71,7 +71,7 @@ export default {
         },
     },
     mounted: function() {
-        this.getPage(this.$route.params.id)
+        this.getPage(this.$route.params.sub)
     }
 
 }

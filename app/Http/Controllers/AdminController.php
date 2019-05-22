@@ -102,6 +102,13 @@ class AdminController extends Controller
         return $page;
     }
 
+    public function get_page($id) {
+        $page = StaticPage::find($id);
+        $page->modules = Utility::format_complex_modules($page->modules()->get());
+
+        return $page;
+    }
+
     public function uniform_and_merge() {
         $collections = func_get_args();
         $merged = collect();
