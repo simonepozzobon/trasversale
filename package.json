@@ -34,6 +34,7 @@
         "laravel-mix": "^4.0.15",
         "tiptap": "^1.19.3",
         "tiptap-extensions": "^1.19.4",
+        "vue-grid-layout": "^2.3.4",
         "vue-packery-plugin": "^1.4.8",
         "vue-swatches": "^1.0.3"
     }

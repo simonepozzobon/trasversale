@@ -11,4 +11,12 @@ class Post extends Model
     public function elements() {
         return $this->morphMany(Element::class, 'elementable');
     }
+
+    public function modules() {
+        return $this->morphMany(Module::class, 'modulable');
+    }
+
+    public function slug() {
+        return $this->morphOne(Slug::class, 'sluggable');
+    }
 }

@@ -21,6 +21,8 @@ Route::get('get-page/{page}/{subpage?}/{slug?}', 'MainController@get_dynamic_ite
 
 Route::prefix('admin')->group(function() {
     Route::post('save-component', 'AdminController@save_component');
+    Route::get('grid-elements/{type}', 'AdminController@get_grid_elements');
+
 
     Route::prefix('sub-page')->group(function() {
         Route::get('/{id}', 'AdminController@get_sub_page');

@@ -3,11 +3,14 @@ const Video = {
     options: [
         {
             key: 'title',
+            label: 'Titolo',
             required: false,
+            info: 'Non sarà visibile ma è utile per il SEO',
             type: 'text',
         },
         {
             key: 'host',
+            label: 'Hosting',
             required: true,
             type: 'select',
             childrens: [
@@ -18,14 +21,16 @@ const Video = {
         },
         {
             key: 'url',
+            label: 'Url del video',
             required: true,
             type: 'text',
         },
         {
             key: 'preview',
             parent: 'url',
-            type: 'video'
-        }
+            type: 'preview',
+            mime: 'video-url',
+        },
     ],
 }
 

@@ -1,6 +1,7 @@
 import UiBlock from './UiBlock.vue'
 import UiButton from './UiButton.vue'
 import UiCalendar from './UiCalendar.vue'
+import UiCheckbox from './UiCheckbox.vue'
 import UiImage from './UiImage.vue'
 import UiLink from './UiLink.vue'
 import UiModuleContainer from './UiModuleContainer.vue'
@@ -21,6 +22,7 @@ export {
     UiBlock,
     UiButton,
     UiCalendar,
+    UiCheckbox,
     UiImage,
     UiLink,
     UiModuleContainer,

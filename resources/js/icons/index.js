@@ -3,6 +3,8 @@ import Linkedin from './Linkedin.vue'
 import Mail from './Mail.vue'
 import MailDark from './MailDark.vue'
 import Twitter from './Twitter.vue'
+import RadioCheck from './RadioCheck.vue'
+import RadioUncheck from './RadioUncheck.vue'
 
 export {
     Facebook,
@@ -10,4 +12,6 @@ export {
     Mail,
     MailDark,
     Twitter,
+    RadioCheck,
+    RadioUncheck,
 }

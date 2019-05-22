@@ -13,6 +13,14 @@
         fill: $white;
     }
 
+    &--primary &__path {
+        fill: $primary;
+    }
+
+    &--danger &__path {
+        fill: $danger;
+    }
+
     &--pointer {
         cursor: pointer;
     }
@@ -31,6 +39,13 @@
     &--hover-primary:hover & {
         &__path {
             fill: rgba($primary, .6);
+            transition: $transition-base;
+        }
+    }
+
+    &--hover-danger:hover & {
+        &__path {
+            fill: rgba($danger, .6);
             transition: $transition-base;
         }
     }

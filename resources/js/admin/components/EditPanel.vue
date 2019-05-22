@@ -8,7 +8,8 @@
         <hr>
         <div class="edit-panel__content">
             <dynamic-module
-                :name="name"/>
+                :name="name"
+                :options="module.options"/>
         </div>
         <hr>
         <div class="edit-panel__footer">
@@ -29,6 +30,7 @@
 </template>
 
 <script>
+import DynamicParams from '../DynamicParams'
 import DynamicModule from './DynamicModule.vue'
 
 export default {
@@ -47,6 +49,11 @@ export default {
             obj: null,
         }
     },
+    computed: {
+        module: function() {
+            return DynamicParams.filter(params => params.name == this.name)[0]
+        },
+    },
     methods: {
         setObj: function(obj) {
             this.obj = obj
@@ -55,7 +62,7 @@ export default {
             this.$http.post('/api/admin/save-component', this.obj).then(response => {
                 console.log(response);
             })
-        }
+        },
     }
 }
 </script>

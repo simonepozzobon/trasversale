@@ -2,7 +2,8 @@
     <div class="page-template">
         <edit-panel
             v-if="this.panel"
-            :name="this.componentId"/>
+            :name="this.componentId"
+            :edit="false"/>
 
         <div class="page-template__container">
             <div class="page-template__head">
@@ -79,7 +80,7 @@ export default {
     },
     methods: {
         debug: function() {
-            this.componentId = 'paragraph'
+            this.componentId = 'grid'
             this.panel = true
         },
         addComponent: function() {

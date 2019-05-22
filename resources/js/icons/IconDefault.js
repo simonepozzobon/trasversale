@@ -29,5 +29,12 @@ export default {
                 return 'ui-icon--hoverable ui-icon--hover-' + this.hoverColor
             }
         }
+    },
+    methods: {
+        clicked: function() {
+            if (this.hoverable) {
+                this.$emit('click')
+            }
+        }
     }
 }
