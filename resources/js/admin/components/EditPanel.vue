@@ -1,37 +1,39 @@
 <template lang="html">
-    <div class="edit-panel">
-        <div class="edit-panel__head">
-            <div class="edit-panel__title">
-                <h1 class="pt-3">Nuovo Componente</h1>
+    <div class="edit-panel container">
+        <div class="edit-panel__container">
+            <div class="edit-panel__head">
+                <div class="edit-panel__title">
+                    <h1 class="pt-3">Nuovo Componente</h1>
+                </div>
             </div>
-        </div>
-        <hr>
-        <div class="edit-panel__content">
-            <dynamic-module
-                :name="name"
-                :options="module.options"
-                :values="values"
-                :is-edit="isEdit"
-                @changed="setObj"/>
-        </div>
-        <hr>
-        <div class="edit-panel__footer">
-            <button
-                class="btn btn-outline-primary"
-                @click="saveComponent">
-                Salva Modifiche
-            </button>
-            <button
-                class="btn btn-outline-secondary"
-                @click="undoComponent">
-                Annulla
-            </button>
-            <button
-                v-if="isEdit"
-                class="btn btn-outline-danger"
-                @click="deleteComponent">
-                Elimina Componente
-            </button>
+            <hr>
+            <div class="edit-panel__content">
+                <dynamic-module
+                    :name="name"
+                    :options="module.options"
+                    :values="values"
+                    :is-edit="isEdit"
+                    @changed="setObj"/>
+            </div>
+            <hr>
+            <div class="edit-panel__footer">
+                <button
+                    class="btn btn-outline-primary"
+                    @click="saveComponent">
+                    Salva Modifiche
+                </button>
+                <button
+                    class="btn btn-outline-secondary"
+                    @click="undoComponent">
+                    Annulla
+                </button>
+                <button
+                    v-if="isEdit"
+                    class="btn btn-outline-danger"
+                    @click="deleteComponent">
+                    Elimina Componente
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -155,11 +157,16 @@ export default {
 @import '~styles/shared';
 
 .edit-panel {
-    @include gradient-directional($gray-300, $light, 135deg);
-    margin: $spacer * 4;
+    margin-top: $spacer * 2;
     padding: $spacer * 2;
-    @include border-radius($spacer / 2);
-    @include box-shadows($gray-500);
+    max-width: 100%;
+
+    &__container {
+        padding: $spacer * 2;
+        @include gradient-directional($gray-300, $light, 135deg);
+        @include border-radius($spacer / 2);
+        @include box-shadows($gray-500);
+    }
 
     &__head {
         display: flex;

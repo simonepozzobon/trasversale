@@ -13,7 +13,7 @@
             @undo="undo"
             @deleted="deleted"/>
 
-        <div class="page-template__container">
+        <div class="page-template__container container">
             <div class="page-template__head">
                 <div class="page-template__title">
                     <h1 class="pt-3">{{ title }}</h1>
@@ -100,7 +100,7 @@ export default {
     },
     methods: {
         debug: function() {
-            this.moduleType = 'grid'
+            this.moduleType = 'title'
             this.panel = true
         },
         addComponent: function() {
@@ -162,9 +162,13 @@ export default {
 $opacity-test: 0.6 !default;
 
 .page-template {
-    padding-top: $spacer;
+    padding: $spacer * 2;
     min-height: 100vh;
+    max-width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     background: linear-gradient(
         45deg,
@@ -183,9 +187,9 @@ $opacity-test: 0.6 !default;
     animation: Gradient 360s ease infinite;
 
     &__container {
-        @include gradient-directional($gray-300, $light, 135deg);
         margin: $spacer * 4;
         padding: $spacer * 2;
+        @include gradient-directional($gray-300, $light, 135deg);
         @include border-radius($spacer / 2);
         @include box-shadows($gray-500);
     }
