@@ -107,7 +107,8 @@ class Utility extends Model
                                 break;
 
                             default:
-                                $grid_block['content'] = $block[$options->content];
+                                $block->slug = $block->slug;
+                                $grid_block['content'] = json_encode($block);
                                 // dd($grid_block['content']);
                                 break;
                         }

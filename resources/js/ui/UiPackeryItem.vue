@@ -5,7 +5,7 @@
         class="packery-item"
         :class="[
             widthClass,
-            bgColorClass
+            hoverableClass,
         ]">
 
         <div
@@ -21,6 +21,12 @@
                 :has-padding="false"
                 :color="this.color"
                 :content="content"/>
+
+            <div class="packery-item__overlay" v-if="hoverable" @click="goToItem">
+                <div class="packery-item__title">
+                    {{ obj.title }}
+                </div>
+            </div>
         </div>
 
     </div>
@@ -76,6 +82,8 @@ export default {
         bgClass: function() {
             if (this.img) {
                 return 'has-image-bg'
+            } else if (this.bgColor) {
+                return 'bg-' + this.bgColor
             }
         },
         widthClass: function() {
@@ -96,10 +104,23 @@ export default {
             }
             return null
         },
+        hoverableClass: function() {
+            if (this.obj) {
+                return 'packery-item--hoverable'
+            }
+        },
+        hoverable: function() {
+            if (this.obj) {
+                return true
+            }
+
+            return false
+        }
     },
     data: function() {
         return {
             debug: true,
+            obj: null,
         }
     },
     methods: {
@@ -110,6 +131,10 @@ export default {
 
             if (this.type == 'module' && this.subType) {
                 console.log(this.type, this.subType);
+            }
+
+            if (this.type !== 'module') {
+                this.obj = JSON.parse(this.content)
             }
         },
         setUnitHeight: function(height) {
@@ -125,6 +150,12 @@ export default {
             this.$refs.item.style.height = itemHeight + 'px'
             this.$refs.container.style.padding = realGutter + 'px'
         },
+        goToItem: function() {
+            this.$root.goToWithParams('subpage', {
+                page: 'post',
+                subpage: this.obj.slug.slug,
+            })
+        }
     },
     mounted: function() {
         this.setBackground()
@@ -138,6 +169,7 @@ export default {
 .packery-item {
 
     &__item {
+        position: relative;
         max-width: 100%;
         height: 100%;
 
@@ -150,6 +182,39 @@ export default {
 
     &__paragraph {
         padding: $spacer;
+    }
+
+    &__title {
+        text-transform: uppercase;
+        color: $white;
+        font-family: $font-family-sans-serif-var;
+        font-size: $font-size-base * 0.8;
+        letter-spacing: 0.05em;
+    }
+
+    &--hoverable &__overlay {
+        position: absolute;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        transition: $transition-base;
+
+        padding: $spacer;
+    }
+
+    &--hoverable {
+        cursor: pointer;
+    }
+
+    &--hoverable:hover & {
+        &__overlay {
+            opacity: 1;
+            background-color: rgba($primary, .9);
+            transition: $transition-base;
+        }
     }
 }
 </style>

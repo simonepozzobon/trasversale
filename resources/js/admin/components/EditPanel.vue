@@ -157,8 +157,9 @@ export default {
 @import '~styles/shared';
 
 .edit-panel {
-    margin-top: $spacer * 2;
-    padding: $spacer * 2;
+    margin-top: $spacer * 4;
+    padding-left: 0;
+    padding-right: 0;
     max-width: 100%;
 
     &__container {

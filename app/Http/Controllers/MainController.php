@@ -17,7 +17,7 @@ class MainController extends Controller
     }
 
     public function test() {
-        $test = $this->get_dynamic_item('notizie', 'modello-trento', null);
+        $test = $this->get_dynamic_item('home', null, null);
         dd($test);
     }
 
@@ -37,6 +37,9 @@ class MainController extends Controller
             ])->orWhere([
                 ['slug', '=', $subpage],
                 ['sluggable_type', '=', 'App\\News'],
+            ])->orWhere([
+                ['slug', '=', $subpage],
+                ['sluggable_type', '=', 'App\\Post'],
             ])->with('sluggable.modules')->first();
         }
 
