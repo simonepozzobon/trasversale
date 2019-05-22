@@ -370,7 +370,6 @@ export default {
                         let idx = options.findIndex(option => option.key == relatedKey)
                         let parent = this.$parent.$refs.module[idx]
                         let parentValue = parent.value
-                        // console.log(this.disableTable);
                         this.elements = []
 
                         this.$nextTick(() => {
