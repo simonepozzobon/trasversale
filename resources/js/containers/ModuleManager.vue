@@ -120,6 +120,7 @@ export default {
 .module-manager {
     &--is-admin {
         cursor: pointer;
+        padding: $spacer / 2;
     }
 
     &--is-admin:hover {
