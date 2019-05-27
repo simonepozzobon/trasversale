@@ -11,6 +11,9 @@ export default {
             modules: null,
         }
     },
+    mounted: function() {
+        console.log('mountef');
+    }
 }
 </script>
 

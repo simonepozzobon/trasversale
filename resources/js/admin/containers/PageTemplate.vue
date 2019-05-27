@@ -98,6 +98,12 @@ export default {
             moduleId: null,
         }
     },
+    watch: {
+        '$route.params': function(params) {
+            console.log('params cambiato', params);
+        },
+
+    },
     methods: {
         debug: function() {
             this.moduleType = 'title'
@@ -127,33 +133,29 @@ export default {
             this.panel = true
         },
         saved: function(module) {
-            this.panel = false
-
-            this.module = null
-            this.moduleId = null
-            this.moduleType = null
+            this.reset()
 
             this.$emit('saved', module)
         },
         undo: function() {
-            this.panel = false
-            this.module = null
-            this.moduleId = null
-            this.moduleType = null
+            this.reset()
         },
         deleted: function(module) {
+            this.reset()
+            this.$emit('deleted', module)
+        },
+        reset: function() {
             this.panel = false
 
             this.module = null
             this.moduleId = null
             this.moduleType = null
-
-            this.$emit('deleted', module)
         }
     },
     mounted: function() {
-        this.debug()
-    }
+        // this.debug()
+        this.reset()
+    },
 }
 </script>
 

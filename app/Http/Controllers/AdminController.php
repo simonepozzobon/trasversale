@@ -69,21 +69,21 @@ class AdminController extends Controller
 
         return [
             'success' => true,
-            // 'module' => $module,
+            'module' => $module,
             'debug' => $module,
         ];
     }
-
-    public function update_component(Request $request) {
-
-        $module = Module::find($request->id);
-        $module = $this->set_module($module, $request);
-
-        return [
-            'success' => true,
-            'module' => $module,
-        ];
-    }
+    //
+    // public function update_component(Request $request) {
+    //
+    //     $module = Module::find($request->id);
+    //     $module = $this->set_module($module, $request);
+    //
+    //     return [
+    //         'success' => true,
+    //         'module' => $module,
+    //     ];
+    // }
 
     public function delete_component($id) {
         $module = Module::find($id);

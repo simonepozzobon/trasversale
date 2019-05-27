@@ -64,10 +64,7 @@ export default {
             type: Number,
             default: null,
         },
-        values: {
-            type: Object,
-            default: function() { return {} },
-        },
+        values: [Object, Array],
         isEdit: {
             type: Boolean,
             default: false,
@@ -96,11 +93,11 @@ export default {
                 module: this.name,
                 data: this.obj,
             }
+
             let data = this.formatRequest(request)
 
-            // console.log(request.data);
             this.$http.post('/api/admin/save-component', data).then(response => {
-                // console.log(response.data.debug);
+                // console.log(response.data);
                 if (response.data.success) {
                     this.$emit('saved', response.data.module)
                 }

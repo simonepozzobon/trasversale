@@ -67,6 +67,8 @@
             <label class="col-md-3">{{ option.label }}</label>
             <div class="col-md-9">
                 <text-editor
+                    ref="textEditor"
+                    :initial="this.value"
                     @update="updateEditor"/>
             </div>
         </div>
@@ -356,7 +358,7 @@ export default {
             let paragraph = json.content
             this.value = html
             // this.debugEditor = paragraph
-            // console.log(html);
+            console.log(html);
         },
         getElements: function(value, relatedKey) {
             let url = '/api/admin/grid-elements/' + value
@@ -452,7 +454,12 @@ export default {
             for (let i = 0; i < test.length; i++) {
                 this.elements.push(this.formatElementForGrid(test[i], i))
             }
-        }
+        },
+        setInitial: function() {
+            if (this.initial) {
+                this.value = this.initial
+            }
+        },
     },
     beforeCreate: function() {
         this.$options.components.DynamicModule = require('./DynamicModule.vue').default
@@ -460,10 +467,10 @@ export default {
     created: function() {
         this.getColors()
         this.setDefault()
-        if (this.initial) {
-            this.value = this.initial
-        }
+        this.setInitial()
     },
+    mounted: function() {
+    }
 }
 </script>
 

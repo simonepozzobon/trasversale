@@ -1,30 +1,37 @@
+import HomeContainer from './views/HomeContainer.vue'
+import Home from './views/Home.vue'
+import PageContainer from './views/PageContainer.vue'
+import Page from './views/Page.vue'
+import SubPageContainer from './views/SubPageContainer.vue'
+import SubPage from './views/SubPage.vue'
+
 const routes = [
     {
         path: '/',
-        component: require('./views/HomeContainer.vue').default,
+        component: HomeContainer,
         children: [
             {
                 path: '',
                 name: 'home',
-                component: require('./views/Home.vue').default,
+                component: Home,
             },
             {
                 path: ':page',
-                component: require('./views/PageContainer.vue').default,
+                component: PageContainer,
                 children: [
                     {
                         path: '',
                         name: 'page',
-                        component: require('./views/Page.vue').default,
+                        component: Page,
                     },
                     {
                         path: ':sub',
-                        component: require('./views/SubPageContainer.vue').default,
+                        component: SubPageContainer,
                         children: [
                             {
                                 path: '',
                                 name: 'sub',
-                                component: require('./views/SubPage.vue').default,
+                                component: SubPage,
                             }
                         ]
                     }
