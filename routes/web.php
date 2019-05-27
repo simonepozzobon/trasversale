@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('test', 'MainController@test');
+Route::get('test', 'AdminController@test');
 // Route::get('test', 'AdminController@test');
 
 Route::prefix('admin')->group(function() {

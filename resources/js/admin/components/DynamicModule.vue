@@ -7,6 +7,7 @@
             :initial="setInitial(option)"
             :option="option"
             :data-obj="dataObj"
+            :edit="isEdit"
             @changed="changed"/>
     </div>
 </template>
@@ -35,6 +36,10 @@ export default {
         isEdit: {
             type: Boolean,
             default: false,
+        },
+        debug: {
+            type: Boolean,
+            default: false,
         }
     },
     data: function() {
@@ -53,8 +58,15 @@ export default {
             this.dataObj = dataObj
         },
         setInitial: function(option) {
+            // if (this.debug) {
+            //     // console.log(option, this.values);
+            // }
             if (this.isEdit) {
                 let key = option.key
+                if (option.hasOwnProperty('childrens') && option.childrens.length > 0) {
+                    return this.values
+                }
+
                 return this.values[key] ? this.values[key] : null
             }
         },

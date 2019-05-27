@@ -123,13 +123,14 @@ export default {
             this.panel = true
         },
         setModule: function(module) {
+            // console.log(module);
             this.isEdit = true
 
             this.module = module
             this.moduleId = module.id
             this.moduleType = module.type
             this.values = JSON.parse(module.content)
-
+            // console.log(this.values);
             this.panel = true
         },
         saved: function(module) {

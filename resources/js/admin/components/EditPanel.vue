@@ -94,6 +94,8 @@ export default {
                 data: this.obj,
             }
 
+            // console.log('save', this.obj, this.isEdit);
+            // return false
             let data = this.formatRequest(request)
 
             this.$http.post('/api/admin/save-component', data).then(response => {

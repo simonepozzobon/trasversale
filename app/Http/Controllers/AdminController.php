@@ -16,6 +16,18 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
     public function test() {
+        $request = new Request();
+        $request->replace([
+            "id" => "80",
+            "model_id" => "4",
+            "model" => "App\\StaticPage",
+            "module" => "grid",
+            "data" => "{\"title\":\"corsi\",\"type\":\"simple\",\"elements\":{\"model\":\"last-mix\",\"post_count\":10,\"blocks\":[{\"i\":0,\"x\":0,\"y\":0,\"w\":4,\"h\":2,\"order\":0,\"id\":16,\"type\":\"product\",\"type_id\":1,\"width\":4,\"height\":2,\"bgColor\":\"secondary\",\"thumb\":\"\/dummies\/main-grid\/dummy_3.jpg\",\"created_at\":null,\"content\":\"{\\\"id\\\":1,\\\"category_id\\\":4,\\\"title\\\":\\\"Coaching Per Gli Insegnanti\\\",\\\"price\\\":350,\\\"thumb\\\":\\\"\\\\\/dummies\\\\\/main-grid\\\\\/dummy_3.jpg\\\",\\\"options\\\":\\\"\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null,\\\"slug\\\":{\\\"id\\\":22,\\\"slug\\\":\\\"coaching-per-gli-insegnanti\\\",\\\"sluggable_type\\\":\\\"App\\\\\\\\Product\\\",\\\"sluggable_id\\\":1,\\\"created_at\\\":null,\\\"updated_at\\\":null},\\\"category\\\":{\\\"id\\\":4,\\\"title\\\":\\\"Coaching\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null}}\",\"moved\":false},{\"i\":1,\"x\":4,\"y\":0,\"w\":4,\"h\":2,\"order\":1,\"id\":17,\"type\":\"product\",\"type_id\":2,\"width\":4,\"height\":2,\"bgColor\":\"secondary\",\"thumb\":\"\/dummies\/main-grid\/dummy_13.jpg\",\"created_at\":null,\"content\":\"{\\\"id\\\":2,\\\"category_id\\\":4,\\\"title\\\":\\\"Coaching Per Genitori\\\",\\\"price\\\":350,\\\"thumb\\\":\\\"\\\\\/dummies\\\\\/main-grid\\\\\/dummy_13.jpg\\\",\\\"options\\\":null,\\\"created_at\\\":null,\\\"updated_at\\\":null,\\\"slug\\\":{\\\"id\\\":23,\\\"slug\\\":\\\"coaching-per-genitori\\\",\\\"sluggable_type\\\":\\\"App\\\\\\\\Product\\\",\\\"sluggable_id\\\":2,\\\"created_at\\\":null,\\\"updated_at\\\":null},\\\"category\\\":{\\\"id\\\":4,\\\"title\\\":\\\"Coaching\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null}}\",\"moved\":false},{\"i\":2,\"x\":8,\"y\":0,\"w\":4,\"h\":2,\"order\":2,\"id\":18,\"type\":\"product\",\"type_id\":3,\"width\":4,\"height\":2,\"bgColor\":\"secondary\",\"thumb\":\"\/dummies\/main-grid\/dummy_14.jpg\",\"created_at\":null,\"content\":\"{\\\"id\\\":3,\\\"category_id\\\":9,\\\"title\\\":\\\"Tutoring\\\",\\\"price\\\":350,\\\"thumb\\\":\\\"\\\\\/dummies\\\\\/main-grid\\\\\/dummy_14.jpg\\\",\\\"options\\\":null,\\\"created_at\\\":null,\\\"updated_at\\\":null,\\\"slug\\\":{\\\"id\\\":24,\\\"slug\\\":\\\"tutoring\\\",\\\"sluggable_type\\\":\\\"App\\\\\\\\Product\\\",\\\"sluggable_id\\\":3,\\\"created_at\\\":null,\\\"updated_at\\\":null},\\\"category\\\":{\\\"id\\\":9,\\\"title\\\":\\\"Tutoring\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null}}\",\"moved\":false},{\"i\":3,\"x\":0,\"y\":2,\"w\":4,\"h\":2,\"order\":3,\"id\":19,\"type\":\"product\",\"type_id\":4,\"width\":4,\"height\":2,\"bgColor\":\"secondary\",\"thumb\":\"\/dummies\/main-grid\/dummy_3.jpg\",\"created_at\":null,\"content\":\"{\\\"id\\\":4,\\\"category_id\\\":5,\\\"title\\\":\\\"Corso Settore Agricolo\\\",\\\"price\\\":350,\\\"thumb\\\":\\\"\\\\\/dummies\\\\\/main-grid\\\\\/dummy_3.jpg\\\",\\\"options\\\":null,\\\"created_at\\\":null,\\\"updated_at\\\":null,\\\"slug\\\":{\\\"id\\\":26,\\\"slug\\\":\\\"coaching-per-gli-insegnanti-2\\\",\\\"sluggable_type\\\":\\\"App\\\\\\\\Product\\\",\\\"sluggable_id\\\":4,\\\"created_at\\\":null,\\\"updated_at\\\":null},\\\"category\\\":{\\\"id\\\":5,\\\"title\\\":\\\"Settore Agricolo\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null}}\",\"moved\":false},{\"i\":4,\"x\":4,\"y\":2,\"w\":4,\"h\":2,\"order\":4,\"id\":20,\"type\":\"product\",\"type_id\":5,\"width\":4,\"height\":2,\"bgColor\":\"secondary\",\"thumb\":\"\/dummies\/main-grid\/dummy_13.jpg\",\"created_at\":null,\"content\":\"{\\\"id\\\":5,\\\"category_id\\\":6,\\\"title\\\":\\\"Corso di formazione finanziaria\\\",\\\"price\\\":350,\\\"thumb\\\":\\\"\\\\\/dummies\\\\\/main-grid\\\\\/dummy_13.jpg\\\",\\\"options\\\":null,\\\"created_at\\\":null,\\\"updated_at\\\":null,\\\"slug\\\":{\\\"id\\\":28,\\\"slug\\\":\\\"coaching-per-genitori-2\\\",\\\"sluggable_type\\\":\\\"App\\\\\\\\Product\\\",\\\"sluggable_id\\\":5,\\\"created_at\\\":null,\\\"updated_at\\\":null},\\\"category\\\":{\\\"id\\\":6,\\\"title\\\":\\\"Formazione Finanziaria\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null}}\",\"moved\":false},{\"i\":5,\"x\":8,\"y\":2,\"w\":4,\"h\":2,\"order\":5,\"id\":21,\"type\":\"product\",\"type_id\":6,\"width\":4,\"height\":2,\"bgColor\":\"secondary\",\"thumb\":\"\/dummies\/main-grid\/dummy_3.jpg\",\"created_at\":null,\"content\":\"{\\\"id\\\":6,\\\"category_id\\\":5,\\\"title\\\":\\\"Corso Settore Agricolo 2\\\",\\\"price\\\":350,\\\"thumb\\\":\\\"\\\\\/dummies\\\\\/main-grid\\\\\/dummy_3.jpg\\\",\\\"options\\\":null,\\\"created_at\\\":null,\\\"updated_at\\\":null,\\\"slug\\\":{\\\"id\\\":27,\\\"slug\\\":\\\"coaching-per-genitori-3\\\",\\\"sluggable_type\\\":\\\"App\\\\\\\\Product\\\",\\\"sluggable_id\\\":6,\\\"created_at\\\":null,\\\"updated_at\\\":null},\\\"category\\\":{\\\"id\\\":5,\\\"title\\\":\\\"Settore Agricolo\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null}}\",\"moved\":false}]}}"
+        ]);
+        $module = Module::find($request->id);
+        $module = $this->set_module($module, $request);
+        dd($module);
+
         $this->get_grid_elements('products');
     }
 
@@ -70,7 +82,6 @@ class AdminController extends Controller
         return [
             'success' => true,
             'module' => $module,
-            'debug' => $module,
         ];
     }
     //
@@ -135,30 +146,47 @@ class AdminController extends Controller
     }
 
     public function set_module($module, $request) {
+
         $content = $request->data;
 
         if ($request->module == 'grid') {
             $content = json_decode($request->data);
 
-            $grid = new Grid();
+            $grid_content = json_decode($module->content);
+            $hasGrid = isset($grid_content->id);
+
+            if ($hasGrid) {
+                $grid = Grid::find($grid_content->id);
+            } else {
+                $grid = new Grid();
+            }
+
             $grid->title = $content->title;
             $grid->type = $content->type;
             $grid->save();
 
-            foreach ($content->elements->items as $key => $item) {
-                $model = 'App\\'.ucfirst($item->type);
+            foreach ($content->elements->blocks as $key => $block) {
+                $model = 'App\\'.ucfirst($block->type);
                 $options = [
-                    'width' => $item->w,
-                    'height' => $item->h,
+                    'x' => $block->x,
+                    'y' => $block->y,
+                    'width' => $block->w,
+                    'height' => $block->h,
                     'color' => 'primary',
                     'content' => 'title',
-                    'img' => $item->thumb,
+                    'thumb' => $block->thumb,
                 ];
 
-                $element = new Element();
+                // dd($block);
+                $hasElement = isset($block->id);
+                if ($hasElement) {
+                    $element = Element::find($block->id);
+                } else {
+                    $element = new Element();
+                }
                 $element->grid_id = $grid->id;
                 $element->elementable_type = $model;
-                $element->elementable_id = $item->id;
+                $element->elementable_id = $block->type_id;
                 $element->options = json_encode($options);
                 $element->save();
             }

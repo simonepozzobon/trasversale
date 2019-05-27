@@ -53,7 +53,7 @@ const Grid = {
                     },
                 },
                 {
-                    key: 'items',
+                    key: 'blocks',
                     required: true,
                     label: 'Elementi',
                     type: 'post-select',

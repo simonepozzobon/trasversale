@@ -76,10 +76,11 @@ class Utility extends Model
                         $grid_block = [
                             'id' => $element->id,
                             'type' => $type,
+                            'type_id' => $block->id,
                             'width' => $options->width,
                             'height' => $options->height,
                             'bgColor' => $options->color,
-                            'img' => $options->img,
+                            'thumb' => $options->thumb,
                             'created_at' => $block->created_at,
                         ];
 
@@ -95,14 +96,14 @@ class Utility extends Model
                             case 'product':
                                 $block->slug = $block->slug;
                                 $block->category = $block->category;
-                                $grid_block['img'] = $block->thumb;
+                                $grid_block['thumb'] = $block->thumb;
                                 $grid_block['content'] = json_encode($block);
                                 break;
 
                             case 'news':
                                 $block->slug = $block->slug;
                                 $block->category = $block->category;
-                                $grid_block['img'] = $block->thumb;
+                                $grid_block['thumb'] = $block->thumb;
                                 $grid_block['content'] = json_encode($block);
                                 break;
 
@@ -119,6 +120,7 @@ class Utility extends Model
                         'blocks' => $blocks,
                         'type' => $grid->type,
                         'options' => $grid->options,
+                        'title' => $grid->title,
                     ];
                     $module->content = json_encode($data);
             }

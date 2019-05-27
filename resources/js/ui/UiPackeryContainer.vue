@@ -15,7 +15,7 @@
             :bg-color="item.bgColor"
             :content="item.content"
             :gutter="gutter"
-            :img="item.img"/>
+            :img="item.thumb"/>
     </div>
 </template>
 

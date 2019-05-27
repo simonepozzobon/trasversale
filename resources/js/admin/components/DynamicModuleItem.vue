@@ -108,6 +108,9 @@
         <dynamic-module
             v-else-if="option.type == 'multiple'"
             :options="option.childrens"
+            :is-edit="edit"
+            :values="values"
+            :debug="true"
             @changed="changed"/>
 
         <div class="form-group row" v-else-if="option.type == 'post-select'">
@@ -117,7 +120,7 @@
                     ref="gridLayout"
                     :layout="elements"
                     :col-num="12"
-                    :row-height="30"
+                    :row-height="60"
                     :is-draggable="true"
                     :is-resizable="true"
                     :auto-size="true"
@@ -127,6 +130,7 @@
                     :use-css-transforms="true">
 
                     <grid-item
+                        ref="gridItem"
                         v-for="(element, i) in elements"
                         :key="i"
                         class="element-item"
@@ -134,7 +138,9 @@
                         :y="element.y"
                         :w="element.w"
                         :h="element.h"
-                        :i="element.i">
+                        :i="element.i"
+                        @moved="gridItemMoved"
+                        @resized="gridItemResized">
 
                         <div
                             class="element-item__container"
@@ -164,7 +170,7 @@
                     ref="table"
                     striped
                     hover
-                    :items="items"
+                    :items="blocks"
                     :fields="fields">
                     <template slot="thumb" slot-scope="data">
                         <img
@@ -222,9 +228,10 @@ export default {
     data: function() {
         return {
             value: null,
+            values: null,
             colors: [],
             elements: [], // elements on the grid
-            items: [], // items from post query
+            blocks: [], // blocks from post query
             fields: PostFields,
             visible: true,
             disableTable: false,
@@ -358,25 +365,25 @@ export default {
             let paragraph = json.content
             this.value = html
             // this.debugEditor = paragraph
-            console.log(html);
+            // console.log(html);
         },
         getElements: function(value, relatedKey) {
             let url = '/api/admin/grid-elements/' + value
             this.$http.get(url).then(response => {
                 // console.log(response.data.elements);
                 if (response.data.success) {
-                    this.items = response.data.elements
+                    this.blocks = response.data.elements
                     // this.debug()
                     if (relatedKey == 'post_count') {
                         let options = this.$parent.options
                         let idx = options.findIndex(option => option.key == relatedKey)
                         let parent = this.$parent.$refs.module[idx]
                         let parentValue = parent.value
-                        this.elements = []
+                        // this.elements = []
 
                         this.$nextTick(() => {
                             for (let i = 0; i < parentValue; i++) {
-                                this.selectPost(this.items[i])
+                                this.selectPost(this.blocks[i])
                             }
                         })
                     }
@@ -390,15 +397,15 @@ export default {
             })
         },
         selectPost: function(item) {
-            let idx = this.items.indexOf(item)
+            let idx = this.blocks.indexOf(item)
             if (idx > -1) {
-                this.items[idx].selected = !item.selected
-                // console.log(this.items[idx].selected);
+                this.blocks[idx].selected = !item.selected
+                // console.log(this.blocks[idx].selected);
 
                 // aggiunge elemento dalla tabella
-                if (this.items[idx].selected) {
+                if (this.blocks[idx].selected) {
                     let i = this.elements.length
-                    let element = this.formatElementForGrid(this.items[idx], i)
+                    let element = this.formatElementForGrid(this.blocks[idx], i)
                     this.elements.push(element)
                 }
 
@@ -413,19 +420,19 @@ export default {
         },
         removeElement: function(item) {
             // rimuove l'elemento dalla griglia e lo deseleziona dalla tabella
-            let idx = this.items.findIndex(row => row.id == item.id && row.type == item.type)
+            let idx = this.blocks.findIndex(row => row.id == item.id && row.type == item.type)
             if (idx > -1) {
-                // console.log(this.items[idx]);
-                this.items[idx].selected = 0
+                // console.log(this.blocks[idx]);
+                this.blocks[idx].selected = 0
             }
             this.elements.splice(this.elements.indexOf(item), 1);
         },
         formatElementForGrid: function(item, i = 0) {
             let colN = 12
-            let w = 2
-            let h = 2
-            let x = (i * w) % colN
-            let y = Math.floor((i * w) / colN)
+            let w = item.hasOwnProperty('width') ? item.width : 2
+            let h = item.hasOwnProperty('height') ? item.height : 2
+            let x = item.hasOwnProperty('x')? item.x : (i * w) % colN
+            let y = item.hasOwnProperty('y')? item.y : Math.floor((i * w) / colN)
 
             return {
                 i: i,
@@ -433,7 +440,21 @@ export default {
                 y: y,
                 w: w,
                 h: h,
+                order: i,
                 ...item,
+            }
+        },
+        gridItemMoved: function(i, newX, newY){
+            let item = this.elements[i] // element moved
+            for (let i = 0; i < this.elements.length; i++) {
+                this.elements[i]
+            }
+        },
+        gridItemResized: function(i, newH, newW, newHPx, newWPx) {
+            this.elements[i] = {
+                ...this.elements[i],
+                w: newW,
+                h: newH
             }
         },
         updateGrid: function() {
@@ -441,23 +462,36 @@ export default {
         },
         debug: function() {
             let test = [
-                this.items[2],
-                this.items[1],
-                this.items[2],
-                this.items[1],
-                this.items[2],
-                this.items[1],
-                this.items[2],
-                this.items[1],
+                this.blocks[2],
+                this.blocks[1],
+                this.blocks[2],
+                this.blocks[1],
+                this.blocks[2],
+                this.blocks[1],
+                this.blocks[2],
+                this.blocks[1],
             ]
 
-            for (let i = 0; i < test.length; i++) {
-                this.elements.push(this.formatElementForGrid(test[i], i))
-            }
+            // for (let i = 0; i < test.length; i++) {
+            //     this.elements.push(this.formatElementForGrid(test[i], i))
+            // }
         },
         setInitial: function() {
             if (this.initial) {
                 this.value = this.initial
+            }
+
+            // se ha sottomoduli
+            if (this.option.hasOwnProperty('childrens') && this.option.childrens.length > 0) {
+                this.values = this.initial
+            }
+
+            // se è post-select
+            if (this.option.type == 'post-select') {
+                for (var i = 0; i < this.initial.length; i++) {
+                    this.elements.push(this.formatElementForGrid(this.initial[i], i))
+                }
+                // console.log('griglia', this.initial[0]);
             }
         },
     },
@@ -468,6 +502,8 @@ export default {
         this.getColors()
         this.setDefault()
         this.setInitial()
+
+
     },
     mounted: function() {
     }
