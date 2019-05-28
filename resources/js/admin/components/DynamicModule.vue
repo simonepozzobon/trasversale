@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { clone, isEqual } from '../../Utilities'
 import DynamicModuleItem from './DynamicModuleItem.vue'
 
 export default {
@@ -55,23 +56,28 @@ export default {
             this.dataObj = dataObj
         },
         setInitial: function(option) {
-            // console.log(this.isEdit);
-            // if (this.debug) {
-            //     // console.log(option, this.values);
-            // }
-            // if (this.isEdit) {
-                let key = option.key
-                if (option.hasOwnProperty('childrens') && option.childrens.length > 0) {
-                    // console.log('children', key,  this.values.blocks);
-                    return this.values
-                }
+            let key = option.key
+            if (option.hasOwnProperty('childrens') && option.childrens.length > 0) {
+                // console.log('children', key,  this.values);
+                return this.values
+            }
+            // console.log('not-children', key,  this.values[key] ? this.values[key] : null);
 
-                return this.values[key] ? this.values[key] : null
-            // }
+            return this.values[key] ? this.values[key] : null
         },
         changed: function(key, value, type) {
-            this.dataObj[key] = value
-            this.$emit('changed', this.dataObj)
+            let prev = clone(this.dataObj[key])
+
+            // if (key == 'elements') {
+            //     console.log('Dynamic module è diverso', !isEqual(prev, value), key);
+            //     console.log(!isEqual(this.dataObj[key], value));
+            // }
+            // console.log(prev, value);
+            if (!isEqual(prev, value)) {
+                this.dataObj[key] = value
+                this.$emit('changed', this.dataObj)
+            }
+
             // console.log(key, value, type);
             if (type == 'file-input' || type == 'text') {
                 // cerco se ha un modulo preview

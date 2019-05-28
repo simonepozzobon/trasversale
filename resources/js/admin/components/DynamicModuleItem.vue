@@ -116,14 +116,14 @@
             :is-edit="edit"
             :values="values"
             :debug="true"
-            @changed="changed"/>
+            @changed="subChanged"/>
 
         <div class="form-group row" v-else-if="option.type == 'post-select'">
             <label :for="option.key" class="col-md-3">Anteprima</label>
             <div class="col-md-9">
                 <grid-layout
                     ref="gridLayout"
-                    :layout="elements"
+                    :layout.sync="elements"
                     :col-num="12"
                     :row-height="60"
                     :is-draggable="true"
@@ -132,12 +132,13 @@
                     :is-mirrored="false"
                     :vertical-compact="true"
                     :margin="[10, 10]"
-                    :use-css-transforms="true">
+                    :use-css-transforms="true"
+                    @layout-updated="layoutUpdated">
 
                     <grid-item
                         ref="gridItem"
                         v-for="(element, i) in elements"
-                        :key="i"
+                        :key="element.i"
                         class="element-item"
                         :x="element.x"
                         :y="element.y"
@@ -202,6 +203,7 @@
 </template>
 
 <script>
+import { clone, isEqual } from '../../Utilities'
 import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
 import Swatches from 'vue-swatches'
 import TextEditor from './TextEditor.vue'
@@ -257,12 +259,18 @@ export default {
         }
     },
     watch: {
-        value: function(value) {
-            this.$emit('changed', this.option.key, value, this.option.type)
+        value: function(newValue, oldValue) {
+            // console.log('è un valore diference', this.option.key, !isEqual(newValue, oldValue));
+            if(!isEqual(newValue, oldValue)) {
+                this.$emit('changed', this.option.key, newValue, this.option.type)
+            }
         },
-        elements: function(els) {
-            // console.log(els);
-            this.value = els
+        elements: function(newEls, oldEls) {
+            // console.log(newEls, oldEls);
+            console.log('elements are different', !isEqual(newEls, oldEls));
+            this.value = clone(newEls)
+            // if (!isEqual(newEls, oldEls)) {
+            // }
         }
     },
     computed: {
@@ -321,10 +329,12 @@ export default {
                 this.value--
             }
         },
-        changed: function(subModuleObj) {
-            // console.log('subModuleObj', subModuleObj);
+        subChanged: function(subModuleObj) {
+            // console.log('subModuleObj è differnte', !isEqual(this.value, subModuleObj));
             // bisogna risettare l'oggetto altrimenti non aggiorna l'evento
-            this.value = {...subModuleObj}
+            if (!isEqual(this.value, subModuleObj)) {
+                this.value = clone(subModuleObj)
+            }
         },
         setDefault: function() {
             if (this.option.hasOwnProperty('default') && !this.edit) {
@@ -443,26 +453,40 @@ export default {
                 if (this.blocks[idx].selected) {
                     let i = this.elements.length
                     let element = this.formatElementForGrid(this.blocks[idx], i)
-                    this.elements.push(element)
+
+                    // force replace
+                    const newEls = Object.assign([], this.elements)
+                    newEls.push(element)
+                    this.elements = Object.assign([], newEls)
                 }
 
                 // rimuove elemento dalla tabella
                 else {
                     let i = this.elements.findIndex(element => element.id == item.id && element.type == item.type)
                     if (i > -1) {
-                        this.elements.splice(i, 1)
+                        // force replace
+                        const newEls = Object.assign([], this.elements)
+                        newEls.splice(i, 1)
+                        this.elements = Object.assign([], newEls)
                     }
                 }
             }
         },
         removeElement: function(item) {
+            // console.log(item);
             // rimuove l'elemento dalla griglia e lo deseleziona dalla tabella
             let idx = this.blocks.findIndex(row => row.id == item.id && row.type == item.type)
             if (idx > -1) {
                 // console.log(this.blocks[idx]);
                 this.blocks[idx].selected = 0
             }
-            this.elements.splice(this.elements.indexOf(item), 1);
+
+            let index = this.elements.indexOf(item)
+
+            // force replace
+            const newEls = Object.assign([], this.elements)
+            newEls.splice(index, 1)
+            this.elements = Object.assign([], newEls)
         },
         formatElementForGrid: function(item, i = 0) {
             let colN = 12
@@ -488,16 +512,24 @@ export default {
             }
         },
         gridItemResized: function(i, newH, newW, newHPx, newWPx) {
-            // console.log(this.elements[i]);
-            let newElement = {
-                ...this.elements[i],
-                w: newW,
-                h: newH
-            }
-            this.elements.splice(i, 1, newElement)
+            // let newEls = Object.assign([], this.elements)
+            // let index = newEls.findIndex(el => el.i === i)
+            // console.log(newEls[index]);
+            // console.log(index, i);
+            // let item = Object.assign({}, newEls[index])
+            // console.log(item);
+            // let newEl = Object.assign({}, item, {w: newW, h: newH})
+
+            // console.log(newEl);
+
+            // force replace
+            // const newEls = Object.assign([], this.elements)
+            // newEls.splice(index, 1, newEl)
+            //
+            // this.elements = Object.assign([], newEls)
         },
-        updateGrid: function() {
-            // da completare
+        layoutUpdated: function(newLayout) {
+            this.elements = Object.assign([], newLayout)
         },
         debug: function() {
             let test = [
@@ -516,21 +548,26 @@ export default {
             // }
         },
         setInitial: function() {
-            if (this.initial) {
+            if (this.initial && this.option.type != 'post-select') {
                 this.value = this.initial
+                // console.log(clone(this.value));
+                // console.log('qui', this.option.key, this.option.type);
             }
 
             // se ha sottomoduli
             if (this.option.hasOwnProperty('childrens') && this.option.childrens.length > 0) {
+                // console.log('children', this.option.key, this.option.type, clone(this.initial));
                 // console.log('childres ', this.initial);
                 this.values = this.initial
             }
 
             // se è post-select
             if (this.option.type == 'post-select' && this.initial) {
+                // console.log('post-select', this.option.key, this.option.type);
                 // console.log('initila', this.initial);
                 for (let i = 0; i < this.initial.length; i++) {
                     let formatted = this.formatElementForGrid(this.initial[i], i)
+                    console.log(formatted);
                     this.elements.push(formatted)
                 }
                 // console.log('griglia', this.initial[0]);

@@ -1,13 +1,18 @@
 <template lang="html">
         <!-- class="row no-gutters" -->
     <div
-        v-packery="this.packeryOpts"
+        v-packery="{
+            itemSelector: '.packery-item',
+            percentPosition: true,
+            initLayout: true,
+            /* resizeContainer: false, */
+        }"
         class="row no-gutters"
         ref="packery">
-        <ui-packery-item
+        <admin-packery-item
             ref="item"
-            v-for="item in this.items"
-            :key="item.id | setUUID"
+            v-for="(item, i) in this.items"
+            :key="item.i"
             :type="item.type"
             :sub-type="item.hasOwnProperty('sub_type') ? item.sub_type : null"
             :width="item.width"
@@ -21,14 +26,14 @@
 </template>
 
 <script>
-import { Uuid } from '../Utilities'
-import UiPackeryItem from './UiPackeryItem.vue'
-import {packeryEvents} from '../admin/PackeryTest'
+import { Uuid } from '../../../Utilities'
+import AdminPackeryItem from './AdminPackeryItem.vue'
+import {packeryEvents} from '../../PackeryTest'
 
 export default {
     name: 'PackeryContainer',
     components: {
-        UiPackeryItem,
+        AdminPackeryItem,
     },
     props: {
         items: [Array, Object],
@@ -43,9 +48,12 @@ export default {
     },
     data: function() {
         return {
+            forceRender: true,
             packeryOpts: {
                 itemSelector: ".packery-item",
                 percentPosition: true,
+                resize: false
+                // resizeContainer: false,
                 // containerStyle: null,
             },
             count: 0,
@@ -55,6 +63,16 @@ export default {
     },
     watch: {
         items: function(items) {
+            packeryEvents.$emit('layout', this.$refs.packery)
+            // this.forceRender = false
+            // this.$nextTick(() => {
+            //     this.forceRender = true
+            // })
+        }
+    },
+    computed: {
+        uuid: function() {
+            return Uuid.get()
         }
     },
     filters: {
@@ -65,8 +83,10 @@ export default {
     methods: {
         setUnitHeight: function() {
             let items = this.$refs.item
-            for (let i = 0; i < items.length; i++) {
-                items[i].setUnitHeight(this.unitSize)
+            if (items) {
+                for (let i = 0; i < items.length; i++) {
+                    items[i].setUnitHeight(this.unitSize)
+                }
             }
         },
         getContainerWidth: function() {

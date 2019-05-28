@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import UiParagraph from './UiParagraph.vue'
+import { UiParagraph } from '../../../ui'
 
 export default {
     name: 'UiPackeryItem',
@@ -76,7 +76,7 @@ export default {
         gutter: {
             type: Number,
             default: 0,
-        }
+        },
     },
     computed: {
         bgClass: function() {
@@ -119,7 +119,7 @@ export default {
     },
     data: function() {
         return {
-            debug: true,
+            // debug: true,
             obj: null,
         }
     },
@@ -155,10 +155,10 @@ export default {
             // })
         },
         goToItem: function() {
-            this.$root.goToWithParams('subpage', {
-                page: 'post',
-                subpage: this.obj.slug.slug,
-            })
+            // this.$root.goToWithParams('subpage', {
+            //     page: 'post',
+            //     subpage: this.obj.slug.slug,
+            // })
         }
     },
     mounted: function() {

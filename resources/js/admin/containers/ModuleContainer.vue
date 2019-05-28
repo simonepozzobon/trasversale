@@ -68,109 +68,90 @@ export default {
     methods: {
         formatTempData: function(obj) {
             // console.log('formato', this.item.type, obj);
-            this.$nextTick(() => {
-                this.setPreview(obj).then(content => {
-                    // console.log(content);
-                    // this.component = {
-                    //     ...this.component,
-                    //     content: content
-                    // }
-                    this.component.content = content
-                })
-            })
+            let content = this.setPreview(obj)
+            const newObj = {
+                ...this.component,
+                content: content
+            }
 
-            // this.component.content = content
+            this.component = Object.assign({}, newObj)
         },
         setPreview: function(obj) {
-            return new Promise(resolve => {
-                let content
-                switch (this.item.type) {
-                    // Riga
-                    case 'row':
-                        let cols = []
-                        for (let i = 0; i < obj.columns; i++) {
-                            let col = {
-                                id: i,
-                                modulable_id: 31,
-                                modulable_type: 'App\\Module',
-                                modules: [],
-                                type: 'column',
-                                content: JSON.stringify({size: 6})
-                            }
-                            cols.push(col)
+            switch (this.item.type) {
+                // Riga
+                case 'row':
+                    let cols = []
+                    for (let i = 0; i < obj.columns; i++) {
+                        let col = {
+                            id: i,
+                            modulable_id: 31,
+                            modulable_type: 'App\\Module',
+                            modules: [],
+                            type: 'column',
+                            content: JSON.stringify({size: 6})
                         }
-                        content = JSON.stringify(cols)
-                        resolve(content)
-                        break;
+                        cols.push(col)
+                    }
+                    return JSON.stringify(cols)
 
-                    // Immagine
-                    case 'image':
-                        content = JSON.stringify({
-                            src: obj.src ? window.URL.createObjectURL(obj.src) : null,
-                            alt: obj.alt
-                        })
-                        resolve(content)
-                        break;
+                // Immagine
+                case 'image':
+                    return JSON.stringify({
+                        src: obj.src ? window.URL.createObjectURL(obj.src) : null,
+                        alt: obj.alt
+                    })
 
-                    // Video
-                    case 'video':
-                        let url = obj.url
-                        if (url) {
-                            url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
+                // Video
+                case 'video':
+                    let url = obj.url
+                    if (url) {
+                        url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
 
-                            if (RegExp.$3.indexOf('youtu') > -1) {
-                                url = 'https://www.youtube.com/embed/' + RegExp.$6
-                            } else if (RegExp.$3.indexOf('vimeo') > -1) {
-                                url = 'https://player.vimeo.com/video/' + RegExp.$6
-                            }
+                        if (RegExp.$3.indexOf('youtu') > -1) {
+                            url = 'https://www.youtube.com/embed/' + RegExp.$6
+                        } else if (RegExp.$3.indexOf('vimeo') > -1) {
+                            url = 'https://player.vimeo.com/video/' + RegExp.$6
                         }
+                    }
 
-                        content = JSON.stringify({
-                            ...obj,
-                            url: url,
-                        })
-                        resolve(content)
+                    return JSON.stringify({
+                        ...obj,
+                        url: url,
+                    })
 
-                        break;
-
-                    case 'grid':
-                        let blocks = []
-                        if (obj.elements) {
-                            if (obj.elements.hasOwnProperty('blocks') && obj.elements.blocks) {
-                                blocks = obj.elements.blocks
-                            }
+                case 'grid':
+                    let blocks = []
+                    if (obj.elements) {
+                        if (obj.elements.hasOwnProperty('blocks') && obj.elements.blocks) {
+                            blocks = obj.elements.blocks
                         }
+                    }
 
-                        blocks = blocks.map(block => {
-                            return {
-                                ...block,
-                                height: block.h,
-                                width: block.w,
-                                content: JSON.stringify({
-                                    id: block.id,
-                                    slug: block.slug,
-                                    title: block.title,
-                                })
-                            }
-                        })
+                    blocks = blocks.map(block => {
+                        return {
+                            ...block,
+                            height: block.h,
+                            width: block.w,
+                            content: JSON.stringify({
+                                id: block.id,
+                                slug: block.slug,
+                                title: block.title,
+                            })
+                        }
+                    })
 
-                        // console.log('blocchi', blocks);
-                        content = JSON.stringify({
-                            blocks: blocks,
-                            options: null,
-                            title: obj.title,
-                            type: obj.type,
-                        })
+                    // console.log('blocchi', blocks);
+                    return JSON.stringify({
+                        blocks: blocks,
+                        options: null,
+                        title: obj.title,
+                        type: obj.type,
+                    })
 
-                        resolve(content)
-                        break;
-
-                    // DEfault
-                    default:
-                        content = JSON.stringify(obj)
-                        resolve(content)
-                }
-            })
+                // DEfault
+                default:
+                    return JSON.stringify(obj)
+            }
         },
         changed: function(obj) {
             this.cache = obj

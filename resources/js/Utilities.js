@@ -40,7 +40,32 @@ const Uuid = {
     }
 }
 
+// https://helloacm.com/how-to-clone-variables-the-clone-function-in-javascript/
+const clone = function(Obj) {
+    let buf;
+    if (Obj instanceof Array) {
+        buf = []; // create an empty array
+        let i = Obj.length;
+        while (i --) {
+            buf[i] = clone(Obj[i]); // recursively clone the elements
+        }
+        return buf;
+    } else if (Obj instanceof Object) {
+        buf = {}; // create an empty object
+        for (let k in Obj) {
+            buf[k] = clone(Obj[k]); // recursively clone the value
+        }
+        return buf;
+    } else {
+        return Obj;
+    }
+}
+
+const isEqual = require('lodash.isequal')
+
 export {
+    clone,
+    isEqual,
     SizeUtil,
     Uuid,
 }
