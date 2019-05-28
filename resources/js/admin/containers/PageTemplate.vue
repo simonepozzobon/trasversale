@@ -37,39 +37,21 @@
                 </button>
             </div>
         </div>
-        <b-modal ref="componentSelector" title="Seleziona il componente">
-            <div class="form-group">
-                <label for="component">Seleziona Componente</label>
-                <select name="component" class="form-control" v-model="moduleType">
-                    <option :value="null">Nessun Componente</option>
-                    <option value="title">Titolo</option>
-                    <option value="paragraph">Paragrafo</option>
-                    <option value="image">Immagine</option>
-                    <option value="video">Video</option>
-                    <!-- <option value="quote">Citazione</option> -->
-                    <option value="grid">Griglia</option>
-                </select>
-            </div>
-
-            <template slot="modal-footer">
-                <button class="btn btn-outline-secondary" @click="dismissModal">
-                    Chiudi
-                </button>
-                <button class="btn btn-outline-primary" @click="newComponent">
-                    Aggiungi
-                </button>
-            </template>
-        </b-modal>
+        <components-list
+            ref="componentSelector"
+            @new-component="newComponent"/>
     </div>
 </template>
 
 <script>
-import EditPanel from '../components/EditPanel.vue'
+import ComponentsList from '../components/ComponentsList.vue'
 import DynamicParams from '../DynamicParams'
+import EditPanel from '../components/EditPanel.vue'
 
 export default {
     name: 'PageTemplate',
     components: {
+        ComponentsList,
         EditPanel,
     },
     props: {
@@ -106,7 +88,7 @@ export default {
     },
     methods: {
         debug: function() {
-            this.moduleType = 'title'
+            this.moduleType = 'row'
             this.panel = true
         },
         addComponent: function() {
@@ -115,11 +97,11 @@ export default {
         dismissModal: function() {
             this.$refs.componentSelector.hide()
         },
-        newComponent: function() {
-            this.isEdit = false
-
+        newComponent: function(type) {
+            this.moduleType = type
             this.dismissModal()
 
+            this.isEdit = false
             this.panel = true
         },
         setModule: function(module) {
@@ -154,8 +136,8 @@ export default {
         }
     },
     mounted: function() {
-        // this.debug()
-        this.reset()
+        this.debug()
+        // this.reset()
     },
 }
 </script>

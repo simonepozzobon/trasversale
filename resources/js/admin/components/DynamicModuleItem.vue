@@ -93,11 +93,18 @@
                 <div class="row">
                     <div class="input-group col-md-3">
                         <div class="input-group-prepend">
-                            <button class="btn btn-outline-primary" @click="value++">+</button>
+                            <button class="btn btn-outline-primary" @click="addCounter">+</button>
                         </div>
-                        <input type="text" :name="option.key" class="form-control" v-model="value">
+                        <input
+                            type="text"
+                            :name="option.key"
+                            class="form-control"
+                            v-model="value"
+                            :max="getModuleOption('max')"
+                            :min="getModuleOption('min')"/>
+
                         <div class="input-group-append">
-                            <button class="btn btn-outline-primary" @click="value--">-</button>
+                            <button class="btn btn-outline-primary" @click="removeCounter">-</button>
                         </div>
                     </div>
                 </div>
@@ -159,9 +166,13 @@
             </div>
         </div>
 
-        <!-- <div v-else>
+        <columns-preview
+            v-else-if="option.type == 'row-preview'"
+            :cols-number="relatedValue" />
+
+        <div v-else>
             {{ option }}
-        </div> -->
+        </div>
 
         <div class="form-group row" v-if="option.type == 'post-select' && !disableTable">
             <label :for="option.key" class="col-md-3">{{ option.label }}</label>
@@ -188,10 +199,12 @@
             </div>
 
         </div>
+
     </div>
 </template>
 
 <script>
+import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
 import Swatches from 'vue-swatches'
 import TextEditor from './TextEditor.vue'
 import VueGridLayout from 'vue-grid-layout'
@@ -204,6 +217,7 @@ import "vue-swatches/dist/vue-swatches.min.css"
 export default {
     name: 'DynamicModuleItem',
     components: {
+        ColumnsPreview,
         Swatches,
         TextEditor,
         GridLayout: VueGridLayout.GridLayout,
@@ -253,6 +267,12 @@ export default {
         }
     },
     computed: {
+        options: function() {
+            if (this.option.hasOwnProperty('options')) {
+                return this.option.options
+            }
+            return {}
+        },
         hasRelated: function() {
             if (this.option.hasOwnProperty('relatedKey')) {
                 return true
@@ -286,6 +306,23 @@ export default {
         }
     },
     methods: {
+        getModuleOption: function(key) {
+            if (this.options && this.options.hasOwnProperty(key)) {
+                return this.options[key]
+            }
+
+            return null
+        },
+        addCounter: function() {
+            if (this.options && this.options.hasOwnProperty('max') && this.value < this.options.max) {
+                this.value++
+            }
+        },
+        removeCounter: function() {
+            if (this.options && this.options.hasOwnProperty('min') && this.value > this.options.min) {
+                this.value--
+            }
+        },
         changed: function(subModuleObj) {
             this.value = subModuleObj
         },

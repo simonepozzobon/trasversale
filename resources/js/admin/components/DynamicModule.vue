@@ -29,10 +29,7 @@ export default {
             type: Array,
             default: function() { return [] },
         },
-        values: {
-            type: Object,
-            default: function() { return {} },
-        },
+        values: [Object, Array],
         isEdit: {
             type: Boolean,
             default: false,
@@ -109,6 +106,7 @@ export default {
         this.setModule()
     },
     mounted: function() {
+        console.log(this.options);
     }
 }
 </script>
