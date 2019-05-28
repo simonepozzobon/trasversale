@@ -14,28 +14,35 @@
             :uppercase="content.hasOwnProperty('uppercase') ? content.uppercase : null "
             :color="content.hasOwnProperty('color') ? content.color : null "
             :font-size="content.hasOwnProperty('fontSize') ? content.fontSize : null"/>
+
         <ui-image
             v-else-if="module.type == 'image'"
             :src="content.src"
             :alt="content.alt"/>
+
         <ui-paragraph
             v-else-if="module.type == 'paragraph'"
             :content="content.content"/>
+
         <ui-button
             v-else-if="module.type == 'button'"
             :text="content.text"/>
+
         <ui-team
             v-else-if="module.type == 'team'"
             :people="content.people"
             :grid-col="content.gridCol"/>
+
         <ui-packery-container
             v-else-if="module.type == 'grid' && this.content.type == 'packery' && this.content.blocks.length > 0"
             :items="this.content.blocks"
             :gutter="8"
             :units="12"/>
+
         <ui-simple-grid
             v-else-if="module.type == 'grid' && this.content.type == 'simple' && this.content.blocks.length > 0"
             :blocks="this.content.blocks"/>
+
         <ui-module-row
             v-else-if="module.type == 'row'"
             :columns="this.content"/>
@@ -100,10 +107,6 @@ export default {
             this.$root.sidebarPaddingTop = height
             this.$emit('title', height)
         }
-        // if (this.module.type == 'grid') {
-        //     console.log(this.content.blocks[0]);
-        // }
-        // console.log(this.content[0]);
     },
     beforeDestroy: function() {
         if (this.module.type == 'title') {
@@ -120,12 +123,15 @@ export default {
 .module-manager {
     &--is-admin {
         cursor: pointer;
-        padding: $spacer / 2;
+        padding: $spacer;
+        @include border-radius(10px);
+        background-color: rgba($white, .3);
+        transition: $transition-base;
     }
 
     &--is-admin:hover {
-        @include border-radius(10px);
         background-color: rgba($black, .1);
+        transition: $transition-base;
     }
 }
 </style>

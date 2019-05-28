@@ -33,6 +33,16 @@
             </div>
             <hr>
             <slot></slot>
+            <new-module
+                ref="panel"
+                v-for="(module, i) in cached"
+                :key="i"
+                :name="module.moduleType"
+                :model="module.model"
+                :model-idx="module.modelIdx"
+                :is-edit="module.isEdit"
+                :module-id="module.moduleId"
+                :values="module.values"/>
             <hr>
             <div class="page-template__footer">
                 <button
@@ -49,15 +59,18 @@
 </template>
 
 <script>
+import { Uuid } from '../../Utilities'
 import ComponentsList from '../components/ComponentsList.vue'
 import DynamicParams from '../DynamicParams'
 import EditPanel from '../components/EditPanel.vue'
+import NewModule from '../components/NewModule.vue'
 
 export default {
     name: 'PageTemplate',
     components: {
         ComponentsList,
         EditPanel,
+        NewModule,
     },
     props: {
         title: {
@@ -83,6 +96,7 @@ export default {
             values: null,
             module: null,
             moduleId: null,
+            cached: [],
         }
     },
     watch: {
@@ -97,7 +111,17 @@ export default {
             this.panel = true
         },
         addRow: function() {
-            
+            let newRow = {
+                uuid: Uuid.get(),
+                moduleType: 'row',
+                model: this.model,
+                modelIdx: this.modelIdx,
+                isEdit: false,
+                moduleId: this.moduleId,
+                values: [],
+            }
+
+            this.cached.push(newRow)
         },
         addComponent: function() {
             this.$refs.componentSelector.show()

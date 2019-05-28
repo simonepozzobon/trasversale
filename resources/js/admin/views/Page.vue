@@ -1,29 +1,23 @@
 <template lang="html">
-    <page-template
+    <new-page-template
         ref="page"
         :title="title"
         :model="model"
         :model-idx="idx"
+        :modules="this.modules"
         @saved="saved"
         @deleted="deleted">
-
-        <module-manager
-            v-for="item in this.modules"
-            :key="item.id"
-            :is-admin="true"
-            :module="item"
-            @selected="selected"/>
-    </page-template>
+    </new-page-template>
 </template>
 
 <script>
-import PageTemplate from '../containers/PageTemplate.vue'
+import NewPageTemplate from '../containers/NewPageTemplate.vue'
 import ModuleManager from '../../containers/ModuleManager.vue'
 
 export default {
-    name: 'SubPage',
+    name: 'Page',
     components: {
-        PageTemplate,
+        NewPageTemplate,
         ModuleManager,
     },
     data: function() {

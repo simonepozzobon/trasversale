@@ -156,6 +156,7 @@ export default {
     created: function() {
         this.size = this.content.size
         this.align = this.content.hasOwnProperty('align') ? this.content.align : null
+        this.color = this.content.hasOwnProperty('color') ? this.content.color : null
     },
     mounted: function() {
     },

@@ -8,18 +8,18 @@ const Row = {
             type: 'counter',
             options: {
                 max: 12,
-                min: 2,
+                min: 1,
             },
-            default: 2,
+            default: 3,
         },
-        {
-            key: 'preview',
-            label: 'Anteprima',
-            require: false,
-            type: 'row-preview',
-            relatedKey: 'columns',
-
-        }
+        // {
+        //     key: 'preview',
+        //     label: 'Anteprima',
+        //     require: false,
+        //     type: 'row-preview',
+        //     relatedKey: 'columns',
+        //
+        // }
     ],
 }
 

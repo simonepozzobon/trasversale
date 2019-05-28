@@ -106,7 +106,7 @@ export default {
         this.setModule()
     },
     mounted: function() {
-        console.log(this.options);
+        // console.log(this.options);
     }
 }
 </script>
