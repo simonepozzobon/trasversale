@@ -1,12 +1,13 @@
 <template lang="html">
+        <!-- class="row no-gutters" -->
     <div
         v-packery="this.packeryOpts"
-        class="row no-gutters"
-        ref="container">
+        class="packery-container"
+        ref="packery">
         <ui-packery-item
             ref="item"
             v-for="item in this.items"
-            :key="item.id"
+            :key="item.id | setUUID"
             :type="item.type"
             :sub-type="item.hasOwnProperty('sub_type') ? item.sub_type : null"
             :width="item.width"
@@ -15,12 +16,15 @@
             :bg-color="item.bgColor"
             :content="item.content"
             :gutter="gutter"
-            :img="item.thumb"/>
+            :img="item.thumb"
+            @loaded="test"/>
     </div>
 </template>
 
 <script>
+import { Uuid } from '../Utilities'
 import UiPackeryItem from './UiPackeryItem.vue'
+import {packeryEvents} from '../admin/PackeryTest'
 
 export default {
     name: 'PackeryContainer',
@@ -42,11 +46,27 @@ export default {
         return {
             packeryOpts: {
                 itemSelector: ".packery-item",
-                percentPosition: true
+                percentPosition: true,
+                containerStyle: null,
             },
             count: 0,
             maxHeight: 0,
             unitSize: 0,
+        }
+    },
+    watch: {
+        items: function(items) {
+            console.log('items');
+            this.packeryOpts.initLayout = false
+            this.$nextTick(() => {
+                // this.getContainerWidth()
+                packeryEvents.$emit('layout', this.$refs.packery)
+            })
+        }
+    },
+    filters: {
+        setUUID: function(value) {
+            return Uuid.get()
         }
     },
     methods: {
@@ -57,11 +77,15 @@ export default {
             }
         },
         getContainerWidth: function() {
-            let container = this.$refs.container.getBoundingClientRect().width
+            let container = this.$refs.packery.getBoundingClientRect().width
             this.unitSize = Math.round(container / this.units)
+            // console.log(container, this.unitSize);
             this.$nextTick(() => {
                 this.setUnitHeight()
             })
+        },
+        test: function() {
+            // console.log('loaded');
         }
     },
     mounted: function() {
@@ -70,5 +94,11 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
+@import '~styles/shared';
+
+.packery-container {
+    position: relative;
+}
+
 </style>

@@ -91,7 +91,7 @@ export default {
         },
         modules: function(modules) {
             if (modules.length == 0) {
-                // this.debug()
+                this.debug()
             }
         }
     },
@@ -99,7 +99,7 @@ export default {
         debug: function() {
             // this.moduleType = 'row'
             // this.panel = true
-            this.addRow()
+            this.newComponent('grid')
         },
         addRow: function() {
             // console.log('aggiungi');

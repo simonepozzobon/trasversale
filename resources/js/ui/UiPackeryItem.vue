@@ -1,6 +1,6 @@
 <template lang="html">
     <div
-        ref="container"
+        ref="packeryItem"
         v-packery-item
         class="packery-item"
         :class="[
@@ -146,15 +146,20 @@ export default {
                 itemHeight = itemHeight + deltaGutter
             }
 
-
             this.$refs.item.style.height = itemHeight + 'px'
-            this.$refs.container.style.padding = realGutter + 'px'
+            this.$refs.packeryItem.style.height = itemHeight + 'px'
+            this.$refs.packeryItem.style.padding = realGutter + 'px'
+
+            // console.log(itemHeight);
+            // this.$nextTick(() => {
+            //     this.$emit('loaded')
+            // })
         },
         goToItem: function() {
-            this.$root.goToWithParams('subpage', {
-                page: 'post',
-                subpage: this.obj.slug.slug,
-            })
+            // this.$root.goToWithParams('subpage', {
+            //     page: 'post',
+            //     subpage: this.obj.slug.slug,
+            // })
         }
     },
     mounted: function() {
@@ -167,6 +172,7 @@ export default {
 @import '~styles/shared';
 
 .packery-item {
+    min-width: 8.3333%;
 
     &__item {
         position: relative;

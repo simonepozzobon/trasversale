@@ -99,9 +99,7 @@
                             type="text"
                             :name="option.key"
                             class="form-control"
-                            v-model="value"
-                            :max="getModuleOption('max')"
-                            :min="getModuleOption('min')"/>
+                            v-model="value"/>
 
                         <div class="input-group-append">
                             <button class="btn btn-outline-primary" @click="removeCounter">-</button>
@@ -263,6 +261,7 @@ export default {
             this.$emit('changed', this.option.key, value, this.option.type)
         },
         elements: function(els) {
+            // console.log(els);
             this.value = els
         }
     },
@@ -323,7 +322,9 @@ export default {
             }
         },
         changed: function(subModuleObj) {
-            this.value = subModuleObj
+            // console.log('subModuleObj', subModuleObj);
+            // bisogna risettare l'oggetto altrimenti non aggiorna l'evento
+            this.value = {...subModuleObj}
         },
         setDefault: function() {
             if (this.option.hasOwnProperty('default') && !this.edit) {
@@ -487,11 +488,13 @@ export default {
             }
         },
         gridItemResized: function(i, newH, newW, newHPx, newWPx) {
-            this.elements[i] = {
+            // console.log(this.elements[i]);
+            let newElement = {
                 ...this.elements[i],
                 w: newW,
                 h: newH
             }
+            this.elements.splice(i, 1, newElement)
         },
         updateGrid: function() {
             // da completare
@@ -519,13 +522,16 @@ export default {
 
             // se ha sottomoduli
             if (this.option.hasOwnProperty('childrens') && this.option.childrens.length > 0) {
+                // console.log('childres ', this.initial);
                 this.values = this.initial
             }
 
             // se è post-select
-            if (this.option.type == 'post-select') {
-                for (var i = 0; i < this.initial.length; i++) {
-                    this.elements.push(this.formatElementForGrid(this.initial[i], i))
+            if (this.option.type == 'post-select' && this.initial) {
+                // console.log('initila', this.initial);
+                for (let i = 0; i < this.initial.length; i++) {
+                    let formatted = this.formatElementForGrid(this.initial[i], i)
+                    this.elements.push(formatted)
                 }
                 // console.log('griglia', this.initial[0]);
             }

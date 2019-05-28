@@ -34,18 +34,18 @@
             :grid-col="content.gridCol"/>
 
         <ui-packery-container
-            v-else-if="module.type == 'grid' && this.content.type == 'packery' && this.content.blocks.length > 0"
-            :items="this.content.blocks"
+            v-else-if="showPackery"
+            :items="content.blocks"
             :gutter="8"
             :units="12"/>
 
         <ui-simple-grid
-            v-else-if="module.type == 'grid' && this.content.type == 'simple' && this.content.blocks.length > 0"
-            :blocks="this.content.blocks"/>
+            v-else-if="showSimpleGrid"
+            :blocks="content.blocks"/>
 
         <admin-ui-module-row
             v-else-if="module.type == 'row'"
-            :columns="this.content"
+            :columns="content"
             :is-open="isOpen"
             @update-size="updateSize"/>
 
@@ -79,6 +79,11 @@ export default {
         return {
         }
     },
+    watch: {
+        module: function(module) {
+            this.listener()
+        }
+    },
     computed: {
         content: function() {
             return JSON.parse(this.module.content)
@@ -87,9 +92,37 @@ export default {
             if (this.isAdmin) {
                 return 'module-manager--is-admin'
             }
+        },
+        showPackery: function() {
+            // v-else-if="module.type == 'grid' && this.content.type == 'packery' && this.content.blocks.length > 0"
+            if (this.module.type == 'grid') {
+                if (this.content.hasOwnProperty('type') && this.content.hasOwnProperty('blocks')) {
+                    if (this.content.type == 'packery' && this.content.blocks.length > 0) {
+                        return true
+                    }
+                }
+            }
+
+            return false
+        },
+        showSimpleGrid: function() {
+            // v-else-if="module.type == 'grid' && this.content.type == 'packery' && this.content.blocks.length > 0"
+            if (this.module.type == 'grid') {
+                if (this.content.hasOwnProperty('type') && this.content.hasOwnProperty('blocks')) {
+                    if (this.content.type == 'simple' && this.content.blocks.length > 0) {
+                        return true
+                    }
+                }
+            }
+            return false
         }
     },
     methods: {
+        listener: function() {
+            // console.log(this.content.hasOwnProperty('type') && this.content.type == 'packery');
+            // console.log('content.type', this.content.type);
+            // console.log('blocks.type', this.content.blocks);
+        },
         updateSize: function(data) {
             this.$emit('update-size', data)
         },
@@ -116,12 +149,15 @@ export default {
             this.$root.sidebarPaddingTop = height
             this.$emit('title', height)
         }
+        this.listener()
     },
     beforeDestroy: function() {
         if (this.module.type == 'title') {
             this.$root.sidebarPaddingTop = false
             this.$emit('title', false)
         }
+
+
     }
 }
 </script>

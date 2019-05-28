@@ -67,11 +67,18 @@ export default {
     },
     methods: {
         formatTempData: function(obj) {
-            console.log('formato', this.item.type, obj);
-            this.setPreview(obj).then(content => {
-                // console.log(content);
-                this.component.content = content
+            // console.log('formato', this.item.type, obj);
+            this.$nextTick(() => {
+                this.setPreview(obj).then(content => {
+                    // console.log(content);
+                    // this.component = {
+                    //     ...this.component,
+                    //     content: content
+                    // }
+                    this.component.content = content
+                })
             })
+
             // this.component.content = content
         },
         setPreview: function(obj) {
@@ -124,6 +131,38 @@ export default {
                         })
                         resolve(content)
 
+                        break;
+
+                    case 'grid':
+                        let blocks = []
+                        if (obj.elements) {
+                            if (obj.elements.hasOwnProperty('blocks') && obj.elements.blocks) {
+                                blocks = obj.elements.blocks
+                            }
+                        }
+
+                        blocks = blocks.map(block => {
+                            return {
+                                ...block,
+                                height: block.h,
+                                width: block.w,
+                                content: JSON.stringify({
+                                    id: block.id,
+                                    slug: block.slug,
+                                    title: block.title,
+                                })
+                            }
+                        })
+
+                        // console.log('blocchi', blocks);
+                        content = JSON.stringify({
+                            blocks: blocks,
+                            options: null,
+                            title: obj.title,
+                            type: obj.type,
+                        })
+
+                        resolve(content)
                         break;
 
                     // DEfault

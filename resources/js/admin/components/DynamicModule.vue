@@ -55,17 +55,19 @@ export default {
             this.dataObj = dataObj
         },
         setInitial: function(option) {
+            // console.log(this.isEdit);
             // if (this.debug) {
             //     // console.log(option, this.values);
             // }
-            if (this.isEdit) {
+            // if (this.isEdit) {
                 let key = option.key
                 if (option.hasOwnProperty('childrens') && option.childrens.length > 0) {
+                    // console.log('children', key,  this.values.blocks);
                     return this.values
                 }
 
                 return this.values[key] ? this.values[key] : null
-            }
+            // }
         },
         changed: function(key, value, type) {
             this.dataObj[key] = value
