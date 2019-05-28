@@ -91,7 +91,7 @@ export default {
         },
         modules: function(modules) {
             if (modules.length == 0) {
-                this.debug()
+                // this.debug()
             }
         }
     },
@@ -128,20 +128,30 @@ export default {
             this.dismissModal()
 
             this.isEdit = false
-            this.panel = true
+            // this.panel = true
+            let newModule = {
+                type: type,
+                isNew: true,
+                modulable_id: this.modelIdx,
+                modulable_type: this.model,
+                content: JSON.stringify({}),
+            }
+            this.modules.push(newModule)
         },
         setModule: function(module) {
-            // console.log(module);
-            this.isEdit = true
+            console.log('deprecata');
 
-            this.module = module
-            this.moduleId = module.id
-            this.moduleType = module.type
-            this.values = JSON.parse(module.content)
-            // console.log(this.values);
-            this.panel = true
+            // // console.log(module);
+            // this.isEdit = true
+            //
+            // this.module = module
+            // this.moduleId = module.id
+            // this.moduleType = module.type
+            // this.values = JSON.parse(module.content)
+            // // console.log(this.values);
+            // this.panel = true
 
-            this.debug()
+            // this.debug()
         },
         saved: function(module) {
             this.reset()

@@ -9,13 +9,13 @@
         <ui-title
             v-if="module.type == 'title'"
             ref="title"
-            :title="content.content"
+            :title="content.hasOwnProperty('content') ? content.content : 'titolo'"
             :is-column="content.hasOwnProperty('isColumn') ? content.isColumn : null "
             :uppercase="content.hasOwnProperty('uppercase') ? content.uppercase : null "
             :color="content.hasOwnProperty('color') ? content.color : null "
             :font-size="content.hasOwnProperty('fontSize') ? content.fontSize : null"/>
 
-        <ui-image
+        <admin-ui-image
             v-else-if="module.type == 'image'"
             :src="content.src"
             :alt="content.alt"/>
@@ -58,7 +58,7 @@
 <script>
 
 export default {
-    name: 'ModuleManager',
+    name: 'AdminModuleManager',
     components: {
     },
     props: {
@@ -103,7 +103,7 @@ export default {
         this.$options.components.AdminUiModuleRow = require('./modulemanager/AdminUiModuleRow.vue').default
         this.$options.components.UiParagraph = require('../../ui/UiParagraph.vue').default
         this.$options.components.UiButton = require('../../ui/UiButton.vue').default
-        this.$options.components.UiImage = require('../../ui/UiImage.vue').default
+        this.$options.components.AdminUiImage = require('./modulemanager/AdminUiImage.vue').default
         this.$options.components.UiPackeryContainer = require('../../ui/UiPackeryContainer.vue').default
         this.$options.components.UiTitle = require('../../ui/UiTitle.vue').default
         this.$options.components.UiTeam = require('../../ui/UiTeam.vue').default

@@ -17,8 +17,9 @@
                     Salva Modifiche
                 </button>
                 <button
-                    class="btn btn-outline-secondary">
-                    Annulla
+                    class="btn btn-outline-secondary"
+                    @click="closeComponent">
+                    Chiudi
                 </button>
                 <button
                     class="btn btn-outline-danger">
@@ -77,18 +78,28 @@ export default {
     methods: {
         init: function() {
             let el = this.$refs.container
-            let height = SizeUtil.get(el).h
-
+            let size = SizeUtil.get(el)
+            // console.log(size);
             this.master = new TimelineMax({
-                paused: true
+                paused: true,
+                yoyo: true
             })
 
-            this.master.fromTo(el, .6, {
-                height: 0,
+            // this.master.fromTo(el, .6, {
+            //     height: 0,
+            //     autoAlpha: 0,
+            // }, {
+            //     height: size.h,
+            //     autoAlpha: 1,
+            // }, 0)
+            this.master.fromTo(el, .5, {
+                className: '-=new-module--open',
                 autoAlpha: 0,
+                ease: Power4.easeIn,
             }, {
-                height: height,
+                className: '+=new-module--open',
                 autoAlpha: 1,
+                ease: Back.easeOut.config(1.2),
             }, 0)
 
             this.master.progress(1).progress(0)
@@ -152,8 +163,8 @@ export default {
             }
             return false
         },
-        undoComponent: function() {
-            this.$emit('undo')
+        closeComponent: function() {
+            this.$emit('close')
         },
         deleteComponent: function() {
             let url = '/api/admin/delete-component/' + this.moduleId
@@ -166,7 +177,7 @@ export default {
         }
     },
     mounted: function() {
-        this.init()
+        this.$nextTick(this.init)
     },
 }
 </script>
@@ -175,7 +186,13 @@ export default {
 @import '~styles/shared';
 
 .new-module {
+    position: relative;
+    height: 0;
     overflow: hidden;
+
+    &--open {
+        height: auto;
+    }
 
     &__container {
         padding: $spacer;

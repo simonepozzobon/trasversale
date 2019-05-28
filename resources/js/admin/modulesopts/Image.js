@@ -15,12 +15,12 @@ const Image = {
             accept: 'image/*',
             type: 'file-input',
         },
-        {
-            key: 'preview',
-            type: 'preview',
-            parent: 'src',
-            mime: 'image'
-        }
+        // {
+        //     key: 'preview',
+        //     type: 'preview',
+        //     parent: 'src',
+        //     mime: 'image'
+        // }
     ],
 }
 

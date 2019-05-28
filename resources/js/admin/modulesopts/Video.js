@@ -25,12 +25,12 @@ const Video = {
             required: true,
             type: 'text',
         },
-        {
-            key: 'preview',
-            parent: 'url',
-            type: 'preview',
-            mime: 'video-url',
-        },
+        // {
+        //     key: 'preview',
+        //     parent: 'url',
+        //     type: 'preview',
+        //     mime: 'video-url',
+        // },
     ],
 }
 

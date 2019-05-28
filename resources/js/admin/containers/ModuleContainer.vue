@@ -17,8 +17,9 @@
             :model-idx="item.modulable_id"
             :is-edit="isEdit"
             :module-id="item.id"
-            :values="values"
-            @changed="formatTempData"/>
+            :values="content"
+            @changed="formatTempData"
+            @close="closeComponent"/>
     </div>
 </template>
 
@@ -66,30 +67,71 @@ export default {
     },
     methods: {
         formatTempData: function(obj) {
-            let content
-
-            switch (this.item.type) {
-                case 'row':
-                    let cols = []
-                    for (let i = 0; i < obj.columns; i++) {
-                        let col = {
-                            id: i,
-                            modulable_id: 31,
-                            modulable_type: 'App\\Module',
-                            modules: [],
-                            type: 'column',
-                            content: JSON.stringify({
-                                size: 6,
-                            })
+            console.log('formato', this.item.type, obj);
+            this.setPreview(obj).then(content => {
+                // console.log(content);
+                this.component.content = content
+            })
+            // this.component.content = content
+        },
+        setPreview: function(obj) {
+            return new Promise(resolve => {
+                let content
+                switch (this.item.type) {
+                    // Riga
+                    case 'row':
+                        let cols = []
+                        for (let i = 0; i < obj.columns; i++) {
+                            let col = {
+                                id: i,
+                                modulable_id: 31,
+                                modulable_type: 'App\\Module',
+                                modules: [],
+                                type: 'column',
+                                content: JSON.stringify({size: 6})
+                            }
+                            cols.push(col)
                         }
-                        cols.push(col)
-                    }
-                    content = JSON.stringify(cols)
-                    break;
-                default:
-            }
-            // console.log(this.component);
-            this.component.content = content
+                        content = JSON.stringify(cols)
+                        resolve(content)
+                        break;
+
+                    // Immagine
+                    case 'image':
+                        content = JSON.stringify({
+                            src: obj.src ? window.URL.createObjectURL(obj.src) : null,
+                            alt: obj.alt
+                        })
+                        resolve(content)
+                        break;
+
+                    // Video
+                    case 'video':
+                        let url = obj.url
+                        if (url) {
+                            url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
+
+                            if (RegExp.$3.indexOf('youtu') > -1) {
+                                url = 'https://www.youtube.com/embed/' + RegExp.$6
+                            } else if (RegExp.$3.indexOf('vimeo') > -1) {
+                                url = 'https://player.vimeo.com/video/' + RegExp.$6
+                            }
+                        }
+
+                        content = JSON.stringify({
+                            ...obj,
+                            url: url,
+                        })
+                        resolve(content)
+
+                        break;
+
+                    // DEfault
+                    default:
+                        content = JSON.stringify(obj)
+                        resolve(content)
+                }
+            })
         },
         changed: function(obj) {
             this.cache = obj
@@ -100,6 +142,10 @@ export default {
                 this.isOpen = true
                 this.show()
             }
+        },
+        closeComponent: function() {
+            this.isOpen = false
+            this.hide()
         },
         show: function() {
             this.$refs.panel.show()
@@ -126,59 +172,27 @@ export default {
                 let i = 0
                 while (total > 12) {
                     if (i != data.idx) {
+                        columns[i].content = this.setColSize(-1, columns[i].content)
+                        total = total - 1
                     }
-                    columns = columns.map((col, idx))
-                    i++
-                }
-                // let colsCount = columns.length - 1
-                // if (colsCount > 0) {
-                //     columns = this.reduceCol(columns, difference, colsCount, data)
-                // }
-            } else {
-                // aggiungere da qualche parte
-                let content = JSON.parse(columns[data.idx].content)
-                content.size = content.size + data.size
-                columns[data.idx].content = JSON.stringify(content)
-            }
 
+                    i = (i >= columns.length - 1) ? 0 : (i + 1)
+                }
+            }
+            columns[data.idx].content = this.setColSize(data.size, columns[data.idx].content)
             this.component.content = JSON.stringify(columns)
             // console.log(total);
         },
-        setSize: function() {
-            let content = JSON.parse(col.content)
-            content.size = content.size
-            col.content = JSON.stringify(content)
-        },
-        reduceCol: function(columns, difference, colsCount, data) {
-            let quotient = Math.floor(difference / colsCount)
-            let modulo =  difference % colsCount
-
-            columns = columns.map((col, idx, cols) => {
-                let content = JSON.parse(col.content)
-
-                if (idx == data.idx) {
-                    content.size = content.size + data.size
-                }
-
-                else if (cols.length - 1 === idx) {
-                    content.size = content.size - quotient - modulo
-                }
-
-                else {
-                    content.size = content.size - quotient
-                }
-                col.content = JSON.stringify(content)
-                return col
-            })
-
-            // let remainder =
-            console.log(difference, colsCount, '->', quotient, modulo);
-            return columns
-        },
+        setColSize: function(value, jsonContent) {
+            let content = JSON.parse(jsonContent)
+            content.size = content.size + value
+            return JSON.stringify(content)
+        }
     },
     created: function() {
         if (this.item) {
             this.component = this.item
+            // console.log(this.values);
         }
     },
     mounted: function() {
