@@ -310,7 +310,6 @@ export default {
             if (this.options && this.options.hasOwnProperty(key)) {
                 return this.options[key]
             }
-
             return null
         },
         addCounter: function() {

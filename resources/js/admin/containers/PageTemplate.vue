@@ -20,6 +20,11 @@
                 </div>
                 <div class="page-template__action">
                     <button
+                        class="btn btn-outline-secondary"
+                        @click="addRow">
+                        Aggiungi Riga
+                    </button>
+                    <button
                         class="btn btn-outline-primary"
                         @click="addComponent">
                         Aggiungi Componente
@@ -90,6 +95,9 @@ export default {
         debug: function() {
             this.moduleType = 'row'
             this.panel = true
+        },
+        addRow: function() {
+            
         },
         addComponent: function() {
             this.$refs.componentSelector.show()
