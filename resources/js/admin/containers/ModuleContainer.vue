@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { clone, isEqual } from '../../Utilities'
 import AdminModuleManager from '../components/AdminModuleManager.vue'
 import NewModule from '../components/NewModule.vue'
 
@@ -68,13 +69,9 @@ export default {
     methods: {
         formatTempData: function(obj) {
             // console.log('formato', this.item.type, obj);
-            let content = this.setPreview(obj)
-            const newObj = {
-                ...this.component,
-                content: content
-            }
-
-            this.component = Object.assign({}, newObj)
+            let newObj = clone(this.component)
+            newObj.content = this.setPreview(obj)
+            this.component = clone(newObj)
         },
         setPreview: function(obj) {
             switch (this.item.type) {

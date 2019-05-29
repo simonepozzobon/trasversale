@@ -17,6 +17,7 @@
             :sub-type="item.hasOwnProperty('sub_type') ? item.sub_type : null"
             :width="item.width"
             :height="item.height"
+            :unit-size="unitSize"
             :color="item.hasOwnProperty('color') ? item.color : null"
             :bg-color="item.bgColor"
             :content="item.content"
@@ -63,6 +64,8 @@ export default {
     },
     watch: {
         items: function(items) {
+            console.log('items');
+            this.setUnitHeight()
             packeryEvents.$emit('layout', this.$refs.packery)
             // this.forceRender = false
             // this.$nextTick(() => {

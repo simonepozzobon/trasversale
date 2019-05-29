@@ -55,7 +55,7 @@ export default {
         },
         height: {
             type: Number,
-            default: null,
+            default: 2,
         },
         content: {
             type: String,
@@ -74,6 +74,10 @@ export default {
             default: null,
         },
         gutter: {
+            type: Number,
+            default: 0,
+        },
+        unitSize: {
             type: Number,
             default: 0,
         },
@@ -123,6 +127,12 @@ export default {
             obj: null,
         }
     },
+    watch: {
+        height: function(h) {
+            console.log('h',h);
+            this.setUnitHeight(this.unitSize)
+        }
+    },
     methods: {
         setBackground: function() {
             if (this.img) {
@@ -141,10 +151,15 @@ export default {
             let realGutter = Math.round(this.gutter / 2)
             let itemHeight = height * this.height
 
+            // console.log(this.height, height);
             if (this.height > 2) {
+                console.log(itemHeight);
                 let deltaGutter = this.height * (realGutter / 2)
                 itemHeight = itemHeight + deltaGutter
+                console.log(itemHeight, deltaGutter);
+                // console.log(height);
             }
+
 
             this.$refs.item.style.height = itemHeight + 'px'
             this.$refs.packeryItem.style.padding = realGutter + 'px'

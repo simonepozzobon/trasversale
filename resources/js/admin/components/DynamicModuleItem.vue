@@ -138,7 +138,7 @@
                     <grid-item
                         ref="gridItem"
                         v-for="(element, i) in elements"
-                        :key="element.i"
+                        :key="element.idx"
                         class="element-item"
                         :x="element.x"
                         :y="element.y"
@@ -241,6 +241,7 @@ export default {
     },
     data: function() {
         return {
+            increments: 0,
             value: null,
             values: null,
             colors: [],
@@ -262,12 +263,13 @@ export default {
         value: function(newValue, oldValue) {
             // console.log('è un valore diference', this.option.key, !isEqual(newValue, oldValue));
             if(!isEqual(newValue, oldValue)) {
+                // console.log('dynamic item change');
                 this.$emit('changed', this.option.key, newValue, this.option.type)
             }
         },
         elements: function(newEls, oldEls) {
             // console.log(newEls, oldEls);
-            console.log('elements are different', !isEqual(newEls, oldEls));
+            // console.log('elements are different', !isEqual(newEls, oldEls));
             this.value = clone(newEls)
             // if (!isEqual(newEls, oldEls)) {
             // }
@@ -495,17 +497,22 @@ export default {
             let x = item.hasOwnProperty('x')? item.x : (i * w) % colN
             let y = item.hasOwnProperty('y')? item.y : Math.floor((i * w) / colN)
 
-            return {
+            const newEl = {
                 i: i,
                 x: x,
                 y: y,
                 w: w,
                 h: h,
+                idx: this.increments,
                 order: i,
                 ...item,
             }
+
+            this.increments++
+            return newEl
         },
         gridItemMoved: function(i, newX, newY){
+            console.log('moved');
             let item = this.elements[i] // element moved
             for (let i = 0; i < this.elements.length; i++) {
                 this.elements[i]
