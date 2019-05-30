@@ -203,12 +203,19 @@
 </template>
 
 <script>
-import { clone, isEqual } from '../../Utilities'
+import {
+    clone,
+    isEqual
+}
+from '../../Utilities'
 import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
 import Swatches from 'vue-swatches'
 import TextEditor from './TextEditor.vue'
 import VueGridLayout from 'vue-grid-layout'
-import { UiCheckbox } from '../../ui'
+import {
+    UiCheckbox
+}
+from '../../ui'
 
 import PostFields from './post-selector/PostFields'
 
@@ -227,11 +234,15 @@ export default {
     props: {
         option: {
             type: Object,
-            default: function() { return {} },
+            default: function() {
+                return {}
+            },
         },
         dataObj: {
             type: Object,
-            default: function() { return {} },
+            default: function() {
+                return {}
+            },
         },
         edit: {
             type: Boolean,
@@ -262,7 +273,7 @@ export default {
     watch: {
         value: function(newValue, oldValue) {
             // console.log('è un valore diference', this.option.key, !isEqual(newValue, oldValue));
-            if(!isEqual(newValue, oldValue)) {
+            if (!isEqual(newValue, oldValue)) {
                 // if (this.option.key === 'elements') {
                 //     console.log('dynamic item change');
                 // }
@@ -270,12 +281,7 @@ export default {
             }
         },
         elements: function(newEls, oldEls) {
-            // console.log(newEls, oldEls);
-            // console.log('elements are different', !isEqual(newEls, oldEls));
             this.value = clone(newEls)
-            // console.log('changed');
-            // if (!isEqual(newEls, oldEls)) {
-            // }
         }
     },
     computed: {
@@ -300,7 +306,7 @@ export default {
         related: function() {
             if (this.hasRelated) {
                 let options = this.$parent.options
-                let idx = options.findIndex(option => option.key ==  this.option.relatedKey)
+                let idx = options.findIndex(option => option.key == this.option.relatedKey)
 
                 if (idx > -1) {
                     return this.$parent.$refs.module[idx]
@@ -363,8 +369,7 @@ export default {
             }
         },
         setWatcher: function(relatedKey) {
-            if (this.option.type == 'counter') {
-            }
+            if (this.option.type == 'counter') {}
             // set watcher for related key
             let watcher = 'dataObj.' + relatedKey
 
@@ -376,7 +381,8 @@ export default {
                 if (this.option.type == 'counter' && this.relatedValue) {
                     if (this.relatedValue == 'last-mix') {
                         this.visible = true
-                    } else {
+                    }
+                    else {
                         this.visible = false
                     }
                 }
@@ -394,11 +400,11 @@ export default {
             }
         },
         getColors: function() {
-            let themeColors = [ 'blue', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'white', 'gray', 'gray-dark', 'black', 'primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark' ]
+            let themeColors = ['blue', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'white', 'gray', 'gray-dark', 'black', 'primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
             let colors = []
 
             for (let i = 0; i < themeColors.length; i++) {
-                let color = this.getColor('--'+themeColors[i])
+                let color = this.getColor('--' + themeColors[i])
                 let idx = colors.findIndex(item => item == color)
                 if (idx < 0) {
                     colors.push(color)
@@ -408,9 +414,11 @@ export default {
             this.colors = colors
         },
         getColor: function(key) {
-            return getComputedStyle(document.documentElement).getPropertyValue(key).trim()
+            return getComputedStyle(document.documentElement)
+                .getPropertyValue(key)
+                .trim()
         },
-        previewFile: function () {
+        previewFile: function() {
             this.value = this.$refs.file.files[0]
         },
         updateEditor: function(json, html) {
@@ -421,32 +429,34 @@ export default {
         },
         getElements: function(value, relatedKey) {
             let url = '/api/admin/grid-elements/' + value
-            this.$http.get(url).then(response => {
-                // console.log(response.data.elements);
-                if (response.data.success) {
-                    this.blocks = response.data.elements
-                    // this.debug()
-                    if (relatedKey == 'post_count') {
-                        let options = this.$parent.options
-                        let idx = options.findIndex(option => option.key == relatedKey)
-                        let parent = this.$parent.$refs.module[idx]
-                        let parentValue = parent.value
-                        // this.elements = []
+            this.$http.get(url)
+                .then(response => {
+                    // console.log(response.data.elements);
+                    if (response.data.success) {
+                        this.blocks = response.data.elements
+                        // this.debug()
+                        if (relatedKey == 'post_count') {
+                            let options = this.$parent.options
+                            let idx = options.findIndex(option => option.key == relatedKey)
+                            let parent = this.$parent.$refs.module[idx]
+                            let parentValue = parent.value
+                            // this.elements = []
 
-                        this.$nextTick(() => {
-                            for (let i = 0; i < parentValue; i++) {
-                                this.selectPost(this.blocks[i])
-                            }
-                        })
-                    }
+                            this.$nextTick(() => {
+                                for (let i = 0; i < parentValue; i++) {
+                                    this.selectPost(this.blocks[i])
+                                }
+                            })
+                        }
 
-                    if (relatedKey == 'model' && value == 'last-mix') {
-                        this.disableTable = true
-                    } else {
-                        this.disableTable = false
+                        if (relatedKey == 'model' && value == 'last-mix') {
+                            this.disableTable = true
+                        }
+                        else {
+                            this.disableTable = false
+                        }
                     }
-                }
-            })
+                })
         },
         selectPost: function(item) {
             let idx = this.blocks.indexOf(item)
@@ -497,8 +507,8 @@ export default {
             let colN = 12
             let w = item.hasOwnProperty('width') ? item.width : 2
             let h = item.hasOwnProperty('height') ? item.height : 2
-            let x = item.hasOwnProperty('x')? item.x : (i * w) % colN
-            let y = item.hasOwnProperty('y')? item.y : Math.floor((i * w) / colN)
+            let x = item.hasOwnProperty('x') ? item.x : (i * w) % colN
+            let y = item.hasOwnProperty('y') ? item.y : Math.floor((i * w) / colN)
 
             const newEl = {
                 i: i,
@@ -514,7 +524,7 @@ export default {
             this.increments++
             return newEl
         },
-        gridItemMoved: function(i, newX, newY){
+        gridItemMoved: function(i, newX, newY) {
             // console.log('moved');
             // let item = this.elements[i] // element moved
             // for (let i = 0; i < this.elements.length; i++) {
@@ -585,7 +595,7 @@ export default {
                 // console.log('initila', this.initial);
                 for (let i = 0; i < this.initial.length; i++) {
                     let formatted = this.formatElementForGrid(this.initial[i], i)
-                    console.log(formatted);
+                    // console.log(formatted);
                     this.elements.push(formatted)
                 }
                 // console.log('griglia', this.initial[0]);
@@ -593,7 +603,8 @@ export default {
         },
     },
     beforeCreate: function() {
-        this.$options.components.DynamicModule = require('./DynamicModule.vue').default
+        this.$options.components.DynamicModule = require('./DynamicModule.vue')
+            .default
     },
     created: function() {
         this.getColors()
@@ -602,8 +613,7 @@ export default {
 
 
     },
-    mounted: function() {
-    }
+    mounted: function() {}
 }
 </script>
 
@@ -616,7 +626,6 @@ export default {
     width: 100%;
     height: auto;
 }
-
 
 .module-item {
     &__image-post {

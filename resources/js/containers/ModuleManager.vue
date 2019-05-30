@@ -49,7 +49,7 @@
 
         <ui-video
             v-else-if="module.type == 'video'"
-            :src="this.content.src"/>
+            :url="this.content.url"/>
 
         <div v-else>
             {{ module }}
@@ -92,15 +92,24 @@ export default {
         }
     },
     beforeCreate: function() {
-        this.$options.components.UiModuleRow = require('../ui/UiModuleRow.vue').default
-        this.$options.components.UiParagraph = require('../ui/UiParagraph.vue').default
-        this.$options.components.UiButton = require('../ui/UiButton.vue').default
-        this.$options.components.UiImage = require('../ui/UiImage.vue').default
-        this.$options.components.UiPackeryContainer = require('../ui/UiPackeryContainer.vue').default
-        this.$options.components.UiTitle = require('../ui/UiTitle.vue').default
-        this.$options.components.UiTeam = require('../ui/UiTeam.vue').default
-        this.$options.components.UiSimpleGrid = require('../ui/UiSimpleGrid.vue').default
-        this.$options.components.UiVideo = require('../ui/UiVideo.vue').default
+        this.$options.components.UiModuleRow = require('../ui/UiModuleRow.vue')
+            .default
+        this.$options.components.UiParagraph = require('../ui/UiParagraph.vue')
+            .default
+        this.$options.components.UiButton = require('../ui/UiButton.vue')
+            .default
+        this.$options.components.UiImage = require('../ui/UiImage.vue')
+            .default
+        this.$options.components.UiPackeryContainer = require('../ui/UiPackeryContainer.vue')
+            .default
+        this.$options.components.UiTitle = require('../ui/UiTitle.vue')
+            .default
+        this.$options.components.UiTeam = require('../ui/UiTeam.vue')
+            .default
+        this.$options.components.UiSimpleGrid = require('../ui/UiSimpleGrid.vue')
+            .default
+        this.$options.components.UiVideo = require('../ui/UiVideo.vue')
+            .default
     },
     mounted: function() {
         // console.log(this.module);

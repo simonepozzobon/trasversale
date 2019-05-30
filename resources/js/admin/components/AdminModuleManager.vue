@@ -51,7 +51,7 @@
 
         <ui-video
             v-else-if="module.type == 'video'"
-            :src="this.content.src"/>
+            :url="this.content.url"/>
 
         <div v-else>
             {{ module }}
