@@ -1,65 +1,23 @@
 <template lang="html">
     <div class="page-template">
-        <edit-panel
-            v-if="this.panel"
-            ref="panel"
-            :name="this.moduleType"
-            :model="model"
-            :model-idx="modelIdx"
-            :is-edit="isEdit"
-            :module-id="moduleId"
-            :values="values"
-            @saved="saved"
-            @undo="undo"
-            @deleted="deleted"/>
-
         <div class="page-template__container container">
             <div class="page-template__head">
                 <div class="page-template__title">
                     <h1 class="pt-3">{{ title }}</h1>
                 </div>
                 <div class="page-template__action">
-                    <button
-                        class="btn btn-outline-secondary"
-                        @click="addRow">
-                        Aggiungi Riga
-                    </button>
-                    <button
-                        class="btn btn-outline-primary"
-                        @click="addComponent">
-                        Aggiungi Componente
-                    </button>
                 </div>
             </div>
             <hr>
             <slot></slot>
-            <new-module
-                ref="panel"
-                v-for="(module, i) in cached"
-                :key="i"
-                :name="module.moduleType"
-                :model="module.model"
-                :model-idx="module.modelIdx"
-                :is-edit="module.isEdit"
-                :module-id="module.moduleId"
-                :values="module.values"/>
-            <hr>
-            <div class="page-template__footer">
-                <button
-                    class="btn btn-outline-primary"
-                    @click="addComponent">
-                    Aggiungi Componente
-                </button>
-            </div>
         </div>
-        <components-list
-            ref="componentSelector"
-            @new-component="newComponent"/>
     </div>
 </template>
 
 <script>
-import { Uuid } from '../../Utilities'
+import {
+    Uuid
+} from '../../Utilities'
 import ComponentsList from '../components/ComponentsList.vue'
 import DynamicParams from '../DynamicParams'
 import EditPanel from '../components/EditPanel.vue'
@@ -187,19 +145,7 @@ $opacity-test: 0.6 !default;
     flex-direction: column;
     align-items: center;
 
-    background: linear-gradient(
-        45deg,
-        rgba($green, $opacity-test),
-        rgba($teal, $opacity-test),
-        rgba($cyan, $opacity-test),
-        rgba($blue, $opacity-test),
-        rgba($indigo, $opacity-test),
-        rgba($purple, $opacity-test),
-        rgba($pink, $opacity-test),
-        rgba($red, $opacity-test),
-        rgba($orange, $opacity-test),
-        rgba($yellow, $opacity-test),
-    );
+    background: linear-gradient(45deg, rgba($green, $opacity-test), rgba($teal, $opacity-test), rgba($cyan, $opacity-test), rgba($blue, $opacity-test), rgba($indigo, $opacity-test), rgba($purple, $opacity-test), rgba($pink, $opacity-test), rgba($red, $opacity-test), rgba($orange, $opacity-test), rgba($yellow, $opacity-test),);
     background-size: 800% 800%;
     animation: Gradient 360s ease infinite;
 
@@ -225,14 +171,14 @@ $opacity-test: 0.6 !default;
 }
 
 @keyframes Gradient {
-	0% {
-		background-position: 0% 50%
-	}
-	50% {
-		background-position: 100% 50%
-	}
-	100% {
-		background-position: 0% 50%
-	}
+    0% {
+        background-position: 0 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
 }
 </style>

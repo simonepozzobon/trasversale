@@ -31,9 +31,14 @@
 </template>
 
 <script>
-import { clone, Uuid } from '../../../Utilities'
+import {
+    clone,
+    Uuid
+} from '../../../Utilities'
 import AdminPackeryItem from './AdminPackeryItem.vue'
-import {packeryEvents} from '../../PackeryTest'
+import {
+    packeryEvents
+} from '../../PackeryTest'
 
 export default {
     name: 'PackeryContainer',
@@ -101,12 +106,6 @@ export default {
                 for (let i = 0; i < items.length; i++) {
                     let current = items[i]
                     current.setUnitHeight(this.unitSize)
-                    //
-                    // let x = current.x * this.unitSize
-                    // let y = current.y * this.unitSize
-
-                    // console.log(current.$el.packeryNode.packery);
-                    // current.$el.packeryNode.packery.fit(current.$el, x, y)
                 }
 
                 for (let i = 0; i < this.packeryItems.length; i++) {
@@ -115,17 +114,14 @@ export default {
                     let idx = node.getAttribute('data-key')
 
                     let item = this.items.find(item => Number(item.idx) === Number(idx))
-
-                    let x = item.x * this.unitSize
-                    let y = item.y * this.unitSize
-                    // console.log('indice', idx, x,y);
-
-                    this.packery.fit(current, x, y)
-                    this.packery.reloadItems()
-                    this.packery.layout()
-                    // packeryEvents.$emit('layout', this.$refs.packery)
+                    if (item) {
+                        let x = item.x * this.unitSize
+                        let y = item.y * this.unitSize
+                        this.packery.fit(current, x, y)
+                        this.packery.reloadItems()
+                        this.packery.layout()
+                    }
                 }
-                // console.log(items[0]);
             }
         },
         getContainerWidth: function() {
@@ -148,5 +144,4 @@ export default {
 .packery-container {
     position: relative;
 }
-
 </style>

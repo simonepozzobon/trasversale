@@ -1,3 +1,6 @@
+import Corsi from './views/Corsi.vue'
+import Notizie from './views/Notizie.vue'
+
 import HomeContainer from './views/HomeContainer.vue'
 import Home from './views/Home.vue'
 import PageContainer from './views/PageContainer.vue'
@@ -14,6 +17,16 @@ const routes = [
                 path: '',
                 name: 'home',
                 component: Home,
+            },
+            {
+                path: 'corsi',
+                name: 'corsi',
+                component: Corsi,
+            },
+            {
+                path: 'notizie',
+                name: 'notizie',
+                component: Notizie,
             },
             {
                 path: ':page',
@@ -34,7 +47,8 @@ const routes = [
                                 component: SubPage,
                             }
                         ]
-                    }
+                    },
+
                 ],
             }
         ],

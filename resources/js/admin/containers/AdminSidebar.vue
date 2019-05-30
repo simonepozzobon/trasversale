@@ -5,7 +5,7 @@
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link" href="#" @click.prevent="$root.goTo('home')">
-                        Home <span class="sr-only">(current)</span>
+                        Admin Home <span class="sr-only">(current)</span>
                     </a>
                 </li>
                 <li
@@ -33,8 +33,22 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <span class="nav-link">------</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" @click.prevent="$root.goTo('corsi')">
+                        Corsi
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" @click.prevent="$root.goTo('notizie')">
+                        Notizie
+                    </a>
+                </li>
             </ul>
             <div class="divider"></div>
+
         </div>
     </nav>
 </template>
@@ -49,7 +63,12 @@ export default {
         },
         goToSub: function(event, sub) {
             event.preventDefault()
-            let route = { name: 'sub', params: { id: sub.id } }
+            let route = {
+                name: 'sub',
+                params: {
+                    id: sub.id
+                }
+            }
             console.log(route);
             this.$router.push(route)
         }
@@ -73,7 +92,7 @@ export default {
     .divider {
         width: 10%;
         height: 1px;
-        margin: $spacer $spacer;
+        margin: $spacer;
         background-color: rgba($light, .3);
     }
 

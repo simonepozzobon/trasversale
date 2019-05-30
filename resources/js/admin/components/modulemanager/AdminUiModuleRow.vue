@@ -13,7 +13,9 @@
 
 <script>
 import AdminUiModuleBlock from './AdminUiModuleBlock.vue'
-import { UiRow } from '../../../ui'
+import {
+    UiRow
+} from '../../../ui'
 
 export default {
     name: 'AdminUiModuleRow',
@@ -22,26 +24,21 @@ export default {
         UiRow,
     },
     props: {
-        columns: {
-            type: Array,
-            default: function() {},
-        },
+        columns: [Array, Object],
         isOpen: {
             type: Boolean,
             default: false,
         }
     },
     data: function() {
-        return {
-        }
+        return {}
     },
     methods: {
         updateSize: function(data) {
             this.$emit('update-size', data)
         },
     },
-    created: function() {
-    }
+    created: function() {}
 }
 </script>
 

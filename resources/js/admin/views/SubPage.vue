@@ -7,13 +7,6 @@
         :modules="this.modules"
         @saved="saved"
         @deleted="deleted">
-
-        <module-manager
-            v-for="item in this.modules"
-            :key="item.id"
-            :is-admin="true"
-            :module="item"
-            @selected="selected"/>
     </new-page-template>
 </template>
 
@@ -44,7 +37,7 @@ export default {
         getPage: function(id) {
             this.idx = Number(id)
 
-            this.$http.get('/api/admin/sub-page/'+id).then(response => {
+            this.$http.get('/api/admin/sub-page/' + id).then(response => {
                 this.title = response.data.title
                 this.modules = response.data.modules
                 // console.log(this.modules);

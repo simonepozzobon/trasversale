@@ -31,7 +31,9 @@
 </template>
 
 <script>
-import { SizeUtil } from '../../Utilities'
+import {
+    SizeUtil
+} from '../../Utilities'
 import BlockColumnsPreview from './rowcolumn/BlockColumnsPreview.vue'
 import DynamicModule from './DynamicModule.vue'
 import DynamicParams from '../DynamicParams'
@@ -85,13 +87,6 @@ export default {
                 yoyo: true
             })
 
-            // this.master.fromTo(el, .6, {
-            //     height: 0,
-            //     autoAlpha: 0,
-            // }, {
-            //     height: size.h,
-            //     autoAlpha: 1,
-            // }, 0)
             this.master.fromTo(el, .5, {
                 className: '-=new-module--open',
                 autoAlpha: 0,
@@ -141,6 +136,7 @@ export default {
                     if (key == 'data') {
                         let content = obj[key]
                         let hasFile = this.hasFile(content)
+
                         // se nel contenuto del modulo c'è un file
                         if (hasFile) {
                             form.append('file', content[hasFile])
@@ -205,8 +201,7 @@ export default {
         display: flex;
         justify-content: space-between;
 
-        button {
-        }
+        button {}
     }
 }
 </style>

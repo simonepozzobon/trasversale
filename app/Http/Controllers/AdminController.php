@@ -70,6 +70,27 @@ class AdminController extends Controller
         ];
     }
 
+    public function get_post_type($type) {
+        switch ($type) {
+            case 'news':
+                $elements = News::with('slug', 'category')->get();
+                break;
+
+            case 'products':
+                $elements = Product::with('slug', 'category')->get();
+                break;
+
+            default:
+                // code...
+                break;
+        }
+
+        return [
+            'success' => true,
+            'elements' => $elements,
+        ];
+    }
+
     public function save_component(Request $request) {
 
         if ($request->id == 'null') {

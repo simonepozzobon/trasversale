@@ -6,11 +6,11 @@
                     <h1 class="pt-3">{{ title }}</h1>
                 </div>
                 <div class="page-template__action">
-                    <button
+                    <!-- <button
                         class="btn btn-outline-secondary"
                         @click="addRow">
                         Aggiungi Riga
-                    </button>
+                    </button> -->
                     <button
                         class="btn btn-outline-primary"
                         @click="addComponent">
@@ -45,7 +45,9 @@ import ComponentsList from '../components/ComponentsList.vue'
 import DynamicParams from '../DynamicParams'
 import EditPanel from '../components/EditPanel.vue'
 import ModuleContainer from './ModuleContainer.vue'
-import { Uuid } from '../../Utilities'
+import {
+    Uuid
+} from '../../Utilities'
 
 export default {
     name: 'PageTemplate',
@@ -69,7 +71,9 @@ export default {
         },
         modules: {
             type: Array,
-            default: function() { return [] },
+            default: function() {
+                return []
+            },
         },
     },
     data: function() {
@@ -194,19 +198,7 @@ $opacity-test: 0.6 !default;
     flex-direction: column;
     align-items: center;
 
-    background: linear-gradient(
-        45deg,
-        rgba($green, $opacity-test),
-        rgba($teal, $opacity-test),
-        rgba($cyan, $opacity-test),
-        rgba($blue, $opacity-test),
-        rgba($indigo, $opacity-test),
-        rgba($purple, $opacity-test),
-        rgba($pink, $opacity-test),
-        rgba($red, $opacity-test),
-        rgba($orange, $opacity-test),
-        rgba($yellow, $opacity-test),
-    );
+    background: linear-gradient(45deg, rgba($green, $opacity-test), rgba($teal, $opacity-test), rgba($cyan, $opacity-test), rgba($blue, $opacity-test), rgba($indigo, $opacity-test), rgba($purple, $opacity-test), rgba($pink, $opacity-test), rgba($red, $opacity-test), rgba($orange, $opacity-test), rgba($yellow, $opacity-test),);
     background-size: 800% 800%;
     animation: Gradient 360s ease infinite;
 
@@ -249,14 +241,14 @@ $opacity-test: 0.6 !default;
 }
 
 @keyframes Gradient {
-	0% {
-		background-position: 0% 50%
-	}
-	50% {
-		background-position: 100% 50%
-	}
-	100% {
-		background-position: 0% 50%
-	}
+    0% {
+        background-position: 0 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
 }
 </style>

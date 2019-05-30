@@ -21,10 +21,11 @@ Route::get('get-page/{page}/{subpage?}/{slug?}', 'MainController@get_dynamic_ite
 
 Route::prefix('admin')->group(function() {
     Route::post('save-component', 'AdminController@save_component');
-    // Route::post('update-component', 'AdminController@update_component');
     Route::delete('delete-component/{id}', 'AdminController@delete_component');
     Route::get('grid-elements/{type}', 'AdminController@get_grid_elements');
+    // Route::post('update-component', 'AdminController@update_component');
 
+    Route::get('post-type/{type}', 'AdminController@get_post_type');
 
     Route::prefix('sub-page')->group(function() {
         Route::get('/{id}', 'AdminController@get_sub_page');
