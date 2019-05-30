@@ -123,9 +123,9 @@ export default {
     },
     methods: {
         listener: function() {
-            if (this.module.type === 'image') {
-                console.log(this.content);
-            }
+            // if (this.module.type === 'image') {
+            //     console.log(this.content);
+            // }
 
             // console.log(this.content.hasOwnProperty('type') && this.content.type == 'packery');
             // console.log('content.type', this.content.type);
@@ -142,15 +142,24 @@ export default {
         }
     },
     beforeCreate: function() {
-        this.$options.components.AdminUiModuleRow = require('./modulemanager/AdminUiModuleRow.vue').default
-        this.$options.components.UiParagraph = require('../../ui/UiParagraph.vue').default
-        this.$options.components.UiButton = require('../../ui/UiButton.vue').default
-        this.$options.components.AdminUiImage = require('./modulemanager/AdminUiImage.vue').default
-        this.$options.components.AdminPackeryContainer = require('./modulemanager/AdminPackeryContainer.vue').default
-        this.$options.components.UiTitle = require('../../ui/UiTitle.vue').default
-        this.$options.components.UiTeam = require('../../ui/UiTeam.vue').default
-        this.$options.components.UiSimpleGrid = require('../../ui/UiSimpleGrid.vue').default
-        this.$options.components.UiVideo = require('../../ui/UiVideo.vue').default
+        this.$options.components.AdminUiModuleRow = require('./modulemanager/AdminUiModuleRow.vue')
+            .default
+        this.$options.components.UiParagraph = require('../../ui/UiParagraph.vue')
+            .default
+        this.$options.components.UiButton = require('../../ui/UiButton.vue')
+            .default
+        this.$options.components.AdminUiImage = require('./modulemanager/AdminUiImage.vue')
+            .default
+        this.$options.components.AdminPackeryContainer = require('./modulemanager/AdminPackeryContainer.vue')
+            .default
+        this.$options.components.UiTitle = require('../../ui/UiTitle.vue')
+            .default
+        this.$options.components.UiTeam = require('../../ui/UiTeam.vue')
+            .default
+        this.$options.components.UiSimpleGrid = require('../../ui/UiSimpleGrid.vue')
+            .default
+        this.$options.components.UiVideo = require('../../ui/UiVideo.vue')
+            .default
     },
     mounted: function() {
         // console.log(this.module);

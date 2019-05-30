@@ -15,7 +15,8 @@
 import {
     SizeUtil,
     Uuid,
-} from '../../../Utilities'
+}
+from '../../../Utilities'
 
 export default {
     name: 'AdminUiImage',
@@ -32,7 +33,7 @@ export default {
     data: function() {
         return {
             ready: false,
-            source: [],
+            source: null,
         }
     },
     watch: {
@@ -46,14 +47,27 @@ export default {
         appendToDOM: function(img) {
             this.ready = true
 
-            let container = this.$refs.container
-            container.appendChild(img)
-            this.source.push(img)
+            // se non c'è nessuna immagine
+            if (!this.source) {
+                // memorizzo per dopo
+                this.source = img
 
-            console.log(this.source);
-            this.$nextTick(() => {
-                container.classList.add('ui-image--loaded')
-            })
+                // modifico il DOM
+                let container = this.$refs.container
+                container.appendChild(img)
+                this.$nextTick(() => {
+                    container.classList.add('ui-image--loaded')
+                })
+            }
+            else {
+                this.source.remove()
+                this.source = null
+                this.$nextTick(() => {
+                    this.appendToDOM(img)
+                })
+            }
+
+
         },
         loader: function() {
             // console.log('loading image');

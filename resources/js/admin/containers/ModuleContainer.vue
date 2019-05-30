@@ -28,10 +28,11 @@ import {
     clone,
     isEqual,
     isFile,
-} from '../../Utilities'
+}
+from '../../Utilities'
+
 import AdminModuleManager from '../components/AdminModuleManager.vue'
 import NewModule from '../components/NewModule.vue'
-import Vue from 'vue'
 
 export default {
     name: 'ModuleContainer',
@@ -80,12 +81,13 @@ export default {
 
             // console.log(clonedObj);
             if (this.item.type === 'image') {
-                // console.log('immmmmmagine');
                 newObj.content = this.setPreview(obj)
-            } else {
+            }
+            else {
                 let clonedObj = clone(obj)
                 newObj.content = this.setPreview(clonedObj)
             }
+
             this.component = clone(newObj)
         },
         setPreview: function(obj) {
@@ -112,13 +114,14 @@ export default {
                 case 'image':
                     let src
                     if (obj.src && isFile(obj.src)) {
-                        console.log('è un file', obj.src);
                         // let file = new File(obj.src)
                         src = window.URL.createObjectURL(obj.src)
-                    } else if (obj.src) {
+                    }
+                    else if (obj.src) {
                         // console.log('non è un file');
                         src = obj.src
-                    } else {
+                    }
+                    else {
                         // console.log('non esiste');
                         src = null
                     }
@@ -136,7 +139,8 @@ export default {
 
                         if (RegExp.$3.indexOf('youtu') > -1) {
                             url = 'https://www.youtube.com/embed/' + RegExp.$6
-                        } else if (RegExp.$3.indexOf('vimeo') > -1) {
+                        }
+                        else if (RegExp.$3.indexOf('vimeo') > -1) {
                             url = 'https://player.vimeo.com/video/' + RegExp.$6
                         }
                     }
@@ -205,13 +209,14 @@ export default {
             // https://stackoverflow.com/questions/1230233/how-to-find-the-sum-of-an-array-of-numbers
             let columns = JSON.parse(this.component.content)
             let total = columns.map((col, idx) => {
-                let content = JSON.parse(col.content)
-                let size = content.size
-                if (idx == data.idx) {
-                    size = content.size + data.size
-                }
-                return size
-            }).reduce((a, b) => a + b, 0)
+                    let content = JSON.parse(col.content)
+                    let size = content.size
+                    if (idx == data.idx) {
+                        size = content.size + data.size
+                    }
+                    return size
+                })
+                .reduce((a, b) => a + b, 0)
 
 
             if (total > 12) {
