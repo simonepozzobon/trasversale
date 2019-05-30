@@ -12,7 +12,10 @@
 </template>
 
 <script>
-import { SizeUtil } from '../../../Utilities'
+import {
+    SizeUtil,
+    Uuid,
+} from '../../../Utilities'
 
 export default {
     name: 'AdminUiImage',
@@ -29,12 +32,13 @@ export default {
     data: function() {
         return {
             ready: false,
-            source: null,
+            source: [],
         }
     },
     watch: {
         src: function(src) {
             // console.log('sorgento', image);
+            this.ready = false
             this.loader()
         }
     },
@@ -44,29 +48,32 @@ export default {
 
             let container = this.$refs.container
             container.appendChild(img)
+            this.source.push(img)
 
+            console.log(this.source);
             this.$nextTick(() => {
                 container.classList.add('ui-image--loaded')
             })
         },
         loader: function() {
-            console.log('loading');
-            let img = new Image()
-
-            img.addEventListener('load', () => {
-                if (!this.ready) {
-                    this.appendToDOM(img)
-                }
-            })
-
-            img.src = this.src
-            img.alt = this.alt
-            img.classList.add('img-fluid', 'ui-image__content')
-
-            if (img.complete) {
-                this.$nextTick(() => {
-                    this.appendToDOM(img)
+            // console.log('loading image');
+            if (this.src) {
+                let img = new Image()
+                img.addEventListener('load', () => {
+                    if (!this.ready) {
+                        this.appendToDOM(img)
+                    }
                 })
+
+                img.src = this.src
+                img.alt = this.alt
+                img.classList.add('img-fluid', 'ui-image__content')
+
+                if (img.complete) {
+                    this.$nextTick(() => {
+                        this.appendToDOM(img)
+                    })
+                }
             }
         },
     },
@@ -118,7 +125,7 @@ export default {
         transition: $transition-base;
     }
 
-    &--loaded  & {
+    &--loaded & {
         &__placeholder {
             height: 0;
             opacity: 0;

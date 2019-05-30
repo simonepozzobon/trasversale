@@ -109,7 +109,9 @@ export default {
                     new BulletList(),
                     new CodeBlock(),
                     new HardBreak(),
-                    new Heading({ levels: [1, 2, 3] }),
+                    new Heading({
+                        levels: [1, 2, 3]
+                    }),
                     new HorizontalRule(),
                     new ListItem(),
                     new OrderedList(),
@@ -126,13 +128,13 @@ export default {
                 content: this.initial ? this.initial : '',
             })
 
-            console.log(this.initial);
+            // console.log(this.initial);
 
             this.editor.on('update', (e) => {
                 this.html = e.getHTML()
                 this.json = e.getJSON()
                 this.$emit('update', this.json, this.html)
-                console.log('updated');
+                // console.log('updated');
             })
         },
     },

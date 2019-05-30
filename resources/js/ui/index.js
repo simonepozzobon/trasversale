@@ -17,6 +17,7 @@ import UiSidebarParagraph from './UiSidebarParagraph.vue'
 import UiSidebarTitle from './UiSidebarTitle.vue'
 import UiSimpleGrid from './UiSimpleGrid.vue'
 import UiTitle from './UiTitle.vue'
+import UiVideo from './UiVideo.vue'
 
 export {
     UiBlock,
@@ -38,4 +39,5 @@ export {
     UiSidebarTitle,
     UiSimpleGrid,
     UiTitle,
+    UiVideo,
 }

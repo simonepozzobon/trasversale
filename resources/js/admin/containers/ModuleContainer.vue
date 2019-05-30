@@ -24,9 +24,14 @@
 </template>
 
 <script>
-import { clone, isEqual } from '../../Utilities'
+import {
+    clone,
+    isEqual,
+    isFile,
+} from '../../Utilities'
 import AdminModuleManager from '../components/AdminModuleManager.vue'
 import NewModule from '../components/NewModule.vue'
+import Vue from 'vue'
 
 export default {
     name: 'ModuleContainer',
@@ -37,7 +42,9 @@ export default {
     props: {
         item: {
             type: Object,
-            default: function() { return {} },
+            default: function() {
+                return {}
+            },
         },
         model: {
             type: String,
@@ -69,11 +76,16 @@ export default {
     methods: {
         formatTempData: function(obj) {
             // console.log('formato', this.item.type, obj);
-            let clonedObj = clone(obj)
+            let newObj = clone(this.component)
 
             // console.log(clonedObj);
-            let newObj = clone(this.component)
-            newObj.content = this.setPreview(clonedObj)
+            if (this.item.type === 'image') {
+                // console.log('immmmmmagine');
+                newObj.content = this.setPreview(obj)
+            } else {
+                let clonedObj = clone(obj)
+                newObj.content = this.setPreview(clonedObj)
+            }
             this.component = clone(newObj)
         },
         setPreview: function(obj) {
@@ -88,20 +100,35 @@ export default {
                             modulable_type: 'App\\Module',
                             modules: [],
                             type: 'column',
-                            content: JSON.stringify({size: 6})
+                            content: JSON.stringify({
+                                size: 6
+                            })
                         }
                         cols.push(col)
                     }
                     return JSON.stringify(cols)
 
-                // Immagine
+                    // Immagine
                 case 'image':
+                    let src
+                    if (obj.src && isFile(obj.src)) {
+                        console.log('è un file', obj.src);
+                        // let file = new File(obj.src)
+                        src = window.URL.createObjectURL(obj.src)
+                    } else if (obj.src) {
+                        // console.log('non è un file');
+                        src = obj.src
+                    } else {
+                        // console.log('non esiste');
+                        src = null
+                    }
+
                     return JSON.stringify({
-                        src: obj.src ? window.URL.createObjectURL(obj.src) : null,
+                        src: src,
                         alt: obj.alt
                     })
 
-                // Video
+                    // Video
                 case 'video':
                     let url = obj.url
                     if (url) {
@@ -148,7 +175,7 @@ export default {
                         type: obj.type,
                     })
 
-                // DEfault
+                    // DEfault
                 default:
                     return JSON.stringify(obj)
             }
@@ -184,7 +211,7 @@ export default {
                     size = content.size + data.size
                 }
                 return size
-            }).reduce((a,b) => a + b, 0)
+            }).reduce((a, b) => a + b, 0)
 
 
             if (total > 12) {

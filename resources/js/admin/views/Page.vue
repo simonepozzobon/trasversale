@@ -36,7 +36,7 @@ export default {
     methods: {
         getPage: function(id) {
             this.idx = Number(id)
-            this.$http.get('/api/admin/page/'+id).then(response => {
+            this.$http.get('/api/admin/page/' + id).then(response => {
                 this.title = response.data.title
                 this.modules = response.data.modules
                 // console.log(this.modules);

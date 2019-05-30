@@ -13,7 +13,10 @@
 </template>
 
 <script>
-import { clone, isEqual } from '../../Utilities'
+import {
+    clone,
+    isEqual
+} from '../../Utilities'
 import DynamicModuleItem from './DynamicModuleItem.vue'
 
 export default {
@@ -28,7 +31,9 @@ export default {
         },
         options: {
             type: Array,
-            default: function() { return [] },
+            default: function() {
+                return []
+            },
         },
         values: [Object, Array],
         isEdit: {
@@ -65,16 +70,22 @@ export default {
 
             return this.values[key] ? this.values[key] : null
         },
+        emitChanged: function(key, value) {
+            this.dataObj[key] = value
+            this.$emit('changed', this.dataObj)
+        },
         changed: function(key, value, type) {
             let prev = clone(this.dataObj[key])
             // console.log('Dynamic module è diverso', !isEqual(prev, value), key);
-            if (!isEqual(prev, value)) {
-                this.dataObj[key] = value
-                this.$emit('changed', this.dataObj)
+            if (!isEqual(prev, value) && type != 'file-input') {
+                this.emitChanged(key, value)
+            } else if (type === 'file-input') {
+                this.emitChanged(key, value)
             }
 
             // console.log(key, value, type);
             if (type == 'file-input' || type == 'text') {
+                // console.log(key, value, type);
                 // cerco se ha un modulo preview
                 let idx = this.options.findIndex(option => option.parent == key && option.type == 'preview')
                 if (idx > -1) {
@@ -88,9 +99,7 @@ export default {
                             this.$refs.module[idx].src = e.target.result
                         }
                         reader.readAsDataURL(value)
-                    }
-
-                    else if (option.mime == 'video-url') {
+                    } else if (option.mime == 'video-url') {
                         let url
                         value.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
 

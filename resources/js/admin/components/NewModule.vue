@@ -32,7 +32,7 @@
 
 <script>
 import {
-    SizeUtil
+    SizeUtil,
 } from '../../Utilities'
 import BlockColumnsPreview from './rowcolumn/BlockColumnsPreview.vue'
 import DynamicModule from './DynamicModule.vue'

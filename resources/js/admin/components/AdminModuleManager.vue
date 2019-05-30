@@ -49,6 +49,10 @@
             :is-open="isOpen"
             @update-size="updateSize"/>
 
+        <ui-video
+            v-else-if="module.type == 'video'"
+            :src="this.content.src"/>
+
         <div v-else>
             {{ module }}
         </div>
@@ -56,11 +60,9 @@
 </template>
 
 <script>
-
 export default {
     name: 'AdminModuleManager',
-    components: {
-    },
+    components: {},
     props: {
         module: {
             type: Object,
@@ -121,12 +123,14 @@ export default {
     },
     methods: {
         listener: function() {
-            if (this.showPackery) {
-
+            if (this.module.type === 'image') {
+                console.log(this.content);
             }
+
             // console.log(this.content.hasOwnProperty('type') && this.content.type == 'packery');
             // console.log('content.type', this.content.type);
             // console.log('blocks.type', this.content.blocks);
+            // console.log('type', this.module.type);
         },
         updateSize: function(data) {
             this.$emit('update-size', data)
@@ -146,6 +150,7 @@ export default {
         this.$options.components.UiTitle = require('../../ui/UiTitle.vue').default
         this.$options.components.UiTeam = require('../../ui/UiTeam.vue').default
         this.$options.components.UiSimpleGrid = require('../../ui/UiSimpleGrid.vue').default
+        this.$options.components.UiVideo = require('../../ui/UiVideo.vue').default
     },
     mounted: function() {
         // console.log(this.module);

@@ -63,9 +63,17 @@ const clone = function(Obj) {
 
 const isEqual = require('lodash.isequal')
 
+const isFile = function(obj) {
+    if (obj instanceof File) {
+        return true
+    }
+    return false
+}
+
 export {
     clone,
     isEqual,
+    isFile,
     SizeUtil,
     Uuid,
 }

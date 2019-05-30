@@ -1,10 +1,10 @@
 <template lang="html">
-    <router-view></router-view>
+    <router-view />
 </template>
 
 <script>
 export default {
-    name: 'Home',
+    name: 'PageContainer',
     data: function() {
         return {
             name: null,
@@ -12,7 +12,7 @@ export default {
         }
     },
     mounted: function() {
-        console.log('mountef');
+        console.log('Page Container -> Mounted');
     }
 }
 </script>

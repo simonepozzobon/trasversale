@@ -47,6 +47,10 @@
             v-else-if="module.type == 'row'"
             :columns="this.content"/>
 
+        <ui-video
+            v-else-if="module.type == 'video'"
+            :src="this.content.src"/>
+
         <div v-else>
             {{ module }}
         </div>
@@ -54,11 +58,9 @@
 </template>
 
 <script>
-
 export default {
     name: 'ModuleManager',
-    components: {
-    },
+    components: {},
     props: {
         module: {
             type: Object,
@@ -70,8 +72,7 @@ export default {
         },
     },
     data: function() {
-        return {
-        }
+        return {}
     },
     computed: {
         content: function() {
@@ -99,6 +100,7 @@ export default {
         this.$options.components.UiTitle = require('../ui/UiTitle.vue').default
         this.$options.components.UiTeam = require('../ui/UiTeam.vue').default
         this.$options.components.UiSimpleGrid = require('../ui/UiSimpleGrid.vue').default
+        this.$options.components.UiVideo = require('../ui/UiVideo.vue').default
     },
     mounted: function() {
         // console.log(this.module);

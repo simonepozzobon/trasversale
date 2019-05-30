@@ -1,10 +1,10 @@
 <template lang="html">
-    <router-view></router-view>
+    <router-view />
 </template>
 
 <script>
 export default {
-    name: 'Home',
+    name: 'SubPageContainer',
     data: function() {
         return {
             name: null,

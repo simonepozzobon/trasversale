@@ -21,7 +21,7 @@ const Title = {
         },
         {
             key: 'isColumn',
-            label: 'Si trova all\'interno di una colonna',
+            label: 'Allinea titolo a sinistra',
             required: false,
             type: 'switch',
         },

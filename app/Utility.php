@@ -18,7 +18,16 @@ class Utility extends Model
 
             $sub_pages = $page->sub_pages;
             $page->sub_pages = $sub_pages->transform(function($sub, $key) {
-                $sub->slug = $sub->slug->slug;
+                $has_slug = isset($sub->slug->slug);
+                if ($has_slug) {
+                    $sub->slug = $sub->slug->slug;
+                } else {
+                    // dump($sub->slug);
+                    $slug = collect();
+                    $slug->slug = 'nessuno';
+
+                    $sub->slug = $slug;
+                }
                 return $sub;
             });
 

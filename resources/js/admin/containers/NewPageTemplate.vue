@@ -50,7 +50,7 @@ import {
 } from '../../Utilities'
 
 export default {
-    name: 'PageTemplate',
+    name: 'NewPageTemplate',
     components: {
         ComponentsList,
         EditPanel,
