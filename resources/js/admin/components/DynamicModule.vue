@@ -67,12 +67,7 @@ export default {
         },
         changed: function(key, value, type) {
             let prev = clone(this.dataObj[key])
-
-            // if (key == 'elements') {
-            //     console.log('Dynamic module è diverso', !isEqual(prev, value), key);
-            //     console.log(!isEqual(this.dataObj[key], value));
-            // }
-            // console.log(prev, value);
+            // console.log('Dynamic module è diverso', !isEqual(prev, value), key);
             if (!isEqual(prev, value)) {
                 this.dataObj[key] = value
                 this.$emit('changed', this.dataObj)

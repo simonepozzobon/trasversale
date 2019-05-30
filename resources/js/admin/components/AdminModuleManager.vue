@@ -83,7 +83,7 @@ export default {
     watch: {
         module: function(module) {
             this.listener()
-        }
+        },
     },
     computed: {
         content: function() {
@@ -99,6 +99,7 @@ export default {
             if (this.module.type == 'grid') {
                 if (this.content.hasOwnProperty('type') && this.content.hasOwnProperty('blocks')) {
                     if (this.content.type == 'packery' && this.content.blocks.length > 0) {
+                        console.log('packery');
                         return true
                     }
                 }
@@ -110,6 +111,7 @@ export default {
             if (this.module.type == 'grid') {
                 if (this.content.hasOwnProperty('type') && this.content.hasOwnProperty('blocks')) {
                     if (this.content.type == 'simple' && this.content.blocks.length > 0) {
+                        console.log('simple');
                         return true
                     }
                 }

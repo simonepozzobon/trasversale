@@ -7,9 +7,12 @@ import BootstrapVue from 'bootstrap-vue'
 import VueRouter from 'vue-router'
 import routes from './adminroutes'
 import VuePackeryPlugin from './PackeryTest'
+import VueDraggabillyPlugin from 'vue-packery-draggabilly-plugin'
+
 
 Vue.use(VueRouter)
 Vue.use(VuePackeryPlugin)
+Vue.use(VueDraggabillyPlugin)
 Vue.use(BootstrapVue)
 Vue.prototype.$http = axios
 

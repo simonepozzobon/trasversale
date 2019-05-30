@@ -123,7 +123,7 @@
             <div class="col-md-9">
                 <grid-layout
                     ref="gridLayout"
-                    :layout.sync="elements"
+                    :layout="elements"
                     :col-num="12"
                     :row-height="60"
                     :is-draggable="true"
@@ -263,7 +263,9 @@ export default {
         value: function(newValue, oldValue) {
             // console.log('è un valore diference', this.option.key, !isEqual(newValue, oldValue));
             if(!isEqual(newValue, oldValue)) {
-                // console.log('dynamic item change');
+                // if (this.option.key === 'elements') {
+                //     console.log('dynamic item change');
+                // }
                 this.$emit('changed', this.option.key, newValue, this.option.type)
             }
         },
@@ -271,6 +273,7 @@ export default {
             // console.log(newEls, oldEls);
             // console.log('elements are different', !isEqual(newEls, oldEls));
             this.value = clone(newEls)
+            // console.log('changed');
             // if (!isEqual(newEls, oldEls)) {
             // }
         }
@@ -512,11 +515,11 @@ export default {
             return newEl
         },
         gridItemMoved: function(i, newX, newY){
-            console.log('moved');
-            let item = this.elements[i] // element moved
-            for (let i = 0; i < this.elements.length; i++) {
-                this.elements[i]
-            }
+            // console.log('moved');
+            // let item = this.elements[i] // element moved
+            // for (let i = 0; i < this.elements.length; i++) {
+            //     this.elements[i]
+            // }
         },
         gridItemResized: function(i, newH, newW, newHPx, newWPx) {
             // let newEls = Object.assign([], this.elements)
@@ -536,7 +539,15 @@ export default {
             // this.elements = Object.assign([], newEls)
         },
         layoutUpdated: function(newLayout) {
-            this.elements = Object.assign([], newLayout)
+            // console.log('layout aggiornato', newLayout);
+            // console.log('prima', newLayout.map(o => o.x + ' ' + o.y));
+
+            // https://coderwall.com/p/ebqhca/javascript-sort-by-two-fields
+            const sorted = clone(newLayout)
+            sorted.sort((a, b) => (a.y - b.y || a.x - b.x))
+
+            // console.log('dopo', sorted.map(o => o.x + ' ' + o.y));
+            this.elements = clone(sorted)
         },
         debug: function() {
             let test = [

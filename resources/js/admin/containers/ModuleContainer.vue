@@ -69,8 +69,11 @@ export default {
     methods: {
         formatTempData: function(obj) {
             // console.log('formato', this.item.type, obj);
+            let clonedObj = clone(obj)
+
+            // console.log(clonedObj);
             let newObj = clone(this.component)
-            newObj.content = this.setPreview(obj)
+            newObj.content = this.setPreview(clonedObj)
             this.component = clone(newObj)
         },
         setPreview: function(obj) {

@@ -20,8 +20,8 @@
         </ui-row>
         <ui-row>
             <ui-simple-grid-loop
-                v-for="block in filtered"
-                :key="block.id"
+                v-for="(block, i) in filtered"
+                :key="i"
                 :block="block"
                 @category="addCategory"
                 @filter-category="filterNews"/>
