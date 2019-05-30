@@ -1,35 +1,41 @@
-<template lang="html">
-    <div
-        class="new-module"
-        ref="container">
-        <div class="new-module__container">
-            <dynamic-module
-                v-if="module"
-                :name="name"
-                :options="module.options"
-                :values="values"
-                :is-edit="isEdit"
-                @changed="setObj"/>
-            <hr>
-            <div class="new-module__tools">
-                <button
-                    class="btn btn-outline-primary"
-                    @click="saveComponent">
-                    Salva Modifiche
-                </button>
-                <button
-                    class="btn btn-outline-secondary"
-                    @click="closeComponent">
-                    Chiudi
-                </button>
-                <button
-                    v-if="!isNew"
-                    class="btn btn-outline-danger">
-                    Elimina Componente
-                </button>
-            </div>
+<template>
+<div
+    class="new-module"
+    ref="container"
+>
+    <div class="new-module__container">
+        <dynamic-module
+            v-if="module"
+            :name="name"
+            :options="module.options"
+            :values="values"
+            :is-edit="isEdit"
+            @changed="setObj"
+        />
+        <hr>
+        <div class="new-module__tools">
+            <button
+                class="btn btn-outline-primary"
+                @click="saveComponent"
+            >
+                Salva Modifiche
+            </button>
+            <button
+                class="btn btn-outline-secondary"
+                @click="closeComponent"
+            >
+                Chiudi
+            </button>
+            <button
+                v-if="!isNew"
+                class="btn btn-outline-danger"
+                @click="deleteComponent"
+            >
+                Elimina Componente
+            </button>
         </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -97,7 +103,7 @@ export default {
             this.master.fromTo(el, .5, {
                 className: '-=new-module--open',
                 autoAlpha: 0,
-                ease: Power4.easeIn,
+                ease: Power4.easeInOut,
             }, {
                 className: '+=new-module--open',
                 autoAlpha: 1,
@@ -125,17 +131,12 @@ export default {
                 module: this.name,
                 data: this.obj,
             }
-            //
-            // if (!request.id) {
-            //     delete request.id
-            // }
 
-            // console.log(request);
             let data = this.formatRequest(request)
 
             this.$http.post('/api/admin/save-component', data)
                 .then(response => {
-                    console.log(response.data);
+                    // console.log(response.data);
                     if (response.data.success) {
                         this.$emit('saved', response.data.module)
                         this.closeComponent()

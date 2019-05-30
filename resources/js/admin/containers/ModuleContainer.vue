@@ -20,7 +20,8 @@
             :module-id="item.id"
             :values="content"
             @changed="formatTempData"
-            @close="closeComponent"/>
+            @close="closeComponent"
+            @deleted="deleteComponent"/>
     </div>
 </template>
 
@@ -90,6 +91,9 @@ export default {
             }
 
             this.component = clone(newObj)
+        },
+        deleteComponent: function() {
+
         },
         setPreview: function(obj) {
             switch (this.item.type) {
