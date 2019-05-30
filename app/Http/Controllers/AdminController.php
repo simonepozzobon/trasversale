@@ -15,28 +15,33 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function test() {
+    public function test()
+    {
         $request = new Request();
         $request->replace([
-            "id" => "80",
-            "model_id" => "4",
-            "model" => "App\\StaticPage",
-            "module" => "grid",
-            "data" => "{\"title\":\"corsi\",\"type\":\"simple\",\"elements\":{\"model\":\"last-mix\",\"post_count\":10,\"blocks\":[{\"i\":0,\"x\":0,\"y\":0,\"w\":4,\"h\":2,\"order\":0,\"id\":16,\"type\":\"product\",\"type_id\":1,\"width\":4,\"height\":2,\"bgColor\":\"secondary\",\"thumb\":\"\/dummies\/main-grid\/dummy_3.jpg\",\"created_at\":null,\"content\":\"{\\\"id\\\":1,\\\"category_id\\\":4,\\\"title\\\":\\\"Coaching Per Gli Insegnanti\\\",\\\"price\\\":350,\\\"thumb\\\":\\\"\\\\\/dummies\\\\\/main-grid\\\\\/dummy_3.jpg\\\",\\\"options\\\":\\\"\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null,\\\"slug\\\":{\\\"id\\\":22,\\\"slug\\\":\\\"coaching-per-gli-insegnanti\\\",\\\"sluggable_type\\\":\\\"App\\\\\\\\Product\\\",\\\"sluggable_id\\\":1,\\\"created_at\\\":null,\\\"updated_at\\\":null},\\\"category\\\":{\\\"id\\\":4,\\\"title\\\":\\\"Coaching\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null}}\",\"moved\":false},{\"i\":1,\"x\":4,\"y\":0,\"w\":4,\"h\":2,\"order\":1,\"id\":17,\"type\":\"product\",\"type_id\":2,\"width\":4,\"height\":2,\"bgColor\":\"secondary\",\"thumb\":\"\/dummies\/main-grid\/dummy_13.jpg\",\"created_at\":null,\"content\":\"{\\\"id\\\":2,\\\"category_id\\\":4,\\\"title\\\":\\\"Coaching Per Genitori\\\",\\\"price\\\":350,\\\"thumb\\\":\\\"\\\\\/dummies\\\\\/main-grid\\\\\/dummy_13.jpg\\\",\\\"options\\\":null,\\\"created_at\\\":null,\\\"updated_at\\\":null,\\\"slug\\\":{\\\"id\\\":23,\\\"slug\\\":\\\"coaching-per-genitori\\\",\\\"sluggable_type\\\":\\\"App\\\\\\\\Product\\\",\\\"sluggable_id\\\":2,\\\"created_at\\\":null,\\\"updated_at\\\":null},\\\"category\\\":{\\\"id\\\":4,\\\"title\\\":\\\"Coaching\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null}}\",\"moved\":false},{\"i\":2,\"x\":8,\"y\":0,\"w\":4,\"h\":2,\"order\":2,\"id\":18,\"type\":\"product\",\"type_id\":3,\"width\":4,\"height\":2,\"bgColor\":\"secondary\",\"thumb\":\"\/dummies\/main-grid\/dummy_14.jpg\",\"created_at\":null,\"content\":\"{\\\"id\\\":3,\\\"category_id\\\":9,\\\"title\\\":\\\"Tutoring\\\",\\\"price\\\":350,\\\"thumb\\\":\\\"\\\\\/dummies\\\\\/main-grid\\\\\/dummy_14.jpg\\\",\\\"options\\\":null,\\\"created_at\\\":null,\\\"updated_at\\\":null,\\\"slug\\\":{\\\"id\\\":24,\\\"slug\\\":\\\"tutoring\\\",\\\"sluggable_type\\\":\\\"App\\\\\\\\Product\\\",\\\"sluggable_id\\\":3,\\\"created_at\\\":null,\\\"updated_at\\\":null},\\\"category\\\":{\\\"id\\\":9,\\\"title\\\":\\\"Tutoring\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null}}\",\"moved\":false},{\"i\":3,\"x\":0,\"y\":2,\"w\":4,\"h\":2,\"order\":3,\"id\":19,\"type\":\"product\",\"type_id\":4,\"width\":4,\"height\":2,\"bgColor\":\"secondary\",\"thumb\":\"\/dummies\/main-grid\/dummy_3.jpg\",\"created_at\":null,\"content\":\"{\\\"id\\\":4,\\\"category_id\\\":5,\\\"title\\\":\\\"Corso Settore Agricolo\\\",\\\"price\\\":350,\\\"thumb\\\":\\\"\\\\\/dummies\\\\\/main-grid\\\\\/dummy_3.jpg\\\",\\\"options\\\":null,\\\"created_at\\\":null,\\\"updated_at\\\":null,\\\"slug\\\":{\\\"id\\\":26,\\\"slug\\\":\\\"coaching-per-gli-insegnanti-2\\\",\\\"sluggable_type\\\":\\\"App\\\\\\\\Product\\\",\\\"sluggable_id\\\":4,\\\"created_at\\\":null,\\\"updated_at\\\":null},\\\"category\\\":{\\\"id\\\":5,\\\"title\\\":\\\"Settore Agricolo\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null}}\",\"moved\":false},{\"i\":4,\"x\":4,\"y\":2,\"w\":4,\"h\":2,\"order\":4,\"id\":20,\"type\":\"product\",\"type_id\":5,\"width\":4,\"height\":2,\"bgColor\":\"secondary\",\"thumb\":\"\/dummies\/main-grid\/dummy_13.jpg\",\"created_at\":null,\"content\":\"{\\\"id\\\":5,\\\"category_id\\\":6,\\\"title\\\":\\\"Corso di formazione finanziaria\\\",\\\"price\\\":350,\\\"thumb\\\":\\\"\\\\\/dummies\\\\\/main-grid\\\\\/dummy_13.jpg\\\",\\\"options\\\":null,\\\"created_at\\\":null,\\\"updated_at\\\":null,\\\"slug\\\":{\\\"id\\\":28,\\\"slug\\\":\\\"coaching-per-genitori-2\\\",\\\"sluggable_type\\\":\\\"App\\\\\\\\Product\\\",\\\"sluggable_id\\\":5,\\\"created_at\\\":null,\\\"updated_at\\\":null},\\\"category\\\":{\\\"id\\\":6,\\\"title\\\":\\\"Formazione Finanziaria\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null}}\",\"moved\":false},{\"i\":5,\"x\":8,\"y\":2,\"w\":4,\"h\":2,\"order\":5,\"id\":21,\"type\":\"product\",\"type_id\":6,\"width\":4,\"height\":2,\"bgColor\":\"secondary\",\"thumb\":\"\/dummies\/main-grid\/dummy_3.jpg\",\"created_at\":null,\"content\":\"{\\\"id\\\":6,\\\"category_id\\\":5,\\\"title\\\":\\\"Corso Settore Agricolo 2\\\",\\\"price\\\":350,\\\"thumb\\\":\\\"\\\\\/dummies\\\\\/main-grid\\\\\/dummy_3.jpg\\\",\\\"options\\\":null,\\\"created_at\\\":null,\\\"updated_at\\\":null,\\\"slug\\\":{\\\"id\\\":27,\\\"slug\\\":\\\"coaching-per-genitori-3\\\",\\\"sluggable_type\\\":\\\"App\\\\\\\\Product\\\",\\\"sluggable_id\\\":6,\\\"created_at\\\":null,\\\"updated_at\\\":null},\\\"category\\\":{\\\"id\\\":5,\\\"title\\\":\\\"Settore Agricolo\\\",\\\"created_at\\\":null,\\\"updated_at\\\":null}}\",\"moved\":false}]}}"
+            "id" => "null",
+            "model_id" => "13",
+            "model" => "App\\SubPage",
+            "module" => "title",
+            "data" => "{\"content\":\"gfgertegfdgdsgsd\",\"fontSize\":\"h2\",\"color\":null,\"isColumn\":null,\"uppercase\":null}"
         ]);
-        $module = Module::find($request->id);
-        $module = $this->set_module($module, $request);
-        dd($module);
 
-        $this->get_grid_elements('products');
+        $result = $this->save_component($request);
+        dd($result);
+        // $module = Module::find($request->id);
+        // $module = $this->set_module($module, $request);
+        //
+        // $this->get_grid_elements('products');
     }
 
-    public function index($slug = null) {
+    public function index($slug = null)
+    {
         $pages = Utility::generate_menu();
         return view('admin.index', compact('pages'));
     }
 
-    public function get_grid_elements($type) {
+    public function get_grid_elements($type)
+    {
         $elements = array();
 
         switch ($type) {
@@ -70,7 +75,8 @@ class AdminController extends Controller
         ];
     }
 
-    public function get_post_type($type) {
+    public function get_post_type($type)
+    {
         switch ($type) {
             case 'news':
                 $elements = News::with('slug', 'category')->get();
@@ -91,8 +97,8 @@ class AdminController extends Controller
         ];
     }
 
-    public function save_component(Request $request) {
-
+    public function save_component(Request $request)
+    {
         if ($request->id == 'null') {
             $module = new Module();
         } else {
@@ -117,7 +123,8 @@ class AdminController extends Controller
     //     ];
     // }
 
-    public function delete_component($id) {
+    public function delete_component($id)
+    {
         $module = Module::find($id);
         $module->delete();
 
@@ -127,21 +134,24 @@ class AdminController extends Controller
         ];
     }
 
-    public function get_sub_page($id) {
+    public function get_sub_page($id)
+    {
         $page = SubPage::find($id);
         $page->modules = Utility::format_complex_modules($page->modules()->get());
 
         return $page;
     }
 
-    public function get_page($id) {
+    public function get_page($id)
+    {
         $page = StaticPage::find($id);
         $page->modules = Utility::format_complex_modules($page->modules()->get());
 
         return $page;
     }
 
-    public function uniform_and_merge() {
+    public function uniform_and_merge()
+    {
         $collections = func_get_args();
         $merged = collect();
 
@@ -154,8 +164,9 @@ class AdminController extends Controller
         return $sorted;
     }
 
-    public function uniform_models($collection) {
-        $formatted = $collection->transform(function($item, $key) {
+    public function uniform_models($collection)
+    {
+        $formatted = $collection->transform(function ($item, $key) {
             $model = strtolower(str_replace('App\\', '', get_class($item)));
             $item->type = $model;
 
@@ -166,8 +177,8 @@ class AdminController extends Controller
         return $collection;
     }
 
-    public function set_module($module, $request) {
-
+    public function set_module($module, $request)
+    {
         $content = $request->data;
 
         if ($request->module == 'grid') {
@@ -215,9 +226,7 @@ class AdminController extends Controller
             $content = json_encode([
                 'id' => $grid->id
             ]);
-        }
-
-        else if ($request->module == 'image' && $request->hasFile('file')) {
+        } elseif ($request->module == 'image' && $request->hasFile('file')) {
             $file = $request->file('file');
             $media = Utility::save_image($file);
 

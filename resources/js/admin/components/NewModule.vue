@@ -13,7 +13,8 @@
             <hr>
             <div class="new-module__tools">
                 <button
-                    class="btn btn-outline-primary">
+                    class="btn btn-outline-primary"
+                    @click="saveComponent">
                     Salva Modifiche
                 </button>
                 <button
@@ -22,6 +23,7 @@
                     Chiudi
                 </button>
                 <button
+                    v-if="!isNew"
                     class="btn btn-outline-danger">
                     Elimina Componente
                 </button>
@@ -33,7 +35,8 @@
 <script>
 import {
     SizeUtil,
-} from '../../Utilities'
+}
+from '../../Utilities'
 import BlockColumnsPreview from './rowcolumn/BlockColumnsPreview.vue'
 import DynamicModule from './DynamicModule.vue'
 import DynamicParams from '../DynamicParams'
@@ -64,6 +67,10 @@ export default {
         isEdit: {
             type: Boolean,
             default: false,
+        },
+        isNew: {
+            type: Boolean,
+            default: true,
         },
         values: [Object, Array],
     },
@@ -97,7 +104,8 @@ export default {
                 ease: Back.easeOut.config(1.2),
             }, 0)
 
-            this.master.progress(1).progress(0)
+            this.master.progress(1)
+                .progress(0)
         },
         show: function() {
             this.master.play()
@@ -117,15 +125,22 @@ export default {
                 module: this.name,
                 data: this.obj,
             }
+            //
+            // if (!request.id) {
+            //     delete request.id
+            // }
 
+            // console.log(request);
             let data = this.formatRequest(request)
 
-            this.$http.post('/api/admin/save-component', data).then(response => {
-                // console.log(response.data);
-                if (response.data.success) {
-                    this.$emit('saved', response.data.module)
-                }
-            })
+            this.$http.post('/api/admin/save-component', data)
+                .then(response => {
+                    console.log(response.data);
+                    if (response.data.success) {
+                        this.$emit('saved', response.data.module)
+                        this.closeComponent()
+                    }
+                })
         },
         formatRequest: function(obj) {
             let form = new FormData()
@@ -142,7 +157,8 @@ export default {
                             form.append('file', content[hasFile])
                         }
                         form.append(key, JSON.stringify(content))
-                    } else {
+                    }
+                    else {
                         form.append(key, obj[key])
                     }
                 }
@@ -164,12 +180,13 @@ export default {
         },
         deleteComponent: function() {
             let url = '/api/admin/delete-component/' + this.moduleId
-            this.$http.delete(url).then(response => {
-                // console.log(response.data);
-                if (response.data.success) {
-                    this.$emit('deleted', response.data.module)
-                }
-            })
+            this.$http.delete(url)
+                .then(response => {
+                    // console.log(response.data);
+                    if (response.data.success) {
+                        this.$emit('deleted', response.data.module)
+                    }
+                })
         }
     },
     mounted: function() {

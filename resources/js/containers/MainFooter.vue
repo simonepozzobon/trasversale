@@ -50,7 +50,7 @@ export default {
 @import '~styles/shared';
 
 .main-footer {
-    background-color: $dark-green;
+    background-color: $primary;
     height: 100%;
 
     &__container {

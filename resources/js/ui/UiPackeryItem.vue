@@ -82,13 +82,14 @@ export default {
         bgClass: function() {
             if (this.img) {
                 return 'has-image-bg'
-            } else if (this.bgColor) {
+            }
+            else if (this.bgColor) {
                 return 'bg-' + this.bgColor
             }
         },
         widthClass: function() {
             if (this.width) {
-                return 'col-md-'+this.width
+                return 'col-md-' + this.width
             }
             return 'col'
         },
@@ -100,7 +101,7 @@ export default {
         },
         bgColorClass: function() {
             if (this.bgColor && !this.img) {
-                return 'bg-'+this.bgColor
+                return 'bg-' + this.bgColor
             }
             return null
         },
@@ -126,7 +127,7 @@ export default {
     methods: {
         setBackground: function() {
             if (this.img) {
-                this.$refs.item.style.backgroundImage = 'url('+this.img+')'
+                this.$refs.item.style.backgroundImage = 'url(' + this.img + ')'
             }
 
             if (this.type == 'module' && this.subType) {
@@ -189,10 +190,12 @@ export default {
 
     &__title {
         text-transform: uppercase;
-        color: $white;
+        color: $black;
         font-family: $font-family-sans-serif-var;
-        font-size: $font-size-base * 0.8;
+        font-size: $font-size-base * 1.8;
         letter-spacing: 0.05em;
+        padding: $spacer;
+        font-weight: 600;
     }
 
     &--hoverable &__overlay {
@@ -215,7 +218,7 @@ export default {
     &--hoverable:hover & {
         &__overlay {
             opacity: 1;
-            background-color: rgba($primary, .9);
+            background-color: rgba($yellow, .95);
             transition: $transition-base;
         }
     }

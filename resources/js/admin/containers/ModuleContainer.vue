@@ -16,6 +16,7 @@
             :model="item.modulable_type"
             :model-idx="item.modulable_id"
             :is-edit="isEdit"
+            :is-new="item.isNew"
             :module-id="item.id"
             :values="content"
             @changed="formatTempData"
@@ -250,6 +251,9 @@ export default {
     mounted: function() {
         if (this.item.hasOwnProperty('isNew') && this.item.isNew) {
             this.$nextTick(this.selected)
+        }
+        else {
+            this.item.isNew = false
         }
     }
 }
