@@ -11,14 +11,20 @@
         </div>
         <div class="team-member__social">
             <div v-for="(social, i, key) in this.socials">
-                <a :href="social.value" v-if="social.name == 'twitter'">T</a>
-                <a :href="social.value" v-else>Ln</a>
+                <a :href="social.value" v-if="social.name == 'twitter'">
+                    <twitter />
+                </a>
+                <a :href="social.value" v-else>
+                    <facebook />
+                </a>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import { Facebook, Twitter } from '../icons'
+
 export default {
     name: 'UiTeamSingle',
     props: {
@@ -30,6 +36,10 @@ export default {
             type: Object,
             default: function() {}
         }
+    },
+    components: {
+        Facebook,
+        Twitter,
     },
     computed: {
         socials: function() {
@@ -77,7 +87,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
     &__sizer {
         width: 80%;
@@ -161,6 +171,7 @@ export default {
     &__name {
         display: inline-block;
         text-transform: uppercase;
+        text-align: center;
         position: relative;
         border-bottom: 4px solid $primary;
         line-height: 2;

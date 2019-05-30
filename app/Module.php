@@ -13,4 +13,8 @@ class Module extends Model
     public function modulable() {
         return $this->morphTo();
     }
+
+    public function modules() {
+        return $this->morphMany(Module::class, 'modulable');
+    }
 }

@@ -13,4 +13,8 @@ class StaticPage extends Model
     public function slug() {
         return $this->morphOne(Slug::class, 'sluggable');
     }
+
+    public function modules() {
+        return $this->morphMany(Module::class, 'modulable');
+    }
 }

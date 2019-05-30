@@ -1,23 +1,29 @@
 <template lang="html">
+        <!-- class="row no-gutters" -->
     <div
         v-packery="this.packeryOpts"
         class="row no-gutters"
-        ref="container">
+        ref="packery">
         <ui-packery-item
             ref="item"
             v-for="item in this.items"
-            :key="item.id"
+            :key="item.id | setUUID"
+            :type="item.type"
+            :sub-type="item.hasOwnProperty('sub_type') ? item.sub_type : null"
             :width="item.width"
             :height="item.height"
-            :color="item.bgColor"
+            :color="item.hasOwnProperty('color') ? item.color : null"
+            :bg-color="item.bgColor"
             :content="item.content"
             :gutter="gutter"
-            :img="item.img"/>
+            :img="item.thumb"/>
     </div>
 </template>
 
 <script>
+import { Uuid } from '../Utilities'
 import UiPackeryItem from './UiPackeryItem.vue'
+import {packeryEvents} from '../admin/PackeryTest'
 
 export default {
     name: 'PackeryContainer',
@@ -25,10 +31,7 @@ export default {
         UiPackeryItem,
     },
     props: {
-        items: {
-            type: Array,
-            default: function() {}
-        },
+        items: [Array, Object],
         units: {
             type: Number,
             default: 12,
@@ -42,11 +45,21 @@ export default {
         return {
             packeryOpts: {
                 itemSelector: ".packery-item",
-                percentPosition: true
+                percentPosition: true,
+                // containerStyle: null,
             },
             count: 0,
             maxHeight: 0,
             unitSize: 0,
+        }
+    },
+    watch: {
+        items: function(items) {
+        }
+    },
+    filters: {
+        setUUID: function(value) {
+            return Uuid.get()
         }
     },
     methods: {
@@ -57,12 +70,13 @@ export default {
             }
         },
         getContainerWidth: function() {
-            let container = this.$refs.container.getBoundingClientRect().width
+            let container = this.$refs.packery.getBoundingClientRect().width
             this.unitSize = Math.round(container / this.units)
+            // console.log(container, this.unitSize);
             this.$nextTick(() => {
                 this.setUnitHeight()
             })
-        }
+        },
     },
     mounted: function() {
         this.getContainerWidth()
@@ -70,5 +84,11 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
+@import '~styles/shared';
+
+.packery-container {
+    position: relative;
+}
+
 </style>

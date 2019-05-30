@@ -1,11 +1,11 @@
 <template lang="html">
     <nav class="col-md-2 d-none d-md-block sidebar admin-sidebar">
         <div class="sidebar-sticky">
-            <h5 class="text-light pl-3">Pagine</h5>
+            <h5 class="text-dark pl-3">Pagine</h5>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" @click="goTo($event, 'homepage')">
-                        Home <span class="sr-only">(current)</span>
+                    <a class="nav-link" href="#" @click.prevent="$root.goTo('home')">
+                        Admin Home <span class="sr-only">(current)</span>
                     </a>
                 </li>
                 <li
@@ -15,7 +15,8 @@
                         class="nav-link"
                         :href="'#collapse-'+page.id"
                         data-toggle="collapse"
-                        :data-target="'#collapse-'+page.id">
+                        :data-target="'#collapse-'+page.id"
+                        @click.prevent="$root.goToWithParams('page', { page: page.id })">
 
                         {{ page.title }} <span v-if="page.sub_pages.length > 0">+</span>
                     </a>
@@ -25,15 +26,29 @@
                                 class="nav-item"
                                 v-for="sub in page.sub_pages"
                                 :key="sub.id">
-                                <a class="nav-link" href="#" @click="goToSub($event, sub)">
+                                <a class="nav-link" href="#" @click.prevent="$root.goToWithParams('sub', { page: page.id, sub: sub.id })">
                                     {{ sub.title }}
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <span class="nav-link">------</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" @click.prevent="$root.goTo('corsi')">
+                        Corsi
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" @click.prevent="$root.goTo('notizie')">
+                        Notizie
+                    </a>
+                </li>
             </ul>
             <div class="divider"></div>
+
         </div>
     </nav>
 </template>
@@ -48,7 +63,12 @@ export default {
         },
         goToSub: function(event, sub) {
             event.preventDefault()
-            let route = { name: 'sub', params: { id: sub.id } }
+            let route = {
+                name: 'sub',
+                params: {
+                    id: sub.id
+                }
+            }
             console.log(route);
             this.$router.push(route)
         }
@@ -72,7 +92,7 @@ export default {
     .divider {
         width: 10%;
         height: 1px;
-        margin: $spacer $spacer;
+        margin: $spacer;
         background-color: rgba($light, .3);
     }
 

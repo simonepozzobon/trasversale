@@ -1,5 +1,5 @@
 <template lang="html">
-    <div>
+    <div class="admin-page">
         <top-bar></top-bar>
         <div class="container-fluid p-0">
             <div class="row no-gutters">

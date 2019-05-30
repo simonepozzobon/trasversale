@@ -1,0 +1,113 @@
+<template lang="html">
+    <div class="ui-simple-grid">
+        <ui-row>
+            <ui-block
+                :size="12"
+                :has-container="false">
+                    <ui-button
+                        v-for="(cat, i) in categories"
+                        :key="i"
+                        class="mr-3"
+                        :title="cat.title"
+                        color="primary"
+                        :has-container="false"
+                        :has-margin="true"
+                        display="inline-block"
+                        :is-active="cat.id == currentId"
+                        :event-params="cat.id"
+                        @click="filterNews"/>
+            </ui-block>
+        </ui-row>
+        <ui-row>
+            <ui-simple-grid-loop
+                v-for="(block, i) in filtered"
+                :key="i"
+                :block="block"
+                @category="addCategory"
+                @filter-category="filterNews"/>
+        </ui-row>
+    </div>
+</template>
+
+<script>
+import UiSimpleGridLoop from './UiSimpleGridLoop.vue'
+import UiBlock from './UiBlock.vue'
+import UiButton from './UiButton.vue'
+import UiRow from './UiRow.vue'
+export default {
+    name: 'UiSimpleGrid',
+    components: {
+        UiBlock,
+        UiButton,
+        UiRow,
+        UiSimpleGridLoop,
+    },
+    props: {
+        blocks: {
+            type: Array,
+            default: function() {},
+        },
+    },
+    data: function() {
+        return {
+            categories: [],
+            filtered: [],
+            currentId: null,
+        }
+    },
+    methods: {
+        setBlocks: function(id = false) {
+            // if (id) {
+            //     this.filtered = this.blocks.filter(block => block.id == id)
+            // }
+        },
+        addCategory: function(category, blockID) {
+            let idx = this.categories.findIndex(single => single.id == category.id)
+            if (idx < 0) {
+                let categoryFormatted = {
+                    ...category,
+                    blockIds: [blockID]
+                }
+                this.categories.push(categoryFormatted)
+            } else {
+                let ids = this.categories[idx].blockIds
+                ids.push(blockID)
+                this.categories[idx] = {
+                    ...this.categories[idx],
+                    blockIds: ids
+                }
+            }
+
+            // console.log(this.categories);
+        },
+        filterNews: function(id) {
+            // console.log(id);
+            let category = this.categories.filter(category => category.id == id)[0]
+            if (category) {
+                if (category.id != this.currentId) {
+                    // https://stackoverflow.com/questions/4607991/javascript-transform-object-into-array
+                    let ids = Object.keys(category.blockIds).map(key => category.blockIds[key])
+                    this.currentId = category.id
+                    this.filtered = this.blocks.filter(function(e){
+                        return this.indexOf(e.id) > -1
+                    }, ids)
+                }
+
+                else {
+                    this.filtered = this.blocks
+                    this.currentId = null
+                }
+            }
+        },
+    },
+    created: function() {
+        this.filtered = this.blocks
+    },
+    mounted: function() {
+    },
+}
+</script>
+
+<style lang="scss" scoped>
+@import '~styles/shared';
+</style>

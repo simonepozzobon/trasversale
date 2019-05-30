@@ -20,6 +20,7 @@ export default {
 @import '~styles/shared';
 
 .sidebar-title {
+    margin-bottom: $spacer * $line-height-base / 2;
     border-top: 2px solid $black;
 
     &__content {

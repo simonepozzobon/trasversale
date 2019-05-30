@@ -1,23 +1,46 @@
 require('./bootstrap');
 
-import Vue from 'vue'
-
-import VuePackeryPlugin from 'vue-packery-plugin'
+import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
+import MainTemplate from './containers/MainTemplate.vue'
+import Vue from 'vue'
+import VuePackeryPlugin from 'vue-packery-plugin'
+import VueRouter from 'vue-router'
 
+import routes from './routes'
+
+Vue.use(VueRouter)
 Vue.use(VuePackeryPlugin)
 Vue.use(BootstrapVue)
 
-import MainContent from './containers/MainContent.vue'
-import MainGridContainer from './containers/MainGridContainer.vue'
-import SidebarCalendar from './components/SidebarCalendar.vue'
-import SidebarInformation from './components/SidebarInformation.vue'
+Vue.prototype.$http = axios
+
+const router = new VueRouter({
+    mode: 'history',
+    dir: __dirname,
+    routes: routes,
+})
 
 const app = new Vue({
+    router,
     components: {
-        MainContent,
-        MainGridContainer,
-        SidebarCalendar,
-        SidebarInformation,
+        MainTemplate,
+    },
+    data: function() {
+        return {
+            sidebarPaddingTop: false,
+        }
+    },
+    methods: {
+        goTo: function(name) {
+            this.$router.push({ name: name })
+        },
+        goToWithParams: function(name, params) {
+            // console.log(name, params);
+            this.$router.push({ name: name, params: params })
+        }
+    },
+    mounted: function() {
+        // console.log(this.$route.name);
     }
 }).$mount('#app');

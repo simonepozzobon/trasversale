@@ -1,10 +1,24 @@
 <template lang="html">
-    <div> Ciao </div>
+    <page-template title="Amministrazione">
+    </page-template>
 </template>
 
 <script>
+import PageTemplate from '../containers/PageTemplate.vue'
+import {
+    UiModuleContainer
+} from '../../ui'
+
 export default {
-    name: 'Home'
+    components: {
+        PageTemplate,
+        UiModuleContainer,
+    },
+    data: function() {
+        return {
+            modules: [],
+        }
+    }
 }
 </script>
 
