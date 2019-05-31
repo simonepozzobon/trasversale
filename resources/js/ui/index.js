@@ -10,6 +10,7 @@ import UiPackeryContainer from './UiPackeryContainer.vue'
 import UiPackeryItem from './UiPackeryItem.vue'
 import UiParagraph from './UiParagraph.vue'
 import UiPartner from './UiPartner.vue'
+import UiQuote from './UiQuote.vue'
 import UiRow from './UiRow.vue'
 import UiSharing from './UiSharing.vue'
 import UiSidebarImage from './UiSidebarImage.vue'
@@ -33,6 +34,7 @@ export {
     UiPackeryItem,
     UiParagraph,
     UiPartner,
+    UiQuote,
     UiRow,
     UiSharing,
     UiSidebarImage,

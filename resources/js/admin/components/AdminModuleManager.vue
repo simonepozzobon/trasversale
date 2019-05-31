@@ -7,7 +7,7 @@
         @click="selected">
 
         <ui-title
-            v-if="module.type == 'title'"
+            v-if="module.type === 'title'"
             ref="title"
             :title="content.hasOwnProperty('content') ? content.content : 'titolo'"
             :is-column="content.hasOwnProperty('isColumn') ? content.isColumn : null "
@@ -16,20 +16,20 @@
             :font-size="content.hasOwnProperty('fontSize') ? content.fontSize : null"/>
 
         <admin-ui-image
-            v-else-if="module.type == 'image'"
+            v-else-if="module.type === 'image'"
             :src="content.src"
             :alt="content.alt"/>
 
         <ui-paragraph
-            v-else-if="module.type == 'paragraph'"
+            v-else-if="module.type === 'paragraph'"
             :content="content.content"/>
 
         <ui-button
-            v-else-if="module.type == 'button'"
+            v-else-if="module.type === 'button'"
             :text="content.text"/>
 
         <ui-team
-            v-else-if="module.type == 'team'"
+            v-else-if="module.type === 'team'"
             :people="content.people"
             :grid-col="content.gridCol"/>
 
@@ -44,14 +44,19 @@
             :blocks="content.blocks"/>
 
         <admin-ui-module-row
-            v-else-if="module.type == 'row'"
+            v-else-if="module.type === 'row'"
             :columns="content"
             :is-open="isOpen"
             @update-size="updateSize"/>
 
         <ui-video
-            v-else-if="module.type == 'video'"
+            v-else-if="module.type === 'video'"
             :url="this.content.url"/>
+
+        <ui-quote
+            v-else-if="module.type === 'quote'"
+            :quote="content.content"
+            :source="content.source"/>
 
         <div v-else>
             {{ module }}
@@ -157,6 +162,8 @@ export default {
         this.$options.components.UiTeam = require('../../ui/UiTeam.vue')
             .default
         this.$options.components.UiSimpleGrid = require('../../ui/UiSimpleGrid.vue')
+            .default
+        this.$options.components.UiQuote = require('../../ui/UiQuote.vue')
             .default
         this.$options.components.UiVideo = require('../../ui/UiVideo.vue')
             .default
