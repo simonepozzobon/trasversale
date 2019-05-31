@@ -20,6 +20,7 @@
             :module-id="item.id"
             :values="content"
             @changed="formatTempData"
+            @saved="saveComponent"
             @close="closeComponent"
             @deleted="deleteComponent"/>
     </div>
@@ -96,6 +97,13 @@ export default {
             this.isOpen = false
             this.hide()
             this.$emit('deleted', this.item)
+        },
+        saveComponent: function(component) {
+            // console.log(component);
+            this.item.modulable_type = component.modulable_type
+            this.item.modulable_id = Number(component.modulable_id)
+            this.item.id = Number(component.id)
+            this.item.isNew = false
         },
         setPreview: function(obj) {
             switch (this.item.type) {
