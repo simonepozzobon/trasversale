@@ -201,7 +201,14 @@ class AdminController extends Controller
                 ];
 
                 // dd($block);
-                $element = isset($block->id) ? Element::find($block->id) : new Element();
+                $has_block = isset($block->id);
+                if ($has_block) {
+                    $element = Element::find($block->id);
+                    $element->delete();
+                    $element = new Element();
+                } else {
+                    $element = new Element();
+                }
 
                 $element->grid_id = $grid->id;
                 $element->elementable_type = $model;
