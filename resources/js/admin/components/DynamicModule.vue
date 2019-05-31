@@ -16,7 +16,8 @@
 import {
     clone,
     isEqual
-} from '../../Utilities'
+}
+from '../../Utilities'
 import DynamicModuleItem from './DynamicModuleItem.vue'
 
 export default {
@@ -79,7 +80,8 @@ export default {
             // console.log('Dynamic module è diverso', !isEqual(prev, value), key);
             if (!isEqual(prev, value) && type != 'file-input') {
                 this.emitChanged(key, value)
-            } else if (type === 'file-input') {
+            }
+            else if (type === 'file-input') {
                 this.emitChanged(key, value)
             }
 
@@ -99,13 +101,15 @@ export default {
                             this.$refs.module[idx].src = e.target.result
                         }
                         reader.readAsDataURL(value)
-                    } else if (option.mime == 'video-url') {
+                    }
+                    else if (option.mime == 'video-url') {
                         let url
                         value.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
 
                         if (RegExp.$3.indexOf('youtu') > -1) {
                             url = 'https://www.youtube.com/embed/' + RegExp.$6
-                        } else if (RegExp.$3.indexOf('vimeo') > -1) {
+                        }
+                        else if (RegExp.$3.indexOf('vimeo') > -1) {
                             url = 'https://player.vimeo.com/video/' + RegExp.$6
                         }
                         this.$refs.module[idx].src = url

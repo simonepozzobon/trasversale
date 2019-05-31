@@ -93,7 +93,9 @@ export default {
             this.component = clone(newObj)
         },
         deleteComponent: function() {
-
+            this.isOpen = false
+            this.hide()
+            this.$emit('deleted', this.item)
         },
         setPreview: function(obj) {
             switch (this.item.type) {

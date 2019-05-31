@@ -21,11 +21,12 @@
         </div>
         <div class="page-template__container container">
             <module-container
-                v-for="(module, i) in modules"
+                v-for="(module, i) in cached"
                 :key="i"
                 :item="module"
                 :model="model"
-                :model-idx="modelIdx"/>
+                :model-idx="modelIdx"
+                @deleted="deleteComponent"/>
         </div>
         <div class="page-template__footer container">
             <button
@@ -47,7 +48,8 @@ import EditPanel from '../components/EditPanel.vue'
 import ModuleContainer from './ModuleContainer.vue'
 import {
     Uuid
-} from '../../Utilities'
+}
+from '../../Utilities'
 
 export default {
     name: 'NewPageTemplate',
@@ -97,32 +99,45 @@ export default {
             if (modules.length == 0) {
                 this.debug()
             }
+            else {
+                this.init()
+            }
         }
     },
     methods: {
+        init: function() {
+            // imposta una variabile intermedia per poter modificare i moduli
+            this.cached = this.modules
+        },
         debug: function() {
             // this.moduleType = 'row'
             // this.panel = true
-            this.newComponent('grid')
+            // this.newComponent('grid')
         },
-        addRow: function() {
-            // console.log('aggiungi');
-            let opts = {
-                columns: 2,
-            }
-
-            let newRow = {
-                type: 'row',
-                isNew: true,
-                modulable_id: this.modelIdx,
-                modulable_type: this.model,
-                content: null,
-            }
-
-            this.modules.push(newRow)
-        },
+        // addRow: function() {
+        //     // console.log('aggiungi');
+        //     let opts = {
+        //         columns: 2,
+        //     }
+        //
+        //     let newRow = {
+        //         type: 'row',
+        //         isNew: true,
+        //         modulable_id: this.modelIdx,
+        //         modulable_type: this.model,
+        //         content: null,
+        //     }
+        //
+        //     this.modules.push(newRow)
+        // },
         addComponent: function() {
             this.$refs.componentSelector.show()
+        },
+        deleteComponent: function(component) {
+            let idx = this.cached.indexOf(component)
+            if (idx > -1) {
+                this.cached.splice(idx, 1)
+            }
         },
         dismissModal: function() {
             this.$refs.componentSelector.hide()
@@ -133,14 +148,15 @@ export default {
 
             this.isEdit = false
             // this.panel = true
-            let newModule = {
+            const newModule = {
                 type: type,
                 isNew: true,
                 modulable_id: this.modelIdx,
                 modulable_type: this.model,
                 content: JSON.stringify({}),
             }
-            this.modules.push(newModule)
+            this.cached.push(newModule)
+            // this.modules.push(newModule)
         },
         setModule: function(module) {
             console.log('deprecata');
@@ -178,6 +194,7 @@ export default {
         }
     },
     mounted: function() {
+        this.init()
         // this.debug()
         // this.reset()
         // this.$nextTick(this.debug)

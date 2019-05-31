@@ -101,7 +101,7 @@ export default {
             if (this.module.type == 'grid') {
                 if (this.content.hasOwnProperty('type') && this.content.hasOwnProperty('blocks')) {
                     if (this.content.type == 'packery' && this.content.blocks.length > 0) {
-                        console.log('packery');
+                        // console.log('packery');
                         return true
                     }
                 }
@@ -113,7 +113,7 @@ export default {
             if (this.module.type == 'grid') {
                 if (this.content.hasOwnProperty('type') && this.content.hasOwnProperty('blocks')) {
                     if (this.content.type == 'simple' && this.content.blocks.length > 0) {
-                        console.log('simple');
+                        // console.log('simple');
                         return true
                     }
                 }
@@ -164,9 +164,11 @@ export default {
     mounted: function() {
         // console.log(this.module);
         if (this.module.type == 'title') {
-            let height = this.$refs.title.$el.offsetHeight + 'px'
-            this.$root.sidebarPaddingTop = height
-            this.$emit('title', height)
+            if (this.$refs.title) {
+                let height = this.$refs.title.$el.offsetHeight + 'px'
+                this.$root.sidebarPaddingTop = height
+                this.$emit('title', height)
+            }
         }
     },
     beforeDestroy: function() {
@@ -174,8 +176,6 @@ export default {
             this.$root.sidebarPaddingTop = false
             this.$emit('title', false)
         }
-
-
     }
 }
 </script>
