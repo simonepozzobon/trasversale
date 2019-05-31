@@ -177,9 +177,9 @@ export default {
                             })
                         }
 
-                        if (i == 2) {
-                            console.log(newBlock, block);
-                        }
+                        // if (i == 2) {
+                        //     console.log(newBlock, block);
+                        // }
 
                         return newBlock
                     })
