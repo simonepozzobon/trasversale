@@ -69,6 +69,8 @@
 
     <ui-calendar v-else-if="module.type === 'calendar'" />
 
+    <ui-contact-form v-else-if="module.type === 'contact-form'" />
+
     <div v-else>
         {{ module }}
     </div>
@@ -131,6 +133,8 @@ export default {
         this.$options.components.UiQuote = require('../ui/UiQuote.vue')
             .default
         this.$options.components.UiCalendar = require('../ui/UiCalendar.vue')
+            .default
+        this.$options.components.UiContactForm = require('../ui/UiContactForm.vue')
             .default
     },
     mounted: function() {

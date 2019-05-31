@@ -1,5 +1,6 @@
 import Calendar from './Calendar.js'
 import Column from './Column.js'
+import ContactForm from './ContactForm.js'
 import Grid from './Grid.js'
 import Image from './Image.js' // fatto
 import Paragraph from './Paragraph.js' // fatto
@@ -11,6 +12,7 @@ import Video from './Video.js' // fatto
 export {
     Calendar,
     Column,
+    ContactForm,
     Grid,
     Image,
     Paragraph,

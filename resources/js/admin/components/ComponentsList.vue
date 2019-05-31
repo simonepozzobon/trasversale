@@ -12,6 +12,7 @@
                 <option value="grid">Griglia</option>
                 <option value="row">Griglia Contenuti</option>
                 <option value="calendar">Calendario</option>
+                <option value="contact-form">Modulo Contatti</option>
             </select>
         </div>
 
