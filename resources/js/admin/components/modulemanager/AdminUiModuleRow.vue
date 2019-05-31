@@ -15,7 +15,8 @@
 import AdminUiModuleBlock from './AdminUiModuleBlock.vue'
 import {
     UiRow
-} from '../../../ui'
+}
+from '../../../ui'
 
 export default {
     name: 'AdminUiModuleRow',
@@ -38,7 +39,10 @@ export default {
             this.$emit('update-size', data)
         },
     },
-    created: function() {}
+    created: function() {},
+    mounted: function() {
+        console.log('ciao', this.columns, this.isOpen);
+    },
 }
 </script>
 
