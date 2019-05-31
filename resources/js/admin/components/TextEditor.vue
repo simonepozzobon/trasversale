@@ -1,83 +1,51 @@
 <template>
-    <div class="editor">
-        <editor-menu-bar
-            :editor="editor"
-            v-slot="{ commands, isActive }">
+<div class="editor">
+    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
 
-            <div class="menubar">
-                <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.bold() }"
-                    @click="commands.bold">
-                    B
-                </button>
+        <div class="menubar">
+            <button class="menubar__button" :class="{ 'is-active': isActive.bold() }" @click="commands.bold">
+                B
+            </button>
 
-                <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.italic() }"
-                    @click="commands.italic">
-                    I
-                </button>
+            <button class="menubar__button" :class="{ 'is-active': isActive.italic() }" @click="commands.italic">
+                I
+            </button>
 
-                <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.strike() }"
-                    @click="commands.strike">
-                    S
-                </button>
+            <button class="menubar__button" :class="{ 'is-active': isActive.strike() }" @click="commands.strike">
+                S
+            </button>
 
-                <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.underline() }"
-                    @click="commands.underline">
-                    U
-                </button>
+            <button class="menubar__button" :class="{ 'is-active': isActive.underline() }" @click="commands.underline">
+                U
+            </button>
 
-                <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.bullet_list() }"
-                    @click="commands.bullet_list">
-                    List
-                </button>
+            <button class="menubar__button" :class="{ 'is-active': isActive.bullet_list() }" @click="commands.bullet_list">
+                List
+            </button>
 
-            </div>
-        </editor-menu-bar>
-        <editor-menu-bubble
-            class="menububble"
-            :editor="editor"
-            @hide="hideLinkMenu"
-            v-slot="{ commands, isActive, getMarkAttrs, menu }"
-        >
-            <div
-                class="menububble"
-                :class="{ 'is-active': menu.isActive }"
-                :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`"
-            >
+        </div>
+    </editor-menu-bar>
+    <editor-menu-bubble class="menububble" :editor="editor" @hide="hideLinkMenu" v-slot="{ commands, isActive, getMarkAttrs, menu }">
+        <div class="menububble" :class="{ 'is-active': menu.isActive }" :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`">
 
             <form class="menububble__form" v-if="linkMenuIsActive" @submit.prevent="setLinkUrl(commands.link, linkUrl)">
-                <input class="menububble__input" type="text" v-model="linkUrl" placeholder="https://" ref="linkInput" @keydown.esc="hideLinkMenu"/>
+                <input class="menububble__input" type="text" v-model="linkUrl" placeholder="https://" ref="linkInput" @keydown.esc="hideLinkMenu" />
                 <button class="menububble__button" @click="setLinkUrl(commands.link, null)" type="button">
                     Elimina
                 </button>
             </form>
 
             <template v-else>
-                <button
-                    class="menububble__button"
-                    @click="showLinkMenu(getMarkAttrs('link'))"
-                    :class="{ 'is-active': isActive.link() }"
-                >
+                <button class="menububble__button" @click="showLinkMenu(getMarkAttrs('link'))" :class="{ 'is-active': isActive.link() }">
                     <span>{{ isActive.link() ? 'Modifica Link' : 'Aggiungi Link'}}</span>
                 </button>
             </template>
 
-            </div>
-        </editor-menu-bubble>
-        <editor-content
-            class="editor__content"
-            :editor="editor">
-        </editor-content>
-    </div>
+        </div>
+    </editor-menu-bubble>
+    <editor-content class="editor__content" :editor="editor">
+    </editor-content>
+</div>
 </template>
 
 <script>
@@ -89,7 +57,8 @@ import {
     EditorContent,
     EditorMenuBar,
     EditorMenuBubble,
-} from 'tiptap'
+}
+from 'tiptap'
 
 
 import {
@@ -110,7 +79,8 @@ import {
     Strike,
     Underline,
     History,
-} from 'tiptap-extensions'
+}
+from 'tiptap-extensions'
 
 export default {
     name: 'TextEditor',
@@ -184,7 +154,9 @@ export default {
             this.linkMenuIsActive = false
         },
         setLinkUrl: function(command, url) {
-            command({ href: url })
+            command({
+                href: url
+            })
             this.hideLinkMenu()
             this.editor.focus()
         },

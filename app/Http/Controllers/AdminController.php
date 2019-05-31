@@ -20,10 +20,10 @@ class AdminController extends Controller
         $request = new Request();
         $request->replace([
             "id" => "null",
-            "model_id" => "13",
-            "model" => "App\\SubPage",
-            "module" => "title",
-            "data" => "{\"content\":\"gfgertegfdgdsgsd\",\"fontSize\":\"h2\",\"color\":null,\"isColumn\":null,\"uppercase\":null}"
+            "model_id" => "1",
+            "model" => "App\\StaticPage",
+            "module" => "grid",
+            "data" => "{\"title\":\"titolo\",\"type\":\"packery\",\"elements\":{\"model\":\"last-mix\",\"post_count\":10,\"blocks\":[{\"i\":0,\"x\":0,\"y\":0,\"w\":2,\"h\":2,\"idx\":0,\"order\":0,\"id\":1,\"title\":\"titolo1\",\"thumb\":null,\"created_at\":null,\"updated_at\":null,\"type\":\"post\",\"selected\":true,\"slug\":null},{\"i\":1,\"x\":2,\"y\":0,\"w\":2,\"h\":2,\"idx\":1,\"order\":1,\"id\":1,\"category_id\":1,\"title\":\"Modello trento per il sostegno\",\"author\":\"Massimo Rossi\",\"thumb\":\"\/dummies\/main-grid\/dummy_24.jpg\",\"created_at\":null,\"updated_at\":null,\"type\":\"news\",\"selected\":true,\"slug\":{\"id\":29,\"slug\":\"modello-trento\",\"sluggable_type\":\"App\\\\News\",\"sluggable_id\":1,\"created_at\":null,\"updated_at\":null},\"category\":{\"id\":1,\"title\":\"Formazione\",\"created_at\":null,\"updated_at\":null}},{\"i\":2,\"x\":4,\"y\":0,\"w\":2,\"h\":2,\"idx\":2,\"order\":2,\"id\":5,\"category_id\":6,\"title\":\"Corso di formazione finanziaria\",\"price\":350,\"thumb\":\"\/dummies\/main-grid\/dummy_13.jpg\",\"options\":null,\"created_at\":null,\"updated_at\":null,\"type\":\"product\",\"selected\":true,\"slug\":{\"id\":28,\"slug\":\"coaching-per-genitori-2\",\"sluggable_type\":\"App\\\\Product\",\"sluggable_id\":5,\"created_at\":null,\"updated_at\":null},\"category\":{\"id\":6,\"title\":\"Formazione Finanziaria\",\"created_at\":null,\"updated_at\":null}},{\"i\":3,\"x\":6,\"y\":0,\"w\":2,\"h\":2,\"idx\":3,\"order\":3,\"id\":4,\"category_id\":5,\"title\":\"Corso Settore Agricolo\",\"price\":350,\"thumb\":\"\/dummies\/main-grid\/dummy_3.jpg\",\"options\":null,\"created_at\":null,\"updated_at\":null,\"type\":\"product\",\"selected\":true,\"slug\":{\"id\":26,\"slug\":\"coaching-per-gli-insegnanti-2\",\"sluggable_type\":\"App\\\\Product\",\"sluggable_id\":4,\"created_at\":null,\"updated_at\":null},\"category\":{\"id\":5,\"title\":\"Settore Agricolo\",\"created_at\":null,\"updated_at\":null}},{\"i\":4,\"x\":8,\"y\":0,\"w\":2,\"h\":2,\"idx\":4,\"order\":4,\"id\":3,\"category_id\":9,\"title\":\"Tutoring\",\"price\":350,\"thumb\":\"\/dummies\/main-grid\/dummy_14.jpg\",\"options\":null,\"created_at\":null,\"updated_at\":null,\"type\":\"product\",\"selected\":true,\"slug\":{\"id\":24,\"slug\":\"tutoring\",\"sluggable_type\":\"App\\\\Product\",\"sluggable_id\":3,\"created_at\":null,\"updated_at\":null},\"category\":{\"id\":9,\"title\":\"Tutoring\",\"created_at\":null,\"updated_at\":null}},{\"i\":5,\"x\":10,\"y\":0,\"w\":2,\"h\":2,\"idx\":5,\"order\":5,\"id\":2,\"category_id\":4,\"title\":\"Coaching Per Genitori\",\"price\":350,\"thumb\":\"\/dummies\/main-grid\/dummy_13.jpg\",\"options\":null,\"created_at\":null,\"updated_at\":null,\"type\":\"product\",\"selected\":true,\"slug\":{\"id\":23,\"slug\":\"coaching-per-genitori\",\"sluggable_type\":\"App\\\\Product\",\"sluggable_id\":2,\"created_at\":null,\"updated_at\":null},\"category\":{\"id\":4,\"title\":\"Coaching\",\"created_at\":null,\"updated_at\":null}},{\"i\":6,\"x\":0,\"y\":1,\"w\":2,\"h\":2,\"idx\":6,\"order\":6,\"id\":1,\"category_id\":4,\"title\":\"Coaching Per Gli Insegnanti\",\"price\":350,\"thumb\":\"\/dummies\/main-grid\/dummy_3.jpg\",\"options\":\"\",\"created_at\":null,\"updated_at\":null,\"type\":\"product\",\"selected\":true,\"slug\":{\"id\":22,\"slug\":\"coaching-per-gli-insegnanti\",\"sluggable_type\":\"App\\\\Product\",\"sluggable_id\":1,\"created_at\":null,\"updated_at\":null},\"category\":{\"id\":4,\"title\":\"Coaching\",\"created_at\":null,\"updated_at\":null}},{\"i\":7,\"x\":2,\"y\":1,\"w\":2,\"h\":2,\"idx\":7,\"order\":7,\"id\":6,\"category_id\":1,\"title\":\"Intelligenza artificiale con il botto\",\"author\":\"Mario Rossi\",\"thumb\":\"\/dummies\/main-grid\/dummy_17.jpg\",\"created_at\":null,\"updated_at\":null,\"type\":\"news\",\"selected\":true,\"slug\":{\"id\":34,\"slug\":\"intelligenza-artificiale\",\"sluggable_type\":\"App\\\\News\",\"sluggable_id\":6,\"created_at\":null,\"updated_at\":null},\"category\":{\"id\":1,\"title\":\"Formazione\",\"created_at\":null,\"updated_at\":null}},{\"i\":8,\"x\":4,\"y\":1,\"w\":2,\"h\":2,\"idx\":8,\"order\":8,\"id\":5,\"category_id\":3,\"title\":\"Reddito di cittadinanza: fetta nemica dell'eficacia\",\"author\":\"Mario Rossi\",\"thumb\":\"\/dummies\/main-grid\/dummy_19.jpg\",\"created_at\":null,\"updated_at\":null,\"type\":\"news\",\"selected\":true,\"slug\":{\"id\":33,\"slug\":\"reddito-cittadinanza-2\",\"sluggable_type\":\"App\\\\News\",\"sluggable_id\":5,\"created_at\":null,\"updated_at\":null},\"category\":{\"id\":3,\"title\":\"Libri\",\"created_at\":null,\"updated_at\":null}},{\"i\":9,\"x\":6,\"y\":1,\"w\":2,\"h\":2,\"idx\":9,\"order\":9,\"id\":4,\"category_id\":3,\"title\":\"Modello trento per il sostegno\",\"author\":\"Giovanni Rossi\",\"thumb\":\"\/dummies\/main-grid\/dummy_21.jpg\",\"created_at\":null,\"updated_at\":null,\"type\":\"news\",\"selected\":true,\"slug\":{\"id\":32,\"slug\":\"modello-trento-2\",\"sluggable_type\":\"App\\\\News\",\"sluggable_id\":4,\"created_at\":null,\"updated_at\":null},\"category\":{\"id\":3,\"title\":\"Libri\",\"created_at\":null,\"updated_at\":null}}]}}"
         ]);
 
         $result = $this->save_component($request);
@@ -104,6 +104,7 @@ class AdminController extends Controller
         } else {
             $module = Module::find($request->id);
         }
+
         $module = $this->set_module($module, $request);
 
         return [
@@ -216,6 +217,8 @@ class AdminController extends Controller
                 } else {
                     $element = new Element();
                 }
+                dd($block);
+                dd($element);
                 $element->grid_id = $grid->id;
                 $element->elementable_type = $model;
                 $element->elementable_id = $block->type_id;

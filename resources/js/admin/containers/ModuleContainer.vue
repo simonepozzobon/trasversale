@@ -163,8 +163,10 @@ export default {
                         }
                     }
 
-                    blocks = blocks.map(block => {
-                        return {
+                    // console.log(blocks);
+
+                    blocks = blocks.map((block, i) => {
+                        let newBlock = {
                             ...block,
                             height: block.h,
                             width: block.w,
@@ -174,6 +176,12 @@ export default {
                                 title: block.title,
                             })
                         }
+
+                        if (i == 2) {
+                            console.log(newBlock, block);
+                        }
+
+                        return newBlock
                     })
 
                     // console.log('blocchi', blocks);
