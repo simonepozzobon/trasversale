@@ -62,14 +62,18 @@ export default {
             this.dataObj = dataObj
         },
         setInitial: function(option) {
-            let key = option.key
-            if (option.hasOwnProperty('childrens') && option.childrens.length > 0) {
-                // console.log('children', key,  this.values);
-                return this.values
-            }
-            // console.log('not-children', key,  this.values[key] ? this.values[key] : null);
+            if (this.values) {
+                let key = option.key
+                if (option.hasOwnProperty('childrens') && option.childrens.length > 0) {
+                    // console.log('children', key,  this.values);
+                    return this.values
+                }
+                // console.log('not-children', key,  this.values[key] ? this.values[key] : null);
 
-            return this.values[key] ? this.values[key] : null
+                return this.values[key] ? this.values[key] : null
+            }
+
+            return null
         },
         emitChanged: function(key, value) {
             this.dataObj[key] = value

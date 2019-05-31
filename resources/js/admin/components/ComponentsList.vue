@@ -11,6 +11,7 @@
                 <option value="quote">Citazione</option>
                 <option value="grid">Griglia</option>
                 <option value="row">Griglia Contenuti</option>
+                <option value="calendar">Calendario</option>
             </select>
         </div>
 

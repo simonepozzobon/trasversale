@@ -1,3 +1,4 @@
+import Calendar from './Calendar.js'
 import Column from './Column.js'
 import Grid from './Grid.js'
 import Image from './Image.js' // fatto
@@ -8,6 +9,7 @@ import Title from './Title.js' // fatto
 import Video from './Video.js' // fatto
 
 export {
+    Calendar,
     Column,
     Grid,
     Image,

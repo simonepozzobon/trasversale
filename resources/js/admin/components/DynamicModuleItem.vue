@@ -278,6 +278,11 @@
         :cols-number="relatedValue"
     />
 
+    <dummy-module
+        v-else-if="option.type === 'info'"
+        :content="option.label"
+    />
+
     <div v-else>
         {{ option }}
     </div>
@@ -332,6 +337,7 @@ import {
     isEqual
 }
 from '../../Utilities'
+import DummyModule from './DummyModule.vue'
 import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
 import Swatches from 'vue-swatches'
 import TextEditor from './TextEditor.vue'
@@ -350,6 +356,7 @@ export default {
     name: 'DynamicModuleItem',
     components: {
         ColumnsPreview,
+        DummyModule,
         Swatches,
         TextEditor,
         GridLayout: VueGridLayout.GridLayout,

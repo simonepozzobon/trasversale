@@ -1,4 +1,5 @@
 import {
+    Calendar,
     Column,
     Grid,
     Image,
@@ -10,6 +11,7 @@ import {
 } from './modulesopts/index.js'
 
 const DynamicParams = [
+    Calendar,
     Column,
     Grid,
     Image,
