@@ -30,6 +30,7 @@ export default {
     },
     watch: {
         '$route.params': function(params) {
+            this.modules = []
             this.getPage(params.page)
         }
     },

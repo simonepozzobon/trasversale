@@ -96,11 +96,10 @@ export default {
             console.log('params cambiato', params);
         },
         modules: function(modules) {
+            this.init()
+
             if (modules.length == 0) {
                 this.debug()
-            }
-            else {
-                this.init()
             }
         }
     },

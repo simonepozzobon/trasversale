@@ -30,6 +30,7 @@ export default {
     },
     watch: {
         '$route.params': function(params) {
+            this.modules = []
             this.getPage(params.sub)
         }
     },
@@ -37,11 +38,12 @@ export default {
         getPage: function(id) {
             this.idx = Number(id)
 
-            this.$http.get('/api/admin/sub-page/' + id).then(response => {
-                this.title = response.data.title
-                this.modules = response.data.modules
-                // console.log(this.modules);
-            })
+            this.$http.get('/api/admin/sub-page/' + id)
+                .then(response => {
+                    this.title = response.data.title
+                    this.modules = response.data.modules
+                    // console.log(this.modules);
+                })
         },
         saved: function(module) {
             this.modules.push(module)
@@ -50,7 +52,8 @@ export default {
             let idx = this.modules.findIndex(item => item.id == module.id)
             if (idx > -1) {
                 this.modules.splice(idx, 1, module)
-            } else {
+            }
+            else {
                 this.modules.push(module)
             }
         },
