@@ -36,4 +36,8 @@ export default {
 
 <style lang="scss" scoped>
 @import '~styles/shared';
+
+.ui-quote {
+    padding-top: $spacer * $line-height-base;
+}
 </style>

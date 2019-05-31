@@ -98,4 +98,8 @@ export default {
 
 <style lang="scss" scoped>
 @import '~styles/shared';
+
+.ui-contact-form {
+    padding-top: $spacer * $line-height-base;
+}
 </style>
