@@ -34,11 +34,13 @@
 import {
     clone,
     Uuid
-} from '../../../Utilities'
+}
+from '../../../Utilities'
 import AdminPackeryItem from './AdminPackeryItem.vue'
 import {
     packeryEvents
-} from '../../PackeryTest'
+}
+from '../../PackeryTest'
 
 export default {
     name: 'PackeryContainer',
@@ -84,11 +86,18 @@ export default {
             return Uuid.get()
         },
         packery: function() {
-            return this.$refs.packery.packery
+            if (this.$refs.packery && this.$refs.packery.hasOwnProperty('packery')) {
+                return this.$refs.packery.packery
+            }
+
+            return false
         },
         packeryItems: function() {
             // console.log(this.packery.getItemElements());
-            return this.packery.items
+            if (this.packery) {
+                return this.packery.items
+            }
+            return []
         }
     },
     filters: {
@@ -125,7 +134,8 @@ export default {
             }
         },
         getContainerWidth: function() {
-            let container = this.$refs.packery.getBoundingClientRect().width
+            let container = this.$refs.packery.getBoundingClientRect()
+                .width
             this.unitSize = Math.round(container / this.units)
             this.$nextTick(() => {
                 this.setUnitHeight()
