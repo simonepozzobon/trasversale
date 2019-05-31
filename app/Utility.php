@@ -10,22 +10,21 @@ use Illuminate\Support\Facades\Storage;
 
 class Utility extends Model
 {
-    public static function generate_menu() {
+    public static function generate_menu()
+    {
         $pages = StaticPage::all();
 
-        $pages = $pages->transform(function($page, $key) {
+        $pages = $pages->transform(function ($page, $key) {
             $page->slug = $page->slug->slug;
 
             $sub_pages = $page->sub_pages;
-            $page->sub_pages = $sub_pages->transform(function($sub, $key) {
+            $page->sub_pages = $sub_pages->transform(function ($sub, $key) {
                 $has_slug = isset($sub->slug->slug);
                 if ($has_slug) {
                     $sub->slug = $sub->slug->slug;
                 } else {
-                    // dump($sub->slug);
                     $slug = collect();
                     $slug->slug = 'nessuno';
-
                     $sub->slug = $slug;
                 }
                 return $sub;
@@ -38,7 +37,8 @@ class Utility extends Model
     }
 
 
-    public static function save_image($file) {
+    public static function save_image($file)
+    {
         $filename = uniqid().'.'.$file->getClientOriginalExtension();
         $src = $file->storeAs('public/media', $filename);
 
@@ -53,8 +53,9 @@ class Utility extends Model
         // Edit files
         $img_thumbnail = Image::make($path.'/thumb_'.$filename)->fit(150)->save();
         $img_thumbnail_md = Image::make($path.'/thumb_md_'.$filename)->fit(400)->save();
-        $img_landscape = Image::make($path.'/landscape_'.$filename)->resize( 1920, null, function ($constraint) {
-            $constraint->aspectRatio(); $constraint->upsize();
+        $img_landscape = Image::make($path.'/landscape_'.$filename)->resize(1920, null, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
         })->save();
 
         $media = new Media;
@@ -67,22 +68,22 @@ class Utility extends Model
         return $media;
     }
 
-    public static function format_complex_modules($modules) {
-        return $modules->transform(function($module, $key) {
-
+    public static function format_complex_modules($modules)
+    {
+        return $modules->transform(function ($module, $key) {
             if ($module->type == 'grid') {
-                    $content = json_decode($module->content);
-                    $grid_id = $content->id;
+                $content = json_decode($module->content);
+                $grid_id = $content->id;
 
-                    $grid = Grid::with('elements.elementable')->find($grid_id);
-                    $blocks = array();
+                $grid = Grid::with('elements.elementable')->find($grid_id);
+                $blocks = array();
 
-                    foreach ($grid->elements as $key => $element) {
-                        $block = $element->elementable;
-                        $type = strtolower(str_replace('App\\', '', get_class($block)));
-                        $options = json_decode($element->options);
+                foreach ($grid->elements as $key => $element) {
+                    $block = $element->elementable;
+                    $type = strtolower(str_replace('App\\', '', get_class($block)));
+                    $options = json_decode($element->options);
 
-                        $grid_block = [
+                    $grid_block = [
                             'id' => $element->id,
                             'type' => $type,
                             'type_id' => $block->id,
@@ -93,7 +94,7 @@ class Utility extends Model
                             'created_at' => $block->created_at,
                         ];
 
-                        switch ($type) {
+                    switch ($type) {
                             case 'module':
                                 $sub_module = json_decode($block->content);
                                 $grid_block['sub_type'] = $block->type;
@@ -122,19 +123,17 @@ class Utility extends Model
                                 // dd($grid_block['content']);
                                 break;
                         }
-                        array_push($blocks, $grid_block);
-                    }
+                    array_push($blocks, $grid_block);
+                }
 
-                    $data = [
+                $data = [
                         'blocks' => $blocks,
                         'type' => $grid->type,
                         'options' => $grid->options,
                         'title' => $grid->title,
                     ];
-                    $module->content = json_encode($data);
-            }
-
-            else if ($module->type == 'row') {
+                $module->content = json_encode($data);
+            } elseif ($module->type == 'row') {
                 $columns = $module->modules()->with('modules')->get();
                 $row = [
                     'id' => $module->id,

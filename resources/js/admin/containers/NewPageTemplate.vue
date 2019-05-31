@@ -1,44 +1,94 @@
-<template lang="html">
-    <div class="page-template">
-        <div class="page-template__header container">
-            <div class="page-template__head">
-                <div class="page-template__title">
-                    <h1 class="pt-3">{{ title }}</h1>
+<template>
+<div class="page-template">
+    <div class="page-tamplate__container container">
+        <div class="page-template__row row">
+            <div class="page-template__main col-md-9">
+                <div class="page-template__header">
+                    <div class="page-template__head">
+                        <div class="page-template__title">
+                            <h1 class="pt-3">{{ title }}</h1>
+                        </div>
+                        <div class="page-template__action">
+                            <!-- <button
+                                    class="btn btn-outline-secondary"
+                                    @click="addRow">
+                                    Aggiungi Riga
+                                </button> -->
+                            <button
+                                class="btn btn-outline-primary"
+                                @click="addComponent"
+                            >
+                                Aggiungi Componente
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="page-template__action">
-                    <!-- <button
-                        class="btn btn-outline-secondary"
-                        @click="addRow">
-                        Aggiungi Riga
-                    </button> -->
+                <div class="page-template__content">
+                    <module-container
+                        v-for="(module, i) in cached"
+                        :key="i"
+                        :item="module"
+                        :model="model"
+                        :model-idx="modelIdx"
+                        @deleted="deleteComponent"
+                    />
+                </div>
+                <div class="page-template__footer">
                     <button
                         class="btn btn-outline-primary"
-                        @click="addComponent">
+                        @click="addComponent"
+                    >
                         Aggiungi Componente
                     </button>
                 </div>
+                <components-list
+                    ref="componentSelector"
+                    @new-component="newComponent"
+                />
+            </div>
+            <div class="page-template__main col-md-3">
+                <div class="page-template__header">
+                    <div class="page-template__head">
+                        <div class="page-template__title">
+                            <h1 class="pt-3">Sidebar</h1>
+                        </div>
+                        <div class="page-template__action">
+                            <button
+                                class="btn btn-outline-primary"
+                                @click="addComponentSide"
+                            >
+                                Aggiungi Componente
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-template__content">
+                    <module-container
+                        v-for="(module, i) in cachedSides"
+                        :key="i"
+                        :item="module"
+                        :model="model"
+                        :model-idx="modelIdx"
+                        @deleted="deleteComponentSide"
+                    />
+                </div>
+                <div class="page-template__footer">
+                    <button
+                        class="btn btn-outline-primary"
+                        @click="addComponentSide"
+                    >
+                        Aggiungi Componente
+                    </button>
+                </div>
+                <components-list
+                    ref="sidebarSelector"
+                    @new-component="newComponentSide"
+                />
             </div>
         </div>
-        <div class="page-template__container container">
-            <module-container
-                v-for="(module, i) in cached"
-                :key="i"
-                :item="module"
-                :model="model"
-                :model-idx="modelIdx"
-                @deleted="deleteComponent"/>
-        </div>
-        <div class="page-template__footer container">
-            <button
-                class="btn btn-outline-primary"
-                @click="addComponent">
-                Aggiungi Componente
-            </button>
-        </div>
-        <components-list
-            ref="componentSelector"
-            @new-component="newComponent"/>
     </div>
+
+</div>
 </template>
 
 <script>
@@ -77,19 +127,34 @@ export default {
                 return []
             },
         },
+        sides: {
+            type: Array,
+            default: function() {
+                return []
+            },
+        },
+        hasSidebar: {
+            type: Boolean,
+            default: false,
+        },
     },
     data: function() {
         return {
-            panel: false,
             component: null,
             moduleType: null,
             moduleOpts: DynamicParams,
             isEdit: false,
             values: null,
-            module: null,
-            moduleId: null,
             cached: [],
+            cachedSides: [],
         }
+    },
+    computed: {
+        contentClass: function() {
+            if (this.hasSidebar) {
+                return 'col-md-9'
+            }
+        },
     },
     watch: {
         '$route.params': function(params) {
@@ -97,10 +162,6 @@ export default {
         },
         modules: function(modules) {
             this.init()
-
-            if (modules.length == 0) {
-                this.debug()
-            }
         }
     },
     methods: {
@@ -108,29 +169,22 @@ export default {
             // imposta una variabile intermedia per poter modificare i moduli
             this.cached = this.modules
         },
-        debug: function() {
-            // this.moduleType = 'row'
-            // this.panel = true
-            // this.newComponent('grid')
-        },
-        // addRow: function() {
-        //     // console.log('aggiungi');
-        //     let opts = {
-        //         columns: 2,
-        //     }
-        //
-        //     let newRow = {
-        //         type: 'row',
-        //         isNew: true,
-        //         modulable_id: this.modelIdx,
-        //         modulable_type: this.model,
-        //         content: null,
-        //     }
-        //
-        //     this.modules.push(newRow)
-        // },
         addComponent: function() {
             this.$refs.componentSelector.show()
+        },
+        newComponent: function(type) {
+            this.moduleType = type
+            this.dismissModal()
+
+            this.isEdit = false
+            const newModule = {
+                type: type,
+                isNew: true,
+                modulable_id: this.modelIdx,
+                modulable_type: this.model,
+                content: JSON.stringify({}),
+            }
+            this.cached.push(newModule)
         },
         deleteComponent: function(component) {
             let idx = this.cached.indexOf(component)
@@ -141,62 +195,51 @@ export default {
         dismissModal: function() {
             this.$refs.componentSelector.hide()
         },
-        newComponent: function(type) {
-            this.moduleType = type
+
+        addComponentSide: function() {
+            this.$refs.sidebarSelector.show()
+        },
+        deleteComponentSide: function(component) {
+            let idx = this.cachedSides.indexOf(component)
+            if (idx > -1) {
+                this.cachedSides.splice(idx, 1)
+            }
+        },
+        dismissModalSide: function() {
+            this.$refs.sidebarSelector.hide()
+        },
+        newComponentSide: function(type) {
+            this.sideType = type
             this.dismissModal()
 
             this.isEdit = false
-            // this.panel = true
-            const newModule = {
+            const newSide = {
                 type: type,
                 isNew: true,
                 modulable_id: this.modelIdx,
                 modulable_type: this.model,
                 content: JSON.stringify({}),
             }
-            this.cached.push(newModule)
-            // this.modules.push(newModule)
+            this.cachedSides.push(newSide)
         },
         setModule: function(module) {
             console.log('deprecata');
-
-            // // console.log(module);
-            // this.isEdit = true
-            //
-            // this.module = module
-            // this.moduleId = module.id
-            // this.moduleType = module.type
-            // this.values = JSON.parse(module.content)
-            // // console.log(this.values);
-            // this.panel = true
-
-            // this.debug()
-        },
-        saved: function(module) {
-            this.reset()
-
-            this.$emit('saved', module)
-        },
-        undo: function() {
-            this.reset()
         },
         deleted: function(module) {
-            this.reset()
+            this.moduleType = null
             this.$emit('deleted', module)
         },
-        reset: function() {
-            this.panel = false
-
-            this.module = null
-            this.moduleId = null
-            this.moduleType = null
-        }
+        deletedSide: function(sidebarModule) {
+            this.sideType = null
+            this.$emit('deleted', sidebarModule)
+        },
+        // reset: function() {
+        //     this.moduleType = null
+        //     this.sideType = null
+        // }
     },
     mounted: function() {
         this.init()
-        // this.debug()
-        // this.reset()
-        // this.$nextTick(this.debug)
     },
 }
 </script>
@@ -218,8 +261,9 @@ $opacity-test: 0.6 !default;
     background-size: 800% 800%;
     animation: Gradient 360s ease infinite;
 
-    &__container {
-        margin: $spacer * 4;
+    &__content {
+        margin-top: $spacer * 4;
+        margin-bottom: $spacer * 4;
         padding: $spacer * 2;
         @include gradient-directional($gray-300, $light, 135deg);
         @include border-radius($spacer / 2);
@@ -228,8 +272,6 @@ $opacity-test: 0.6 !default;
 
     &__header {
         margin-top: $spacer * 4;
-        margin-left: $spacer * 4;
-        margin-right: $spacer * 4;
         padding: $spacer * 2;
         @include gradient-directional($gray-300, $light, 135deg);
         @include border-radius($spacer / 2);
@@ -238,14 +280,14 @@ $opacity-test: 0.6 !default;
 
     &__head {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
     }
 
     &__footer {
+        margin-top: $spacer * 4;
         margin-bottom: $spacer * 4;
-        margin-left: $spacer * 4;
-        margin-right: $spacer * 4;
         padding: $spacer * 2;
         @include gradient-directional($gray-300, $light, 135deg);
         @include border-radius($spacer / 2);

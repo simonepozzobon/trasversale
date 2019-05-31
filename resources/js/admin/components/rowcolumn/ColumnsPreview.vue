@@ -48,7 +48,8 @@ export default {
                 let difference = this.colsNumber - this.columns.length
                 if (difference > 0) {
                     this.bulkCreate(difference)
-                } else {
+                }
+                else {
                     this.deleteColumn(difference)
                 }
             }
@@ -74,6 +75,9 @@ export default {
     },
     created: function() {
         this.changeColumns()
+    },
+    mounted: function() {
+        console.log('colonne');
     },
 }
 </script>

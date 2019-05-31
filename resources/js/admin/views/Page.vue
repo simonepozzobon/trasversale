@@ -6,7 +6,8 @@
         :model-idx="idx"
         :modules="this.modules"
         @saved="saved"
-        @deleted="deleted">
+        @deleted="deleted"
+        :has-sidebar="true">
     </new-page-template>
 </template>
 
