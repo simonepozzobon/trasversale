@@ -1,14 +1,13 @@
-<template lang="html">
-    <ui-row>
-        <admin-ui-module-block
-            v-if="columns.length > 0"
-            v-for="(column, i) in columns"
-            :key="column.id"
-            :idx="i"
-            :column="column"
-            :is-open="isOpen"
-            @update="updateSize" />
-    </ui-row>
+<template>
+<ui-row>
+    <admin-ui-module-block v-if="columns.length > 0"
+        v-for="(column, i) in columns"
+        :key="column.id"
+        :idx="i"
+        :column="column"
+        :is-open="isOpen"
+        @update="updateSize" />
+</ui-row>
 </template>
 
 <script>
@@ -31,17 +30,17 @@ export default {
             default: false,
         }
     },
-    data: function() {
+    data: function () {
         return {}
     },
     methods: {
-        updateSize: function(data) {
+        updateSize: function (data) {
             this.$emit('update-size', data)
         },
     },
-    created: function() {},
-    mounted: function() {
-        console.log('ciao', this.columns, this.isOpen);
+    created: function () {},
+    mounted: function () {
+        // console.log('ciao', this.columns, this.isOpen);
     },
 }
 </script>

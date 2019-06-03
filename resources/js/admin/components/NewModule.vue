@@ -1,36 +1,26 @@
 <template>
-<div
-    class="new-module"
-    ref="container"
->
+<div class="new-module"
+    ref="container">
     <div class="new-module__container">
-        <dynamic-module
-            v-if="module"
+        <dynamic-module v-if="module"
             :name="name"
             :options="module.options"
             :values="values"
             :is-edit="isEdit"
-            @changed="setObj"
-        />
+            @changed="setObj" />
         <hr>
         <div class="new-module__tools">
-            <button
-                class="btn btn-outline-primary"
-                @click="saveComponent"
-            >
+            <button class="btn btn-outline-primary"
+                @click="saveComponent">
                 Salva Modifiche
             </button>
-            <button
-                class="btn btn-outline-secondary"
-                @click="closeComponent"
-            >
+            <button class="btn btn-outline-secondary"
+                @click="closeComponent">
                 Chiudi
             </button>
-            <button
-                v-if="!isNew"
+            <button v-if="!isNew"
                 class="btn btn-outline-danger"
-                @click="deleteComponent"
-            >
+                @click="deleteComponent">
                 Elimina Componente
             </button>
         </div>
@@ -80,18 +70,18 @@ export default {
         },
         values: [Object, Array],
     },
-    data: function() {
+    data: function () {
         return {
             obj: null,
         }
     },
     computed: {
-        module: function() {
+        module: function () {
             return DynamicParams.filter(params => params.name == this.name)[0]
         },
     },
     methods: {
-        init: function() {
+        init: function () {
             let el = this.$refs.container
             let size = SizeUtil.get(el)
             // console.log(size);
@@ -113,17 +103,17 @@ export default {
             this.master.progress(1)
                 .progress(0)
         },
-        show: function() {
+        show: function () {
             this.master.play()
         },
-        hide: function() {
+        hide: function () {
             this.master.reverse()
         },
-        setObj: function(obj) {
+        setObj: function (obj) {
             this.obj = obj
             this.$emit('changed', obj)
         },
-        saveComponent: function() {
+        saveComponent: function () {
             let request = {
                 id: this.moduleId,
                 model_id: this.modelIdx,
@@ -143,7 +133,7 @@ export default {
                     }
                 })
         },
-        formatRequest: function(obj) {
+        formatRequest: function (obj) {
             let form = new FormData()
 
             // inserisco i campi normali
@@ -167,7 +157,7 @@ export default {
 
             return form
         },
-        hasFile: function(obj) {
+        hasFile: function (obj) {
             // https://stackoverflow.com/questions/31525667/check-if-variable-holds-file-or-blob
             for (let key in obj) {
                 if (obj.hasOwnProperty(key) && obj[key] instanceof File) {
@@ -176,10 +166,10 @@ export default {
             }
             return false
         },
-        closeComponent: function() {
+        closeComponent: function () {
             this.$emit('close')
         },
-        deleteComponent: function() {
+        deleteComponent: function () {
             let url = '/api/admin/delete-component/' + this.moduleId
             this.$http.delete(url)
                 .then(response => {
@@ -190,7 +180,7 @@ export default {
                 })
         }
     },
-    mounted: function() {
+    mounted: function () {
         this.$nextTick(this.init)
     },
 }

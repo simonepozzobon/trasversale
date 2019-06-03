@@ -1,83 +1,52 @@
-<template lang="html">
-    <div
-        class="ui-block"
-        :class="[
-                sizeClass,
-                alignClass, justifyClass,
-                directionClass,
-                radiusClass,
-                transparentClass,
-                fullHeightClass,
-            ]"
-        ref="block"
-        v-if="hasContainer">
+<template>
+<div class="ui-block"
+    :class="[
+        sizeClass,
+        transparentClass,
+    ]"
+    ref="block">
 
-        <div
-            class="ui-block__container"
-            :class="colorClass"
-            ref="container">
-            <module-manager
-                v-for="module in this.modules"
-                :key="module.id"
-                :module="module"/>
+    <div class="ui-block__container"
+        ref="container">
 
-            <div class="ui-block__action" v-if="isOpen">
-                <counter
-                    @update="updateSize"
-                    :size="content.size"/>
-                <button class="btn btn-outline-primary">
-                    Aggiungi
-                </button>
-            </div>
+        <module-container v-for="(module, i) in modules"
+            :key="i"
+            :item="module"
+            :model-idx="modelIdx" />
+
+        <components-list ref="componentSelector"
+            :exclude="['row', 'grid']"
+            @new-component="newComponent" />
+
+        <div class="ui-block__action"
+            v-if="isOpen">
+            <counter @update="updateSize"
+                :size="content.size" />
+            <button class="btn btn-outline-primary ui-block__add"
+                @click="addModule">
+                Aggiungi
+            </button>
         </div>
     </div>
+</div>
 </template>
 
 <script>
 import Counter from './Counter.vue'
 import ModuleManager from '../../../containers/ModuleManager.vue'
+import ComponentsList from '../ComponentsList.vue'
+
 export default {
     name: 'AdminUiBlock',
     components: {
         Counter,
         ModuleManager,
+        ComponentsList,
     },
     props: {
-        hasContainer: {
-            type: Boolean,
-            default: true,
-        },
-        color: {
-            type: String,
-            default: null,
-        },
-        justify: {
-            type: String,
-            default: null,
-        },
-        direction: {
-            type: String,
-            default: null,
-        },
-        transparent: {
-            type: Boolean,
-            default: false,
-        },
-        radius: {
-            type: Boolean,
-            default: false,
-        },
-        radiusSize: {
-            type: String,
-            default: null,
-        },
-        fullHeight: {
-            type: Boolean,
-            default: false,
-        },
         column: {
             type: Object,
-            default: function() {},
+            default: function () {},
         },
         isOpen: {
             type: Boolean,
@@ -88,93 +57,57 @@ export default {
             default: 0,
         }
     },
-    data: function() {
+    data: function () {
         return {
             size: null,
             align: null,
+            model: 'App\\Module',
+            modelIdx: 0
         }
     },
     computed: {
-        content: function() {
+        content: function () {
             return JSON.parse(this.column.content)
         },
-        sizeClass: function() {
+        sizeClass: function () {
             if (this.content.size == 'auto') {
                 return 'col'
             }
             return 'col-md-' + this.content.size
         },
-        colorClass: function() {
-            if (this.color && this.transparent) {
-                return 'ui-block--transparent-'+this.color
-            } else if (this.color) {
-                return 'bg-' + this.color
-            }
-        },
-        alignClass: function() {
-            if (this.align == 'start') {
-                return 'ui-block--align-start'
-            } else if (this.align == 'between') {
-                return 'ui-block--align-between'
-            } else if (this.align == 'end') {
-                return 'ui-block--align-end'
-            }
-        },
-        justifyClass: function() {
-            if (this.justify == 'start') {
-                return 'ui-block--justify-start'
-            } else if (this.justify == 'between') {
-                return 'ui-block--justify-between'
-            } else if (this.justify == 'center') {
-                return 'ui-block--justify-center'
-            } else if (this.justify == 'end') {
-                return 'ui-block--justify-end'
-            }
-        },
-        directionClass: function() {
-            if (this.direction == 'row') {
-                return 'ui-block--flex-row'
-            }
-        },
-        radiusClass: function() {
-            if (this.radius && !this.radiusSize) {
-                return 'ui-block--radius'
-            } else if (this.radius && this.radiusSize) {
-                return 'ui-block--radius-'+this.radiusSize
-            }
-        },
-        radiusSizeClass: function() {
-            if (this.radiusSize) {
-            }
-        },
-        transparentClass: function() {
+        transparentClass: function () {
             if (this.transparent) {
                 return 'ui-block--transparent'
             }
         },
-        fullHeightClass: function() {
-            if (this.fullHeight) {
-                return 'ui-block--full-height'
-            }
-        },
-        modules: function() {
+        modules: function () {
             return this.column.modules
         }
     },
     methods: {
-        updateSize: function(size) {
+        updateSize: function (size) {
             this.$emit('update', {
                 size: size,
                 idx: this.idx
             })
+        },
+        addModule: function () {
+            this.$refs.componentSelector.show()
+        },
+        newComponent: function (type) {
+            console.log(type);
         }
     },
-    created: function() {
+    beforeCreate: function () {
+        this.$options.components.ModuleContainer = require('../../containers/ModuleContainer.vue')
+            .default
+    },
+    created: function () {
         this.size = this.content.size
         this.align = this.content.hasOwnProperty('align') ? this.content.align : null
+        console.log(this.modules);
     },
-    mounted: function() {
-    },
+    mounted: function () {},
 }
 </script>
 
@@ -202,6 +135,7 @@ export default {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        flex-wrap: wrap;
     }
 
     &__action {
@@ -211,6 +145,10 @@ export default {
         align-items: center;
         justify-content: center;
         width: 100%;
+    }
+
+    &__add {
+        margin-left: $spacer;
     }
 
     &--radius {
@@ -237,10 +175,9 @@ export default {
         align-items: flex-end;
     }
 
-
     &--flex-row &__container {
         flex-direction: row;
-        align-items: center
+        align-items: center;
     }
 
     &--flex-row#{&}--align-start &__container {
@@ -276,5 +213,4 @@ export default {
         justify-content: flex-start;
     }
 }
-
 </style>

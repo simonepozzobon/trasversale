@@ -32,7 +32,7 @@ export default {
         },
         options: {
             type: Array,
-            default: function() {
+            default: function () {
                 return []
             },
         },
@@ -46,13 +46,13 @@ export default {
             default: false,
         }
     },
-    data: function() {
+    data: function () {
         return {
             dataObj: null,
         }
     },
     methods: {
-        setModule: function() {
+        setModule: function () {
             let fields = this.options
             let dataObj = {}
             for (let i = 0; i < fields.length; i++) {
@@ -61,7 +61,7 @@ export default {
             }
             this.dataObj = dataObj
         },
-        setInitial: function(option) {
+        setInitial: function (option) {
             if (this.values) {
                 let key = option.key
                 if (option.hasOwnProperty('childrens') && option.childrens.length > 0) {
@@ -75,11 +75,11 @@ export default {
 
             return null
         },
-        emitChanged: function(key, value) {
+        emitChanged: function (key, value) {
             this.dataObj[key] = value
             this.$emit('changed', this.dataObj)
         },
-        changed: function(key, value, type) {
+        changed: function (key, value, type) {
             let prev = clone(this.dataObj[key])
             // console.log('Dynamic module è diverso', !isEqual(prev, value), key);
             if (!isEqual(prev, value) && type != 'file-input') {
@@ -122,10 +122,10 @@ export default {
             }
         }
     },
-    created: function() {
+    created: function () {
         this.setModule()
     },
-    mounted: function() {
+    mounted: function () {
         // console.log(this.options);
     }
 }

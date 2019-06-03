@@ -14,45 +14,61 @@
                                     @click="addRow">
                                     Aggiungi Riga
                                 </button> -->
-                            <button class="btn btn-outline-primary" @click="addComponent">
+                            <button class="btn btn-outline-primary"
+                                @click="addComponent">
                                 Aggiungi Componente
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="page-template__content">
-                    <module-container v-for="(module, i) in cached" :key="i" :item="module" :model="model" :model-idx="modelIdx" @deleted="deleteComponent" />
+                    <module-container v-for="(module, i) in cached"
+                        :key="i"
+                        :item="module"
+                        :model="model"
+                        :model-idx="modelIdx"
+                        @deleted="deleteComponent" />
                 </div>
                 <div class="page-template__footer">
-                    <button class="btn btn-outline-primary" @click="addComponent">
+                    <button class="btn btn-outline-primary"
+                        @click="addComponent">
                         Aggiungi Componente
                     </button>
                 </div>
-                <components-list ref="componentSelector" @new-component="newComponent" />
+                <components-list ref="componentSelector"
+                    @new-component="newComponent" />
             </div>
-            <div class="page-template__main col-12">
+            <!-- <div class="page-template__main col-12">
                 <div class="page-template__header">
                     <div class="page-template__head">
                         <div class="page-template__title">
                             <h1 class="pt-3">Sidebar</h1>
                         </div>
                         <div class="page-template__action">
-                            <button class="btn btn-outline-primary" @click="addComponentSide">
+                            <button class="btn btn-outline-primary"
+                                @click="addComponentSide">
                                 Aggiungi Componente
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="page-template__content">
-                    <module-container v-for="(module, i) in cachedSides" :key="i" :item="module" :model="model" :model-idx="modelIdx" @deleted="deleteComponentSide" />
+                    <module-container v-for="(module, i) in cachedSides"
+                        :key="i"
+                        :item="module"
+                        :model="model"
+                        :model-idx="modelIdx"
+                        @deleted="deleteComponentSide" />
                 </div>
                 <div class="page-template__footer">
-                    <button class="btn btn-outline-primary" @click="addComponentSide">
+                    <button class="btn btn-outline-primary"
+                        @click="addComponentSide">
                         Aggiungi Componente
                     </button>
                 </div>
-                <components-list ref="sidebarSelector" @new-component="newComponentSide" />
-            </div>
+                <components-list ref="sidebarSelector"
+                    @new-component="newComponentSide" />
+            </div> -->
         </div>
     </div>
 
@@ -126,7 +142,7 @@ export default {
     },
     watch: {
         '$route.params': function (params) {
-            console.log('params cambiato', params);
+            // console.log('params cambiato', params);
         },
         modules: function (modules) {
             this.init()
@@ -136,6 +152,15 @@ export default {
         init: function () {
             // imposta una variabile intermedia per poter modificare i moduli
             this.cached = this.modules
+            this.debug()
+        },
+        debug: function () {
+            if (this.cached.length == 0) {
+                this.$nextTick(() => {
+                    // console.log('debug');
+                    this.newComponent('row')
+                })
+            }
         },
         addComponent: function () {
             this.$refs.componentSelector.show()
@@ -152,6 +177,8 @@ export default {
                 modulable_type: this.model,
                 content: JSON.stringify({}),
             }
+
+            // console.log(newModule);
             this.cached.push(newModule)
         },
         deleteComponent: function (component) {

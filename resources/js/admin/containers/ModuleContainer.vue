@@ -36,6 +36,7 @@ from '../../Utilities'
 
 import AdminModuleManager from '../components/AdminModuleManager.vue'
 import NewModule from '../components/NewModule.vue'
+import DynamicParams from '../DynamicParams'
 
 export default {
     name: 'ModuleContainer',
@@ -46,7 +47,7 @@ export default {
     props: {
         item: {
             type: Object,
-            default: function() {
+            default: function () {
                 return {}
             },
         },
@@ -59,7 +60,7 @@ export default {
             default: 0,
         },
     },
-    data: function() {
+    data: function () {
         return {
             isEdit: false,
             component: null,
@@ -70,7 +71,7 @@ export default {
         }
     },
     computed: {
-        content: function() {
+        content: function () {
             if (this.item) {
                 return JSON.parse(this.item.content)
             }
@@ -78,7 +79,7 @@ export default {
         },
     },
     methods: {
-        formatTempData: function(obj) {
+        formatTempData: function (obj) {
             // console.log('formato', this.item.type, obj);
             let newObj = clone(this.component)
 
@@ -93,142 +94,144 @@ export default {
 
             this.component = clone(newObj)
         },
-        deleteComponent: function() {
+        deleteComponent: function () {
             this.isOpen = false
             this.hide()
             this.$emit('deleted', this.item)
         },
-        saveComponent: function(component) {
+        saveComponent: function (component) {
             // console.log(component);
             this.item.modulable_type = component.modulable_type
             this.item.modulable_id = Number(component.modulable_id)
             this.item.id = Number(component.id)
             this.item.isNew = false
         },
-        setPreview: function(obj) {
+        setPreview: function (obj) {
+            console.log('setting preview');
             switch (this.item.type) {
                 // Riga
-                case 'row':
-                    let cols = []
-                    for (let i = 0; i < obj.columns; i++) {
-                        let col = {
-                            id: i,
-                            modulable_id: 31,
-                            modulable_type: 'App\\Module',
-                            modules: [],
-                            type: 'column',
-                            content: JSON.stringify({
-                                size: 6
-                            })
-                        }
-                        cols.push(col)
+            case 'row':
+                let cols = []
+                let newCols = []
+                let content = JSON.parse(this.component.content)
+                let colsToGenerate = obj.columns - content.length
+
+                if (content.length > 0 && colsToGenerate > 0) {
+                    newCols = this.generateColumns(colsToGenerate)
+                    cols = content.concat(newCols)
+                }
+                else if (content.length > 0 && colsToGenerate < 0) {
+                    content.pop()
+                    cols = newCols.concat(content)
+                }
+
+                return JSON.stringify(cols)
+
+                // Immagine
+            case 'image':
+                let src
+                if (obj.src && isFile(obj.src)) {
+                    // let file = new File(obj.src)
+                    src = window.URL.createObjectURL(obj.src)
+                }
+                else if (obj.src) {
+                    // console.log('non è un file');
+                    src = obj.src
+                }
+                else {
+                    // console.log('non esiste');
+                    src = null
+                }
+
+                return JSON.stringify({
+                    src: src,
+                    alt: obj.alt
+                })
+
+                // Video
+            case 'video':
+                let url = obj.url
+                if (url) {
+                    url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
+
+                    if (RegExp.$3.indexOf('youtu') > -1) {
+                        url = 'https://www.youtube.com/embed/' + RegExp.$6
                     }
-                    return JSON.stringify(cols)
-
-                    // Immagine
-                case 'image':
-                    let src
-                    if (obj.src && isFile(obj.src)) {
-                        // let file = new File(obj.src)
-                        src = window.URL.createObjectURL(obj.src)
+                    else if (RegExp.$3.indexOf('vimeo') > -1) {
+                        url = 'https://player.vimeo.com/video/' + RegExp.$6
                     }
-                    else if (obj.src) {
-                        // console.log('non è un file');
-                        src = obj.src
+                }
+
+                return JSON.stringify({
+                    ...obj,
+                    url: url,
+                })
+
+            case 'grid':
+                let blocks = []
+                if (obj.elements) {
+                    if (obj.elements.hasOwnProperty('blocks') && obj.elements.blocks) {
+                        blocks = obj.elements.blocks
                     }
-                    else {
-                        // console.log('non esiste');
-                        src = null
-                    }
+                }
 
-                    return JSON.stringify({
-                        src: src,
-                        alt: obj.alt
-                    })
+                // console.log(blocks);
 
-                    // Video
-                case 'video':
-                    let url = obj.url
-                    if (url) {
-                        url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
-
-                        if (RegExp.$3.indexOf('youtu') > -1) {
-                            url = 'https://www.youtube.com/embed/' + RegExp.$6
-                        }
-                        else if (RegExp.$3.indexOf('vimeo') > -1) {
-                            url = 'https://player.vimeo.com/video/' + RegExp.$6
-                        }
+                blocks = blocks.map((block, i) => {
+                    let newBlock = {
+                        ...block,
+                        height: block.h,
+                        width: block.w,
+                        content: JSON.stringify({
+                            id: block.id,
+                            slug: block.slug,
+                            title: block.title,
+                        })
                     }
 
-                    return JSON.stringify({
-                        ...obj,
-                        url: url,
-                    })
+                    // if (i == 2) {
+                    //     console.log(newBlock, block);
+                    // }
 
-                case 'grid':
-                    let blocks = []
-                    if (obj.elements) {
-                        if (obj.elements.hasOwnProperty('blocks') && obj.elements.blocks) {
-                            blocks = obj.elements.blocks
-                        }
-                    }
+                    return newBlock
+                })
 
-                    // console.log(blocks);
+                // console.log('blocchi', blocks);
+                return JSON.stringify({
+                    blocks: blocks,
+                    options: null,
+                    title: obj.title,
+                    type: obj.type,
+                })
 
-                    blocks = blocks.map((block, i) => {
-                        let newBlock = {
-                            ...block,
-                            height: block.h,
-                            width: block.w,
-                            content: JSON.stringify({
-                                id: block.id,
-                                slug: block.slug,
-                                title: block.title,
-                            })
-                        }
-
-                        // if (i == 2) {
-                        //     console.log(newBlock, block);
-                        // }
-
-                        return newBlock
-                    })
-
-                    // console.log('blocchi', blocks);
-                    return JSON.stringify({
-                        blocks: blocks,
-                        options: null,
-                        title: obj.title,
-                        type: obj.type,
-                    })
-
-                    // DEfault
-                default:
-                    return JSON.stringify(obj)
+                // DEfault
+            default:
+                return JSON.stringify(obj)
             }
         },
-        changed: function(obj) {
+        changed: function (obj) {
             this.cache = obj
             // console.log(obj);
         },
-        selected: function(obj = null) {
+        selected: function (obj = null) {
             if (!this.isOpen) {
                 this.isOpen = true
                 this.show()
             }
         },
-        closeComponent: function() {
+        closeComponent: function () {
             this.isOpen = false
             this.hide()
         },
-        show: function() {
+        show: function () {
             this.$refs.panel.show()
             // console.log(this.cache, this.item);
         },
-        hide: function() {
+        hide: function () {
             this.$refs.panel.hide()
         },
-        updateSize: function(data) {
+        updateSize: function (data) {
+            console.log('update size');
             // https://stackoverflow.com/questions/1230233/how-to-find-the-sum-of-an-array-of-numbers
             let columns = JSON.parse(this.component.content)
             let total = columns.map((col, idx) => {
@@ -258,19 +261,64 @@ export default {
             this.component.content = JSON.stringify(columns)
             // console.log(total);
         },
-        setColSize: function(value, jsonContent) {
+        setColSize: function (value, jsonContent) {
             let content = JSON.parse(jsonContent)
             content.size = content.size + value
             return JSON.stringify(content)
+        },
+        initColumns: function () {
+            let params, colsOpts
+            let colsDefault = 2
+            let newColumns = []
+
+            params = DynamicParams.find(params => params.name === 'row')
+            if (params && params.hasOwnProperty('options')) {
+                colsOpts = params.options.find(option => option.key === 'columns')
+                if (colsOpts) {
+                    colsDefault = colsOpts.default
+                }
+            }
+
+            newColumns = this.generateColumns(colsDefault)
+
+            let content = JSON.stringify(newColumns)
+            this.component = {
+                ...this.item,
+                content: content
+            }
+        },
+        generateColumns: function (colsNum) {
+            let newColumns = []
+
+            for (let i = 0; i < colsNum; i++) {
+                const newCol = this.generateColumn()
+                newColumns.push(newCol)
+            }
+
+            return newColumns
+        },
+        generateColumn: function () {
+            return {
+                type: 'column',
+                isNew: true,
+                modulable_type: 'App\\Module',
+                content: JSON.stringify({
+                    size: 6,
+                    modules: []
+                })
+            }
         }
     },
-    created: function() {
-        if (this.item) {
+    created: function () {
+        if (this.item.type == 'row' && this.item.isNew) {
+            this.initColumns()
+        }
+        else if (this.item) {
             this.component = this.item
             // console.log(this.values);
         }
     },
-    mounted: function() {
+    mounted: function () {
         if (this.item.hasOwnProperty('isNew') && this.item.isNew) {
             this.$nextTick(this.selected)
         }
@@ -285,6 +333,7 @@ export default {
 @import '~styles/shared';
 
 .module-container {
+    max-width: 100%;
     margin-bottom: $spacer * 2;
 }
 </style>
