@@ -36,7 +36,15 @@
 import Partners from '../contents/Partners'
 import MainMenu from './MainMenu.vue'
 import MainFooter from './MainFooter.vue'
-import { UiCalendar, UiPartner, UiSidebarImage, UiSidebarParagraph, UiSidebarTitle, UiTitle, } from '../ui'
+import {
+    UiCalendar,
+    UiPartner,
+    UiSidebarImage,
+    UiSidebarParagraph,
+    UiSidebarTitle,
+    UiTitle,
+}
+from '../ui'
 
 export default {
     name: 'MainTemplate',
@@ -53,27 +61,30 @@ export default {
     props: {
         pages: {
             type: String,
-            default: function() {}
+            default: function () {}
         }
     },
-    data: function() {
+    data: function () {
         return {
             partners: Partners,
         }
     },
     watch: {
-        '$root.sidebarPaddingTop': function(h) {
+        '$root.sidebarPaddingTop': function (h) {
             if (h) {
                 this.$refs.sidebar.style.paddingTop = h
-            } else {
+            }
+            else {
                 delete this.$refs.sidebar.style.paddingTop
             }
         }
     },
     computed: {
-        parsedPages: function() {
+        parsedPages: function () {
             if (this.pages) {
-                return JSON.parse(this.pages)
+                const pages = JSON.parse(this.pages)
+                    .filter(page => page.title !== 'home')
+                return pages
             }
         }
     }
