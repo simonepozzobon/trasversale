@@ -1,29 +1,30 @@
-<template lang="html">
-    <div class="module-container">
-        <!-- MODULE -->
-        <admin-module-manager
-            v-if="component"
-            :is-admin="true"
-            :module="component"
-            :isOpen="isOpen"
-            @selected="selected"
-            @update-size="updateSize"/>
+<template>
+<div class="module-container">
+    <!-- MODULE -->
+    <admin-module-manager v-if="component"
+        :is-admin="true"
+        :module="component"
+        :isOpen="isOpen"
+        @selected="selected"
+        @add-component="addComponent"
+        @update-size="updateSize"
+        @save-module="saveSubModule" />
 
-        <!-- PANNELLO -->
-        <new-module
-            ref="panel"
-            :name="item.type"
-            :model="item.modulable_type"
-            :model-idx="item.modulable_id"
-            :is-edit="isEdit"
-            :is-new="item.isNew"
-            :module-id="item.id"
-            :values="content"
-            @changed="formatTempData"
-            @saved="saveComponent"
-            @close="closeComponent"
-            @deleted="deleteComponent"/>
-    </div>
+    <!-- PANNELLO -->
+    <new-module ref="panel"
+        :name="item.type"
+        :model="item.modulable_type"
+        :model-idx="item.modulable_id"
+        :is-edit="isEdit"
+        :is-new="item.isNew"
+        :module-id="item.id"
+        :values="content"
+        @changed="formatTempData"
+        @save="saveComponent"
+        @saved="savedComponent"
+        @close="closeComponent"
+        @deleted="deletedComponent" />
+</div>
 </template>
 
 <script>
@@ -31,6 +32,7 @@ import {
     clone,
     isEqual,
     isFile,
+    Uuid,
 }
 from '../../Utilities'
 
@@ -73,63 +75,83 @@ export default {
     computed: {
         content: function () {
             if (this.item) {
-                return JSON.parse(this.item.content)
+                return this.item.content
             }
             return null
         },
     },
     methods: {
-        formatTempData: function (obj) {
-            // console.log('formato', this.item.type, obj);
-            let newObj = clone(this.component)
-
-            // console.log(clonedObj);
-            if (this.item.type === 'image') {
-                newObj.content = this.setPreview(obj)
-            }
-            else {
-                let clonedObj = clone(obj)
-                newObj.content = this.setPreview(clonedObj)
+        addComponent: function (column, component) {
+            console.log('aggiungi componente nella colonna', column);
+            let columns = this.component.content
+            let colID = columns.findIndex(col => col.uuid === column.uuid)
+            console.log(colID);
+            if (colID > -1) {
+                // aggiunge il componente alla colonna
+                columns[colID].content.modules.push(component)
             }
 
-            this.component = clone(newObj)
+            this.component = {
+                ...this.component,
+                content: columns
+            }
+            // console.log('prima', newComponent);
+            // this.component = Object.assign({}, newComponent)
+            // console.log('dopo', this.component);
         },
-        deleteComponent: function () {
+        saveSubModule: function (module) {
+            // console.log('save sub module', this.item);
+            this.saveComponent(null)
+        },
+        formatTempData: function (obj) {
+            // console.log('formatTempData', this.item.type, obj);
+            this.component.content = this.setPreview(obj)
+        },
+        deletedComponent: function (module) {
             this.isOpen = false
             this.hide()
             this.$emit('deleted', this.item)
         },
-        saveComponent: function (component) {
+        saveComponent: function (obj) {
+            // console.log('module container save', this.component);
+            this.$emit('save', this.component)
+        },
+        savedComponent: function (component) {
             // console.log(component);
+            // console.log('module container save', component);
             this.item.modulable_type = component.modulable_type
             this.item.modulable_id = Number(component.modulable_id)
             this.item.id = Number(component.id)
             this.item.isNew = false
         },
         setPreview: function (obj) {
-            console.log('setting preview');
+            // console.log('setting preview', obj);
             switch (this.item.type) {
-                // Riga
             case 'row':
+                // Riga
+                // console.log('setting preview della row', obj);
                 let cols = []
                 let newCols = []
-                let content = JSON.parse(this.component.content)
-                let colsToGenerate = obj.columns - content.length
+                let content = this.component.content
 
-                if (content.length > 0 && colsToGenerate > 0) {
+                let length = content.length ? content.length : 0
+                let colsToGenerate = obj.columns - length
+
+                if (colsToGenerate > 0) {
                     newCols = this.generateColumns(colsToGenerate)
-                    cols = content.concat(newCols)
+                    cols = Object.assign([], content)
+                        .concat(newCols)
                 }
-                else if (content.length > 0 && colsToGenerate < 0) {
+                else if (colsToGenerate < 0) {
                     content.pop()
                     cols = newCols.concat(content)
                 }
 
-                return JSON.stringify(cols)
+                return cols
 
-                // Immagine
             case 'image':
-                let src
+                // Immagine
+                let src = null
                 if (obj.src && isFile(obj.src)) {
                     // let file = new File(obj.src)
                     src = window.URL.createObjectURL(obj.src)
@@ -138,22 +160,17 @@ export default {
                     // console.log('non è un file');
                     src = obj.src
                 }
-                else {
-                    // console.log('non esiste');
-                    src = null
-                }
 
-                return JSON.stringify({
+                return {
                     src: src,
                     alt: obj.alt
-                })
+                }
 
-                // Video
             case 'video':
+                // Video
                 let url = obj.url
                 if (url) {
                     url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
-
                     if (RegExp.$3.indexOf('youtu') > -1) {
                         url = 'https://www.youtube.com/embed/' + RegExp.$6
                     }
@@ -161,52 +178,40 @@ export default {
                         url = 'https://player.vimeo.com/video/' + RegExp.$6
                     }
                 }
-
-                return JSON.stringify({
+                return {
                     ...obj,
                     url: url,
-                })
+                }
 
             case 'grid':
+                console.log(obj);
                 let blocks = []
                 if (obj.elements) {
                     if (obj.elements.hasOwnProperty('blocks') && obj.elements.blocks) {
                         blocks = obj.elements.blocks
                     }
                 }
-
-                // console.log(blocks);
-
-                blocks = blocks.map((block, i) => {
-                    let newBlock = {
-                        ...block,
-                        height: block.h,
-                        width: block.w,
-                        content: JSON.stringify({
-                            id: block.id,
-                            slug: block.slug,
-                            title: block.title,
-                        })
-                    }
-
-                    // if (i == 2) {
-                    //     console.log(newBlock, block);
-                    // }
-
-                    return newBlock
-                })
-
-                // console.log('blocchi', blocks);
-                return JSON.stringify({
-                    blocks: blocks,
+                return {
                     options: null,
                     title: obj.title,
                     type: obj.type,
-                })
+                    blocks: blocks.map((block, i) => {
+                        return {
+                            ...block,
+                            height: block.h,
+                            width: block.w,
+                            content: {
+                                id: block.id,
+                                slug: block.slug,
+                                title: block.title,
+                            }
+                        }
+                    })
+                }
 
-                // DEfault
             default:
-                return JSON.stringify(obj)
+                // DEfault
+                return obj
             }
         },
         changed: function (obj) {
@@ -231,11 +236,10 @@ export default {
             this.$refs.panel.hide()
         },
         updateSize: function (data) {
-            console.log('update size');
             // https://stackoverflow.com/questions/1230233/how-to-find-the-sum-of-an-array-of-numbers
-            let columns = JSON.parse(this.component.content)
+            let columns = this.component.content
             let total = columns.map((col, idx) => {
-                    let content = JSON.parse(col.content)
+                    let content = col.content
                     let size = content.size
                     if (idx == data.idx) {
                         size = content.size + data.size
@@ -258,34 +262,13 @@ export default {
                 }
             }
             columns[data.idx].content = this.setColSize(data.size, columns[data.idx].content)
-            this.component.content = JSON.stringify(columns)
+            this.component.content = columns
             // console.log(total);
         },
         setColSize: function (value, jsonContent) {
-            let content = JSON.parse(jsonContent)
+            let content = jsonContent
             content.size = content.size + value
-            return JSON.stringify(content)
-        },
-        initColumns: function () {
-            let params, colsOpts
-            let colsDefault = 2
-            let newColumns = []
-
-            params = DynamicParams.find(params => params.name === 'row')
-            if (params && params.hasOwnProperty('options')) {
-                colsOpts = params.options.find(option => option.key === 'columns')
-                if (colsOpts) {
-                    colsDefault = colsOpts.default
-                }
-            }
-
-            newColumns = this.generateColumns(colsDefault)
-
-            let content = JSON.stringify(newColumns)
-            this.component = {
-                ...this.item,
-                content: content
-            }
+            return content
         },
         generateColumns: function (colsNum) {
             let newColumns = []
@@ -299,24 +282,20 @@ export default {
         },
         generateColumn: function () {
             return {
+                uuid: Uuid.get(),
                 type: 'column',
                 isNew: true,
                 modulable_type: 'App\\Module',
-                content: JSON.stringify({
+                content: {
                     size: 6,
                     modules: []
-                })
+                }
             }
         }
     },
     created: function () {
-        if (this.item.type == 'row' && this.item.isNew) {
-            this.initColumns()
-        }
-        else if (this.item) {
-            this.component = this.item
-            // console.log(this.values);
-        }
+        this.component = this.item
+        // console.log('init module container', this.item.content);
     },
     mounted: function () {
         if (this.item.hasOwnProperty('isNew') && this.item.isNew) {

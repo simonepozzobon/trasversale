@@ -9,11 +9,6 @@
                             <h1 class="pt-3">{{ title }}</h1>
                         </div>
                         <div class="page-template__action">
-                            <!-- <button
-                                    class="btn btn-outline-secondary"
-                                    @click="addRow">
-                                    Aggiungi Riga
-                                </button> -->
                             <button class="btn btn-outline-primary"
                                 @click="addComponent">
                                 Aggiungi Componente
@@ -23,11 +18,12 @@
                 </div>
                 <div class="page-template__content">
                     <module-container v-for="(module, i) in cached"
-                        :key="i"
+                        :key="module.uuid"
                         :item="module"
                         :model="model"
                         :model-idx="modelIdx"
-                        @deleted="deleteComponent" />
+                        @deleted="deletedComponent"
+                        @save="saveComponent" />
                 </div>
                 <div class="page-template__footer">
                     <button class="btn btn-outline-primary"
@@ -38,37 +34,6 @@
                 <components-list ref="componentSelector"
                     @new-component="newComponent" />
             </div>
-            <!-- <div class="page-template__main col-12">
-                <div class="page-template__header">
-                    <div class="page-template__head">
-                        <div class="page-template__title">
-                            <h1 class="pt-3">Sidebar</h1>
-                        </div>
-                        <div class="page-template__action">
-                            <button class="btn btn-outline-primary"
-                                @click="addComponentSide">
-                                Aggiungi Componente
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="page-template__content">
-                    <module-container v-for="(module, i) in cachedSides"
-                        :key="i"
-                        :item="module"
-                        :model="model"
-                        :model-idx="modelIdx"
-                        @deleted="deleteComponentSide" />
-                </div>
-                <div class="page-template__footer">
-                    <button class="btn btn-outline-primary"
-                        @click="addComponentSide">
-                        Aggiungi Componente
-                    </button>
-                </div>
-                <components-list ref="sidebarSelector"
-                    @new-component="newComponentSide" />
-            </div> -->
         </div>
     </div>
 
@@ -151,13 +116,27 @@ export default {
     methods: {
         init: function () {
             // imposta una variabile intermedia per poter modificare i moduli
-            this.cached = this.modules
-            this.debug()
+            if (this.modules.length > 0) {
+                for (let i = 0; i < this.modules.length; i++) {
+                    let cache = {
+                        ...this.modules[i],
+                        uuid: Uuid.get()
+                    }
+
+                    if (cache.type === 'row') {
+                        for (let j = 0; j < cache.content.length; j++) {
+                            cache.content[j].isNew = false
+                        }
+                    }
+
+                    this.cached.push(cache)
+                }
+            }
+            // this.debug()
         },
         debug: function () {
-            if (this.cached.length == 0) {
+            if (this.cached.length === 0 && this.modelIdx !== 0) {
                 this.$nextTick(() => {
-                    // console.log('debug');
                     this.newComponent('row')
                 })
             }
@@ -171,51 +150,25 @@ export default {
 
             this.isEdit = false
             const newModule = {
+                uuid: Uuid.get(),
                 type: type,
                 isNew: true,
                 modulable_id: this.modelIdx,
                 modulable_type: this.model,
-                content: JSON.stringify({}),
+                content: {},
             }
 
             // console.log(newModule);
             this.cached.push(newModule)
         },
-        deleteComponent: function (component) {
-            let idx = this.cached.indexOf(component)
+        deletedComponent: function (component) {
+            let idx = this.cached.findIndex(cache => cache.uuid === component.uuid)
             if (idx > -1) {
                 this.cached.splice(idx, 1)
             }
         },
         dismissModal: function () {
             this.$refs.componentSelector.hide()
-        },
-
-        addComponentSide: function () {
-            this.$refs.sidebarSelector.show()
-        },
-        deleteComponentSide: function (component) {
-            let idx = this.cachedSides.indexOf(component)
-            if (idx > -1) {
-                this.cachedSides.splice(idx, 1)
-            }
-        },
-        dismissModalSide: function () {
-            this.$refs.sidebarSelector.hide()
-        },
-        newComponentSide: function (type) {
-            this.sideType = type
-            this.dismissModal()
-
-            this.isEdit = false
-            const newSide = {
-                type: type,
-                isNew: true,
-                modulable_id: this.modelIdx,
-                modulable_type: this.model,
-                content: JSON.stringify({}),
-            }
-            this.cachedSides.push(newSide)
         },
         setModule: function (module) {
             console.log('deprecata');
@@ -224,14 +177,35 @@ export default {
             this.moduleType = null
             this.$emit('deleted', module)
         },
-        deletedSide: function (sidebarModule) {
-            this.sideType = null
-            this.$emit('deleted', sidebarModule)
+        saveComponent: function (component) {
+            let idx = this.cached.findIndex(cache => cache.uuid === component.uuid)
+            if (idx > -1) {
+                // if (this.cached[idx].isNew === true) {
+                //     this.cached[idx].isNew = false
+                // }
+
+                console.log('save component', component);
+                let data = {
+                    ...component,
+                    content: JSON.stringify(component.content)
+                }
+
+                this.$http.post('/api/admin/save-component', data)
+                    .then(response => {
+
+                        let module = {
+                            ...response.data.module,
+                            uuid: component.uuid,
+                            isNew: false,
+                            content: JSON.parse(response.data.module.content)
+                        }
+
+                        this.cached[idx] = module
+
+                        console.log(response.data);
+                    })
+            }
         },
-        // reset: function() {
-        //     this.moduleType = null
-        //     this.sideType = null
-        // }
     },
     mounted: function () {
         this.init()

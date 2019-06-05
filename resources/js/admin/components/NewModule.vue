@@ -18,8 +18,7 @@
                 @click="closeComponent">
                 Chiudi
             </button>
-            <button v-if="!isNew"
-                class="btn btn-outline-danger"
+            <button class="btn btn-outline-danger"
                 @click="deleteComponent">
                 Elimina Componente
             </button>
@@ -102,6 +101,7 @@ export default {
 
             this.master.progress(1)
                 .progress(0)
+
         },
         show: function () {
             this.master.play()
@@ -114,24 +114,31 @@ export default {
             this.$emit('changed', obj)
         },
         saveComponent: function () {
-            let request = {
-                id: this.moduleId,
-                model_id: this.modelIdx,
-                model: this.model,
-                module: this.name,
-                data: this.obj,
-            }
 
-            let data = this.formatRequest(request)
+            this.hide()
+            this.$emit('save')
 
-            this.$http.post('/api/admin/save-component', data)
-                .then(response => {
-                    // console.log(response.data);
-                    if (response.data.success) {
-                        this.$emit('saved', response.data.module)
-                        this.closeComponent()
-                    }
-                })
+            // let request = {
+            //     id: this.moduleId,
+            //     model_id: this.modelIdx,
+            //     model: this.model,
+            //     module: this.name,
+            //     data: this.obj,
+            // }
+            // this.$emit('save', this.obj)
+            // console.log('formatto richiesta', request);
+            // console.log('save component newmodule', request);
+
+            // let data = this.formatRequest(request)
+
+            // this.$http.post('/api/admin/save-component', data)
+            //     .then(response => {
+            //         console.log(response.data);
+            //         if (response.data.success) {
+            //             this.$emit('saved', response.data.module)
+            //             this.closeComponent()
+            //         }
+            //     })
         },
         formatRequest: function (obj) {
             let form = new FormData()
@@ -170,14 +177,22 @@ export default {
             this.$emit('close')
         },
         deleteComponent: function () {
-            let url = '/api/admin/delete-component/' + this.moduleId
-            this.$http.delete(url)
-                .then(response => {
-                    // console.log(response.data);
-                    if (response.data.success) {
-                        this.$emit('deleted', response.data.module)
-                    }
-                })
+            // Se non è un nuovo modulo, effettua l'eliminazione sul DB
+            if (this.moduleId && !this.isNew) {
+                let url = '/api/admin/delete-component/' + this.moduleId
+                this.$http.delete(url)
+                    .then(response => {
+                        // console.log(response.data);
+                        if (response.data.success) {
+                            this.$emit('deleted', response.data.module)
+                        }
+                    })
+            }
+            // se è un nuovo modulo emette l'evento deleted
+            else {
+                this.$emit('deleted', false)
+            }
+
         }
     },
     mounted: function () {

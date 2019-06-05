@@ -1,15 +1,14 @@
-<template lang="html">
-    <div>
-        <dynamic-module-item
-            ref="module"
-            v-for="(option, i) in options"
-            :key="i"
-            :initial="setInitial(option)"
-            :option="option"
-            :data-obj="dataObj"
-            :edit="isEdit"
-            @changed="changed"/>
-    </div>
+<template>
+<div>
+    <dynamic-module-item ref="module"
+        v-for="(option, i) in options"
+        :key="i"
+        :initial="setInitial(option)"
+        :option="option"
+        :data-obj="dataObj"
+        :edit="isEdit"
+        @changed="changed" />
+</div>
 </template>
 
 <script>
@@ -60,6 +59,12 @@ export default {
                 dataObj[field.key] = field.hasOwnProperty('default') ? field.default : null
             }
             this.dataObj = dataObj
+
+            // for (let key in this.dataObj) {
+            //     if (this.dataObj.hasOwnProperty(key)) {
+            //         this.emitChanged(key, this.dataObj[key])
+            //     }
+            // }
         },
         setInitial: function (option) {
             if (this.values) {

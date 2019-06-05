@@ -68,9 +68,9 @@ class Utility extends Model
         return $media;
     }
 
-    public static function format_complex_modules($modules)
+    public static function format_complex_modules($modules, $has_json = true)
     {
-        return $modules->transform(function ($module, $key) {
+        return $modules->transform(function($module, $key) use($has_json) {
             if ($module->type == 'grid') {
                 $content = json_decode($module->content);
                 $grid_id = $content->id;
@@ -107,19 +107,19 @@ class Utility extends Model
                                 $block->slug = $block->slug;
                                 $block->category = $block->category;
                                 $grid_block['thumb'] = $block->thumb;
-                                $grid_block['content'] = json_encode($block);
+                                $grid_block['content'] = $has_json ? json_encode($block) : $block;
                                 break;
 
                             case 'news':
                                 $block->slug = $block->slug;
                                 $block->category = $block->category;
                                 $grid_block['thumb'] = $block->thumb;
-                                $grid_block['content'] = json_encode($block);
+                                $grid_block['content'] = $has_json ? json_encode($block) : $block;
                                 break;
 
                             default:
                                 $block->slug = $block->slug;
-                                $grid_block['content'] = json_encode($block);
+                                $grid_block['content'] = $has_json ? json_encode($block) : $block;
                                 // dd($grid_block['content']);
                                 break;
                         }
@@ -132,17 +132,39 @@ class Utility extends Model
                         'options' => $grid->options,
                         'title' => $grid->title,
                     ];
-                $module->content = json_encode($data);
+
+                $module->content = $has_json ? json_encode($data) : $data;
+
             } elseif ($module->type == 'row') {
                 $columns = $module->modules()->with('modules')->get();
+
+                $columns = $columns->transform(function($column, $key) use($has_json) {
+                    $column->content = json_decode($column->content);
+                    if ($has_json) {
+                        $column->content->modules = $column->modules;
+                        $columns->content = json_encode($column->content);
+                    } else {
+                        $modules = $column->modules;
+                        $column->content->modules = $modules->transform(function($module, $key) {
+                            $module->content = json_decode($module->content);
+                            return $module;
+                        })->all();
+                    }
+                    return $column;
+                })->all();
+
                 $row = [
                     'id' => $module->id,
                     'columns' => $columns,
                 ];
 
-                $module->content = json_encode($columns);
+                $module->content = $has_json ? json_encode($columns) : $columns;
+            } else {
+                // trasforma il contenuto in oggetto oppure lo lascia in json
+                $module->content = $has_json ? $module->content : json_decode($module->content);
             }
 
+            // dd($module);
             return $module;
         })->all();
     }

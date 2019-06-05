@@ -9,10 +9,13 @@
     <div class="ui-block__container"
         ref="container">
 
-        <module-container v-for="(module, i) in modules"
-            :key="i"
+        <module-container v-for="(module, i) in cached"
+            :key="module.uuid"
             :item="module"
-            :model-idx="modelIdx" />
+            :model="model"
+            :model-idx="modelIdx"
+            @save="saveSubComponent"
+            @deleted="deletedComponent" />
 
         <components-list ref="componentSelector"
             :exclude="['row', 'grid']"
@@ -33,8 +36,12 @@
 
 <script>
 import Counter from './Counter.vue'
-import ModuleManager from '../../../containers/ModuleManager.vue'
 import ComponentsList from '../ComponentsList.vue'
+import ModuleManager from '../../../containers/ModuleManager.vue'
+import {
+    Uuid
+}
+from '../../../Utilities'
 
 export default {
     name: 'AdminUiBlock',
@@ -62,12 +69,21 @@ export default {
             size: null,
             align: null,
             model: 'App\\Module',
-            modelIdx: 0
+            modelIdx: 0,
+            cached: [],
+        }
+    },
+    watch: {
+        column: {
+            handler: function (col) {
+                this.setColumn(col)
+            },
+            deep: true
         }
     },
     computed: {
         content: function () {
-            return JSON.parse(this.column.content)
+            return this.column.content
         },
         sizeClass: function () {
             if (this.content.size == 'auto') {
@@ -85,6 +101,9 @@ export default {
         }
     },
     methods: {
+        setColumn: function (col) {
+            this.cached = col.content.modules
+        },
         updateSize: function (size) {
             this.$emit('update', {
                 size: size,
@@ -94,8 +113,30 @@ export default {
         addModule: function () {
             this.$refs.componentSelector.show()
         },
-        newComponent: function (type) {
-            console.log(type);
+        newComponent: function (type, content = {}) {
+            this.$refs.componentSelector.hide()
+
+            const newModule = {
+                uuid: Uuid.get(),
+                type: type,
+                isNew: true,
+                modulable_id: this.modelIdx,
+                modulable_type: this.model,
+                content: content,
+            }
+
+            this.$emit('add-component', this.column, newModule)
+        },
+        saveSubComponent: function (component) {
+            // console.log('salvo subcomponent', this.column);
+            this.$emit('save-column', this.column)
+        },
+        deletedComponent: function (component) {
+            console.log('Elimina componente dalla colonna');
+            let idx = this.cached.findIndex(cache => cache.uuid === component.uuid)
+            if (idx > -1) {
+                this.cached.splice(idx, 1)
+            }
         }
     },
     beforeCreate: function () {
@@ -103,11 +144,10 @@ export default {
             .default
     },
     created: function () {
+        this.setColumn(this.column)
         this.size = this.content.size
         this.align = this.content.hasOwnProperty('align') ? this.content.align : null
-        console.log(this.modules);
-    },
-    mounted: function () {},
+    }
 }
 </script>
 

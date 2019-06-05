@@ -28,6 +28,8 @@
     <admin-ui-module-row v-else-if="module.type === 'row'"
         :columns="content"
         :is-open="isOpen"
+        @save-row="saveRow"
+        @add-component="addComponent"
         @update-size="updateSize" />
     <ui-video v-else-if="module.type === 'video'"
         :url="this.content.url" />
@@ -72,7 +74,10 @@ export default {
     },
     computed: {
         content: function () {
-            return JSON.parse(this.module.content)
+            if (this.module && this.module.hasOwnProperty('content')) {
+                return this.module.content
+            }
+            return {}
         },
         isAdminClass: function () {
             if (this.isAdmin) {
@@ -102,11 +107,11 @@ export default {
                 }
             }
             return false
-        }
+        },
     },
     methods: {
         listener: function () {
-            // if (this.module.type === 'image') {
+            // if (this.module.type === 'row') {
             //     console.log(this.content);
             // }
             // console.log(this.content.hasOwnProperty('type') && this.content.type == 'packery');
@@ -121,6 +126,15 @@ export default {
             if (this.isAdmin) {
                 this.$emit('selected', this.module)
             }
+        },
+        addComponent: function (column, component) {
+            this.$emit('add-component', column, component)
+        },
+        saveRow: function (columns) {
+            console.log('save module', this.module);
+            this.$emit('save-module', this.module)
+            // console.log('salvataggio dall AdminModuleManager', columns);
+            // this.$emit('save-columns', columns)
         }
     },
     beforeCreate: function () {

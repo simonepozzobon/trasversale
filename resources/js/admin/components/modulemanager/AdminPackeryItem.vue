@@ -33,7 +33,10 @@
 </template>
 
 <script>
-import { UiParagraph } from '../../../ui'
+import {
+    UiParagraph
+}
+from '../../../ui'
 
 export default {
     name: 'UiPackeryItem',
@@ -58,8 +61,10 @@ export default {
             default: 2,
         },
         content: {
-            type: String,
-            default: null,
+            type: Object,
+            default: function () {
+                return {}
+            },
         },
         color: {
             type: String,
@@ -91,37 +96,38 @@ export default {
         },
     },
     computed: {
-        bgClass: function() {
+        bgClass: function () {
             if (this.img) {
                 return 'has-image-bg'
-            } else if (this.bgColor) {
+            }
+            else if (this.bgColor) {
                 return 'bg-' + this.bgColor
             }
         },
-        widthClass: function() {
+        widthClass: function () {
             if (this.width) {
-                return 'col-md-'+this.width
+                return 'col-md-' + this.width
             }
             return 'col'
         },
-        heightClass: function() {
+        heightClass: function () {
             if (this.height) {
                 return this.height
             }
             return null
         },
-        bgColorClass: function() {
+        bgColorClass: function () {
             if (this.bgColor && !this.img) {
-                return 'bg-'+this.bgColor
+                return 'bg-' + this.bgColor
             }
             return null
         },
-        hoverableClass: function() {
+        hoverableClass: function () {
             if (this.obj) {
                 return 'packery-item--hoverable'
             }
         },
-        hoverable: function() {
+        hoverable: function () {
             if (this.obj) {
                 return true
             }
@@ -129,20 +135,20 @@ export default {
             return false
         }
     },
-    data: function() {
+    data: function () {
         return {
             obj: null,
         }
     },
     watch: {
-        height: function(h) {
+        height: function (h) {
             this.setUnitHeight(this.unitSize)
         }
     },
     methods: {
-        setBackground: function() {
+        setBackground: function () {
             if (this.img) {
-                this.$refs.item.style.backgroundImage = 'url('+this.img+')'
+                this.$refs.item.style.backgroundImage = 'url(' + this.img + ')'
             }
 
             if (this.type == 'module' && this.subType) {
@@ -150,10 +156,10 @@ export default {
             }
 
             if (this.type !== 'module') {
-                this.obj = JSON.parse(this.content)
+                this.obj = this.content
             }
         },
-        setUnitHeight: function(height) {
+        setUnitHeight: function (height) {
             let realGutter = Math.round(this.gutter / 2)
             let itemHeight = height * this.height
 
@@ -165,14 +171,14 @@ export default {
             this.$refs.item.style.height = itemHeight + 'px'
             this.$refs.packeryItem.style.padding = realGutter + 'px'
         },
-        goToItem: function() {
+        goToItem: function () {
             // this.$root.goToWithParams('subpage', {
             //     page: 'post',
             //     subpage: this.obj.slug.slug,
             // })
         }
     },
-    mounted: function() {
+    mounted: function () {
         this.setBackground()
     }
 }
