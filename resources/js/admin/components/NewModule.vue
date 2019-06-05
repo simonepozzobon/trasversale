@@ -10,10 +10,10 @@
             @changed="setObj" />
         <hr>
         <div class="new-module__tools">
-            <button class="btn btn-outline-primary"
+            <!-- <button class="btn btn-outline-primary"
                 @click="saveComponent">
                 Salva Modifiche
-            </button>
+            </button> -->
             <button class="btn btn-outline-secondary"
                 @click="closeComponent">
                 Chiudi
@@ -114,31 +114,9 @@ export default {
             this.$emit('changed', obj)
         },
         saveComponent: function () {
-
+            console.log('deprecata');
             this.hide()
             this.$emit('save')
-
-            // let request = {
-            //     id: this.moduleId,
-            //     model_id: this.modelIdx,
-            //     model: this.model,
-            //     module: this.name,
-            //     data: this.obj,
-            // }
-            // this.$emit('save', this.obj)
-            // console.log('formatto richiesta', request);
-            // console.log('save component newmodule', request);
-
-            // let data = this.formatRequest(request)
-
-            // this.$http.post('/api/admin/save-component', data)
-            //     .then(response => {
-            //         console.log(response.data);
-            //         if (response.data.success) {
-            //             this.$emit('saved', response.data.module)
-            //             this.closeComponent()
-            //         }
-            //     })
         },
         formatRequest: function (obj) {
             let form = new FormData()
@@ -178,21 +156,21 @@ export default {
         },
         deleteComponent: function () {
             // Se non è un nuovo modulo, effettua l'eliminazione sul DB
-            if (this.moduleId && !this.isNew) {
-                let url = '/api/admin/delete-component/' + this.moduleId
-                this.$http.delete(url)
-                    .then(response => {
-                        // console.log(response.data);
-                        if (response.data.success) {
-                            this.$emit('deleted', response.data.module)
-                        }
-                    })
-            }
-            // se è un nuovo modulo emette l'evento deleted
-            else {
-                this.$emit('deleted', false)
-            }
-
+            // if (this.moduleId && !this.isNew) {
+            //     let url = '/api/admin/delete-component/' + this.moduleId
+            //     this.$http.delete(url)
+            //         .then(response => {
+            //             // console.log(response.data);
+            //             if (response.data.success) {
+            //                 this.$emit('deleted', response.data.module)
+            //             }
+            //         })
+            // }
+            // // se è un nuovo modulo emette l'evento deleted
+            // else {
+            //     this.$emit('deleted', false)
+            // }
+            this.$emit('delete', this.moduleId, this.isNew)
         }
     },
     mounted: function () {

@@ -8,6 +8,7 @@
         @selected="selected"
         @add-component="addComponent"
         @update-size="updateSize"
+        @delete="deleteComponent"
         @save-module="saveSubModule" />
 
     <!-- PANNELLO -->
@@ -23,6 +24,7 @@
         @save="saveComponent"
         @saved="savedComponent"
         @close="closeComponent"
+        @delete="deleteComponent"
         @deleted="deletedComponent" />
 </div>
 </template>
@@ -82,10 +84,9 @@ export default {
     },
     methods: {
         addComponent: function (column, component) {
-            console.log('aggiungi componente nella colonna', column);
             let columns = this.component.content
             let colID = columns.findIndex(col => col.uuid === column.uuid)
-            console.log(colID);
+            console.log('aggiungi componente nella colonna', column, colID);
             if (colID > -1) {
                 // aggiunge il componente alla colonna
                 columns[colID].content.modules.push(component)
@@ -106,6 +107,13 @@ export default {
         formatTempData: function (obj) {
             // console.log('formatTempData', this.item.type, obj);
             this.component.content = this.setPreview(obj)
+        },
+        deleteComponent: function (id, isNew, uuid = false) {
+            // console.log('module container delete', this.component);
+            if (!uuid) {
+                uuid = this.component.uuid
+            }
+            this.$emit('delete', id, isNew, uuid)
         },
         deletedComponent: function (module) {
             this.isOpen = false

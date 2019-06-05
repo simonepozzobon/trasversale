@@ -13,6 +13,10 @@
                                 @click="addComponent">
                                 Aggiungi Componente
                             </button>
+                            <button class="btn btn-outline-success"
+                                @click="savePage">
+                                Salva Pagina
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -23,12 +27,17 @@
                         :model="model"
                         :model-idx="modelIdx"
                         @deleted="deletedComponent"
-                        @save="saveComponent" />
+                        @save="saveComponent"
+                        @delete="deleteComponent" />
                 </div>
                 <div class="page-template__footer">
                     <button class="btn btn-outline-primary"
                         @click="addComponent">
                         Aggiungi Componente
+                    </button>
+                    <button class="btn btn-outline-success ml-2"
+                        @click="savePage">
+                        Salva Pagina
                     </button>
                 </div>
                 <components-list ref="componentSelector"
@@ -124,9 +133,7 @@ export default {
                     }
 
                     if (cache.type === 'row') {
-                        for (let j = 0; j < cache.content.length; j++) {
-                            cache.content[j].isNew = false
-                        }
+                        cache.content = this.setInitials(cache.content)
                     }
 
                     this.cached.push(cache)
@@ -134,6 +141,18 @@ export default {
             }
             // this.debug()
         },
+        setInitials: function (objs) {
+            for (let i = 0; i < objs.length; i++) {
+                objs[i].uuid = Uuid.get()
+                objs[i].isNew = false
+
+                if (objs[i].content.hasOwnProperty('modules')) {
+                    objs[i].content.modules = this.setInitials(objs[i].content.modules)
+                }
+            }
+            return objs
+        },
+
         debug: function () {
             if (this.cached.length === 0 && this.modelIdx !== 0) {
                 this.$nextTick(() => {
@@ -177,6 +196,44 @@ export default {
             this.moduleType = null
             this.$emit('deleted', module)
         },
+        deleteComponent: function (id, isNew, uuid) {
+            console.log('elimina componente', id, isNew, uuid);
+
+            // se è nuovo elimina il componente dalla visuale
+            if (isNew) {
+                this.cached = this.searchAndDelete(this.cached, uuid)
+            }
+            else {
+                // Se non è un nuovo modulo, effettua l'eliminazione sul DB
+                let url = '/api/admin/delete-component/' + id
+                this.$http.delete(url)
+                    .then(response => {
+                        // console.log(response.data);
+                        console.log('modulo eliminato', uuid);
+                        if (response.data.success) {
+                            this.cached = this.searchAndDelete(this.cached, uuid)
+                        }
+                    })
+            }
+        },
+        searchAndDelete: function (objs, uuid) {
+            let idx = objs.findIndex(obj => obj.uuid === uuid)
+            if (idx > -1) {
+                console.log('trovato');
+                objs.splice(idx, 1)
+            }
+            else {
+                for (let i = 0; i < objs.length; i++) {
+                    if (objs[i].content.hasOwnProperty('modules')) {
+                        objs[i].content.modules = this.searchAndDelete(objs[i].content.modules, uuid)
+                    }
+                    else if (objs[i].content.length > 0) {
+                        objs[i].content = this.searchAndDelete(objs[i].content, uuid)
+                    }
+                }
+            }
+            return objs
+        },
         saveComponent: function (component) {
             let idx = this.cached.findIndex(cache => cache.uuid === component.uuid)
             if (idx > -1) {
@@ -206,6 +263,14 @@ export default {
                     })
             }
         },
+        savePage: function () {
+            console.log('salva pagina');
+            for (let i = 0; i < this.cached.length; i++) {
+                let current = this.cached[i]
+                console.log(current);
+                this.saveComponent(current)
+            }
+        }
     },
     mounted: function () {
         this.init()

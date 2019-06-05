@@ -30,6 +30,7 @@
         :is-open="isOpen"
         @save-row="saveRow"
         @add-component="addComponent"
+        @delete-sub-component="deleteSubComponent"
         @update-size="updateSize" />
     <ui-video v-else-if="module.type === 'video'"
         :url="this.content.url" />
@@ -135,6 +136,9 @@ export default {
             this.$emit('save-module', this.module)
             // console.log('salvataggio dall AdminModuleManager', columns);
             // this.$emit('save-columns', columns)
+        },
+        deleteSubComponent: function (id, isNew, uuid) {
+            this.$emit('delete', id, isNew, uuid)
         }
     },
     beforeCreate: function () {

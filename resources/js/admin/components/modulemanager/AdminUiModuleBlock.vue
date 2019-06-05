@@ -15,6 +15,7 @@
             :model="model"
             :model-idx="modelIdx"
             @save="saveSubComponent"
+            @delete="deleteComponent"
             @deleted="deletedComponent" />
 
         <components-list ref="componentSelector"
@@ -130,6 +131,9 @@ export default {
         saveSubComponent: function (component) {
             // console.log('salvo subcomponent', this.column);
             this.$emit('save-column', this.column)
+        },
+        deleteComponent: function (id, isNew, uuid) {
+            this.$emit('delete-sub-component', id, isNew, uuid)
         },
         deletedComponent: function (component) {
             console.log('Elimina componente dalla colonna');

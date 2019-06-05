@@ -8,6 +8,7 @@
         :is-open="isOpen"
         @save-column="saveColumn"
         @add-component="addComponent"
+        @delete-sub-component="deleteSubComponent"
         @update="updateSize" />
 </ui-row>
 </template>
@@ -59,6 +60,9 @@ export default {
         },
         addComponent: function (column, component) {
             this.$emit('add-component', column, component)
+        },
+        deleteSubComponent: function (id, isNew, uuid) {
+            this.$emit('delete-sub-component', id, isNew, uuid)
         }
     },
     created: function () {
