@@ -251,6 +251,7 @@ class AdminController extends Controller
         }
 
         $module->type = $request->type;
+        $module->order = $request->order;
         $module->modulable_type = $request->modulable_type;
         $module->modulable_id = $request->modulable_id;
         $module->content = $content;

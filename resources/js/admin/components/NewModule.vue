@@ -1,26 +1,34 @@
 <template>
-<div class="new-module"
-    ref="container">
+<div
+    class="new-module"
+    ref="container"
+>
     <div class="new-module__container">
-        <dynamic-module v-if="module"
+        <dynamic-module
+            v-if="module"
             :name="name"
             :uuid="uuid"
             :options="module.options"
             :values="values"
             :is-edit="isEdit"
-            @changed="setObj" />
+            @changed="setObj"
+        />
         <hr>
         <div class="new-module__tools">
             <!-- <button class="btn btn-outline-primary"
                 @click="saveComponent">
                 Salva Modifiche
             </button> -->
-            <button class="btn btn-outline-secondary"
-                @click="closeComponent">
+            <button
+                class="btn btn-outline-secondary"
+                @click="closeComponent"
+            >
                 Chiudi
             </button>
-            <button class="btn btn-outline-danger"
-                @click="deleteComponent">
+            <button
+                class="btn btn-outline-danger"
+                @click="deleteComponent"
+            >
                 Elimina Componente
             </button>
         </div>

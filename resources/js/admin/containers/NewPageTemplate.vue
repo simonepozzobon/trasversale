@@ -25,16 +25,22 @@
                     </div>
                 </div>
                 <div class="page-template__content">
-                    <module-container
-                        v-for="(module, i) in cached"
-                        :key="module.uuid"
-                        :item="module"
-                        :model="model"
-                        :model-idx="modelIdx"
-                        @deleted="deletedComponent"
-                        @save="saveComponent"
-                        @delete="deleteComponent"
-                    />
+                    <draggable
+                        v-model="cached"
+                        @update="sortModules"
+                    >
+                        <module-container
+                            v-for="(module, i) in cached"
+                            :key="module.uuid"
+                            :item="module"
+                            :model="model"
+                            :model-idx="modelIdx"
+                            @deleted="deletedComponent"
+                            @save="saveComponent"
+                            @delete="deleteComponent"
+                            @save-sub-module="saveSubModule"
+                        />
+                    </draggable>
                 </div>
                 <div class="page-template__footer">
                     <button
@@ -63,6 +69,7 @@
 
 <script>
 import ComponentsList from '../components/ComponentsList.vue'
+import draggable from 'vuedraggable'
 import DynamicParams from '../DynamicParams'
 import EditPanel from '../components/EditPanel.vue'
 import ModuleContainer from './ModuleContainer.vue'
@@ -71,10 +78,13 @@ import {
 }
 from '../../Utilities'
 
+const orderBy = require('lodash.orderby')
+
 export default {
     name: 'NewPageTemplate',
     components: {
         ComponentsList,
+        draggable,
         EditPanel,
         ModuleContainer,
     },
@@ -138,10 +148,21 @@ export default {
     methods: {
         init: function () {
             // imposta una variabile intermedia per poter modificare i moduli
-            if (this.modules.length > 0) {
-                for (let i = 0; i < this.modules.length; i++) {
+            let sorted = orderBy(this.modules, ['order', 'created_at'], ['asc', 'asc'])
+            if (sorted.length > 0) {
+                for (let i = 0; i < sorted.length; i++) {
+                    if (sorted[i].type === 'row') {
+                        let sortedColumns = orderBy(sorted[i].content, ['order', 'created_at'], ['asc', 'asc'])
+                        sortedColumns = sortedColumns.map(column => {
+                            let sortedModules = orderBy(column.content.modules, ['order', 'created_at'], ['asc', 'asc'])
+                            column.content.modules = sortedModules
+                            return column
+                        })
+                        sorted[i].content = sortedColumns
+                    }
+
                     let cache = {
-                        ...this.modules[i],
+                        ...sorted[i],
                         uuid: Uuid.get()
                     }
 
@@ -192,6 +213,14 @@ export default {
 
             // console.log(newModule);
             this.cached.push(newModule)
+        },
+        saveSubModule: function (subModule) {
+            let idx = this.cached.findIndex(cache => cache.uuid === subModule.uuid)
+            if (idx > -1) {
+                this.cached.splice(idx, 1, subModule)
+                this.savePage()
+            }
+            // console.log(idx, subModule.uuid);
         },
         deletedComponent: function (component) {
             let idx = this.cached.findIndex(cache => cache.uuid === component.uuid)
@@ -277,16 +306,16 @@ export default {
                                 columnData = this.formatRequest(columnData)
                                 let columnRequest = this.$http.post('/api/admin/save-component', columnData)
                                     .then(columnResponse => {
-                                        for (let k = 0; k < modules.length; k++) {
-                                            let moduleData = Object.assign({}, modules[
-                                                k])
-                                            moduleData.modulable_id = columnResponse.data
-                                                .module.id
-                                            moduleData.modulable_type = 'App\\Module'
-                                            moduleData = this.formatRequest(moduleData)
-                                            let moduleRequest = this.$http.post(
-                                                '/api/admin/save-component',
-                                                moduleData)
+                                        if (modules) {
+                                            for (let k = 0; k < modules.length; k++) {
+                                                let moduleData = Object.assign({}, modules[
+                                                    k])
+                                                moduleData.modulable_id = columnResponse.data
+                                                    .module.id
+                                                moduleData.modulable_type = 'App\\Module'
+                                                moduleData = this.formatRequest(moduleData)
+                                                let moduleRequest = this.$http.post('/api/admin/save-component', moduleData)
+                                            }
                                         }
                                     })
                             }
@@ -345,6 +374,15 @@ export default {
             }
             return false
         },
+        sortModules: function (modules) {
+            this.cached = this.cached.map((cache, i) => {
+                let newModule = Object.assign({}, cache)
+                newModule['order'] = i
+                return newModule
+            })
+
+            this.savePage()
+        }
     },
     mounted: function () {
         this.init()

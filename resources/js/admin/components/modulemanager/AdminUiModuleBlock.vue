@@ -1,33 +1,42 @@
 <template>
-<div class="ui-block"
-    :class="[
-        sizeClass,
-        transparentClass,
-    ]"
-    ref="block">
-
-    <div class="ui-block__container"
-        ref="container">
-
-        <module-container v-for="(module, i) in cached"
-            :key="module.uuid"
-            :item="module"
-            :model="model"
-            :model-idx="modelIdx"
-            @save="saveSubComponent"
-            @delete="deleteComponent"
-            @deleted="deletedComponent" />
-
-        <components-list ref="componentSelector"
+<div
+    class="ui-block"
+    :class="[sizeClass, transparentClass]"
+    ref="block"
+>
+    <div
+        class="ui-block__container"
+        ref="container"
+    >
+        <draggable v-model="cached">
+            <module-container
+                v-for="(module, i) in cached"
+                :key="module.uuid"
+                :item="module"
+                :model="model"
+                :model-idx="modelIdx"
+                @save="saveSubComponent"
+                @delete="deleteComponent"
+                @deleted="deletedComponent"
+            />
+        </draggable>
+        <components-list
+            ref="componentSelector"
             :exclude="['row', 'grid']"
-            @new-component="newComponent" />
-
-        <div class="ui-block__action"
-            v-if="isOpen">
-            <counter @update="updateSize"
-                :size="content.size" />
-            <button class="btn btn-outline-primary ui-block__add"
-                @click="addModule">
+            @new-component="newComponent"
+        />
+        <div
+            class="ui-block__action"
+            v-if="isOpen"
+        >
+            <counter
+                @update="updateSize"
+                :size="content.size"
+            />
+            <button
+                class="btn btn-outline-primary ui-block__add"
+                @click="addModule"
+            >
                 Aggiungi
             </button>
         </div>
@@ -36,8 +45,9 @@
 </template>
 
 <script>
-import Counter from './Counter.vue'
 import ComponentsList from '../ComponentsList.vue'
+import Counter from './Counter.vue'
+import draggable from 'vuedraggable'
 import ModuleManager from '../../../containers/ModuleManager.vue'
 import {
     Uuid
@@ -47,9 +57,10 @@ from '../../../Utilities'
 export default {
     name: 'AdminUiBlock',
     components: {
-        Counter,
-        ModuleManager,
         ComponentsList,
+        Counter,
+        draggable,
+        ModuleManager,
     },
     props: {
         column: {

@@ -1,7 +1,8 @@
 <template>
 <div class="module-container">
     <!-- MODULE -->
-    <admin-module-manager v-if="component"
+    <admin-module-manager
+        v-if="component"
         :is-admin="true"
         :module="component"
         :isOpen="isOpen"
@@ -9,10 +10,12 @@
         @add-component="addComponent"
         @update-size="updateSize"
         @delete="deleteComponent"
-        @save-module="saveSubModule" />
+        @save-module="saveSubModule"
+    />
 
     <!-- PANNELLO -->
-    <new-module ref="panel"
+    <new-module
+        ref="panel"
         :name="item.type"
         :uuid="item.uuid"
         :model="item.modulable_type"
@@ -26,7 +29,8 @@
         @saved="savedComponent"
         @close="closeComponent"
         @delete="deleteComponent"
-        @deleted="deletedComponent" />
+        @deleted="deletedComponent"
+    />
 </div>
 </template>
 
@@ -101,9 +105,13 @@ export default {
             // this.component = Object.assign({}, newComponent)
             // console.log('dopo', this.component);
         },
-        saveSubModule: function (module) {
+        saveSubModule: function (columns) {
             // console.log('save sub module', this.item);
-            this.saveComponent(null)
+            // this.saveComponent(null)
+            this.component.content = columns
+
+            this.$emit('save-sub-module', this.component)
+            console.log(columns, this.component);
         },
         formatTempData: function (obj) {
             // console.log('formatTempData', this.item.type, obj);
