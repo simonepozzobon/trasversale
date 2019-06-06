@@ -57,7 +57,7 @@ export default {
     },
     methods: {
         setColumns: function (columns) {
-            this.cached = columns
+            this.cached = Object.assign([], columns)
         },
         updateSize: function (data) {
             this.$emit('update-size', data)

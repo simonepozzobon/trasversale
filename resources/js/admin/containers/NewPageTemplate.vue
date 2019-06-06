@@ -206,6 +206,7 @@ export default {
                 uuid: Uuid.get(),
                 type: type,
                 isNew: true,
+                order: this.cached.length,
                 modulable_id: this.modelIdx,
                 modulable_type: this.model,
                 content: {},

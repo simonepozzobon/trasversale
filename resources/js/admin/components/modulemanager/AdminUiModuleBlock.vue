@@ -134,11 +134,15 @@ export default {
         },
         newComponent: function (type, content = {}) {
             this.$refs.componentSelector.hide()
-
+            let order = 0
+            if (this.column.hasOwnProperty('content') && this.column.content.modules) {
+                order = this.column.content.modules.length
+            }
             const newModule = {
                 uuid: Uuid.get(),
                 type: type,
                 isNew: true,
+                order: order,
                 modulable_id: this.modelIdx,
                 modulable_type: this.model,
                 content: content,

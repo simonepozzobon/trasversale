@@ -91,7 +91,7 @@ export default {
         addComponent: function (column, component) {
             let columns = this.component.content
             let colID = columns.findIndex(col => col.uuid === column.uuid)
-            console.log('aggiungi componente nella colonna', column, colID);
+            console.log('aggiungi componente nella colonna', column, colID, component);
             if (colID > -1) {
                 // aggiunge il componente alla colonna
                 columns[colID].content.modules.push(component)
@@ -292,18 +292,19 @@ export default {
             let newColumns = []
 
             for (let i = 0; i < colsNum; i++) {
-                const newCol = this.generateColumn()
+                const newCol = this.generateColumn(i)
                 newColumns.push(newCol)
             }
 
             return newColumns
         },
-        generateColumn: function () {
+        generateColumn: function (i = 0) {
             return {
                 uuid: Uuid.get(),
                 type: 'column',
                 isNew: true,
                 modulable_type: 'App\\Module',
+                order: i,
                 content: {
                     size: 6,
                     modules: []
