@@ -10,7 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "axios": "^0.18",
+        "axios": "^0.19.0",
         "bootstrap": "^4.3.1",
         "bootstrap-vue": "^2.0.0-rc.19",
         "browser-sync": "^2.26.5",
@@ -33,12 +33,14 @@
     "dependencies": {
         "laravel-mix": "^4.0.15",
         "lodash.isequal": "^4.5.0",
+        "lodash.orderby": "^4.6.0",
         "tiptap": "^1.19.3",
         "tiptap-extensions": "^1.19.4",
         "vue-grid-layout": "^2.3.4",
         "vue-packery-draggabilly-plugin": "^1.0.3",
         "vue-packery-plugin": "^1.4.8",
         "vue-swatches": "^1.0.3",
+        "vuedraggable": "^2.21.0",
         "vueisotope": "^3.1.2"
     }
 }

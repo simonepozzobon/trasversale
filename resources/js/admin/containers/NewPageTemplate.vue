@@ -1,5 +1,6 @@
 <template>
 <div class="page-template">
+    <notifications-container :toasts="notifications" />
     <div class="page-tamplate__container container">
         <div class="page-template__row row">
             <div class="page-template__main col-12">
@@ -9,49 +10,57 @@
                             <h1 class="pt-3">{{ title }}</h1>
                         </div>
                         <div class="page-template__action">
-                            <!-- <button
-                                    class="btn btn-outline-secondary"
-                                    @click="addRow">
-                                    Aggiungi Riga
-                                </button> -->
-                            <button class="btn btn-outline-primary" @click="addComponent">
+                            <button
+                                class="btn btn-outline-primary"
+                                @click="addComponent"
+                            >
                                 Aggiungi Componente
+                            </button>
+                            <button
+                                class="btn btn-outline-success"
+                                @click="savePage"
+                            >
+                                Salva Pagina
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="page-template__content">
-                    <module-container v-for="(module, i) in cached" :key="i" :item="module" :model="model" :model-idx="modelIdx" @deleted="deleteComponent" />
+                    <draggable
+                        v-model="cached"
+                        @update="sortModules"
+                    >
+                        <module-container
+                            v-for="(module, i) in cached"
+                            :key="module.uuid"
+                            :item="module"
+                            :model="model"
+                            :model-idx="modelIdx"
+                            @deleted="deletedComponent"
+                            @save="saveComponent"
+                            @delete="deleteComponent"
+                            @save-sub-module="saveSubModule"
+                        />
+                    </draggable>
                 </div>
                 <div class="page-template__footer">
-                    <button class="btn btn-outline-primary" @click="addComponent">
+                    <button
+                        class="btn btn-outline-primary"
+                        @click="addComponent"
+                    >
                         Aggiungi Componente
                     </button>
-                </div>
-                <components-list ref="componentSelector" @new-component="newComponent" />
-            </div>
-            <div class="page-template__main col-12">
-                <div class="page-template__header">
-                    <div class="page-template__head">
-                        <div class="page-template__title">
-                            <h1 class="pt-3">Sidebar</h1>
-                        </div>
-                        <div class="page-template__action">
-                            <button class="btn btn-outline-primary" @click="addComponentSide">
-                                Aggiungi Componente
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="page-template__content">
-                    <module-container v-for="(module, i) in cachedSides" :key="i" :item="module" :model="model" :model-idx="modelIdx" @deleted="deleteComponentSide" />
-                </div>
-                <div class="page-template__footer">
-                    <button class="btn btn-outline-primary" @click="addComponentSide">
-                        Aggiungi Componente
+                    <button
+                        class="btn btn-outline-success ml-2"
+                        @click="savePage"
+                    >
+                        Salva Pagina
                     </button>
                 </div>
-                <components-list ref="sidebarSelector" @new-component="newComponentSide" />
+                <components-list
+                    ref="componentSelector"
+                    @new-component="newComponent"
+                />
             </div>
         </div>
     </div>
@@ -61,20 +70,27 @@
 
 <script>
 import ComponentsList from '../components/ComponentsList.vue'
+import draggable from 'vuedraggable'
 import DynamicParams from '../DynamicParams'
 import EditPanel from '../components/EditPanel.vue'
 import ModuleContainer from './ModuleContainer.vue'
+import NotificationsContainer from './NotificationsContainer.vue'
+
 import {
     Uuid
 }
 from '../../Utilities'
 
+const orderBy = require('lodash.orderby')
+
 export default {
     name: 'NewPageTemplate',
     components: {
         ComponentsList,
+        draggable,
         EditPanel,
         ModuleContainer,
+        NotificationsContainer,
     },
     props: {
         title: {
@@ -115,6 +131,10 @@ export default {
             values: null,
             cached: [],
             cachedSides: [],
+            files: [],
+            notifications: [],
+            loaded: 0,
+            counter: 0,
         }
     },
     computed: {
@@ -126,7 +146,7 @@ export default {
     },
     watch: {
         '$route.params': function (params) {
-            console.log('params cambiato', params);
+            // console.log('params cambiato', params);
         },
         modules: function (modules) {
             this.init()
@@ -135,7 +155,51 @@ export default {
     methods: {
         init: function () {
             // imposta una variabile intermedia per poter modificare i moduli
-            this.cached = this.modules
+            let sorted = orderBy(this.modules, ['order', 'created_at'], ['asc', 'asc'])
+            if (sorted.length > 0) {
+                for (let i = 0; i < sorted.length; i++) {
+                    if (sorted[i].type === 'row') {
+                        let sortedColumns = orderBy(sorted[i].content, ['order', 'created_at'], ['asc', 'asc'])
+                        sortedColumns = sortedColumns.map(column => {
+                            let sortedModules = orderBy(column.content.modules, ['order', 'created_at'], ['asc', 'asc'])
+                            column.content.modules = sortedModules
+                            return column
+                        })
+                        sorted[i].content = sortedColumns
+                    }
+
+                    let cache = {
+                        ...sorted[i],
+                        uuid: Uuid.get()
+                    }
+
+                    if (cache.type === 'row') {
+                        cache.content = this.setInitials(cache.content)
+                    }
+
+                    this.cached.push(cache)
+                }
+            }
+            // this.debug()
+        },
+        setInitials: function (objs) {
+            for (let i = 0; i < objs.length; i++) {
+                objs[i].uuid = Uuid.get()
+                objs[i].isNew = false
+
+                if (objs[i].content.hasOwnProperty('modules')) {
+                    objs[i].content.modules = this.setInitials(objs[i].content.modules)
+                }
+            }
+            return objs
+        },
+
+        debug: function () {
+            if (this.cached.length === 0 && this.modelIdx !== 0) {
+                this.$nextTick(() => {
+                    this.newComponent('row')
+                })
+            }
         },
         addComponent: function () {
             this.$refs.componentSelector.show()
@@ -146,49 +210,34 @@ export default {
 
             this.isEdit = false
             const newModule = {
+                uuid: Uuid.get(),
                 type: type,
                 isNew: true,
+                order: this.cached.length,
                 modulable_id: this.modelIdx,
                 modulable_type: this.model,
-                content: JSON.stringify({}),
+                content: {},
             }
+
+            // console.log(newModule);
             this.cached.push(newModule)
         },
-        deleteComponent: function (component) {
-            let idx = this.cached.indexOf(component)
+        saveSubModule: function (subModule) {
+            let idx = this.cached.findIndex(cache => cache.uuid === subModule.uuid)
+            if (idx > -1) {
+                this.cached.splice(idx, 1, subModule)
+                this.savePage()
+            }
+            // console.log(idx, subModule.uuid);
+        },
+        deletedComponent: function (component) {
+            let idx = this.cached.findIndex(cache => cache.uuid === component.uuid)
             if (idx > -1) {
                 this.cached.splice(idx, 1)
             }
         },
         dismissModal: function () {
             this.$refs.componentSelector.hide()
-        },
-
-        addComponentSide: function () {
-            this.$refs.sidebarSelector.show()
-        },
-        deleteComponentSide: function (component) {
-            let idx = this.cachedSides.indexOf(component)
-            if (idx > -1) {
-                this.cachedSides.splice(idx, 1)
-            }
-        },
-        dismissModalSide: function () {
-            this.$refs.sidebarSelector.hide()
-        },
-        newComponentSide: function (type) {
-            this.sideType = type
-            this.dismissModal()
-
-            this.isEdit = false
-            const newSide = {
-                type: type,
-                isNew: true,
-                modulable_id: this.modelIdx,
-                modulable_type: this.model,
-                content: JSON.stringify({}),
-            }
-            this.cachedSides.push(newSide)
         },
         setModule: function (module) {
             console.log('deprecata');
@@ -197,17 +246,195 @@ export default {
             this.moduleType = null
             this.$emit('deleted', module)
         },
-        deletedSide: function (sidebarModule) {
-            this.sideType = null
-            this.$emit('deleted', sidebarModule)
+        deleteComponent: function (id, isNew, uuid) {
+            console.log('elimina componente', id, isNew, uuid);
+
+            // se è nuovo elimina il componente dalla visuale
+            if (isNew) {
+                this.cached = this.searchAndDelete(this.cached, uuid)
+            }
+            else {
+                // Se non è un nuovo modulo, effettua l'eliminazione sul DB
+                let url = '/api/admin/delete-component/' + id
+                this.$http.delete(url)
+                    .then(response => {
+                        // console.log(response.data);
+                        // console.log('modulo eliminato', uuid);
+                        if (response.data.success) {
+                            this.cached = this.searchAndDelete(this.cached, uuid)
+                        }
+                    })
+            }
         },
-        // reset: function() {
-        //     this.moduleType = null
-        //     this.sideType = null
-        // }
+        searchAndDelete: function (objs, uuid) {
+            let idx = objs.findIndex(obj => obj.uuid === uuid)
+            if (idx > -1) {
+                console.log('trovato');
+                objs.splice(idx, 1)
+            }
+            else {
+                for (let i = 0; i < objs.length; i++) {
+                    if (objs[i].content.hasOwnProperty('modules')) {
+                        objs[i].content.modules = this.searchAndDelete(objs[i].content.modules,
+                            uuid)
+                    }
+                    else if (objs[i].content.length > 0) {
+                        objs[i].content = this.searchAndDelete(objs[i].content, uuid)
+                    }
+                }
+            }
+            return objs
+        },
+
+        savePage: function () {
+            // console.log('salva pagina', this.cached);
+            this.$root.$emit('close-all-panels')
+            this.counter = this.cached.length
+            let promises = []
+
+            for (let i = 0; i < this.cached.length; i++) {
+                // temps[i] = this.saveComponent(temps[i])
+                switch (this.cached[i].type) {
+                case 'row':
+                    let rowData = Object.assign({}, this.cached[i])
+                    delete rowData.content
+                    rowData.content = {
+                        columns: this.cached[i].content.length
+                    }
+
+                    rowData = this.formatRequest(rowData)
+                    let requestRow = this.$http.post('/api/admin/save-component', rowData)
+                        .then(rowResponse => {
+                            this.cached[i] = this.formatFromResponse(this.cached[i], rowResponse.data.module)
+                            let columns = this.cached[i].content
+                            for (let j = 0; j < columns.length; j++) {
+                                let modules = columns[j].content.modules
+                                let columnData = Object.assign({}, columns[j])
+                                columnData.modulable_id = rowResponse.data.module.id
+                                columnData.modulable_type = 'App\\Module'
+                                delete columnData.content.modules
+
+                                columnData = this.formatRequest(columnData)
+                                let requestColumn = this.$http.post('/api/admin/save-component', columnData)
+                                    .then(columnResponse => {
+                                        this.cached[i].content[j] = this.formatFromResponse(this.cached[i].content[j], columnResponse.data.module)
+                                        if (modules) {
+                                            for (let k = 0; k < modules.length; k++) {
+                                                let moduleData = Object.assign({}, modules[k])
+                                                moduleData.modulable_id = columnResponse.data.module.id
+                                                moduleData.modulable_type = 'App\\Module'
+                                                moduleData = this.formatRequest(moduleData)
+                                                let requestModule = this.$http.post('/api/admin/save-component', moduleData)
+                                                    .then(moduleResponse => {
+                                                        let newModule = this.formatFromResponse(modules[k], moduleResponse.data.module)
+                                                        this.cached[i].content[j].modules[k] = newModule
+                                                        if (!this.cached[i].content[j].content.hasOwnProperty('modules')) {
+                                                            this.cached[i].content[j].content.modules = []
+                                                            this.cached[i].content[j].content.modules[k] = newModule
+                                                        }
+                                                        else {
+                                                            this.cached[i].content[j].content.modules[k] = newModule
+                                                        }
+                                                    })
+                                                promises.push(requestModule)
+                                            }
+                                        }
+                                    })
+                                promises.push(requestColumn)
+                            }
+                        })
+                    promises.push(requestRow)
+                    break;
+                default:
+                    let data = this.formatRequest(this.cached[i])
+                    let request = this.$http.post('/api/admin/save-component', data)
+                        .then(response => {
+                            let temp = this.formatFromResponse(this.cached[i], response.data.module)
+                            this.cached[i] = temp
+                        })
+                    promises.push(request)
+                }
+            }
+
+            this.$http.all(promises)
+                .then(results => {
+                    this.notifications.push({
+                        uuid: Uuid.get(),
+                        title: 'Pagina Salvata',
+                        message: 'Salvataggio Completato'
+                    })
+                })
+        },
+        formatFromResponse: function (obj, newObj) {
+            let temp = Object.assign({}, obj, newObj)
+            temp.id = Number(temp.id)
+            temp.modulable_id = Number(temp.modulable_id)
+            temp.isNew = false
+            temp.order = Number(temp.order)
+            temp.content = obj.content
+
+            return temp
+        },
+        saveComponent: function (current) {
+
+        },
+        formatModuleData: function (source) {
+            let obj = Object.assign({}, source)
+
+        },
+        formatRequest: function (obj) {
+            let form = new FormData()
+            // inserisco i campi normali
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    if (key === 'content') {
+                        let content = obj[key]
+
+                        form.append(key, JSON.stringify(content))
+                    }
+                    else if (key === 'uuid') {
+                        let hasFile = this.hasFile(obj[key])
+                        // se nel contenuto del modulo c'è un file
+                        if (hasFile) {
+                            form.append('file', hasFile)
+                        }
+                    }
+                    else {
+                        form.append(key, obj[key])
+                    }
+                }
+            }
+            return form
+        },
+        hasFile: function (uuid) {
+            // console.log(uuid);
+            let idx = this.files.findIndex(file => file.uuid === uuid)
+            if (idx > -1) {
+                return this.files[idx].file
+            }
+            return false
+        },
+        sortModules: function (modules) {
+            this.cached = this.cached.map((cache, i) => {
+                let newModule = Object.assign({}, cache)
+                newModule['order'] = i
+                return newModule
+            })
+
+            this.savePage()
+        }
     },
     mounted: function () {
         this.init()
+        this.$root.$on('add-file-to-upload', obj => {
+            let idx = this.files.findIndex(file => file.uuid === obj.uuid)
+            if (idx > -1) {
+                this.files[idx].file = obj.file
+            }
+            else {
+                this.files.push(obj)
+            }
+        })
     },
 }
 </script>

@@ -1,15 +1,14 @@
-<template lang="html">
-    <div>
-        <dynamic-module-item
-            ref="module"
-            v-for="(option, i) in options"
-            :key="i"
-            :initial="setInitial(option)"
-            :option="option"
-            :data-obj="dataObj"
-            :edit="isEdit"
-            @changed="changed"/>
-    </div>
+<template>
+<div>
+    <dynamic-module-item ref="module"
+        v-for="(option, i) in options"
+        :key="i"
+        :initial="setInitial(option)"
+        :option="option"
+        :data-obj="dataObj"
+        :edit="isEdit"
+        @changed="changed" />
+</div>
 </template>
 
 <script>
@@ -30,9 +29,13 @@ export default {
             type: String,
             default: null,
         },
+        uuid: {
+            type: String,
+            default: null,
+        },
         options: {
             type: Array,
-            default: function() {
+            default: function () {
                 return []
             },
         },
@@ -46,13 +49,13 @@ export default {
             default: false,
         }
     },
-    data: function() {
+    data: function () {
         return {
             dataObj: null,
         }
     },
     methods: {
-        setModule: function() {
+        setModule: function () {
             let fields = this.options
             let dataObj = {}
             for (let i = 0; i < fields.length; i++) {
@@ -60,8 +63,14 @@ export default {
                 dataObj[field.key] = field.hasOwnProperty('default') ? field.default : null
             }
             this.dataObj = dataObj
+
+            // for (let key in this.dataObj) {
+            //     if (this.dataObj.hasOwnProperty(key)) {
+            //         this.emitChanged(key, this.dataObj[key])
+            //     }
+            // }
         },
-        setInitial: function(option) {
+        setInitial: function (option) {
             if (this.values) {
                 let key = option.key
                 if (option.hasOwnProperty('childrens') && option.childrens.length > 0) {
@@ -75,11 +84,11 @@ export default {
 
             return null
         },
-        emitChanged: function(key, value) {
+        emitChanged: function (key, value) {
             this.dataObj[key] = value
             this.$emit('changed', this.dataObj)
         },
-        changed: function(key, value, type) {
+        changed: function (key, value, type) {
             let prev = clone(this.dataObj[key])
             // console.log('Dynamic module è diverso', !isEqual(prev, value), key);
             if (!isEqual(prev, value) && type != 'file-input') {
@@ -87,12 +96,18 @@ export default {
             }
             else if (type === 'file-input') {
                 this.emitChanged(key, value)
+                // console.log(this.uuid, value);
+                this.$root.$emit('add-file-to-upload', {
+                    uuid: this.uuid,
+                    file: value
+                })
             }
 
             // console.log(key, value, type);
             if (type == 'file-input' || type == 'text') {
                 // console.log(key, value, type);
                 // cerco se ha un modulo preview
+
                 let idx = this.options.findIndex(option => option.parent == key && option.type == 'preview')
                 if (idx > -1) {
 
@@ -105,6 +120,7 @@ export default {
                             this.$refs.module[idx].src = e.target.result
                         }
                         reader.readAsDataURL(value)
+
                     }
                     else if (option.mime == 'video-url') {
                         let url
@@ -122,10 +138,10 @@ export default {
             }
         }
     },
-    created: function() {
+    created: function () {
         this.setModule()
     },
-    mounted: function() {
+    mounted: function () {
         // console.log(this.options);
     }
 }
