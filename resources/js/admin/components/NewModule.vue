@@ -1,35 +1,39 @@
-<template lang="html">
-    <div
-        class="new-module"
-        ref="container">
-        <div class="new-module__container">
-            <dynamic-module
-                v-if="module"
-                :name="name"
-                :options="module.options"
-                :values="values"
-                :is-edit="isEdit"
-                @changed="setObj"/>
-            <hr>
-            <div class="new-module__tools">
-                <button
-                    class="btn btn-outline-primary"
-                    @click="saveComponent">
-                    Salva Modifiche
-                </button>
-                <button
-                    class="btn btn-outline-secondary"
-                    @click="closeComponent">
-                    Chiudi
-                </button>
-                <button
-                    v-if="!isNew"
-                    class="btn btn-outline-danger">
-                    Elimina Componente
-                </button>
-            </div>
+<template>
+<div
+    class="new-module"
+    ref="container"
+>
+    <div class="new-module__container">
+        <dynamic-module
+            v-if="module"
+            :name="name"
+            :uuid="uuid"
+            :options="module.options"
+            :values="values"
+            :is-edit="isEdit"
+            @changed="setObj"
+        />
+        <hr>
+        <div class="new-module__tools">
+            <!-- <button class="btn btn-outline-primary"
+                @click="saveComponent">
+                Salva Modifiche
+            </button> -->
+            <button
+                class="btn btn-outline-secondary"
+                @click="closeComponent"
+            >
+                Chiudi
+            </button>
+            <button
+                class="btn btn-outline-danger"
+                @click="deleteComponent"
+            >
+                Elimina Componente
+            </button>
         </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -49,6 +53,10 @@ export default {
     },
     props: {
         name: {
+            type: String,
+            default: null,
+        },
+        uuid: {
             type: String,
             default: null,
         },
@@ -74,18 +82,18 @@ export default {
         },
         values: [Object, Array],
     },
-    data: function() {
+    data: function () {
         return {
             obj: null,
         }
     },
     computed: {
-        module: function() {
+        module: function () {
             return DynamicParams.filter(params => params.name == this.name)[0]
         },
     },
     methods: {
-        init: function() {
+        init: function () {
             let el = this.$refs.container
             let size = SizeUtil.get(el)
             // console.log(size);
@@ -97,7 +105,7 @@ export default {
             this.master.fromTo(el, .5, {
                 className: '-=new-module--open',
                 autoAlpha: 0,
-                ease: Power4.easeIn,
+                ease: Power4.easeInOut,
             }, {
                 className: '+=new-module--open',
                 autoAlpha: 1,
@@ -106,90 +114,32 @@ export default {
 
             this.master.progress(1)
                 .progress(0)
+
         },
-        show: function() {
+        show: function () {
+            // console.log('show values', this.values);
             this.master.play()
         },
-        hide: function() {
+        hide: function () {
             this.master.reverse()
         },
-        setObj: function(obj) {
+        setObj: function (obj) {
             this.obj = obj
             this.$emit('changed', obj)
         },
-        saveComponent: function() {
-            let request = {
-                id: this.moduleId,
-                model_id: this.modelIdx,
-                model: this.model,
-                module: this.name,
-                data: this.obj,
-            }
-            //
-            // if (!request.id) {
-            //     delete request.id
-            // }
-
-            // console.log(request);
-            let data = this.formatRequest(request)
-
-            this.$http.post('/api/admin/save-component', data)
-                .then(response => {
-                    console.log(response.data);
-                    if (response.data.success) {
-                        this.$emit('saved', response.data.module)
-                        this.closeComponent()
-                    }
-                })
+        saveComponent: function () {
+            console.log('deprecata');
+            this.hide()
+            this.$emit('save')
         },
-        formatRequest: function(obj) {
-            let form = new FormData()
-
-            // inserisco i campi normali
-            for (let key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    if (key == 'data') {
-                        let content = obj[key]
-                        let hasFile = this.hasFile(content)
-
-                        // se nel contenuto del modulo c'è un file
-                        if (hasFile) {
-                            form.append('file', content[hasFile])
-                        }
-                        form.append(key, JSON.stringify(content))
-                    }
-                    else {
-                        form.append(key, obj[key])
-                    }
-                }
-            }
-
-            return form
-        },
-        hasFile: function(obj) {
-            // https://stackoverflow.com/questions/31525667/check-if-variable-holds-file-or-blob
-            for (let key in obj) {
-                if (obj.hasOwnProperty(key) && obj[key] instanceof File) {
-                    return key
-                }
-            }
-            return false
-        },
-        closeComponent: function() {
+        closeComponent: function () {
             this.$emit('close')
         },
-        deleteComponent: function() {
-            let url = '/api/admin/delete-component/' + this.moduleId
-            this.$http.delete(url)
-                .then(response => {
-                    // console.log(response.data);
-                    if (response.data.success) {
-                        this.$emit('deleted', response.data.module)
-                    }
-                })
+        deleteComponent: function () {
+            this.$emit('delete', this.moduleId, this.isNew)
         }
     },
-    mounted: function() {
+    mounted: function () {
         this.$nextTick(this.init)
     },
 }

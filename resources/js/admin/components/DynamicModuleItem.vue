@@ -1,214 +1,352 @@
-<template lang="html">
-    <div class="module-item">
-        <div class="form-group row" v-if="option.type == 'text'">
-            <label :for="option.key" class="col-md-3">{{ option.label }}</label>
-            <div class="col-md-9">
-                <input type="text" :name="option.key" class="form-control" v-model="value">
-                <small class="text-muted" v-if="option.hasOwnProperty('info')">{{ option.info }}</small>
-            </div>
+<template>
+<div class="module-item">
+    <div
+        class="form-group row"
+        v-if="option.type === 'text'"
+    >
+        <label
+            :for="option.key"
+            class="col-md-3"
+        >
+            {{ option.label }}
+        </label>
+        <div class="col-md-9">
+            <input
+                type="text"
+                :name="option.key"
+                class="form-control"
+                v-model="value"
+            >
+            <small
+                class="text-muted"
+                v-if="option.hasOwnProperty('info')"
+            >
+                {{ option.info }}
+            </small>
         </div>
-        <div class="form-group row" v-else-if="option.type == 'switch'">
-            <label :for="option.key" class="col-md-3">{{ option.label }}</label>
-            <div class="form-group col-md-9">
-                <span class="switch">
-                    <input type="checkbox" class="switch" :id="option.key" v-model="value">
-                    <label :for="option.key"></label>
-                </span>
-            </div>
-        </div>
-        <div class="form-group form__field row" v-else-if="option.type == 'color-picker'">
-            <label :for="option.key" class="col-md-3">{{ option.label }}</label>
-            <div class="form__input col-md-9">
-                <swatches
-                    v-model="value"
-                    :colors="colors"
-                    background-color="transparent"
-                    :wrapper-style="swatchesWrapperStyle"
-                    inline />
-            </div>
-        </div>
-        <div class="form-group row" v-else-if="option.type == 'file-input'">
-            <label class="col-md-3">{{ option.label }}</label>
-            <div class="col-md-9">
-                <div class="input-group mb-3">
-                    <div class="custom-file">
-                        <input
-                            ref="file"
-                            type="file"
-                            class="custom-file-input"
-                            :id="option.key"
-                            :accept="option.accept"
-                            @change="previewFile"/>
+    </div>
 
-                        <label
-                            class="custom-file-label"
-                            :for="option.key"
-                            aria-describedby="inputGroupFileAddon02">
-                            Seleziona File
-                        </label>
+    <ui-switch
+        v-else-if="option.type === 'switch'"
+        :label="option.label"
+        @changed="subChanged"
+    />
+
+    <div
+        class="form-group form__field row"
+        v-else-if="option.type === 'color-picker'"
+    >
+        <label
+            :for="option.key"
+            class="col-md-3"
+        >{{ option.label }}</label>
+        <div class="form__input col-md-9">
+            <swatches
+                v-model="value"
+                :colors="colors"
+                background-color="transparent"
+                :wrapper-style="swatchesWrapperStyle"
+                inline
+            />
+        </div>
+    </div>
+
+    <div
+        class="form-group row"
+        v-else-if="option.type === 'file-input'"
+    >
+        <label class="col-md-3">{{ option.label }}</label>
+        <div class="col-md-9">
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                    <input
+                        ref="file"
+                        type="file"
+                        class="custom-file-input"
+                        :id="option.key"
+                        :accept="option.accept"
+                        @change="previewFile"
+                    />
+
+                    <label
+                        class="custom-file-label"
+                        :for="option.key"
+                        aria-describedby="inputGroupFileAddon02"
+                    >
+                        Seleziona File
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div
+        class="form-group row"
+        v-else-if="option.type === 'preview' && this.src"
+    >
+        <label
+            for="preview"
+            class="col-md-3"
+        >
+            Anteprima
+        </label>
+        <div class="col-md-9">
+            <img
+                :src="src"
+                alt=""
+                class="preview-image"
+                v-if="option.mime == 'image'"
+            >
+            <div
+                class="embed-responsive embed-responsive-16by9"
+                v-else
+            >
+                <iframe
+                    class="embed-responsive-item"
+                    :src="src"
+                    allowfullscreen
+                >
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <div
+        class="form-group row"
+        v-else-if="option.type === 'wysiwyg'"
+    >
+        <label class="col-md-3">{{ option.label }}</label>
+        <div class="col-md-9">
+            <text-editor
+                ref="textEditor"
+                :initial="this.value"
+                @update="updateEditor"
+            />
+        </div>
+    </div>
+
+    <div
+        class="form-group row"
+        v-else-if="option.type === 'select'"
+    >
+        <label
+            :for="option.key"
+            class="col-md-3"
+        >
+            {{ option.label }}
+        </label>
+        <div class="col-md-9">
+            <select
+                class="form-control"
+                :name="option.key"
+                v-model="value"
+            >
+                <option
+                    v-for="(children, i) in option.options"
+                    :value="children.value"
+                >
+                    {{ children.label }}
+                </option>
+            </select>
+            <small
+                class="text-muted"
+                v-if="option.hasOwnProperty('info')"
+            >
+                {{ option.info }}
+            </small>
+        </div>
+    </div>
+
+    <div
+        class="form-group row"
+        v-else-if="option.type === 'counter' && visible"
+    >
+        <label
+            :for="option.key"
+            class="col-md-3"
+        >
+            {{ option.label }}
+        </label>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="input-group col-md-3">
+                    <div class="input-group-prepend">
+                        <button
+                            class="btn btn-outline-primary"
+                            @click="addCounter"
+                        >
+                            +
+                        </button>
+                    </div>
+                    <input
+                        type="text"
+                        :name="option.key"
+                        class="form-control"
+                        v-model="value"
+                    />
+
+                    <div class="input-group-append">
+                        <button
+                            class="btn btn-outline-primary"
+                            @click="removeCounter"
+                        >
+                            -
+                        </button>
                     </div>
                 </div>
             </div>
+            <small
+                class="text-muted"
+                v-if="option.hasOwnProperty('info')"
+            >
+                {{ option.info }}
+            </small>
         </div>
-        <div class="form-group row" v-else-if="option.type == 'preview' && this.src">
-            <label for="preview" class="col-md-3">Anteprima</label>
-            <div class="col-md-9">
-                <img :src="src" alt="" class="preview-image" v-if="option.mime == 'image'">
-                <div class="embed-responsive embed-responsive-16by9" v-else>
-                    <iframe
-                        class="embed-responsive-item"
-                        :src="src"
-                        allowfullscreen>
-                    </iframe>
-                </div>
-            </div>
-        </div>
-        <div class="form-group row" v-else-if="option.type == 'wysiwyg'">
-            <label class="col-md-3">{{ option.label }}</label>
-            <div class="col-md-9">
-                <text-editor
-                    ref="textEditor"
-                    :initial="this.value"
-                    @update="updateEditor"/>
-            </div>
-        </div>
+    </div>
 
-        <div class="form-group row" v-else-if="option.type == 'select'">
-            <label :for="option.key" class="col-md-3">{{ option.label }}</label>
-            <div class="col-md-9">
-                <select class="form-control" :name="option.key" v-model="value">
-                    <option
-                        v-for="(children, i) in option.options"
-                        :value="children.value">
-                        {{ children.label }}
-                    </option>
-                </select>
-                <small class="text-muted" v-if="option.hasOwnProperty('info')">{{ option.info }}</small>
-            </div>
-        </div>
+    <dynamic-module
+        v-else-if="option.type === 'multiple'"
+        :options="option.childrens"
+        :is-edit="edit"
+        :values="values"
+        :debug="true"
+        @changed="subChanged"
+    />
 
-        <div class="form-group row" v-else-if="option.type == 'counter' && visible">
-            <label :for="option.key" class="col-md-3">{{ option.label }}</label>
-            <div class="col-md-9">
-                <div class="row">
-                    <div class="input-group col-md-3">
-                        <div class="input-group-prepend">
-                            <button class="btn btn-outline-primary" @click="addCounter">+</button>
-                        </div>
-                        <input
-                            type="text"
-                            :name="option.key"
-                            class="form-control"
-                            v-model="value"/>
+    <div
+        class="form-group row"
+        v-else-if="option.type === 'post-select'"
+    >
+        <label
+            :for="option.key"
+            class="col-md-3"
+        >
+            Anteprima
+        </label>
+        <div class="col-md-9">
+            <grid-layout
+                ref="gridLayout"
+                :layout="elements"
+                :col-num="12"
+                :row-height="60"
+                :is-draggable="true"
+                :is-resizable="true"
+                :auto-size="true"
+                :is-mirrored="false"
+                :vertical-compact="true"
+                :margin="[10, 10]"
+                :use-css-transforms="true"
+                @layout-updated="layoutUpdated"
+            >
 
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-primary" @click="removeCounter">-</button>
-                        </div>
-                    </div>
-                </div>
-                <small class="text-muted" v-if="option.hasOwnProperty('info')">{{ option.info }}</small>
-            </div>
-        </div>
+                <grid-item
+                    ref="gridItem"
+                    v-for="(element, i) in elements"
+                    :key="element.idx"
+                    class="element-item"
+                    :x="element.x"
+                    :y="element.y"
+                    :w="element.w"
+                    :h="element.h"
+                    :i="element.i"
+                >
 
-        <dynamic-module
-            v-else-if="option.type == 'multiple'"
-            :options="option.childrens"
-            :is-edit="edit"
-            :values="values"
-            :debug="true"
-            @changed="subChanged"/>
-
-        <div class="form-group row" v-else-if="option.type == 'post-select'">
-            <label :for="option.key" class="col-md-3">Anteprima</label>
-            <div class="col-md-9">
-                <grid-layout
-                    ref="gridLayout"
-                    :layout="elements"
-                    :col-num="12"
-                    :row-height="60"
-                    :is-draggable="true"
-                    :is-resizable="true"
-                    :auto-size="true"
-                    :is-mirrored="false"
-                    :vertical-compact="true"
-                    :margin="[10, 10]"
-                    :use-css-transforms="true"
-                    @layout-updated="layoutUpdated">
-
-                    <grid-item
-                        ref="gridItem"
-                        v-for="(element, i) in elements"
-                        :key="element.idx"
-                        class="element-item"
-                        :x="element.x"
-                        :y="element.y"
-                        :w="element.w"
-                        :h="element.h"
-                        :i="element.i"
-                        @moved="gridItemMoved"
-                        @resized="gridItemResized">
+                    <div
+                        class="element-item__container"
+                        :style="'background-image: url('+ element.thumb +')'"
+                    >
 
                         <div
-                            class="element-item__container"
-                            :style="'background-image: url('+ element.thumb +')'">
-
-                            <div class="element-item__tools" v-if="!disableTable">
-                                <button
-                                    class="btn btn-outline-danger"
-                                    @click="removeElement(element)">
-                                    Rimuovi
-                                </button>
-                            </div>
+                            class="element-item__tools"
+                            v-if="!disableTable"
+                        >
+                            <button
+                                class="btn btn-outline-danger"
+                                @click="removeElement(element)"
+                            >
+                                Rimuovi
+                            </button>
                         </div>
-                    </grid-item>
-                </grid-layout>
-            </div>
+                    </div>
+                </grid-item>
+            </grid-layout>
         </div>
+    </div>
 
-        <columns-preview
-            v-else-if="option.type == 'row-preview'"
-            :cols-number="relatedValue" />
+    <columns-preview
+        v-else-if="option.type === 'row-preview'"
+        :cols-number="relatedValue"
+    />
 
-        <div v-else>
-            {{ option }}
-        </div>
+    <dummy-module
+        v-else-if="option.type === 'info'"
+        :content="option.label"
+    />
 
-        <div class="form-group row" v-if="option.type == 'post-select' && !disableTable">
-            <label :for="option.key" class="col-md-3">{{ option.label }}</label>
-            <div class="col-md-9">
-                <b-table
-                    ref="table"
-                    striped
-                    hover
-                    :items="blocks"
-                    :fields="fields">
-                    <template slot="thumb" slot-scope="data">
-                        <img
-                            v-if="data.item.thumb"
-                            :src="data.item.thumb"
-                            :alt="data.item.title"
-                            class="module-item__image-post" />
-                    </template>
-                    <template slot="selected" slot-scope="data">
-                        <ui-checkbox
-                            :value="Boolean(data.item.selected)"
-                            @click="selectPost(data.item)"/>
-                    </template>
-                </b-table>
-            </div>
+    <div v-else>
+        {{ option }}
+    </div>
 
+    <div
+        class="form-group row"
+        v-if="option.type === 'post-select' && !disableTable"
+    >
+        <label
+            :for="option.key"
+            class="col-md-3"
+        >{{ option.label }}</label>
+        <div class="col-md-9">
+            <b-table
+                ref="table"
+                striped
+                hover
+                :items="blocks"
+                :fields="fields"
+            >
+                <template
+                    slot="thumb"
+                    slot-scope="data"
+                >
+                    <img
+                        v-if="data.item.thumb"
+                        :src="data.item.thumb"
+                        :alt="data.item.title"
+                        class="module-item__image-post"
+                    />
+                </template>
+                <template
+                    slot="selected"
+                    slot-scope="data"
+                >
+                    <ui-checkbox
+                        :value="Boolean(data.item.selected)"
+                        @click="selectPost(data.item)"
+                    />
+                </template>
+            </b-table>
         </div>
 
     </div>
+
+</div>
 </template>
 
 <script>
-import { clone, isEqual } from '../../Utilities'
+import {
+    clone,
+    isEqual
+}
+from '../../Utilities'
+import DummyModule from './DummyModule.vue'
 import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
 import Swatches from 'vue-swatches'
 import TextEditor from './TextEditor.vue'
 import VueGridLayout from 'vue-grid-layout'
-import { UiCheckbox } from '../../ui'
+import {
+    UiCheckbox,
+    UiSwitch,
+}
+from '../../ui'
 
 import PostFields from './post-selector/PostFields'
 
@@ -218,20 +356,26 @@ export default {
     name: 'DynamicModuleItem',
     components: {
         ColumnsPreview,
+        DummyModule,
         Swatches,
         TextEditor,
         GridLayout: VueGridLayout.GridLayout,
         GridItem: VueGridLayout.GridItem,
         UiCheckbox,
+        UiSwitch,
     },
     props: {
         option: {
             type: Object,
-            default: function() { return {} },
+            default: function() {
+                return {}
+            },
         },
         dataObj: {
             type: Object,
-            default: function() { return {} },
+            default: function() {
+                return {}
+            },
         },
         edit: {
             type: Boolean,
@@ -262,20 +406,15 @@ export default {
     watch: {
         value: function(newValue, oldValue) {
             // console.log('è un valore diference', this.option.key, !isEqual(newValue, oldValue));
-            if(!isEqual(newValue, oldValue)) {
-                // if (this.option.key === 'elements') {
+            if (!isEqual(newValue, oldValue)) {
+                // if (this.option.key == 'elements') {
                 //     console.log('dynamic item change');
                 // }
                 this.$emit('changed', this.option.key, newValue, this.option.type)
             }
         },
         elements: function(newEls, oldEls) {
-            // console.log(newEls, oldEls);
-            // console.log('elements are different', !isEqual(newEls, oldEls));
             this.value = clone(newEls)
-            // console.log('changed');
-            // if (!isEqual(newEls, oldEls)) {
-            // }
         }
     },
     computed: {
@@ -300,7 +439,7 @@ export default {
         related: function() {
             if (this.hasRelated) {
                 let options = this.$parent.options
-                let idx = options.findIndex(option => option.key ==  this.option.relatedKey)
+                let idx = options.findIndex(option => option.key == this.option.relatedKey)
 
                 if (idx > -1) {
                     return this.$parent.$refs.module[idx]
@@ -363,20 +502,20 @@ export default {
             }
         },
         setWatcher: function(relatedKey) {
-            if (this.option.type == 'counter') {
-            }
+            if (this.option.type === 'counter') {}
             // set watcher for related key
             let watcher = 'dataObj.' + relatedKey
 
             this.$watch(watcher, (value) => {
-                if (this.option.type == 'post-select') {
+                if (this.option.type === 'post-select') {
                     this.getElements(value, relatedKey)
                 }
 
-                if (this.option.type == 'counter' && this.relatedValue) {
+                if (this.option.type === 'counter' && this.relatedValue) {
                     if (this.relatedValue == 'last-mix') {
                         this.visible = true
-                    } else {
+                    }
+                    else {
                         this.visible = false
                     }
                 }
@@ -388,17 +527,17 @@ export default {
             // set initial value if related has one
             let related = this.dataObj[relatedKey]
             if (related) {
-                if (this.option.type == 'post-select') {
+                if (this.option.type === 'post-select') {
                     this.getElements(related, relatedKey)
                 }
             }
         },
         getColors: function() {
-            let themeColors = [ 'blue', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'white', 'gray', 'gray-dark', 'black', 'primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark' ]
+            let themeColors = ['blue', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'white', 'gray', 'gray-dark', 'black', 'primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
             let colors = []
 
             for (let i = 0; i < themeColors.length; i++) {
-                let color = this.getColor('--'+themeColors[i])
+                let color = this.getColor('--' + themeColors[i])
                 let idx = colors.findIndex(item => item == color)
                 if (idx < 0) {
                     colors.push(color)
@@ -408,9 +547,11 @@ export default {
             this.colors = colors
         },
         getColor: function(key) {
-            return getComputedStyle(document.documentElement).getPropertyValue(key).trim()
+            return getComputedStyle(document.documentElement)
+                .getPropertyValue(key)
+                .trim()
         },
-        previewFile: function () {
+        previewFile: function() {
             this.value = this.$refs.file.files[0]
         },
         updateEditor: function(json, html) {
@@ -421,32 +562,34 @@ export default {
         },
         getElements: function(value, relatedKey) {
             let url = '/api/admin/grid-elements/' + value
-            this.$http.get(url).then(response => {
-                // console.log(response.data.elements);
-                if (response.data.success) {
-                    this.blocks = response.data.elements
-                    // this.debug()
-                    if (relatedKey == 'post_count') {
-                        let options = this.$parent.options
-                        let idx = options.findIndex(option => option.key == relatedKey)
-                        let parent = this.$parent.$refs.module[idx]
-                        let parentValue = parent.value
-                        // this.elements = []
+            this.$http.get(url)
+                .then(response => {
+                    // console.log(response.data.elements);
+                    if (response.data.success) {
+                        this.blocks = response.data.elements
+                        // this.debug()
+                        if (relatedKey == 'post_count') {
+                            let options = this.$parent.options
+                            let idx = options.findIndex(option => option.key == relatedKey)
+                            let parent = this.$parent.$refs.module[idx]
+                            let parentValue = parent.value
+                            // this.elements = []
 
-                        this.$nextTick(() => {
-                            for (let i = 0; i < parentValue; i++) {
-                                this.selectPost(this.blocks[i])
-                            }
-                        })
-                    }
+                            this.$nextTick(() => {
+                                for (let i = 0; i < parentValue; i++) {
+                                    this.selectPost(this.blocks[i])
+                                }
+                            })
+                        }
 
-                    if (relatedKey == 'model' && value == 'last-mix') {
-                        this.disableTable = true
-                    } else {
-                        this.disableTable = false
+                        if (relatedKey == 'model' && value == 'last-mix') {
+                            this.disableTable = true
+                        }
+                        else {
+                            this.disableTable = false
+                        }
                     }
-                }
-            })
+                })
         },
         selectPost: function(item) {
             let idx = this.blocks.indexOf(item)
@@ -467,7 +610,7 @@ export default {
 
                 // rimuove elemento dalla tabella
                 else {
-                    let i = this.elements.findIndex(element => element.id == item.id && element.type == item.type)
+                    let i = this.elements.findIndex(element => element.type_id == item.id && element.type === item.type)
                     if (i > -1) {
                         // force replace
                         const newEls = Object.assign([], this.elements)
@@ -480,10 +623,11 @@ export default {
         removeElement: function(item) {
             // console.log(item);
             // rimuove l'elemento dalla griglia e lo deseleziona dalla tabella
-            let idx = this.blocks.findIndex(row => row.id == item.id && row.type == item.type)
+            let idx = this.blocks.findIndex(row => row.id == item.type_id && row.type === item.type)
             if (idx > -1) {
                 // console.log(this.blocks[idx]);
-                this.blocks[idx].selected = 0
+                this.blocks[idx].selected = false
+                item.selected = false
             }
 
             let index = this.elements.indexOf(item)
@@ -497,8 +641,11 @@ export default {
             let colN = 12
             let w = item.hasOwnProperty('width') ? item.width : 2
             let h = item.hasOwnProperty('height') ? item.height : 2
-            let x = item.hasOwnProperty('x')? item.x : (i * w) % colN
-            let y = item.hasOwnProperty('y')? item.y : Math.floor((i * w) / colN)
+            let x = item.hasOwnProperty('x') ? item.x : (i * w) % colN
+            let y = item.hasOwnProperty('y') ? item.y : Math.floor((i * w) / colN)
+
+            const cache = clone(item)
+            delete cache.id
 
             const newEl = {
                 i: i,
@@ -508,35 +655,14 @@ export default {
                 h: h,
                 idx: this.increments,
                 order: i,
-                ...item,
+                type_id: item.id,
+                ...cache,
             }
-
-            this.increments++
-            return newEl
-        },
-        gridItemMoved: function(i, newX, newY){
-            // console.log('moved');
-            // let item = this.elements[i] // element moved
-            // for (let i = 0; i < this.elements.length; i++) {
-            //     this.elements[i]
-            // }
-        },
-        gridItemResized: function(i, newH, newW, newHPx, newWPx) {
-            // let newEls = Object.assign([], this.elements)
-            // let index = newEls.findIndex(el => el.i === i)
-            // console.log(newEls[index]);
-            // console.log(index, i);
-            // let item = Object.assign({}, newEls[index])
-            // console.log(item);
-            // let newEl = Object.assign({}, item, {w: newW, h: newH})
 
             // console.log(newEl);
 
-            // force replace
-            // const newEls = Object.assign([], this.elements)
-            // newEls.splice(index, 1, newEl)
-            //
-            // this.elements = Object.assign([], newEls)
+            this.increments++
+            return newEl
         },
         layoutUpdated: function(newLayout) {
             // console.log('layout aggiornato', newLayout);
@@ -580,12 +706,12 @@ export default {
             }
 
             // se è post-select
-            if (this.option.type == 'post-select' && this.initial) {
+            if (this.option.type === 'post-select' && this.initial) {
                 // console.log('post-select', this.option.key, this.option.type);
                 // console.log('initila', this.initial);
                 for (let i = 0; i < this.initial.length; i++) {
                     let formatted = this.formatElementForGrid(this.initial[i], i)
-                    console.log(formatted);
+                    // console.log(formatted);
                     this.elements.push(formatted)
                 }
                 // console.log('griglia', this.initial[0]);
@@ -593,7 +719,8 @@ export default {
         },
     },
     beforeCreate: function() {
-        this.$options.components.DynamicModule = require('./DynamicModule.vue').default
+        this.$options.components.DynamicModule = require('./DynamicModule.vue')
+            .default
     },
     created: function() {
         this.getColors()
@@ -602,8 +729,7 @@ export default {
 
 
     },
-    mounted: function() {
-    }
+    mounted: function() {}
 }
 </script>
 
@@ -616,7 +742,6 @@ export default {
     width: 100%;
     height: auto;
 }
-
 
 .module-item {
     &__image-post {

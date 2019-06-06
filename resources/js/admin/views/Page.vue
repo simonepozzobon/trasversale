@@ -6,7 +6,8 @@
         :model-idx="idx"
         :modules="this.modules"
         @saved="saved"
-        @deleted="deleted">
+        @deleted="deleted"
+        :has-sidebar="true">
     </new-page-template>
 </template>
 
@@ -20,7 +21,7 @@ export default {
         NewPageTemplate,
         ModuleManager,
     },
-    data: function() {
+    data: function () {
         return {
             title: null,
             modules: [],
@@ -29,41 +30,43 @@ export default {
         }
     },
     watch: {
-        '$route.params': function(params) {
+        '$route.params': function (params) {
+            this.modules = []
             this.getPage(params.page)
         }
     },
     methods: {
-        getPage: function(id) {
+        getPage: function (id) {
             this.idx = Number(id)
-            this.$http.get('/api/admin/page/' + id).then(response => {
-                this.title = response.data.title
-                this.modules = response.data.modules
-                // console.log(this.modules);
-            })
+            this.$http.get('/api/admin/page/' + id)
+                .then(response => {
+                    this.title = response.data.title
+                    this.modules = response.data.modules
+                })
         },
-        saved: function(module) {
-            this.modules.push(module)
-        },
-        saved: function(module) {
+        // saved: function (module) {
+        //     this.modules.push(module)
+        // },
+        saved: function (module) {
             let idx = this.modules.findIndex(item => item.id == module.id)
             if (idx > -1) {
                 this.modules.splice(idx, 1, module)
-            } else {
+            }
+            else {
                 this.modules.push(module)
             }
         },
-        deleted: function(module) {
+        deleted: function (module) {
             let idx = this.modules.findIndex(item => item.id == module.id)
             if (idx > -1) {
                 this.modules.splice(idx, 1)
             }
         },
-        selected: function(module) {
+        selected: function (module) {
             this.$children[0].setModule(module)
         },
     },
-    mounted: function() {
+    mounted: function () {
         this.getPage(this.$route.params.page)
     }
 
