@@ -4,6 +4,7 @@
     <div class="new-module__container">
         <dynamic-module v-if="module"
             :name="name"
+            :uuid="uuid"
             :options="module.options"
             :values="values"
             :is-edit="isEdit"
@@ -44,6 +45,10 @@ export default {
     },
     props: {
         name: {
+            type: String,
+            default: null,
+        },
+        uuid: {
             type: String,
             default: null,
         },
@@ -118,58 +123,10 @@ export default {
             this.hide()
             this.$emit('save')
         },
-        formatRequest: function (obj) {
-            let form = new FormData()
-
-            // inserisco i campi normali
-            for (let key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    if (key == 'data') {
-                        let content = obj[key]
-                        let hasFile = this.hasFile(content)
-
-                        // se nel contenuto del modulo c'è un file
-                        if (hasFile) {
-                            form.append('file', content[hasFile])
-                        }
-                        form.append(key, JSON.stringify(content))
-                    }
-                    else {
-                        form.append(key, obj[key])
-                    }
-                }
-            }
-
-            return form
-        },
-        hasFile: function (obj) {
-            // https://stackoverflow.com/questions/31525667/check-if-variable-holds-file-or-blob
-            for (let key in obj) {
-                if (obj.hasOwnProperty(key) && obj[key] instanceof File) {
-                    return key
-                }
-            }
-            return false
-        },
         closeComponent: function () {
             this.$emit('close')
         },
         deleteComponent: function () {
-            // Se non è un nuovo modulo, effettua l'eliminazione sul DB
-            // if (this.moduleId && !this.isNew) {
-            //     let url = '/api/admin/delete-component/' + this.moduleId
-            //     this.$http.delete(url)
-            //         .then(response => {
-            //             // console.log(response.data);
-            //             if (response.data.success) {
-            //                 this.$emit('deleted', response.data.module)
-            //             }
-            //         })
-            // }
-            // // se è un nuovo modulo emette l'evento deleted
-            // else {
-            //     this.$emit('deleted', false)
-            // }
             this.$emit('delete', this.moduleId, this.isNew)
         }
     },

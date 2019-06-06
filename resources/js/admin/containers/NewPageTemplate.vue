@@ -105,6 +105,7 @@ export default {
             values: null,
             cached: [],
             cachedSides: [],
+            files: [],
         }
     },
     computed: {
@@ -209,7 +210,7 @@ export default {
                 this.$http.delete(url)
                     .then(response => {
                         // console.log(response.data);
-                        console.log('modulo eliminato', uuid);
+                        // console.log('modulo eliminato', uuid);
                         if (response.data.success) {
                             this.cached = this.searchAndDelete(this.cached, uuid)
                         }
@@ -234,46 +235,109 @@ export default {
             }
             return objs
         },
-        saveComponent: function (component) {
-            let idx = this.cached.findIndex(cache => cache.uuid === component.uuid)
-            if (idx > -1) {
-                // if (this.cached[idx].isNew === true) {
-                //     this.cached[idx].isNew = false
-                // }
 
-                console.log('save component', component);
-                let data = {
-                    ...component,
-                    content: JSON.stringify(component.content)
+        savePage: function () {
+            console.log('salva pagina', this.cached);
+            for (let i = 0; i < this.cached.length; i++) {
+                // temps[i] = this.saveComponent(temps[i])
+                switch (this.cached[i].type) {
+                case 'row':
+                    let rowData = Object.assign({}, this.cached[i])
+                    delete rowData.content
+                    rowData.content = {
+                        columns: this.cached[i].content.length
+                    }
+
+                    rowData = this.formatRequest(rowData)
+                    this.$http.post('/api/admin/save-component', rowData)
+                        .then(rowResponse => {
+                            let columns = this.cached[i].content
+                            for (let j = 0; j < columns.length; j++) {
+                                let modules = columns[j].content.modules
+                                let columnData = Object.assign({}, columns[j])
+                                columnData.modulable_id = rowResponse.data.module.id
+                                columnData.modulable_type = 'App\\Module'
+                                delete columnData.content.modules
+
+                                columnData = this.formatRequest(columnData)
+                                let columnRequest = this.$http.post('/api/admin/save-component', columnData)
+                                    .then(columnResponse => {
+                                        for (let k = 0; k < modules.length; k++) {
+                                            let moduleData = Object.assign({}, modules[k])
+                                            moduleData.modulable_id = columnResponse.data.module.id
+                                            moduleData.modulable_type = 'App\\Module'
+                                            moduleData = this.formatRequest(moduleData)
+                                            let moduleRequest = this.$http.post('/api/admin/save-component', moduleData)
+                                        }
+                                    })
+                            }
+                        })
+                    break;
+                default:
+                    let data = this.formatRequest(this.cached[i])
+
+                    // for (let value of data.entries()) {
+                    //     console.log(value[0], value[1]);
+                    // }
+
+                    this.$http.post('/api/admin/save-component', data)
+                        .then(response => {
+                            let temp = Object.assign(this.cached[i], response.data.module)
+                            temp.content = JSON.parse(temp.content)
+                            temp.id = Number(temp.id)
+                            temp.modulable_id = Number(temp.modulable_id)
+                            this.cached[i] = temp
+                        })
                 }
-
-                this.$http.post('/api/admin/save-component', data)
-                    .then(response => {
-
-                        let module = {
-                            ...response.data.module,
-                            uuid: component.uuid,
-                            isNew: false,
-                            content: JSON.parse(response.data.module.content)
-                        }
-
-                        this.cached[idx] = module
-
-                        console.log(response.data);
-                    })
             }
         },
-        savePage: function () {
-            console.log('salva pagina');
-            for (let i = 0; i < this.cached.length; i++) {
-                let current = this.cached[i]
-                console.log(current);
-                this.saveComponent(current)
+        saveComponent: function (current) {
+
+        },
+        formatRequest: function (obj) {
+            let form = new FormData()
+            // inserisco i campi normali
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    if (key === 'content') {
+                        let content = obj[key]
+
+                        form.append(key, JSON.stringify(content))
+                    }
+                    else if (key === 'uuid') {
+                        let hasFile = this.hasFile(obj[key])
+                        // se nel contenuto del modulo c'è un file
+                        if (hasFile) {
+                            form.append('file', hasFile)
+                        }
+                    }
+                    else {
+                        form.append(key, obj[key])
+                    }
+                }
             }
-        }
+            return form
+        },
+        hasFile: function (uuid) {
+            // console.log(uuid);
+            let idx = this.files.findIndex(file => file.uuid === uuid)
+            if (idx > -1) {
+                return this.files[idx].file
+            }
+            return false
+        },
     },
     mounted: function () {
         this.init()
+        this.$root.$on('add-file-to-upload', obj => {
+            let idx = this.files.findIndex(file => file.uuid === obj.uuid)
+            if (idx > -1) {
+                this.files[idx].file = obj.file
+            }
+            else {
+                this.files.push(obj)
+            }
+        })
     },
 }
 </script>

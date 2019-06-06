@@ -14,6 +14,7 @@
     <!-- PANNELLO -->
     <new-module ref="panel"
         :name="item.type"
+        :uuid="item.uuid"
         :model="item.modulable_type"
         :model-idx="item.modulable_id"
         :is-edit="isEdit"

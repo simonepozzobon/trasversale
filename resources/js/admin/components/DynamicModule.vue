@@ -29,6 +29,10 @@ export default {
             type: String,
             default: null,
         },
+        uuid: {
+            type: String,
+            default: null,
+        },
         options: {
             type: Array,
             default: function () {
@@ -92,12 +96,18 @@ export default {
             }
             else if (type === 'file-input') {
                 this.emitChanged(key, value)
+                // console.log(this.uuid, value);
+                this.$root.$emit('add-file-to-upload', {
+                    uuid: this.uuid,
+                    file: value
+                })
             }
 
             // console.log(key, value, type);
             if (type == 'file-input' || type == 'text') {
                 // console.log(key, value, type);
                 // cerco se ha un modulo preview
+
                 let idx = this.options.findIndex(option => option.parent == key && option.type == 'preview')
                 if (idx > -1) {
 
@@ -110,6 +120,7 @@ export default {
                             this.$refs.module[idx].src = e.target.result
                         }
                         reader.readAsDataURL(value)
+
                     }
                     else if (option.mime == 'video-url') {
                         let url

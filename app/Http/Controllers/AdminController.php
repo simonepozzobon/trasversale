@@ -20,16 +20,19 @@ class AdminController extends Controller
         $request = new Request();
         $request->replace(
             [
-                "uuid" => "0aiqg7ol4g",
-                "type" => "row",
-                "isNew" => true,
-                "modulable_id" => 2,
+                "id" => "10",
+                "type" => "title",
                 "modulable_type" => "App\\StaticPage",
-                "content" => "[{\"uuid\":\"1g54uytuzs\",\"type\":\"column\",\"isNew\":true,\"modulable_type\":\"App\\\\Module\",\"content\":{\"size\":6,\"modules\":[{\"uuid\":\"68jg7u601v\",\"type\":\"title\",\"isNew\":true,\"modulable_id\":0,\"modulable_type\":\"App\\\\Module\",\"content\":{\"content\":\"Titollo\",\"fontSize\":\"h2\",\"color\":null,\"isColumn\":true,\"uppercase\":true}}]}},{\"uuid\":\"4u3wf5gja3\",\"type\":\"column\",\"isNew\":true,\"modulable_type\":\"App\\\\Module\",\"content\":{\"size\":6,\"modules\":[]}}]"
+                "modulable_id" => "2",
+                "content" => "{\"content\":\"Giuseppe\",\"fontSize\":\"h2\",\"color\":null,\"isColumn\":null,\"uppercase\":null}",
+                "created_at" => "2019-06-06 00:35:30",
+                "updated_at" => "2019-06-06 00:35:30",
+                "uuid" => "5qngii0q09",
+                "isNew" => "false"
             ]
         );
-        // return $this->save_component($request);
-        return $this->get_page(2);
+        return $this->save_component($request);
+        // return $this->get_page(2);
 
         // dd($result->modules);
         // $module = Module::find($request->id);
@@ -101,8 +104,24 @@ class AdminController extends Controller
         ];
     }
 
+    public function purge_request($request)
+    {
+        $temp = $request->all();
+        $isNew = $temp['isNew'];
+
+        if ($isNew === 'false' || $isNew === 0 || $isNew === false) {
+            $temp['isNew'] = false;
+        } else {
+            $temp['isNew'] = true;
+        }
+
+        $request->merge(['isNew' => $temp['isNew']]);
+        return $request;
+    }
+
     public function save_component(Request $request)
     {
+        $request = $this->purge_request($request);
         if ($request->isNew) {
             $module = new Module();
         } else {
@@ -224,78 +243,10 @@ class AdminController extends Controller
             $file = $request->file('file');
             $media = Utility::save_image($file);
 
-            $content = json_decode($request->data);
+            $content = json_decode($content);
             $content->src = $media->landscape;
             $content = json_encode($content);
 
-        } elseif ($request->type == 'row') {
-            $columns = json_decode($content);
-
-            // imposto il contenuto del modulo riga
-            $content = json_encode(
-                [
-                    'columns' => count($columns),
-                ]
-            );
-
-            // salvo la riga
-            $module->type = $request->type;
-            $module->modulable_type = $request->modulable_type;
-            $module->modulable_id = $request->modulable_id;
-            $module->content = $content;
-            $module->save();
-
-            $row = clone $module;
-
-            // per ogni colonna effettuo il salvataggio
-            foreach ($columns as $key => $column) {
-                // se è una nuova colonna aggiorno la riga collegata
-                $column->modulable_id = $column->isNew ? $row->id : $column->modulable_id;
-
-                // formatto la nuova richiesta
-                $column_request = new Request();
-                $column_request->replace((array) $column);
-
-                // Ottengo il nuovo(?) modulo colonna
-                $column_module = $column->isNew ? new Module() : Module::find($column->id);
-
-                // richiamo la funziona update per il modulo colonna per
-                // salvare la colonna appunto
-                $column_module = $this->update_module($column_module, $column_request);
-            }
-        } elseif ($request->type == 'column') {
-            $sub_components = isset($content->modules) ? $content->modules : array();
-
-            // rimuovo i moduli dalle opzioni dell colonna
-            unset($content->modules);
-            $content = json_encode($content);
-
-            // salvo la colonna per poi salvare anche i sotto moduli
-            $module->type = $request->type;
-            $module->modulable_type = $request->modulable_type;
-            $module->modulable_id = $request->modulable_id;
-            $module->content = $content;
-            $module->save();
-
-            $column = clone $module;
-
-            // salvo ogni sotto modulo
-            foreach ($sub_components as $key => $sub_component) {
-                // se è un nuovo modulo aggiorno la colonna collegata
-                $sub_component->modulable_id = $sub_component->isNew ? $column->id : $sub_component->modulable_id;
-                $sub_component->content = json_encode($sub_component->content);
-
-                // formatto la nuova richiesta
-                $sub_component_request = new Request();
-                $sub_component_request->replace((array) $sub_component);
-
-                // Ottengo il nuovo(?) sotto_componente
-                $sub_component_module = $sub_component->isNew ? new Module() : Module::find($sub_component->id);
-
-                // richiamo la funziona update per il sotto_componente
-                // così da salvarlo
-                $sub_component_module = $this->update_module($sub_component_module, $sub_component_request);
-            }
         }
 
         $module->type = $request->type;
@@ -362,7 +313,7 @@ class AdminController extends Controller
                 'id' => $grid->id
                 ]
             );
-        } elseif ($request->module == 'image' && $request->hasFile('file')) {
+        } elseif ($request->module == 'image') {
             $file = $request->file('file');
             $media = Utility::save_image($file);
 
