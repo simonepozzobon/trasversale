@@ -89,9 +89,16 @@ export default {
         column: {
             handler: function (col) {
                 this.setColumn(col)
+                // console.log('colonne cambiate', col);
             },
             deep: true
-        }
+        },
+        // cached: {
+        //     handler: function (cached) {
+        //         console.log('cambiati');
+        //     },
+        //     deep: true
+        // }
     },
     computed: {
         content: function () {

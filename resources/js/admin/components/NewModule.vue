@@ -117,6 +117,7 @@ export default {
 
         },
         show: function () {
+            // console.log('show values', this.values);
             this.master.play()
         },
         hide: function () {

@@ -111,7 +111,7 @@ export default {
             this.component.content = columns
 
             this.$emit('save-sub-module', this.component)
-            console.log(columns, this.component);
+            // console.log(columns, this.component);
         },
         formatTempData: function (obj) {
             // console.log('formatTempData', this.item.type, obj);
@@ -232,8 +232,8 @@ export default {
             }
         },
         changed: function (obj) {
+            // console.log('changed', obj);
             this.cache = obj
-            // console.log(obj);
         },
         selected: function (obj = null) {
             if (!this.isOpen) {
@@ -248,6 +248,7 @@ export default {
         show: function () {
             this.$refs.panel.show()
             // console.log(this.cache, this.item);
+            // console.log(this.component, this.item);
         },
         hide: function () {
             this.$refs.panel.hide()

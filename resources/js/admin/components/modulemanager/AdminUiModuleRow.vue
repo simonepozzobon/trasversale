@@ -1,24 +1,22 @@
 <template>
-<ui-row>
-    <draggable
-        v-model="cached"
-        class="row"
-        @change="sortColumns"
-    >
-        <admin-ui-module-block
-            v-if="columns.length > 0"
-            v-for="(column, i) in cached"
-            :key="column.uuid"
-            :idx="i"
-            :column="column"
-            :is-open="isOpen"
-            @save-column="saveColumn"
-            @add-component="addComponent"
-            @delete-sub-component="deleteSubComponent"
-            @update="updateSize"
-        />
-    </draggable>
-</ui-row>
+<draggable
+    v-model="cached"
+    class="row"
+    @change="sortColumns"
+>
+    <admin-ui-module-block
+        v-if="columns.length > 0"
+        v-for="(column, i) in cached"
+        :key="column.uuid"
+        :idx="i"
+        :column="column"
+        :is-open="isOpen"
+        @save-column="saveColumn"
+        @add-component="addComponent"
+        @delete-sub-component="deleteSubComponent"
+        @update="updateSize"
+    />
+</draggable>
 </template>
 
 <script>
@@ -55,7 +53,7 @@ export default {
                 this.setColumns(columns)
             },
             deep: true
-        }
+        },
     },
     methods: {
         setColumns: function (columns) {

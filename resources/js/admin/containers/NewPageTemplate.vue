@@ -316,7 +316,15 @@ export default {
                                                 moduleData = this.formatRequest(moduleData)
                                                 this.$http.post('/api/admin/save-component', moduleData)
                                                     .then(moduleResponse => {
-                                                        this.cached[i].content[j].modules[k] = this.formatFromResponse(modules[k], moduleResponse.data.module)
+                                                        let newModule = this.formatFromResponse(modules[k], moduleResponse.data.module)
+                                                        this.cached[i].content[j].modules[k] = newModule
+                                                        if (!this.cached[i].content[j].content.hasOwnProperty('modules')) {
+                                                            this.cached[i].content[j].content.modules = []
+                                                            this.cached[i].content[j].content.modules[k] = newModule
+                                                        }
+                                                        else {
+                                                            this.cached[i].content[j].content.modules[k] = newModule
+                                                        }
                                                     })
                                             }
                                         }

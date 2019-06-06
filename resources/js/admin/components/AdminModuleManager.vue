@@ -134,6 +134,7 @@ export default {
     },
     methods: {
         listener: function () {
+            // console.log('modulo cambiato');
             // if (this.module.type === 'row') {
             //     console.log(this.content);
             // }
@@ -143,6 +144,7 @@ export default {
             // console.log('type', this.module.type);
         },
         updateSize: function (data) {
+            // console.log('dimensione cambiata');
             this.$emit('update-size', data)
         },
         selected: function () {
@@ -154,9 +156,9 @@ export default {
             this.$emit('add-component', column, component)
         },
         saveRow: function (columns) {
-            console.log('save module', this.module);
+            // console.log('save module', this.module);
             // this.$emit('save-module', this.module)
-            console.log('salvataggio dall AdminModuleManager', this.module);
+            // console.log('salvataggio dall AdminModuleManager', this.module);
             this.$emit('save-module', columns)
         },
         deleteSubComponent: function (id, isNew, uuid) {
