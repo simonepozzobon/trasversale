@@ -10,13 +10,15 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('test', 'AdminController@test');
+Route::get('test', 'MainController@test');
 // Route::get('test', 'AdminController@test');
 
-Route::prefix('admin')->group(function() {
-    Route::get('/', 'AdminController@index');
-    Route::get('/{slug}', 'AdminController@index')->where('slug', '.*');
-});
+Route::prefix('admin')->group(
+    function () {
+        Route::get('/', 'AdminController@index');
+        Route::get('/{slug}', 'AdminController@index')->where('slug', '.*');
+    }
+);
 
 Route::get('/{slug}', 'MainController@home')->where('slug', '.*')->name('home');
 
