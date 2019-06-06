@@ -129,6 +129,7 @@ class AdminController extends Controller
         }
 
         $module = $this->update_module($module, $request);
+        $module = Utility::format_complex_module($module, false);
 
         return [
             'success' => true,

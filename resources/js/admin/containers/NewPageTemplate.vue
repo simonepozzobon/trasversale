@@ -9,39 +9,51 @@
                             <h1 class="pt-3">{{ title }}</h1>
                         </div>
                         <div class="page-template__action">
-                            <button class="btn btn-outline-primary"
-                                @click="addComponent">
+                            <button
+                                class="btn btn-outline-primary"
+                                @click="addComponent"
+                            >
                                 Aggiungi Componente
                             </button>
-                            <button class="btn btn-outline-success"
-                                @click="savePage">
+                            <button
+                                class="btn btn-outline-success"
+                                @click="savePage"
+                            >
                                 Salva Pagina
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="page-template__content">
-                    <module-container v-for="(module, i) in cached"
+                    <module-container
+                        v-for="(module, i) in cached"
                         :key="module.uuid"
                         :item="module"
                         :model="model"
                         :model-idx="modelIdx"
                         @deleted="deletedComponent"
                         @save="saveComponent"
-                        @delete="deleteComponent" />
+                        @delete="deleteComponent"
+                    />
                 </div>
                 <div class="page-template__footer">
-                    <button class="btn btn-outline-primary"
-                        @click="addComponent">
+                    <button
+                        class="btn btn-outline-primary"
+                        @click="addComponent"
+                    >
                         Aggiungi Componente
                     </button>
-                    <button class="btn btn-outline-success ml-2"
-                        @click="savePage">
+                    <button
+                        class="btn btn-outline-success ml-2"
+                        @click="savePage"
+                    >
                         Salva Pagina
                     </button>
                 </div>
-                <components-list ref="componentSelector"
-                    @new-component="newComponent" />
+                <components-list
+                    ref="componentSelector"
+                    @new-component="newComponent"
+                />
             </div>
         </div>
     </div>
@@ -226,7 +238,8 @@ export default {
             else {
                 for (let i = 0; i < objs.length; i++) {
                     if (objs[i].content.hasOwnProperty('modules')) {
-                        objs[i].content.modules = this.searchAndDelete(objs[i].content.modules, uuid)
+                        objs[i].content.modules = this.searchAndDelete(objs[i].content.modules,
+                            uuid)
                     }
                     else if (objs[i].content.length > 0) {
                         objs[i].content = this.searchAndDelete(objs[i].content, uuid)
@@ -238,6 +251,8 @@ export default {
 
         savePage: function () {
             console.log('salva pagina', this.cached);
+            this.$root.$emit('close-all-panels')
+
             for (let i = 0; i < this.cached.length; i++) {
                 // temps[i] = this.saveComponent(temps[i])
                 switch (this.cached[i].type) {
@@ -263,11 +278,15 @@ export default {
                                 let columnRequest = this.$http.post('/api/admin/save-component', columnData)
                                     .then(columnResponse => {
                                         for (let k = 0; k < modules.length; k++) {
-                                            let moduleData = Object.assign({}, modules[k])
-                                            moduleData.modulable_id = columnResponse.data.module.id
+                                            let moduleData = Object.assign({}, modules[
+                                                k])
+                                            moduleData.modulable_id = columnResponse.data
+                                                .module.id
                                             moduleData.modulable_type = 'App\\Module'
                                             moduleData = this.formatRequest(moduleData)
-                                            let moduleRequest = this.$http.post('/api/admin/save-component', moduleData)
+                                            let moduleRequest = this.$http.post(
+                                                '/api/admin/save-component',
+                                                moduleData)
                                         }
                                     })
                             }
@@ -283,7 +302,7 @@ export default {
                     this.$http.post('/api/admin/save-component', data)
                         .then(response => {
                             let temp = Object.assign(this.cached[i], response.data.module)
-                            temp.content = JSON.parse(temp.content)
+                            temp.content = temp.content
                             temp.id = Number(temp.id)
                             temp.modulable_id = Number(temp.modulable_id)
                             this.cached[i] = temp

@@ -305,6 +305,10 @@ export default {
     created: function () {
         this.component = this.item
         // console.log('init module container', this.item.content);
+
+        this.$root.$on('close-all-panels', () => {
+            this.closeComponent()
+        })
     },
     mounted: function () {
         if (this.item.hasOwnProperty('isNew') && this.item.isNew) {
