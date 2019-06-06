@@ -1,5 +1,6 @@
 <template>
 <div class="page-template">
+    <notifications-container :toasts="notifications" />
     <div class="page-tamplate__container container">
         <div class="page-template__row row">
             <div class="page-template__main col-12">
@@ -73,6 +74,8 @@ import draggable from 'vuedraggable'
 import DynamicParams from '../DynamicParams'
 import EditPanel from '../components/EditPanel.vue'
 import ModuleContainer from './ModuleContainer.vue'
+import NotificationsContainer from './NotificationsContainer.vue'
+
 import {
     Uuid
 }
@@ -87,6 +90,7 @@ export default {
         draggable,
         EditPanel,
         ModuleContainer,
+        NotificationsContainer,
     },
     props: {
         title: {
@@ -128,6 +132,9 @@ export default {
             cached: [],
             cachedSides: [],
             files: [],
+            notifications: [],
+            loaded: 0,
+            counter: 0,
         }
     },
     computed: {
@@ -280,8 +287,10 @@ export default {
         },
 
         savePage: function () {
-            console.log('salva pagina', this.cached);
+            // console.log('salva pagina', this.cached);
             this.$root.$emit('close-all-panels')
+            this.counter = this.cached.length
+            let promises = []
 
             for (let i = 0; i < this.cached.length; i++) {
                 // temps[i] = this.saveComponent(temps[i])
@@ -294,7 +303,7 @@ export default {
                     }
 
                     rowData = this.formatRequest(rowData)
-                    this.$http.post('/api/admin/save-component', rowData)
+                    let requestRow = this.$http.post('/api/admin/save-component', rowData)
                         .then(rowResponse => {
                             this.cached[i] = this.formatFromResponse(this.cached[i], rowResponse.data.module)
                             let columns = this.cached[i].content
@@ -306,7 +315,7 @@ export default {
                                 delete columnData.content.modules
 
                                 columnData = this.formatRequest(columnData)
-                                this.$http.post('/api/admin/save-component', columnData)
+                                let requestColumn = this.$http.post('/api/admin/save-component', columnData)
                                     .then(columnResponse => {
                                         this.cached[i].content[j] = this.formatFromResponse(this.cached[i].content[j], columnResponse.data.module)
                                         if (modules) {
@@ -315,7 +324,7 @@ export default {
                                                 moduleData.modulable_id = columnResponse.data.module.id
                                                 moduleData.modulable_type = 'App\\Module'
                                                 moduleData = this.formatRequest(moduleData)
-                                                this.$http.post('/api/admin/save-component', moduleData)
+                                                let requestModule = this.$http.post('/api/admin/save-component', moduleData)
                                                     .then(moduleResponse => {
                                                         let newModule = this.formatFromResponse(modules[k], moduleResponse.data.module)
                                                         this.cached[i].content[j].modules[k] = newModule
@@ -327,26 +336,40 @@ export default {
                                                             this.cached[i].content[j].content.modules[k] = newModule
                                                         }
                                                     })
+                                                promises.push(requestModule)
                                             }
                                         }
                                     })
+                                promises.push(requestColumn)
                             }
                         })
+                    promises.push(requestRow)
                     break;
                 default:
                     let data = this.formatRequest(this.cached[i])
-                    this.$http.post('/api/admin/save-component', data)
+                    let request = this.$http.post('/api/admin/save-component', data)
                         .then(response => {
                             let temp = this.formatFromResponse(this.cached[i], response.data.module)
                             this.cached[i] = temp
                         })
+                    promises.push(request)
                 }
             }
+
+            this.$http.all(promises)
+                .then(results => {
+                    this.notifications.push({
+                        uuid: Uuid.get(),
+                        title: 'Pagina Salvata',
+                        message: 'Salvataggio Completato'
+                    })
+                })
         },
         formatFromResponse: function (obj, newObj) {
             let temp = Object.assign({}, obj, newObj)
             temp.id = Number(temp.id)
             temp.modulable_id = Number(temp.modulable_id)
+            temp.isNew = false
             temp.order = Number(temp.order)
             temp.content = obj.content
 
