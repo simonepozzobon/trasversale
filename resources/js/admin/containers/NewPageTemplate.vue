@@ -295,6 +295,7 @@ export default {
                     rowData = this.formatRequest(rowData)
                     this.$http.post('/api/admin/save-component', rowData)
                         .then(rowResponse => {
+                            this.cached[i] = this.formatFromResponse(this.cached[i], rowResponse.data.module)
                             let columns = this.cached[i].content
                             for (let j = 0; j < columns.length; j++) {
                                 let modules = columns[j].content.modules
@@ -304,17 +305,19 @@ export default {
                                 delete columnData.content.modules
 
                                 columnData = this.formatRequest(columnData)
-                                let columnRequest = this.$http.post('/api/admin/save-component', columnData)
+                                this.$http.post('/api/admin/save-component', columnData)
                                     .then(columnResponse => {
+                                        this.cached[i].content[j] = this.formatFromResponse(this.cached[i].content[j], columnResponse.data.module)
                                         if (modules) {
                                             for (let k = 0; k < modules.length; k++) {
-                                                let moduleData = Object.assign({}, modules[
-                                                    k])
-                                                moduleData.modulable_id = columnResponse.data
-                                                    .module.id
+                                                let moduleData = Object.assign({}, modules[k])
+                                                moduleData.modulable_id = columnResponse.data.module.id
                                                 moduleData.modulable_type = 'App\\Module'
                                                 moduleData = this.formatRequest(moduleData)
-                                                let moduleRequest = this.$http.post('/api/admin/save-component', moduleData)
+                                                this.$http.post('/api/admin/save-component', moduleData)
+                                                    .then(moduleResponse => {
+                                                        this.cached[i].content[j].modules[k] = this.formatFromResponse(modules[k], moduleResponse.data.module)
+                                                    })
                                             }
                                         }
                                     })
@@ -323,23 +326,28 @@ export default {
                     break;
                 default:
                     let data = this.formatRequest(this.cached[i])
-
-                    // for (let value of data.entries()) {
-                    //     console.log(value[0], value[1]);
-                    // }
-
                     this.$http.post('/api/admin/save-component', data)
                         .then(response => {
-                            let temp = Object.assign(this.cached[i], response.data.module)
-                            temp.content = temp.content
-                            temp.id = Number(temp.id)
-                            temp.modulable_id = Number(temp.modulable_id)
+                            let temp = this.formatFromResponse(this.cached[i], response.data.module)
                             this.cached[i] = temp
                         })
                 }
             }
         },
+        formatFromResponse: function (obj, newObj) {
+            let temp = Object.assign({}, obj, newObj)
+            temp.id = Number(temp.id)
+            temp.modulable_id = Number(temp.modulable_id)
+            temp.order = Number(temp.order)
+            temp.content = obj.content
+
+            return temp
+        },
         saveComponent: function (current) {
+
+        },
+        formatModuleData: function (source) {
+            let obj = Object.assign({}, source)
 
         },
         formatRequest: function (obj) {
