@@ -1,7 +1,7 @@
 <template>
 <div class="page-template">
     <notifications-container :toasts="notifications" />
-    <div class="page-tamplate__container container">
+    <div class="page-template__container container">
         <div class="page-template__row row">
             <div class="page-template__main col-12">
                 <div class="page-template__header">
