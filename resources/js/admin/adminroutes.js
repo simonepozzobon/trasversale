@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import PageContainer from './views/PageContainer.vue'
 import Page from './views/Page.vue'
 import PostsContainer from './views/PostsContainer.vue'
+import PostCreate from './views/PostCreate.vue'
 import PostsCrud from './views/PostsCrud.vue'
 import SubPageContainer from './views/SubPageContainer.vue'
 import SubPage from './views/SubPage.vue'
@@ -19,13 +20,18 @@ const routes = [
                 component: Home,
             },
             {
-                path: 'posts',
+                path: 'posts/:type',
                 component: PostsContainer,
                 children: [
                     {
-                        path: ':type',
+                        path: '',
                         name: 'posts',
                         component: PostsCrud,
+                    },
+                    {
+                        path: 'create',
+                        name: 'post-create',
+                        component: PostCreate
                     }
                 ]
             },

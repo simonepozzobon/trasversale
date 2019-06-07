@@ -50,6 +50,10 @@
 <script>
 import PageTemplate from '../containers/PageTemplate.vue'
 import PostsOpts from '../postsopts/PostsOpts'
+import {
+    Uuid
+}
+from '../../Utilities'
 
 export default {
     name: 'Notizie',
@@ -94,13 +98,23 @@ export default {
             let url = '/api/admin/post-type/' + this.opts.table + '/delete/' + item.id
             this.$http.delete(url)
                 .then(response => {
-                    let idx = this.posts.findIndex(post => post.id === response.data.element.id)
-                    if (idx > -1) {
-                        this.posts.splice(idx, 1)
+                    if (response.status) {
+                        let idx = this.posts.findIndex(post => post.id === response.data.element.id)
+                        if (idx > -1) {
+                            this.notifications.push({
+                                uuid: Uuid.get(),
+                                title: 'Post Eliminato',
+                                message: response.data.element.title + ' è stato eliminato'
+                            })
+                            this.posts.splice(idx, 1)
+                        }
                     }
                 })
         },
         createPost: function () {
+            this.$root.goToWithParams('post-create', {
+                type: this.$route.params.type
+            })
             console.log('crea post');
         }
     },
