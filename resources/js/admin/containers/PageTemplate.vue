@@ -1,5 +1,6 @@
 <template lang="html">
     <div class="page-template">
+        <notifications-container :toasts="notifications" />
         <div class="page-template__container container">
             <div class="page-template__head">
                 <div class="page-template__title">
@@ -17,11 +18,13 @@
 <script>
 import {
     Uuid
-} from '../../Utilities'
+}
+from '../../Utilities'
 import ComponentsList from '../components/ComponentsList.vue'
 import DynamicParams from '../DynamicParams'
 import EditPanel from '../components/EditPanel.vue'
 import NewModule from '../components/NewModule.vue'
+import NotificationsContainer from '../containers/NotificationsContainer.vue'
 
 export default {
     name: 'PageTemplate',
@@ -29,6 +32,7 @@ export default {
         ComponentsList,
         EditPanel,
         NewModule,
+        NotificationsContainer,
     },
     props: {
         title: {
@@ -43,8 +47,14 @@ export default {
             type: Number,
             default: 0,
         },
+        notifications: {
+            type: Array,
+            default: function () {
+                return []
+            },
+        },
     },
-    data: function() {
+    data: function () {
         return {
             panel: false,
             component: null,
@@ -58,17 +68,17 @@ export default {
         }
     },
     watch: {
-        '$route.params': function(params) {
+        '$route.params': function (params) {
             console.log('params cambiato', params);
         },
 
     },
     methods: {
-        debug: function() {
+        debug: function () {
             this.moduleType = 'row'
             this.panel = true
         },
-        addRow: function() {
+        addRow: function () {
             let newRow = {
                 uuid: Uuid.get(),
                 moduleType: 'row',
@@ -81,20 +91,20 @@ export default {
 
             this.cached.push(newRow)
         },
-        addComponent: function() {
+        addComponent: function () {
             this.$refs.componentSelector.show()
         },
-        dismissModal: function() {
+        dismissModal: function () {
             this.$refs.componentSelector.hide()
         },
-        newComponent: function(type) {
+        newComponent: function (type) {
             this.moduleType = type
             this.dismissModal()
 
             this.isEdit = false
             this.panel = true
         },
-        setModule: function(module) {
+        setModule: function (module) {
             // console.log(module);
             this.isEdit = true
 
@@ -105,19 +115,19 @@ export default {
             // console.log(this.values);
             this.panel = true
         },
-        saved: function(module) {
+        saved: function (module) {
             this.reset()
 
             this.$emit('saved', module)
         },
-        undo: function() {
+        undo: function () {
             this.reset()
         },
-        deleted: function(module) {
+        deleted: function (module) {
             this.reset()
             this.$emit('deleted', module)
         },
-        reset: function() {
+        reset: function () {
             this.panel = false
 
             this.module = null
@@ -125,7 +135,7 @@ export default {
             this.moduleType = null
         }
     },
-    mounted: function() {
+    mounted: function () {
         this.debug()
         // this.reset()
     },

@@ -104,6 +104,26 @@ class AdminController extends Controller
         ];
     }
 
+    public function delete_post_type($type, $id)
+    {
+        switch ($type) {
+        case 'news':
+            $element = News::find($id);
+            break;
+
+        case 'products':
+            $element = Product::find($id);
+            break;
+        }
+
+        $element->delete();
+
+        return [
+            'success' => true,
+            'element' => $element,
+        ];
+    }
+
     public function purge_request($request)
     {
         $temp = $request->all();
