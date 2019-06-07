@@ -1,9 +1,13 @@
 <template>
-<div class="page-template">
+<div
+    class="page-template"
+    :class="[hasTitleClass]"
+>
     <notifications-container :toasts="notifications" />
     <div class="page-template__container container">
         <div class="page-template__row row">
             <div class="page-template__main col-12">
+                <slot></slot>
                 <div class="page-template__header">
                     <div class="page-template__head">
                         <div
@@ -23,12 +27,11 @@
                                 class="btn btn-outline-success"
                                 @click="savePage"
                             >
-                                Salva Pagina
+                                {{ customSave }}
                             </button>
                         </div>
                     </div>
                 </div>
-                <slot></slot>
                 <div class="page-template__content">
                     <draggable
                         v-model="cached"
@@ -58,7 +61,7 @@
                         class="btn btn-outline-success ml-2"
                         @click="savePage"
                     >
-                        Salva Pagina
+                        {{ customSave }}
                     </button>
                 </div>
                 <components-list
@@ -128,6 +131,14 @@ export default {
         hasTitle: {
             type: Boolean,
             default: true,
+        },
+        customSave: {
+            type: String,
+            default: 'Salva Pagina'
+        },
+        hasInterceptor: {
+            type: Boolean,
+            default: false,
         }
     },
     data: function () {
@@ -151,6 +162,11 @@ export default {
                 return 'col-md-9'
             }
         },
+        hasTitleClass: function () {
+            if (!this.hasTitle) {
+                return 'page-template--no-title'
+            }
+        }
     },
     watch: {
         '$route.params': function (params) {
@@ -296,82 +312,89 @@ export default {
 
         savePage: function () {
             // console.log('salva pagina', this.cached);
-            this.$root.$emit('close-all-panels')
-            this.counter = this.cached.length
-            let promises = []
+            this.$emit('save-page')
+            console.log('this.model', this.model);
+            if (this.model) {
+                this.$root.$emit('close-all-panels')
+                this.counter = this.cached.length
+                let promises = []
 
-            for (let i = 0; i < this.cached.length; i++) {
-                // temps[i] = this.saveComponent(temps[i])
-                switch (this.cached[i].type) {
-                case 'row':
-                    let rowData = Object.assign({}, this.cached[i])
-                    delete rowData.content
-                    rowData.content = {
-                        columns: this.cached[i].content.length
-                    }
+                for (let i = 0; i < this.cached.length; i++) {
+                    // temps[i] = this.saveComponent(temps[i])
+                    switch (this.cached[i].type) {
+                    case 'row':
+                        let rowData = Object.assign({}, this.cached[i])
+                        delete rowData.content
+                        rowData.content = {
+                            columns: this.cached[i].content.length
+                        }
 
-                    rowData = this.formatRequest(rowData)
-                    let requestRow = this.$http.post('/api/admin/save-component', rowData)
-                        .then(rowResponse => {
-                            this.cached[i] = this.formatFromResponse(this.cached[i], rowResponse.data.module)
-                            let columns = this.cached[i].content
-                            for (let j = 0; j < columns.length; j++) {
-                                let modules = columns[j].content.modules
-                                let columnData = Object.assign({}, columns[j])
-                                columnData.modulable_id = rowResponse.data.module.id
-                                columnData.modulable_type = 'App\\Module'
-                                delete columnData.content.modules
+                        rowData = this.formatRequest(rowData)
+                        let requestRow = this.$http.post('/api/admin/save-component', rowData)
+                            .then(rowResponse => {
+                                this.cached[i] = this.formatFromResponse(this.cached[i], rowResponse.data.module)
+                                let columns = this.cached[i].content
+                                for (let j = 0; j < columns.length; j++) {
+                                    let modules = columns[j].content.modules
+                                    let columnData = Object.assign({}, columns[j])
+                                    columnData.modulable_id = rowResponse.data.module.id
+                                    columnData.modulable_type = 'App\\Module'
+                                    delete columnData.content.modules
 
-                                columnData = this.formatRequest(columnData)
-                                let requestColumn = this.$http.post('/api/admin/save-component', columnData)
-                                    .then(columnResponse => {
-                                        this.cached[i].content[j] = this.formatFromResponse(this.cached[i].content[j], columnResponse.data.module)
-                                        if (modules) {
-                                            for (let k = 0; k < modules.length; k++) {
-                                                let moduleData = Object.assign({}, modules[k])
-                                                moduleData.modulable_id = columnResponse.data.module.id
-                                                moduleData.modulable_type = 'App\\Module'
-                                                moduleData = this.formatRequest(moduleData)
-                                                let requestModule = this.$http.post('/api/admin/save-component', moduleData)
-                                                    .then(moduleResponse => {
-                                                        let newModule = this.formatFromResponse(modules[k], moduleResponse.data.module)
-                                                        this.cached[i].content[j].modules[k] = newModule
-                                                        if (!this.cached[i].content[j].content.hasOwnProperty('modules')) {
-                                                            this.cached[i].content[j].content.modules = []
-                                                            this.cached[i].content[j].content.modules[k] = newModule
-                                                        }
-                                                        else {
-                                                            this.cached[i].content[j].content.modules[k] = newModule
-                                                        }
-                                                    })
-                                                promises.push(requestModule)
+                                    columnData = this.formatRequest(columnData)
+                                    let requestColumn = this.$http.post('/api/admin/save-component', columnData)
+                                        .then(columnResponse => {
+                                            this.cached[i].content[j] = this.formatFromResponse(this.cached[i].content[j], columnResponse.data.module)
+                                            if (modules) {
+                                                for (let k = 0; k < modules.length; k++) {
+                                                    let moduleData = Object.assign({}, modules[k])
+                                                    moduleData.modulable_id = columnResponse.data.module.id
+                                                    moduleData.modulable_type = 'App\\Module'
+                                                    moduleData = this.formatRequest(moduleData)
+                                                    let requestModule = this.$http.post('/api/admin/save-component', moduleData)
+                                                        .then(moduleResponse => {
+                                                            let newModule = this.formatFromResponse(modules[k], moduleResponse.data.module)
+                                                            this.cached[i].content[j].modules[k] = newModule
+                                                            if (!this.cached[i].content[j].content.hasOwnProperty('modules')) {
+                                                                this.cached[i].content[j].content.modules = []
+                                                                this.cached[i].content[j].content.modules[k] = newModule
+                                                            }
+                                                            else {
+                                                                this.cached[i].content[j].content.modules[k] = newModule
+                                                            }
+                                                        })
+                                                    promises.push(requestModule)
+                                                }
                                             }
-                                        }
-                                    })
-                                promises.push(requestColumn)
-                            }
-                        })
-                    promises.push(requestRow)
-                    break;
-                default:
-                    let data = this.formatRequest(this.cached[i])
-                    let request = this.$http.post('/api/admin/save-component', data)
-                        .then(response => {
-                            let temp = this.formatFromResponse(this.cached[i], response.data.module)
-                            this.cached[i] = temp
-                        })
-                    promises.push(request)
+                                        })
+                                    promises.push(requestColumn)
+                                }
+                            })
+                        promises.push(requestRow)
+                        break;
+                    default:
+                        let data = this.formatRequest(this.cached[i])
+                        let request = this.$http.post('/api/admin/save-component', data)
+                            .then(response => {
+                                let temp = this.formatFromResponse(this.cached[i], response.data.module)
+                                this.cached[i] = temp
+                            })
+                        promises.push(request)
+                    }
                 }
-            }
 
-            this.$http.all(promises)
-                .then(results => {
-                    this.notifications.push({
-                        uuid: Uuid.get(),
-                        title: 'Pagina Salvata',
-                        message: 'Salvataggio Completato'
+                this.$http.all(promises)
+                    .then(results => {
+                        this.notifications.push({
+                            uuid: Uuid.get(),
+                            title: 'Pagina Salvata',
+                            message: 'Salvataggio Completato'
+                        })
                     })
-                })
+            }
+            else {
+                console.log('intercept');
+            }
         },
         formatFromResponse: function (obj, newObj) {
             let temp = Object.assign({}, obj, newObj)
@@ -498,6 +521,10 @@ $opacity-test: 0.6 !default;
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    &--no-title &__head {
+        justify-content: center;
     }
 }
 

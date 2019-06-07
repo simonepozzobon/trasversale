@@ -10,6 +10,7 @@ use App\Product;
 use App\Element;
 use App\Utility;
 use App\SubPage;
+use App\Category;
 use App\StaticPage;
 use Illuminate\Http\Request;
 
@@ -101,6 +102,15 @@ class AdminController extends Controller
         return [
             'success' => true,
             'elements' => $elements,
+        ];
+    }
+
+    public function get_categories()
+    {
+        $categories = Category::all();
+        return [
+            'success' => true,
+            'categories' => $categories
         ];
     }
 

@@ -283,9 +283,17 @@
         :content="option.label"
     />
 
-    <div v-else>
+    <dynamic-select
+        v-else-if="option.type === 'dynamic-select'"
+        :request="option.request"
+        :name="option.key"
+        :label="option.label"
+        :info="option.info"
+    />
+
+    <!-- <div v-else>
         {{ option }}
-    </div>
+    </div> -->
 
     <div
         class="form-group row"
@@ -338,18 +346,17 @@ import {
 }
 from '../../Utilities'
 import DummyModule from './DummyModule.vue'
+import DynamicSelect from './dynamicselect/DynamicSelect.vue'
 import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
+import PostFields from './post-selector/PostFields'
 import Swatches from 'vue-swatches'
 import TextEditor from './TextEditor.vue'
-import VueGridLayout from 'vue-grid-layout'
 import {
     UiCheckbox,
     UiSwitch,
 }
 from '../../ui'
-
-import PostFields from './post-selector/PostFields'
-
+import VueGridLayout from 'vue-grid-layout'
 import "vue-swatches/dist/vue-swatches.min.css"
 
 export default {
@@ -357,23 +364,24 @@ export default {
     components: {
         ColumnsPreview,
         DummyModule,
+        DynamicSelect,
+        GridItem: VueGridLayout.GridItem,
+        GridLayout: VueGridLayout.GridLayout,
         Swatches,
         TextEditor,
-        GridLayout: VueGridLayout.GridLayout,
-        GridItem: VueGridLayout.GridItem,
         UiCheckbox,
         UiSwitch,
     },
     props: {
         option: {
             type: Object,
-            default: function() {
+            default: function () {
                 return {}
             },
         },
         dataObj: {
             type: Object,
-            default: function() {
+            default: function () {
                 return {}
             },
         },
@@ -383,7 +391,7 @@ export default {
         },
         initial: [Object, String, Number, Array, Boolean],
     },
-    data: function() {
+    data: function () {
         return {
             increments: 0,
             value: null,
@@ -404,7 +412,7 @@ export default {
         }
     },
     watch: {
-        value: function(newValue, oldValue) {
+        value: function (newValue, oldValue) {
             // console.log('è un valore diference', this.option.key, !isEqual(newValue, oldValue));
             if (!isEqual(newValue, oldValue)) {
                 // if (this.option.key == 'elements') {
@@ -413,30 +421,30 @@ export default {
                 this.$emit('changed', this.option.key, newValue, this.option.type)
             }
         },
-        elements: function(newEls, oldEls) {
+        elements: function (newEls, oldEls) {
             this.value = clone(newEls)
         }
     },
     computed: {
-        options: function() {
+        options: function () {
             if (this.option.hasOwnProperty('options')) {
                 return this.option.options
             }
             return {}
         },
-        hasRelated: function() {
+        hasRelated: function () {
             if (this.option.hasOwnProperty('relatedKey')) {
                 return true
             }
             return false
         },
-        relatedType: function() {
+        relatedType: function () {
             if (this.hasRelated) {
                 return typeof this.option.relatedKey
             }
             return null
         },
-        related: function() {
+        related: function () {
             if (this.hasRelated) {
                 let options = this.$parent.options
                 let idx = options.findIndex(option => option.key == this.option.relatedKey)
@@ -447,7 +455,7 @@ export default {
             }
             return null
         },
-        relatedValue: function() {
+        relatedValue: function () {
             if (this.hasRelated) {
                 if (this.related) {
                     return this.related.value
@@ -457,51 +465,51 @@ export default {
         }
     },
     methods: {
-        getModuleOption: function(key) {
+        getModuleOption: function (key) {
             if (this.options && this.options.hasOwnProperty(key)) {
                 return this.options[key]
             }
             return null
         },
-        addCounter: function() {
+        addCounter: function () {
             if (this.options && this.options.hasOwnProperty('max') && this.value < this.options.max) {
                 this.value++
             }
         },
-        removeCounter: function() {
+        removeCounter: function () {
             if (this.options && this.options.hasOwnProperty('min') && this.value > this.options.min) {
                 this.value--
             }
         },
-        subChanged: function(subModuleObj) {
+        subChanged: function (subModuleObj) {
             // console.log('subModuleObj è differnte', !isEqual(this.value, subModuleObj));
             // bisogna risettare l'oggetto altrimenti non aggiorna l'evento
             if (!isEqual(this.value, subModuleObj)) {
                 this.value = clone(subModuleObj)
             }
         },
-        setDefault: function() {
+        setDefault: function () {
             if (this.option.hasOwnProperty('default') && !this.edit) {
                 this.value = this.option.default
             }
 
             this.setWatchers()
         },
-        setWatchers: function() {
+        setWatchers: function () {
             if (this.hasRelated) {
                 switch (this.relatedType) {
-                    case 'string':
-                        this.setWatcher(this.option.relatedKey)
-                        break;
-                    case 'object':
-                        for (let i = 0; i < this.option.relatedKey.length; i++) {
-                            this.setWatcher(this.option.relatedKey[i])
-                        }
-                        break;
+                case 'string':
+                    this.setWatcher(this.option.relatedKey)
+                    break;
+                case 'object':
+                    for (let i = 0; i < this.option.relatedKey.length; i++) {
+                        this.setWatcher(this.option.relatedKey[i])
+                    }
+                    break;
                 }
             }
         },
-        setWatcher: function(relatedKey) {
+        setWatcher: function (relatedKey) {
             if (this.option.type === 'counter') {}
             // set watcher for related key
             let watcher = 'dataObj.' + relatedKey
@@ -523,7 +531,7 @@ export default {
 
             this.setRelated(relatedKey)
         },
-        setRelated: function(relatedKey) {
+        setRelated: function (relatedKey) {
             // set initial value if related has one
             let related = this.dataObj[relatedKey]
             if (related) {
@@ -532,7 +540,7 @@ export default {
                 }
             }
         },
-        getColors: function() {
+        getColors: function () {
             let themeColors = ['blue', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'white', 'gray', 'gray-dark', 'black', 'primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
             let colors = []
 
@@ -546,21 +554,21 @@ export default {
 
             this.colors = colors
         },
-        getColor: function(key) {
+        getColor: function (key) {
             return getComputedStyle(document.documentElement)
                 .getPropertyValue(key)
                 .trim()
         },
-        previewFile: function() {
+        previewFile: function () {
             this.value = this.$refs.file.files[0]
         },
-        updateEditor: function(json, html) {
+        updateEditor: function (json, html) {
             let paragraph = json.content
             this.value = html
             // this.debugEditor = paragraph
             // console.log(html);
         },
-        getElements: function(value, relatedKey) {
+        getElements: function (value, relatedKey) {
             let url = '/api/admin/grid-elements/' + value
             this.$http.get(url)
                 .then(response => {
@@ -591,7 +599,7 @@ export default {
                     }
                 })
         },
-        selectPost: function(item) {
+        selectPost: function (item) {
             let idx = this.blocks.indexOf(item)
             if (idx > -1) {
                 this.blocks[idx].selected = !item.selected
@@ -620,7 +628,7 @@ export default {
                 }
             }
         },
-        removeElement: function(item) {
+        removeElement: function (item) {
             // console.log(item);
             // rimuove l'elemento dalla griglia e lo deseleziona dalla tabella
             let idx = this.blocks.findIndex(row => row.id == item.type_id && row.type === item.type)
@@ -637,7 +645,7 @@ export default {
             newEls.splice(index, 1)
             this.elements = Object.assign([], newEls)
         },
-        formatElementForGrid: function(item, i = 0) {
+        formatElementForGrid: function (item, i = 0) {
             let colN = 12
             let w = item.hasOwnProperty('width') ? item.width : 2
             let h = item.hasOwnProperty('height') ? item.height : 2
@@ -664,7 +672,7 @@ export default {
             this.increments++
             return newEl
         },
-        layoutUpdated: function(newLayout) {
+        layoutUpdated: function (newLayout) {
             // console.log('layout aggiornato', newLayout);
             // console.log('prima', newLayout.map(o => o.x + ' ' + o.y));
 
@@ -675,7 +683,7 @@ export default {
             // console.log('dopo', sorted.map(o => o.x + ' ' + o.y));
             this.elements = clone(sorted)
         },
-        debug: function() {
+        debug: function () {
             let test = [
                 this.blocks[2],
                 this.blocks[1],
@@ -691,7 +699,7 @@ export default {
             //     this.elements.push(this.formatElementForGrid(test[i], i))
             // }
         },
-        setInitial: function() {
+        setInitial: function () {
             if (this.initial && this.option.type != 'post-select') {
                 this.value = this.initial
                 // console.log(clone(this.value));
@@ -718,18 +726,16 @@ export default {
             }
         },
     },
-    beforeCreate: function() {
+    beforeCreate: function () {
         this.$options.components.DynamicModule = require('./DynamicModule.vue')
             .default
     },
-    created: function() {
+    created: function () {
         this.getColors()
         this.setDefault()
         this.setInitial()
-
-
     },
-    mounted: function() {}
+    mounted: function () {}
 }
 </script>
 

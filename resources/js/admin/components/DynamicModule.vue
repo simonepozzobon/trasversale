@@ -1,13 +1,15 @@
 <template>
 <div>
-    <dynamic-module-item ref="module"
+    <dynamic-module-item
+        ref="module"
         v-for="(option, i) in options"
         :key="i"
         :initial="setInitial(option)"
         :option="option"
         :data-obj="dataObj"
         :edit="isEdit"
-        @changed="changed" />
+        @changed="changed"
+    />
 </div>
 </template>
 
@@ -33,12 +35,7 @@ export default {
             type: String,
             default: null,
         },
-        options: {
-            type: Array,
-            default: function () {
-                return []
-            },
-        },
+        options: [Object, Array],
         values: [Object, Array],
         isEdit: {
             type: Boolean,
@@ -120,7 +117,6 @@ export default {
                             this.$refs.module[idx].src = e.target.result
                         }
                         reader.readAsDataURL(value)
-
                     }
                     else if (option.mime == 'video-url') {
                         let url
@@ -141,9 +137,7 @@ export default {
     created: function () {
         this.setModule()
     },
-    mounted: function () {
-        // console.log(this.options);
-    }
+    mounted: function () {}
 }
 </script>
 

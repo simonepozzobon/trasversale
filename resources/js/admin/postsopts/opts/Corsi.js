@@ -3,6 +3,7 @@ const Corsi = {
     table: 'products',
     slug: 'corsi',
     create: 'Crea Corso',
+    single: 'Corso',
     fields: [
         {
             key: 'id',

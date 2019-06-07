@@ -3,6 +3,7 @@ const Notizie = {
     table: 'news',
     slug: 'notizie',
     create: 'Crea Notizia',
+    single: 'Notizia',
     fields: [
         {
             key: 'id',
