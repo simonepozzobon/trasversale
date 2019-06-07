@@ -118,10 +118,14 @@ export default {
         },
         show: function () {
             // console.log('show values', this.values);
-            this.master.play()
+            if (this.master) {
+                this.master.play()
+            }
         },
         hide: function () {
-            this.master.reverse()
+            if (this.master) {
+                this.master.reverse()
+            }
         },
         setObj: function (obj) {
             this.obj = obj
@@ -142,6 +146,11 @@ export default {
     mounted: function () {
         this.$nextTick(this.init)
     },
+    beforeDestroy: function () {
+        if (this.master) {
+            this.master.kill()
+        }
+    }
 }
 </script>
 
