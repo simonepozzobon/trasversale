@@ -6,7 +6,10 @@
             <div class="page-template__main col-12">
                 <div class="page-template__header">
                     <div class="page-template__head">
-                        <div class="page-template__title">
+                        <div
+                            class="page-template__title"
+                            v-if="hasTitle"
+                        >
                             <h1 class="pt-3">{{ title }}</h1>
                         </div>
                         <div class="page-template__action">
@@ -25,6 +28,7 @@
                         </div>
                     </div>
                 </div>
+                <slot></slot>
                 <div class="page-template__content">
                     <draggable
                         v-model="cached"
@@ -121,6 +125,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        hasTitle: {
+            type: Boolean,
+            default: true,
+        }
     },
     data: function () {
         return {
