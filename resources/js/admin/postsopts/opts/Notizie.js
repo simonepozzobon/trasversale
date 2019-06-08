@@ -1,6 +1,7 @@
 const Notizie = {
     title: 'Notizie',
     table: 'news',
+    model: 'news',
     slug: 'notizie',
     create: 'Crea Notizia',
     single: 'Notizia',

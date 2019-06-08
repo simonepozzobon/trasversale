@@ -1,6 +1,7 @@
 const Corsi = {
     title: 'Corsi',
     table: 'products',
+    model: 'product',
     slug: 'corsi',
     create: 'Crea Corso',
     single: 'Corso',
@@ -8,6 +9,11 @@ const Corsi = {
         {
             key: 'id',
             label: 'ID',
+            sortable: true,
+        },
+        {
+            key: 'price',
+            label: 'Prezzo',
             sortable: true,
         },
         {

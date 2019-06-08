@@ -10,6 +10,7 @@
         <select
             class="form-control"
             :name="name"
+            v-model="value"
         >
             <option
                 v-for="option in options"
@@ -53,7 +54,13 @@ export default {
     },
     data: function () {
         return {
+            value: null,
             options: []
+        }
+    },
+    watch: {
+        value: function (value) {
+            this.$emit('changed', value)
         }
     },
     methods: {

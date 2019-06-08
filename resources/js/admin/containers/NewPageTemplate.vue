@@ -174,9 +174,20 @@ export default {
         },
         modules: function (modules) {
             this.init()
+        },
+        model: function (model) {
+            this.setModelKey('modulable_type', model)
+        },
+        modelIdx: function (id) {
+            this.setModelKey('modulable_id', id)
         }
     },
     methods: {
+        setModelKey: function (key, value) {
+            for (let i = 0; i < this.cached.length; i++) {
+                this.cached[i][key] = value
+            }
+        },
         init: function () {
             // imposta una variabile intermedia per poter modificare i moduli
             let sorted = orderBy(this.modules, ['order', 'created_at'], ['asc', 'asc'])
@@ -310,15 +321,18 @@ export default {
             return objs
         },
 
-        savePage: function () {
+        savePage: function (modelSaved = true) {
             // console.log('salva pagina', this.cached);
-            this.$emit('save-page')
-            console.log('this.model', this.model);
+            if (modelSaved) {
+                this.$emit('save-page')
+            }
+            // console.log(this.model);
+
+            // console.log('this.model', this.model);
             if (this.model) {
                 this.$root.$emit('close-all-panels')
                 this.counter = this.cached.length
                 let promises = []
-
                 for (let i = 0; i < this.cached.length; i++) {
                     // temps[i] = this.saveComponent(temps[i])
                     switch (this.cached[i].type) {
@@ -330,6 +344,7 @@ export default {
                         }
 
                         rowData = this.formatRequest(rowData)
+
                         let requestRow = this.$http.post('/api/admin/save-component', rowData)
                             .then(rowResponse => {
                                 this.cached[i] = this.formatFromResponse(this.cached[i], rowResponse.data.module)
@@ -382,18 +397,25 @@ export default {
                         promises.push(request)
                     }
                 }
-
                 this.$http.all(promises)
                     .then(results => {
+                        // console.log('completato');
+                        // if (modelSaved) {
                         this.notifications.push({
                             uuid: Uuid.get(),
                             title: 'Pagina Salvata',
                             message: 'Salvataggio Completato'
                         })
+                        // }
                     })
-            }
-            else {
-                console.log('intercept');
+                    .catch(err => {
+                        console.error(err);
+                        this.notifications.push({
+                            uuid: Uuid.get(),
+                            title: 'Errore',
+                            message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
+                        })
+                    })
             }
         },
         formatFromResponse: function (obj, newObj) {
@@ -403,7 +425,7 @@ export default {
             temp.isNew = false
             temp.order = Number(temp.order)
             temp.content = obj.content
-
+            // console.log('temp', temp, obj, newObj);
             return temp
         },
         saveComponent: function (current) {

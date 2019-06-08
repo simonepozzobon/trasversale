@@ -31,6 +31,7 @@ Route::prefix('admin')->group(
 
         Route::prefix('post-type')->group(
             function () {
+                Route::post('save', 'AdminController@save_post_type');
                 Route::delete('{type}/delete/{id}', 'AdminController@delete_post_type');
                 Route::get('{type}', 'AdminController@get_post_type');
             }

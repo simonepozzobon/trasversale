@@ -289,6 +289,7 @@
         :name="option.key"
         :label="option.label"
         :info="option.info"
+        @changed="subChanged"
     />
 
     <!-- <div v-else>
