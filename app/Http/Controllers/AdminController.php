@@ -76,7 +76,7 @@ class AdminController extends Controller
         ];
     }
 
-    public function get_post_type($type)
+    public function get_posts_type($type)
     {
         switch ($type) {
         case 'news':
@@ -95,6 +95,17 @@ class AdminController extends Controller
         return [
             'success' => true,
             'elements' => $elements,
+        ];
+    }
+
+    public function get_post_type($type, $id)
+    {
+        $model = 'App\\'.ucfirst($type);
+        $post = $model::with('slug', 'category', 'modules')->where('id', $id)->first();
+
+        return [
+            'success' => true,
+            'post' => $post,
         ];
     }
 

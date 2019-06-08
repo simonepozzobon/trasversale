@@ -25,7 +25,10 @@
             slot="tools"
             slot-scope="data"
         >
-            <button class="btn btn-outline-primary">
+            <button
+                class="btn btn-outline-primary"
+                @click="editPost(data.item)"
+            >
                 Modifica
             </button>
             <button
@@ -116,6 +119,12 @@ export default {
                 type: this.$route.params.type
             })
             console.log('crea post');
+        },
+        editPost: function (item) {
+            this.$root.goToWithParams('post-edit', {
+                type: this.$route.params.type,
+                id: item.id
+            })
         }
     },
     mounted: function () {

@@ -5,6 +5,7 @@ import PageContainer from './views/PageContainer.vue'
 import Page from './views/Page.vue'
 import PostsContainer from './views/PostsContainer.vue'
 import PostCreate from './views/PostCreate.vue'
+import PostEdit from './views/PostEdit.vue'
 import PostsCrud from './views/PostsCrud.vue'
 import SubPageContainer from './views/SubPageContainer.vue'
 import SubPage from './views/SubPage.vue'
@@ -32,6 +33,11 @@ const routes = [
                         path: 'create',
                         name: 'post-create',
                         component: PostCreate
+                    },
+                    {
+                        path: ':id',
+                        name: 'post-edit',
+                        component: PostEdit
                     }
                 ]
             },
