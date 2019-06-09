@@ -21,25 +21,19 @@ const routes = [
                 component: Home,
             },
             {
+                path: 'posts/:type/create',
+                name: 'post-create',
+                component: PostCreate
+            },
+            {
+                path: 'posts/:type/:id',
+                name: 'post-edit',
+                component: PostEdit
+            },
+            {
                 path: 'posts/:type',
-                component: PostsContainer,
-                children: [
-                    {
-                        path: '',
-                        name: 'posts',
-                        component: PostsCrud,
-                    },
-                    {
-                        path: 'create',
-                        name: 'post-create',
-                        component: PostCreate
-                    },
-                    {
-                        path: ':id',
-                        name: 'post-edit',
-                        component: PostEdit
-                    }
-                ]
+                name: 'posts',
+                component: PostsCrud,
             },
             {
                 path: ':page',
