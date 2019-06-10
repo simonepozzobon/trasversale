@@ -1,11 +1,11 @@
 <template lang="html">
-    <router-view></router-view>
+    <router-view :key="$route.fullPath"></router-view>
 </template>
 
 <script>
 export default {
     name: 'Home',
-    data: function() {
+    data: function () {
         return {
             name: null,
             modules: null,
