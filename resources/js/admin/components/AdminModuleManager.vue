@@ -1,12 +1,9 @@
 <template>
 <div
     class="module-manager"
-    :class="[
-            isAdminClass,
-        ]"
+    :class="[isAdminClass]"
     @click="selected"
 >
-
     <ui-title
         v-if="module.type === 'title'"
         ref="title"
@@ -16,63 +13,54 @@
         :color="content.hasOwnProperty('color') ? content.color : null "
         :font-size="content.hasOwnProperty('fontSize') ? content.fontSize : null"
     />
-
     <admin-ui-image
         v-else-if="module.type === 'image'"
         :src="content.src"
         :alt="content.alt"
     />
-
     <ui-paragraph
         v-else-if="module.type === 'paragraph'"
         :content="content.content"
     />
-
     <ui-button
         v-else-if="module.type === 'button'"
         :text="content.text"
     />
-
     <ui-team
         v-else-if="module.type === 'team'"
         :people="content.people"
         :grid-col="content.gridCol"
     />
-
     <admin-packery-container
         v-else-if="showPackery"
         :items="content.blocks"
         :gutter="8"
         :units="12"
     />
-
     <ui-simple-grid
         v-else-if="showSimpleGrid"
         :blocks="content.blocks"
     />
-
     <admin-ui-module-row
         v-else-if="module.type === 'row'"
         :columns="content"
         :is-open="isOpen"
+        @save-row="saveRow"
+        @add-component="addComponent"
+        @delete-sub-component="deleteSubComponent"
         @update-size="updateSize"
     />
-
     <ui-video
         v-else-if="module.type === 'video'"
         :url="this.content.url"
     />
-
     <ui-quote
         v-else-if="module.type === 'quote'"
         :quote="content.content"
         :source="content.source"
     />
-
     <ui-calendar v-else-if="module.type === 'calendar'" />
-
     <ui-contact-form v-else-if="module.type === 'contact-form'" />
-
     <div v-else>
         {{ module }}
     </div>
@@ -86,7 +74,7 @@ export default {
     props: {
         module: {
             type: Object,
-            default: function() {}
+            default: function () {}
         },
         isAdmin: {
             type: Boolean,
@@ -97,26 +85,29 @@ export default {
             default: false,
         },
     },
-    data: function() {
+    data: function () {
         return {
             blocks: [],
         }
     },
     watch: {
-        module: function(module) {
+        module: function (module) {
             this.listener()
         },
     },
     computed: {
-        content: function() {
-            return JSON.parse(this.module.content)
+        content: function () {
+            if (this.module && this.module.hasOwnProperty('content')) {
+                return this.module.content
+            }
+            return {}
         },
-        isAdminClass: function() {
+        isAdminClass: function () {
             if (this.isAdmin) {
                 return 'module-manager--is-admin'
             }
         },
-        showPackery: function() {
+        showPackery: function () {
             // v-else-if="module.type == 'grid' && this.content.type == 'packery' && this.content.blocks.length > 0"
             if (this.module.type == 'grid') {
                 if (this.content.hasOwnProperty('type') && this.content.hasOwnProperty('blocks')) {
@@ -128,7 +119,7 @@ export default {
             }
             return false
         },
-        showSimpleGrid: function() {
+        showSimpleGrid: function () {
             // v-else-if="module.type == 'grid' && this.content.type == 'packery' && this.content.blocks.length > 0"
             if (this.module.type == 'grid') {
                 if (this.content.hasOwnProperty('type') && this.content.hasOwnProperty('blocks')) {
@@ -139,29 +130,42 @@ export default {
                 }
             }
             return false
-        }
+        },
     },
     methods: {
-        listener: function() {
-            // if (this.module.type === 'image') {
+        listener: function () {
+            // console.log('modulo cambiato');
+            // if (this.module.type === 'row') {
             //     console.log(this.content);
             // }
-
             // console.log(this.content.hasOwnProperty('type') && this.content.type == 'packery');
             // console.log('content.type', this.content.type);
             // console.log('blocks.type', this.content.blocks);
             // console.log('type', this.module.type);
         },
-        updateSize: function(data) {
+        updateSize: function (data) {
+            // console.log('dimensione cambiata');
             this.$emit('update-size', data)
         },
-        selected: function() {
+        selected: function () {
             if (this.isAdmin) {
                 this.$emit('selected', this.module)
             }
+        },
+        addComponent: function (column, component) {
+            this.$emit('add-component', column, component)
+        },
+        saveRow: function (columns) {
+            // console.log('save module', this.module);
+            // this.$emit('save-module', this.module)
+            // console.log('salvataggio dall AdminModuleManager', this.module);
+            this.$emit('save-module', columns)
+        },
+        deleteSubComponent: function (id, isNew, uuid) {
+            this.$emit('delete', id, isNew, uuid)
         }
     },
-    beforeCreate: function() {
+    beforeCreate: function () {
         this.$options.components.AdminUiModuleRow = require('./modulemanager/AdminUiModuleRow.vue')
             .default
         this.$options.components.UiParagraph = require('../../ui/UiParagraph.vue')
@@ -187,7 +191,7 @@ export default {
         this.$options.components.UiContactForm = require('../../ui/UiContactForm.vue')
             .default
     },
-    mounted: function() {
+    mounted: function () {
         // console.log(this.module);
         if (this.module.type == 'title') {
             if (this.$refs.title) {
@@ -197,7 +201,7 @@ export default {
             }
         }
     },
-    beforeDestroy: function() {
+    beforeDestroy: function () {
         if (this.module.type == 'title') {
             this.$root.sidebarPaddingTop = false
             this.$emit('title', false)

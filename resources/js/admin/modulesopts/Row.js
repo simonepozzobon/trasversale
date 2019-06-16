@@ -10,7 +10,7 @@ const Row = {
                 max: 12,
                 min: 1,
             },
-            default: 3,
+            default: 2,
         },
         // {
         //     key: 'preview',

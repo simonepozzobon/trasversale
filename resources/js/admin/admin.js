@@ -9,6 +9,7 @@ import routes from './adminroutes'
 import VuePackeryPlugin from './PackeryTest'
 import VueDraggabillyPlugin from 'vue-packery-draggabilly-plugin'
 
+Vue.config.productionTip = false
 
 Vue.use(VueRouter)
 Vue.use(VuePackeryPlugin)
