@@ -231,7 +231,7 @@ export default {
                     this.cached.push(cache)
                 }
             }
-            // this.debug()
+            this.debug()
         },
         setInitials: function (objs) {
             for (let i = 0; i < objs.length; i++) {
@@ -248,7 +248,7 @@ export default {
         debug: function () {
             if (this.cached.length === 0 && this.modelIdx !== 0) {
                 this.$nextTick(() => {
-                    this.newComponent('row')
+                    this.newComponent('map')
                 })
             }
         },

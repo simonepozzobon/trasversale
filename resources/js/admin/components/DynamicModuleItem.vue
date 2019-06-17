@@ -292,6 +292,13 @@
         @changed="subChanged"
     />
 
+    <map-module
+        v-else-if="option.type === 'map'"
+        :name="option.key"
+        :label="option.label"
+        :info="option.info"
+    />
+
     <!-- <div v-else>
         {{ option }}
     </div> -->
@@ -349,6 +356,7 @@ from '../../Utilities'
 import DummyModule from './DummyModule.vue'
 import DynamicSelect from './dynamicselect/DynamicSelect.vue'
 import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
+import MapModule from './map/MapModule.vue'
 import PostFields from './post-selector/PostFields'
 import Swatches from 'vue-swatches'
 import TextEditor from './TextEditor.vue'
@@ -368,6 +376,7 @@ export default {
         DynamicSelect,
         GridItem: VueGridLayout.GridItem,
         GridLayout: VueGridLayout.GridLayout,
+        MapModule,
         Swatches,
         TextEditor,
         UiCheckbox,

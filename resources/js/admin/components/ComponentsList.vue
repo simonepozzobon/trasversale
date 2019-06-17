@@ -1,24 +1,34 @@
 <template>
-<b-modal ref="modal"
-    title="Seleziona il componente">
+<b-modal
+    ref="modal"
+    title="Seleziona il componente"
+>
     <div class="form-group">
         <label for="component">Seleziona Componente</label>
-        <select name="component"
+        <select
+            name="component"
             class="form-control"
-            v-model="moduleType">
-            <option v-for="(module, i) in modules"
+            v-model="moduleType"
+        >
+            <option
+                v-for="(module, i) in modules"
                 :key="i"
-                :value="module.value">{{module.label}}</option>
+                :value="module.value"
+            >{{module.label}}</option>
         </select>
     </div>
 
     <template slot="modal-footer">
-        <button class="btn btn-outline-secondary"
-            @click="dismissModal">
+        <button
+            class="btn btn-outline-secondary"
+            @click="dismissModal"
+        >
             Chiudi
         </button>
-        <button class="btn btn-outline-primary"
-            @click="newComponent">
+        <button
+            class="btn btn-outline-primary"
+            @click="newComponent"
+        >
             Aggiungi
         </button>
     </template>
@@ -74,6 +84,10 @@ export default {
                 {
                     value: 'calendar',
                     label: 'Calendario',
+                },
+                {
+                    value: 'map',
+                    label: 'Mappa',
                 },
                 {
                     value: 'contact-form',

@@ -3,6 +3,7 @@ import Column from './Column.js'
 import ContactForm from './ContactForm.js'
 import Grid from './Grid.js'
 import Image from './Image.js' // fatto
+import Map from './Map.js' // fatto
 import Paragraph from './Paragraph.js' // fatto
 import PostNews from './PostNews.js'
 import PostProduct from './PostProduct.js'
@@ -17,6 +18,7 @@ export {
     ContactForm,
     Grid,
     Image,
+    Map,
     Paragraph,
     PostNews,
     PostProduct,
