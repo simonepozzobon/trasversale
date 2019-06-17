@@ -1,12 +1,19 @@
 <template>
-<div class="page-template">
+<div
+    class="page-template"
+    :class="[hasTitleClass]"
+>
     <notifications-container :toasts="notifications" />
-    <div class="page-tamplate__container container">
+    <div class="page-template__container container">
         <div class="page-template__row row">
             <div class="page-template__main col-12">
+                <slot></slot>
                 <div class="page-template__header">
                     <div class="page-template__head">
-                        <div class="page-template__title">
+                        <div
+                            class="page-template__title"
+                            v-if="hasTitle"
+                        >
                             <h1 class="pt-3">{{ title }}</h1>
                         </div>
                         <div class="page-template__action">
@@ -20,7 +27,7 @@
                                 class="btn btn-outline-success"
                                 @click="savePage"
                             >
-                                Salva Pagina
+                                {{ customSave }}
                             </button>
                         </div>
                     </div>
@@ -54,7 +61,7 @@
                         class="btn btn-outline-success ml-2"
                         @click="savePage"
                     >
-                        Salva Pagina
+                        {{ customSave }}
                     </button>
                 </div>
                 <components-list
@@ -121,6 +128,18 @@ export default {
             type: Boolean,
             default: false,
         },
+        hasTitle: {
+            type: Boolean,
+            default: true,
+        },
+        customSave: {
+            type: String,
+            default: 'Salva Pagina'
+        },
+        hasInterceptor: {
+            type: Boolean,
+            default: false,
+        }
     },
     data: function () {
         return {
@@ -143,6 +162,11 @@ export default {
                 return 'col-md-9'
             }
         },
+        hasTitleClass: function () {
+            if (!this.hasTitle) {
+                return 'page-template--no-title'
+            }
+        }
     },
     watch: {
         '$route.params': function (params) {
@@ -150,9 +174,20 @@ export default {
         },
         modules: function (modules) {
             this.init()
+        },
+        model: function (model) {
+            this.setModelKey('modulable_type', model)
+        },
+        modelIdx: function (id) {
+            this.setModelKey('modulable_id', id)
         }
     },
     methods: {
+        setModelKey: function (key, value) {
+            for (let i = 0; i < this.cached.length; i++) {
+                this.cached[i][key] = value
+            }
+        },
         init: function () {
             // imposta una variabile intermedia per poter modificare i moduli
             let sorted = orderBy(this.modules, ['order', 'created_at'], ['asc', 'asc'])
@@ -286,84 +321,102 @@ export default {
             return objs
         },
 
-        savePage: function () {
+        savePage: function (modelSaved = true) {
             // console.log('salva pagina', this.cached);
-            this.$root.$emit('close-all-panels')
-            this.counter = this.cached.length
-            let promises = []
-
-            for (let i = 0; i < this.cached.length; i++) {
-                // temps[i] = this.saveComponent(temps[i])
-                switch (this.cached[i].type) {
-                case 'row':
-                    let rowData = Object.assign({}, this.cached[i])
-                    delete rowData.content
-                    rowData.content = {
-                        columns: this.cached[i].content.length
-                    }
-
-                    rowData = this.formatRequest(rowData)
-                    let requestRow = this.$http.post('/api/admin/save-component', rowData)
-                        .then(rowResponse => {
-                            this.cached[i] = this.formatFromResponse(this.cached[i], rowResponse.data.module)
-                            let columns = this.cached[i].content
-                            for (let j = 0; j < columns.length; j++) {
-                                let modules = columns[j].content.modules
-                                let columnData = Object.assign({}, columns[j])
-                                columnData.modulable_id = rowResponse.data.module.id
-                                columnData.modulable_type = 'App\\Module'
-                                delete columnData.content.modules
-
-                                columnData = this.formatRequest(columnData)
-                                let requestColumn = this.$http.post('/api/admin/save-component', columnData)
-                                    .then(columnResponse => {
-                                        this.cached[i].content[j] = this.formatFromResponse(this.cached[i].content[j], columnResponse.data.module)
-                                        if (modules) {
-                                            for (let k = 0; k < modules.length; k++) {
-                                                let moduleData = Object.assign({}, modules[k])
-                                                moduleData.modulable_id = columnResponse.data.module.id
-                                                moduleData.modulable_type = 'App\\Module'
-                                                moduleData = this.formatRequest(moduleData)
-                                                let requestModule = this.$http.post('/api/admin/save-component', moduleData)
-                                                    .then(moduleResponse => {
-                                                        let newModule = this.formatFromResponse(modules[k], moduleResponse.data.module)
-                                                        this.cached[i].content[j].modules[k] = newModule
-                                                        if (!this.cached[i].content[j].content.hasOwnProperty('modules')) {
-                                                            this.cached[i].content[j].content.modules = []
-                                                            this.cached[i].content[j].content.modules[k] = newModule
-                                                        }
-                                                        else {
-                                                            this.cached[i].content[j].content.modules[k] = newModule
-                                                        }
-                                                    })
-                                                promises.push(requestModule)
-                                            }
-                                        }
-                                    })
-                                promises.push(requestColumn)
-                            }
-                        })
-                    promises.push(requestRow)
-                    break;
-                default:
-                    let data = this.formatRequest(this.cached[i])
-                    let request = this.$http.post('/api/admin/save-component', data)
-                        .then(response => {
-                            let temp = this.formatFromResponse(this.cached[i], response.data.module)
-                            this.cached[i] = temp
-                        })
-                    promises.push(request)
-                }
+            if (modelSaved) {
+                this.$emit('save-page')
             }
+            // console.log(this.model);
 
-            this.$http.all(promises)
-                .then(results => {
-                    this.notifications.push({
-                        uuid: Uuid.get(),
-                        title: 'Pagina Salvata',
-                        message: 'Salvataggio Completato'
+            // console.log('this.model', this.model);
+            if (this.model) {
+                this.$root.$emit('close-all-panels')
+                this.counter = this.cached.length
+                let promises = []
+                for (let i = 0; i < this.cached.length; i++) {
+                    // temps[i] = this.saveComponent(temps[i])
+                    switch (this.cached[i].type) {
+                    case 'row':
+                        let rowData = Object.assign({}, this.cached[i])
+                        delete rowData.content
+                        rowData.content = {
+                            columns: this.cached[i].content.length
+                        }
+
+                        rowData = this.formatRequest(rowData)
+
+                        let requestRow = this.$http.post('/api/admin/save-component', rowData)
+                            .then(rowResponse => {
+                                this.cached[i] = this.formatFromResponse(this.cached[i], rowResponse.data.module)
+                                let columns = this.cached[i].content
+                                for (let j = 0; j < columns.length; j++) {
+                                    let modules = columns[j].content.modules
+                                    let columnData = Object.assign({}, columns[j])
+                                    columnData.modulable_id = rowResponse.data.module.id
+                                    columnData.modulable_type = 'App\\Module'
+                                    delete columnData.content.modules
+
+                                    columnData = this.formatRequest(columnData)
+                                    let requestColumn = this.$http.post('/api/admin/save-component', columnData)
+                                        .then(columnResponse => {
+                                            this.cached[i].content[j] = this.formatFromResponse(this.cached[i].content[j], columnResponse.data.module)
+                                            if (modules) {
+                                                for (let k = 0; k < modules.length; k++) {
+                                                    let moduleData = Object.assign({}, modules[k])
+                                                    moduleData.modulable_id = columnResponse.data.module.id
+                                                    moduleData.modulable_type = 'App\\Module'
+                                                    moduleData = this.formatRequest(moduleData)
+                                                    let requestModule = this.$http.post('/api/admin/save-component', moduleData)
+                                                        .then(moduleResponse => {
+                                                            let newModule = this.formatFromResponse(modules[k], moduleResponse.data.module)
+                                                            this.cached[i].content[j].modules[k] = newModule
+                                                            if (!this.cached[i].content[j].content.hasOwnProperty('modules')) {
+                                                                this.cached[i].content[j].content.modules = []
+                                                                this.cached[i].content[j].content.modules[k] = newModule
+                                                            }
+                                                            else {
+                                                                this.cached[i].content[j].content.modules[k] = newModule
+                                                            }
+                                                        })
+                                                    promises.push(requestModule)
+                                                }
+                                            }
+                                        })
+                                    promises.push(requestColumn)
+                                }
+                            })
+                        promises.push(requestRow)
+                        break;
+                    default:
+                        let data = this.formatRequest(this.cached[i])
+                        let request = this.$http.post('/api/admin/save-component', data)
+                            .then(response => {
+                                let temp = this.formatFromResponse(this.cached[i], response.data.module)
+                                this.cached[i] = temp
+                            })
+                        promises.push(request)
+                    }
+                }
+                this.$http.all(promises)
+                    .then(results => {
+                        // console.log('completato');
+                        // if (modelSaved) {
+                        this.notifications.push({
+                            uuid: Uuid.get(),
+                            title: 'Pagina Salvata',
+                            message: 'Salvataggio Completato'
+                        })
+                        // }
                     })
-                })
+                    .catch(err => {
+                        console.error(err);
+                        this.notifications.push({
+                            uuid: Uuid.get(),
+                            title: 'Errore',
+                            message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
+                        })
+                    })
+            }
         },
         formatFromResponse: function (obj, newObj) {
             let temp = Object.assign({}, obj, newObj)
@@ -372,7 +425,7 @@ export default {
             temp.isNew = false
             temp.order = Number(temp.order)
             temp.content = obj.content
-
+            // console.log('temp', temp, obj, newObj);
             return temp
         },
         saveComponent: function (current) {
@@ -490,6 +543,10 @@ $opacity-test: 0.6 !default;
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    &--no-title &__head {
+        justify-content: center;
     }
 }
 

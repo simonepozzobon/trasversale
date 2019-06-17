@@ -10,6 +10,7 @@ use App\Product;
 use App\Element;
 use App\Utility;
 use App\SubPage;
+use App\Category;
 use App\StaticPage;
 use Illuminate\Http\Request;
 
@@ -32,13 +33,6 @@ class AdminController extends Controller
             ]
         );
         return $this->save_component($request);
-        // return $this->get_page(2);
-
-        // dd($result->modules);
-        // $module = Module::find($request->id);
-        // $module = $this->set_module($module, $request);
-        //
-        // $this->get_grid_elements('products');
     }
 
     public function index($slug = null)
@@ -82,7 +76,7 @@ class AdminController extends Controller
         ];
     }
 
-    public function get_post_type($type)
+    public function get_posts_type($type)
     {
         switch ($type) {
         case 'news':
@@ -101,6 +95,79 @@ class AdminController extends Controller
         return [
             'success' => true,
             'elements' => $elements,
+        ];
+    }
+
+    public function get_post_type($type, $id)
+    {
+        $model = 'App\\'.ucfirst($type);
+        $post = $model::with('slug', 'category', 'modules')->where('id', $id)->first();
+
+        return [
+            'success' => true,
+            'post' => $post,
+        ];
+    }
+
+    public function save_post_type(Request $request)
+    {
+        $model = 'App\\'.ucfirst($request->model);
+        $post = isset($request->id) ? $model::find($request->id) : new $model();
+
+        $post->category_id = $request->category;
+        $post->title = $request->title;
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $media = Utility::save_image($file);
+            $post->thumb = $media->landscape;
+        } else {
+            $post->thumb = 'no-image';
+        }
+
+        if (isset($request->price)) {
+            $post->price = $request->price;
+        }
+
+        if (isset($request->options)) {
+            $post->options = $request->options;
+        }
+
+        $post->save();
+
+
+        return [
+            'success' => true,
+            'post' => $post
+        ];
+    }
+
+    public function get_categories()
+    {
+        $categories = Category::all();
+        return [
+            'success' => true,
+            'categories' => $categories
+        ];
+    }
+
+    public function delete_post_type($type, $id)
+    {
+        switch ($type) {
+        case 'news':
+            $element = News::find($id);
+            break;
+
+        case 'products':
+            $element = Product::find($id);
+            break;
+        }
+
+        $element->delete();
+
+        return [
+            'success' => true,
+            'element' => $element,
         ];
     }
 
@@ -127,7 +194,7 @@ class AdminController extends Controller
         } else {
             $module = Module::find($request->id);
         }
-
+        // return [$request->all()];
         $module = $this->update_module($module, $request);
         $module = Utility::format_complex_module($module, false);
 
@@ -254,81 +321,6 @@ class AdminController extends Controller
         $module->order = $request->order;
         $module->modulable_type = $request->modulable_type;
         $module->modulable_id = $request->modulable_id;
-        $module->content = $content;
-        $module->save();
-
-        return $module;
-    }
-
-    public function set_module($module, $request)
-    {
-        $content = $request->data;
-
-        if ($request->module == 'grid') {
-            $content = json_decode($request->data);
-
-            $grid_content = json_decode($module->content);
-            $hasGrid = isset($grid_content->id);
-
-            if ($hasGrid) {
-                $grid = Grid::find($grid_content->id);
-            } else {
-                $grid = new Grid();
-            }
-
-            $grid->title = $content->title;
-            $grid->type = $content->type;
-            $grid->save();
-
-            foreach ($content->elements->blocks as $key => $block) {
-                $model = 'App\\'.ucfirst($block->type);
-
-                $options = [
-                    'x' => $block->x,
-                    'y' => $block->y,
-                    'width' => $block->w,
-                    'height' => $block->h,
-                    'color' => 'primary',
-                    'content' => 'title',
-                    'thumb' => isset($block->thumb) ? $block->thumb : '',
-                ];
-
-                // dd($block);
-                $has_block = isset($block->id);
-                if ($has_block) {
-                    $element = Element::find($block->id);
-                    $element->delete();
-                    $element = new Element();
-                } else {
-                    $element = new Element();
-                }
-
-                $element->grid_id = $grid->id;
-                $element->elementable_type = $model;
-                $element->elementable_id = $block->type_id;
-                $element->options = json_encode($options);
-                $element->save();
-            }
-
-            $content = json_encode(
-                [
-                'id' => $grid->id
-                ]
-            );
-        } elseif ($request->module == 'image') {
-            $file = $request->file('file');
-            $media = Utility::save_image($file);
-
-            $content = json_decode($request->data);
-            $content->src = $media->landscape;
-            $content = json_encode($content);
-        }
-
-
-
-        $module->type = $request->module;
-        $module->modulable_type = $request->model;
-        $module->modulable_id = $request->model_id;
         $module->content = $content;
         $module->save();
 

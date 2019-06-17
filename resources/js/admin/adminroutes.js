@@ -1,10 +1,12 @@
-import Corsi from './views/Corsi.vue'
-import Notizie from './views/Notizie.vue'
 
 import HomeContainer from './views/HomeContainer.vue'
 import Home from './views/Home.vue'
 import PageContainer from './views/PageContainer.vue'
 import Page from './views/Page.vue'
+import PostsContainer from './views/PostsContainer.vue'
+import PostCreate from './views/PostCreate.vue'
+import PostEdit from './views/PostEdit.vue'
+import PostsCrud from './views/PostsCrud.vue'
 import SubPageContainer from './views/SubPageContainer.vue'
 import SubPage from './views/SubPage.vue'
 
@@ -19,14 +21,19 @@ const routes = [
                 component: Home,
             },
             {
-                path: 'corsi',
-                name: 'corsi',
-                component: Corsi,
+                path: 'posts/:type/create',
+                name: 'post-create',
+                component: PostCreate
             },
             {
-                path: 'notizie',
-                name: 'notizie',
-                component: Notizie,
+                path: 'posts/:type/:id',
+                name: 'post-edit',
+                component: PostEdit
+            },
+            {
+                path: 'posts/:type',
+                name: 'posts',
+                component: PostsCrud,
             },
             {
                 path: ':page',
