@@ -23,4 +23,8 @@ class News extends Model
     public function category() {
         return $this->belongsTo(Category::class);
     }
+
+    public function sidebar() {
+        return $this->morphOne(Sidebar::class, 'sidebarable');
+    }
 }

@@ -71,7 +71,14 @@
             </div>
         </div>
     </div>
-
+    <new-sidebar-template
+        ref="sidebar"
+        model="App\Sidebar"
+        :model-idx="sidebarIdx"
+        :modules="sidebarModules"
+        @saved="savedSidebar"
+        @deleted="deletedSidebar"
+    />
 </div>
 </template>
 
@@ -81,6 +88,7 @@ import draggable from 'vuedraggable'
 import DynamicParams from '../DynamicParams'
 import EditPanel from '../components/EditPanel.vue'
 import ModuleContainer from './ModuleContainer.vue'
+import NewSidebarTemplate from './NewSidebarTemplate.vue'
 import NotificationsContainer from './NotificationsContainer.vue'
 
 import {
@@ -97,6 +105,7 @@ export default {
         draggable,
         EditPanel,
         ModuleContainer,
+        NewSidebarTemplate,
         NotificationsContainer,
     },
     props: {
@@ -118,12 +127,6 @@ export default {
                 return []
             },
         },
-        sides: {
-            type: Array,
-            default: function () {
-                return []
-            },
-        },
         hasSidebar: {
             type: Boolean,
             default: false,
@@ -139,7 +142,17 @@ export default {
         hasInterceptor: {
             type: Boolean,
             default: false,
-        }
+        },
+        sidebarIdx: {
+            type: Number,
+            default: 0,
+        },
+        sidebarModules: {
+            type: Array,
+            default: function () {
+                return []
+            },
+        },
     },
     data: function () {
         return {
@@ -475,7 +488,22 @@ export default {
             })
 
             this.savePage()
-        }
+        },
+        savedSidebar: function (module) {
+            let idx = this.sidebarModules.findIndex(item => item.id == module.id)
+            if (idx > -1) {
+                this.sidebarModules.splice(idx, 1, module)
+            }
+            else {
+                this.sidebarModules.push(module)
+            }
+        },
+        deletedSidebar: function (module) {
+            let idx = this.sidebarModules.findIndex(item => item.id == module.id)
+            if (idx > -1) {
+                this.sidebarModules.splice(idx, 1)
+            }
+        },
     },
     mounted: function () {
         this.init()

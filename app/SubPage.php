@@ -19,4 +19,8 @@ class SubPage extends Model
     public function slug() {
         return $this->morphOne(Slug::class, 'sluggable');
     }
+
+    public function sidebar() {
+        return $this->morphOne(Sidebar::class, 'sidebarable');
+    }
 }

@@ -18,21 +18,22 @@ class AdminController extends Controller
 {
     public function test()
     {
-        $request = new Request();
-        $request->replace(
-            [
-                "id" => "10",
-                "type" => "title",
-                "modulable_type" => "App\\StaticPage",
-                "modulable_id" => "2",
-                "content" => "{\"content\":\"Giuseppe\",\"fontSize\":\"h2\",\"color\":null,\"isColumn\":null,\"uppercase\":null}",
-                "created_at" => "2019-06-06 00:35:30",
-                "updated_at" => "2019-06-06 00:35:30",
-                "uuid" => "5qngii0q09",
-                "isNew" => "false"
-            ]
-        );
-        return $this->save_component($request);
+        // $request = new Request();
+        // $request->replace(
+        //     [
+        //         "id" => "10",
+        //         // "type" => "title",
+        //         // "modulable_type" => "App\\StaticPage",
+        //         // "modulable_id" => "2",
+        //         // "content" => "{\"content\":\"Giuseppe\",\"fontSize\":\"h2\",\"color\":null,\"isColumn\":null,\"uppercase\":null}",
+        //         // "created_at" => "2019-06-06 00:35:30",
+        //         // "updated_at" => "2019-06-06 00:35:30",
+        //         // "uuid" => "5qngii0q09",
+        //         // "isNew" => "false"
+        //     ]
+        // );
+        // return $this->save_component($request);
+        return $this->get_sub_page(15);
     }
 
     public function index($slug = null)
@@ -101,7 +102,7 @@ class AdminController extends Controller
     public function get_post_type($type, $id)
     {
         $model = 'App\\'.ucfirst($type);
-        $post = $model::with('slug', 'category', 'modules')->where('id', $id)->first();
+        $post = $model::with('slug', 'category', 'modules', 'sidebar.modules')->where('id', $id)->first();
 
         return [
             'success' => true,
@@ -217,14 +218,20 @@ class AdminController extends Controller
 
     public function get_sub_page($id)
     {
-        $page = SubPage::find($id);
+        $page = SubPage::with('sidebar.modules')->where('id', $id)->first();
+        if ($page->sidebar && $page->sidebar->modules) {
+            $page->sidebar->modules = Utility::format_complex_modules($page->sidebar->modules, false);
+        }
         $page->modules = Utility::format_complex_modules($page->modules()->get(), false);
         return $page;
     }
 
     public function get_page($id)
     {
-        $page = StaticPage::find($id);
+        $page = StaticPage::with('sidebar.modules')->where('id', $id)->first();
+        if ($page->sidebar && $page->sidebar->modules) {
+            $page->sidebar->modules = Utility::format_complex_modules($page->sidebar->modules, false);
+        }
         $page->modules = Utility::format_complex_modules($page->modules()->get(), false);
         return $page;
     }
