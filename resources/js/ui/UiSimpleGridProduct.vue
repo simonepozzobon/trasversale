@@ -37,16 +37,19 @@ export default {
     props: {
         block: {
             type: Object,
-            default: function() {},
+            default: function () {},
         },
     },
     computed: {
-        content: function() {
-            return JSON.parse(this.block.content)
+        content: function () {
+            if (typeof this.block.content === 'string') {
+                return JSON.parse(this.block.content)
+            }
+            return this.block.content
         },
     },
     methods: {
-        goToProduct: function() {
+        goToProduct: function () {
             // console.log(this.$route.params.page);
             this.$root.goToWithParams('item', {
                 page: this.$route.params.page,
@@ -55,8 +58,7 @@ export default {
             })
         },
     },
-    mounted: function() {
-    },
+    mounted: function () {},
 }
 </script>
 
@@ -83,10 +85,10 @@ export default {
         padding: $spacer;
     }
 
-    &__title,
-    &__reviews,
+    &__action,
     &__price,
-    &__action {
+    &__reviews,
+    &__title {
         text-align: center;
     }
 

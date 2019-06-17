@@ -48,16 +48,19 @@ export default {
     props: {
         block: {
             type: Object,
-            default: function() {},
+            default: function () {},
         },
     },
     computed: {
-        content: function() {
-            return JSON.parse(this.block.content)
+        content: function () {
+            if (typeof this.block.content === 'string') {
+                return JSON.parse(this.block.content)
+            }
+            return this.block.content
         },
     },
     methods: {
-        goToNews: function() {
+        goToNews: function () {
             // console.log({
             //     page: this.$route.params.page,
             //     news: this.content.slug.slug,
@@ -67,11 +70,11 @@ export default {
                 subpage: this.content.slug.slug,
             })
         },
-        filterCategory: function() {
+        filterCategory: function () {
             this.$emit('filter-category', this.content.category_id)
         }
     },
-    mounted: function() {
+    mounted: function () {
         // console.log(this.block, this.content);
     },
 }
@@ -98,10 +101,7 @@ export default {
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
-        padding-top: $spacer;
-        padding-bottom: $spacer;
-        padding-left: $spacer * $line-height-base / 2;
-        padding-right: $spacer * $line-height-base / 2;
+        padding: $spacer $spacer * $line-height-base / 2;
     }
 
     &__title {
