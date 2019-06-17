@@ -180,55 +180,55 @@ export default {
 
                 return {
                     src: src,
-                    alt: obj.alt
+                        alt: obj.alt
                 }
 
-            case 'video':
-                // Video
-                let url = obj.url
-                if (url) {
-                    url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
-                    if (RegExp.$3.indexOf('youtu') > -1) {
-                        url = 'https://www.youtube.com/embed/' + RegExp.$6
+                case 'video':
+                    // Video
+                    let url = obj.url
+                    if (url) {
+                        url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
+                        if (RegExp.$3.indexOf('youtu') > -1) {
+                            url = 'https://www.youtube.com/embed/' + RegExp.$6
+                        }
+                        else if (RegExp.$3.indexOf('vimeo') > -1) {
+                            url = 'https://player.vimeo.com/video/' + RegExp.$6
+                        }
                     }
-                    else if (RegExp.$3.indexOf('vimeo') > -1) {
-                        url = 'https://player.vimeo.com/video/' + RegExp.$6
+                    return {
+                        ...obj,
+                        url: url,
                     }
-                }
-                return {
-                    ...obj,
-                    url: url,
-                }
 
-            case 'grid':
-                console.log(obj);
-                let blocks = []
-                if (obj.elements) {
-                    if (obj.elements.hasOwnProperty('blocks') && obj.elements.blocks) {
-                        blocks = obj.elements.blocks
-                    }
-                }
-                return {
-                    options: null,
-                    title: obj.title,
-                    type: obj.type,
-                    blocks: blocks.map((block, i) => {
-                        return {
-                            ...block,
-                            height: block.h,
-                            width: block.w,
-                            content: {
-                                id: block.id,
-                                slug: block.slug,
-                                title: block.title,
+                    case 'grid':
+                        console.log(obj);
+                        let blocks = []
+                        if (obj.elements) {
+                            if (obj.elements.hasOwnProperty('blocks') && obj.elements.blocks) {
+                                blocks = obj.elements.blocks
                             }
                         }
-                    })
-                }
+                        return {
+                            options: null,
+                                title: obj.title,
+                                type: obj.type,
+                                blocks: blocks.map((block, i) => {
+                                    return {
+                                        ...block,
+                                        height: block.h,
+                                        width: block.w,
+                                        content: {
+                                            id: block.id,
+                                            slug: block.slug,
+                                            title: block.title,
+                                        }
+                                    }
+                                })
+                        }
 
-            default:
-                // DEfault
-                return obj
+                        default:
+                            // DEfault
+                            return obj
             }
         },
         changed: function (obj) {
@@ -246,12 +246,14 @@ export default {
             this.hide()
         },
         show: function () {
-            this.$refs.panel.show()
-            // console.log(this.cache, this.item);
-            // console.log(this.component, this.item);
+            if (this.$refs.hasOwnProperty('panel') && this.$refs.panel) {
+                this.$refs.panel.show()
+            }
         },
         hide: function () {
-            this.$refs.panel.hide()
+            if (this.$refs.hasOwnProperty('panel') && this.$refs.panel) {
+                this.$refs.panel.hide()
+            }
         },
         updateSize: function (data) {
             // https://stackoverflow.com/questions/1230233/how-to-find-the-sum-of-an-array-of-numbers
