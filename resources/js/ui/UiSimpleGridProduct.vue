@@ -14,7 +14,7 @@
                 *****
             </div>
             <div class="grid-product__price">
-                {{ content.price.toFixed(2) }} €
+                {{ price }} €
             </div>
             <div class="grid-product__action">
                 <a
@@ -41,6 +41,12 @@ export default {
         },
     },
     computed: {
+        price: function () {
+            if (this.content && this.content.hasOwnProperty('price')) {
+                return this.content.price.toFixed(2)
+            }
+            return 'error'
+        },
         content: function () {
             if (typeof this.block.content === 'string') {
                 return JSON.parse(this.block.content)

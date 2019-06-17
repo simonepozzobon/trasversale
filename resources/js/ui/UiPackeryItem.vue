@@ -6,6 +6,7 @@
         :class="[
             widthClass,
             hoverableClass,
+            titleClass
         ]">
 
         <div
@@ -79,7 +80,7 @@ export default {
         }
     },
     computed: {
-        bgClass: function() {
+        bgClass: function () {
             if (this.img) {
                 return 'has-image-bg'
             }
@@ -87,45 +88,54 @@ export default {
                 return 'bg-' + this.bgColor
             }
         },
-        widthClass: function() {
+        widthClass: function () {
             if (this.width) {
                 return 'col-md-' + this.width
             }
             return 'col'
         },
-        heightClass: function() {
+        heightClass: function () {
             if (this.height) {
                 return this.height
             }
             return null
         },
-        bgColorClass: function() {
+        bgColorClass: function () {
             if (this.bgColor && !this.img) {
                 return 'bg-' + this.bgColor
             }
             return null
         },
-        hoverableClass: function() {
+        hoverableClass: function () {
             if (this.obj) {
                 return 'packery-item--hoverable'
             }
         },
-        hoverable: function() {
+        hoverable: function () {
             if (this.obj) {
                 return true
             }
 
             return false
+        },
+        titleClass: function () {
+            if (this.width <= 2) {
+                return 'packery-item--title-small'
+            }
+            else if (this.width > 2 && this.width <= 6) {
+                return 'packery-item--title-medium'
+            }
+            return null
         }
     },
-    data: function() {
+    data: function () {
         return {
             debug: true,
             obj: null,
         }
     },
     methods: {
-        setBackground: function() {
+        setBackground: function () {
             if (this.img) {
                 this.$refs.item.style.backgroundImage = 'url(' + this.img + ')'
             }
@@ -138,7 +148,7 @@ export default {
                 this.obj = JSON.parse(this.content)
             }
         },
-        setUnitHeight: function(height) {
+        setUnitHeight: function (height) {
             let realGutter = Math.round(this.gutter / 2)
             let itemHeight = height * this.height
 
@@ -155,14 +165,14 @@ export default {
             //     this.$emit('loaded')
             // })
         },
-        goToItem: function() {
+        goToItem: function () {
             this.$root.goToWithParams('subpage', {
                 page: 'post',
                 subpage: this.obj.slug.slug,
             })
         }
     },
-    mounted: function() {
+    mounted: function () {
         this.setBackground()
     }
 }
@@ -191,11 +201,22 @@ export default {
     &__title {
         text-transform: uppercase;
         color: $black;
+        line-height: 1.4;
         font-family: $font-family-sans-serif-var;
         font-size: $font-size-base * 1.8;
         letter-spacing: 0.05em;
         padding: $spacer;
         font-weight: 600;
+    }
+
+    &--title-medium &__title {
+        padding: $spacer / 2;
+        font-size: $font-size-base * 1.4;
+    }
+
+    &--title-small &__title {
+        padding: $spacer / 4;
+        font-size: $font-size-base * 0.8;
     }
 
     &--hoverable &__overlay {
