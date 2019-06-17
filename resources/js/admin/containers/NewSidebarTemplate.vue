@@ -16,7 +16,7 @@
                         </button>
                         <button
                             class="btn btn-outline-success"
-                            @click="savePage"
+                            @click="saveSidebar"
                         >
                             Salva Sidebar
                         </button>
@@ -33,7 +33,7 @@
                         :key="module.uuid"
                         :item="module"
                         :model="model"
-                        :model-idx="modelIdx"
+                        :model-idx="cacheIdx"
                         @deleted="deletedComponent"
                         @save="saveComponent"
                         @delete="deleteComponent"
@@ -50,7 +50,7 @@
                 </button>
                 <button
                     class="btn btn-outline-success ml-2"
-                    @click="savePage"
+                    @click="saveSidebar"
                 >
                     Salva Sidebar
                 </button>
@@ -112,6 +112,14 @@ export default {
             type: Boolean,
             default: false,
         },
+        sidebarable_id: {
+            type: Number,
+            default: 0,
+        },
+        sidebarable_type: {
+            type: String,
+            default: null,
+        },
     },
     data: function () {
         return {
@@ -126,6 +134,7 @@ export default {
             notifications: [],
             loaded: 0,
             counter: 0,
+            cacheIdx: 0,
         }
     },
     computed: {
@@ -146,6 +155,8 @@ export default {
     methods: {
         init: function () {
             // imposta una variabile intermedia per poter modificare i moduli
+            this.cacheIdx = this.modelIdx
+
             let sorted = orderBy(this.modules, ['order', 'created_at'], ['asc', 'asc'])
             if (sorted.length > 0) {
                 for (let i = 0; i < sorted.length; i++) {
@@ -187,7 +198,7 @@ export default {
         },
 
         debug: function () {
-            if (this.cached.length === 0 && this.modelIdx !== 0) {
+            if (this.cached.length === 0 && this.cacheIdx !== 0) {
                 this.$nextTick(() => {
                     this.newComponent('row')
                 })
@@ -206,7 +217,7 @@ export default {
                 type: type,
                 isNew: true,
                 order: this.cached.length,
-                modulable_id: this.modelIdx,
+                modulable_id: this.cacheIdx,
                 modulable_type: this.model,
                 content: {},
             }
@@ -218,7 +229,7 @@ export default {
             let idx = this.cached.findIndex(cache => cache.uuid === subModule.uuid)
             if (idx > -1) {
                 this.cached.splice(idx, 1, subModule)
-                this.savePage()
+                this.saveSidebar()
             }
             // console.log(idx, subModule.uuid);
         },
@@ -278,12 +289,35 @@ export default {
             return objs
         },
 
-        savePage: function () {
+        saveSidebar: function () {
             // console.log('salva pagina', this.cached);
             this.$root.$emit('close-all-panels')
-            this.counter = this.cached.length
-            let promises = []
 
+            if (this.cacheIdx === 0) {
+                // console.log('sto salvando sidebar', this.sidebarable_id, this.sidebarable_type);
+                let data = new FormData();
+                data.append('sidebarable_id', this.sidebarable_id)
+                data.append('sidebarable_type', this.sidebarable_type)
+
+                this.$http.post('/api/admin/create-sidebar', data).then(response => {
+                    if (response.data.success) {
+                        this.cacheIdx = response.data.sidebar.id
+                        for (let i = 0; i < this.cached.length; i++) {
+                            this.cached[i].modulable_id = this.cacheIdx
+                        }
+                        this.$nextTick(() => {
+                            this.updateSidebar()
+                        })
+                    }
+                })
+            }
+            else {
+                this.updateSidebar()
+            }
+        },
+        updateSidebar: function () {
+            let promises = []
+            this.counter = this.cached.length
             for (let i = 0; i < this.cached.length; i++) {
                 // temps[i] = this.saveComponent(temps[i])
                 switch (this.cached[i].type) {
@@ -413,7 +447,7 @@ export default {
                 return newModule
             })
 
-            this.savePage()
+            this.saveSidebar()
         }
     },
     mounted: function () {

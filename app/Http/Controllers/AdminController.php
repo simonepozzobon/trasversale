@@ -10,6 +10,7 @@ use App\Product;
 use App\Element;
 use App\Utility;
 use App\SubPage;
+use App\Sidebar;
 use App\Category;
 use App\StaticPage;
 use Illuminate\Http\Request;
@@ -103,6 +104,15 @@ class AdminController extends Controller
     {
         $model = 'App\\'.ucfirst($type);
         $post = $model::with('slug', 'category', 'modules', 'sidebar.modules')->where('id', $id)->first();
+
+        if ($post->modules) {
+            $post->modules = Utility::format_complex_modules($post->modules, false);
+        }
+
+        if ($post->sidebar && $post->sidebar->modules) {
+            $post->sidebar->modules = Utility::format_complex_modules($post->sidebar->modules, false);
+
+        }
 
         return [
             'success' => true,
@@ -234,6 +244,25 @@ class AdminController extends Controller
         }
         $page->modules = Utility::format_complex_modules($page->modules()->get(), false);
         return $page;
+    }
+
+    public function create_sidebar(Request $request) {
+        $sidebar = Sidebar::where([
+            ['sidebarable_id', '=', $request->sidebarable_id],
+            ['sidebarable_type', '=', $request->sidebarable_type]
+            ])->first();
+
+        if (!$sidebar) {
+            $sidebar = new Sidebar();
+            $sidebar->sidebarable_id = $request->sidebarable_id;
+            $sidebar->sidebarable_type = $request->sidebarable_type;
+            $sidebar->save();
+        }
+
+        return [
+            'success' => true,
+            'sidebar' => $sidebar
+        ];
     }
 
     public function uniform_and_merge()

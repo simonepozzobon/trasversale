@@ -76,8 +76,11 @@
         model="App\Sidebar"
         :model-idx="sidebarIdx"
         :modules="sidebarModules"
+        :sidebarable_id="modelIdx"
+        :sidebarable_type="model"
         @saved="savedSidebar"
         @deleted="deletedSidebar"
+        @sidebar-created="sidebarCreated"
     />
 </div>
 </template>
@@ -504,6 +507,9 @@ export default {
                 this.sidebarModules.splice(idx, 1)
             }
         },
+        sidebarCreated: function (sidebar) {
+            this.sidebarIdx = sidebar.id
+        }
     },
     mounted: function () {
         this.init()

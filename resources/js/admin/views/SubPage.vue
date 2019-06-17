@@ -46,6 +46,7 @@ export default {
                 .then(response => {
                     this.title = response.data.title
                     this.modules = response.data.modules
+                    console.log(response.data);
                     this.sidebarIdx = response.data.sidebar ? response.data.sidebar.id : 0
                     this.sidebarModules = response.data.sidebar ? response.data.sidebar.modules : []
                     // console.log(this.modules);

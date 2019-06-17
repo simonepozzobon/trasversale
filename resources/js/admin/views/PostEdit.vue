@@ -6,6 +6,8 @@
     :model="model"
     :modelIdx="modelIdx"
     :modules="modules"
+    :sidebar-idx="sidebarIdx"
+    :sidebarModules="sidebarModules"
     @save-page="savePost"
 >
     <div class="page-template__content">
@@ -51,6 +53,8 @@ export default {
         return {
             model: null,
             modelIdx: null,
+            sidebarModules: [],
+            sidebarIdx: 0,
             postObj: {},
             modules: [],
         }
@@ -85,6 +89,8 @@ export default {
                     console.log(response);
                     if (response.data.success) {
                         this.modules = response.data.post.modules
+                        this.sidebarIdx = response.data.sidebar ? response.data.sidebar.id : 0
+                        this.sidebarModules = response.data.sidebar ? response.data.sidebar.modules : []
                     }
                 })
         },
