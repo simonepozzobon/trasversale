@@ -52,10 +52,11 @@ export default {
     },
     methods: {
         onMapClick: function (event) {
-            this.addresses = [{
+            this.addresses.splice(0, 1)
+            this.addresses.push({
                 lng: event.coordinate[0],
                 lat: event.coordinate[1],
-            }]
+            })
             this.$emit('update', event.coordinate)
         },
         showAddressDetails: function () {
