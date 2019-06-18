@@ -25,14 +25,14 @@ Vue.use(VuePackeryPlugin)
 Vue.use(VueRouter)
 
 Vue.prototype.$http = axios
-//
-// Sentry.init({
-//     dsn: 'https://c9eb05333e3847978f121143675cf80b@sentry.io/1478692',
-//     integrations: [new Integrations.Vue({
-//         Vue,
-//         attachProps: true
-//     })],
-// })
+
+Sentry.init({
+    dsn: 'https://c9eb05333e3847978f121143675cf80b@sentry.io/1478692',
+    integrations: [new Integrations.Vue({
+        Vue,
+        attachProps: true
+    })],
+})
 
 const router = new VueRouter({
     mode: 'history',
