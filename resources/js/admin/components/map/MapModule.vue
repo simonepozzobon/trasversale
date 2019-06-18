@@ -199,8 +199,8 @@ export default {
             title: null,
             zoom: 13,
             center: {
-                lat: 0,
-                lng: 0,
+                lat: 45.461118675626096,
+                lng: 9.19131164549529,
             },
         }
     },
@@ -213,7 +213,7 @@ export default {
         },
         center: {
             handler: function (center) {
-                console.log(this.adminObj);
+                // console.log(this.adminObj);
                 this.$emit('update', this.adminObj)
             },
             deep: true,

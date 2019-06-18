@@ -29,8 +29,23 @@
                 ></vl-style-icon>
             </vl-style-box>
         </vl-feature>
-
     </vl-map>
+    <div class="ui-map__addresses">
+        <div
+            class="ui-map__address ui-map-address"
+            v-for="address in addresses"
+            :key="address.uuid"
+        >
+            <h6 class="ui-map-address__title">{{ address.title }}</h6> -
+            <a
+                :href="address.link"
+                class="ui-map-address__link"
+                target="_blank"
+            >
+                Link Google Maps
+            </a>
+        </div>
+    </div>
 </div>
 </template>
 
@@ -45,7 +60,7 @@ export default {
         center: {
             type: Array,
             default: function () {
-                return [0, 0]
+                return [9.19131164549529, 45.461118675626096]
             },
         },
         addresses: {
@@ -69,7 +84,6 @@ export default {
         },
         center: function (center) {
             this.centerCache = center
-            console.log('center', center);
         },
     },
     mounted: function () {
@@ -81,4 +95,18 @@ export default {
 
 <style lang="scss" scoped>
 @import '~styles/shared';
+
+.ui-map {
+    &__addresses {
+        margin-top: $spacer;
+    }
+
+    .ui-map-address {
+        &__title {
+            display: inline-block;
+        }
+
+        &__link {}
+    }
+}
 </style>

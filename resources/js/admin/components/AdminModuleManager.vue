@@ -103,7 +103,7 @@ export default {
     },
     computed: {
         content: function () {
-            console.log('contenuto', this.module.content);
+            // console.log('contenuto', this.module.content);
             if (this.module && this.module.hasOwnProperty('content')) {
                 return this.module.content
             }
