@@ -12,6 +12,7 @@
         <div class="grid-news__details">
             <div class="grid-news__category">
                 <span
+                    v-if="content.hasOwnProperty('category') && content.category.hasOwnProperty('title')"
                     class="badge badge-light grid-news__badge"
                     @click="filterCategory">
                     {{ content.category.title }}
