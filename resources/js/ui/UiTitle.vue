@@ -7,6 +7,7 @@
         uppercaseClass,
         hasPaddingClass,
     ]"
+    ref="title"
 >
     <component
         :is="tag"
@@ -51,6 +52,11 @@ export default {
             default: true,
         },
     },
+    watch: {
+        color: function (color) {
+            this.setColor()
+        },
+    },
     computed: {
         fontSizeClass: function () {
             if (this.fontSize) {
@@ -68,15 +74,25 @@ export default {
             }
         },
         colorClass: function () {
-            if (this.color) {
-                return 'text-' + this.color
-            }
+            // if (this.color) {
+            //     return 'text-' + this.color
+            // }
         },
         hasPaddingClass: function () {
             if (!this.hasPadding) {
                 return 'ui-title--no-padding'
             }
-        }
+        },
+    },
+    methods: {
+        setColor: function () {
+            if (this.color) {
+                this.$refs.title.style.color = this.color
+            }
+        },
+    },
+    mounted: function () {
+        this.setColor()
     },
 }
 </script>
