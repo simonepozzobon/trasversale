@@ -297,6 +297,7 @@
         :name="option.key"
         :label="option.label"
         :info="option.info"
+        @update="subChanged"
     />
 
     <!-- <div v-else>
@@ -495,9 +496,13 @@ export default {
             // console.log('subModuleObj è differnte', !isEqual(this.value, subModuleObj));
             // bisogna risettare l'oggetto altrimenti non aggiorna l'evento
             if (!isEqual(this.value, subModuleObj)) {
+                // console.log('cambia');
                 this.value = clone(subModuleObj)
             }
         },
+        // mapUpdate: function (subModule) {
+        //     this.value = clone(subModule)
+        // },
         setDefault: function () {
             if (this.option.hasOwnProperty('default') && !this.edit) {
                 this.value = this.option.default

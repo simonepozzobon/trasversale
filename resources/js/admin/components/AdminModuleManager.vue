@@ -61,6 +61,12 @@
     />
     <ui-calendar v-else-if="module.type === 'calendar'" />
     <ui-contact-form v-else-if="module.type === 'contact-form'" />
+    <ui-map
+        v-else-if="module.type === 'map' && content.hasOwnProperty('map')"
+        :addresses="content.map.addresses"
+        :zoom="content.map.zoom"
+        :center="content.map.center"
+    />
     <div v-else>
         {{ module }}
     </div>
@@ -97,6 +103,7 @@ export default {
     },
     computed: {
         content: function () {
+            console.log('contenuto', this.module.content);
             if (this.module && this.module.hasOwnProperty('content')) {
                 return this.module.content
             }
@@ -134,7 +141,7 @@ export default {
     },
     methods: {
         listener: function () {
-            // console.log('modulo cambiato');
+            console.log('modulo cambiato');
             // if (this.module.type === 'row') {
             //     console.log(this.content);
             // }
@@ -166,30 +173,19 @@ export default {
         }
     },
     beforeCreate: function () {
-        this.$options.components.AdminUiModuleRow = require('./modulemanager/AdminUiModuleRow.vue')
-            .default
-        this.$options.components.UiParagraph = require('../../ui/UiParagraph.vue')
-            .default
-        this.$options.components.UiButton = require('../../ui/UiButton.vue')
-            .default
-        this.$options.components.AdminUiImage = require('./modulemanager/AdminUiImage.vue')
-            .default
-        this.$options.components.AdminPackeryContainer = require('./modulemanager/AdminPackeryContainer.vue')
-            .default
-        this.$options.components.UiTitle = require('../../ui/UiTitle.vue')
-            .default
-        this.$options.components.UiTeam = require('../../ui/UiTeam.vue')
-            .default
-        this.$options.components.UiSimpleGrid = require('../../ui/UiSimpleGrid.vue')
-            .default
-        this.$options.components.UiQuote = require('../../ui/UiQuote.vue')
-            .default
-        this.$options.components.UiVideo = require('../../ui/UiVideo.vue')
-            .default
-        this.$options.components.UiCalendar = require('../../ui/UiCalendar.vue')
-            .default
-        this.$options.components.UiContactForm = require('../../ui/UiContactForm.vue')
-            .default
+        this.$options.components.AdminPackeryContainer = require('./modulemanager/AdminPackeryContainer.vue').default
+        this.$options.components.AdminUiImage = require('./modulemanager/AdminUiImage.vue').default
+        this.$options.components.AdminUiModuleRow = require('./modulemanager/AdminUiModuleRow.vue').default
+        this.$options.components.UiButton = require('../../ui/UiButton.vue').default
+        this.$options.components.UiCalendar = require('../../ui/UiCalendar.vue').default
+        this.$options.components.UiContactForm = require('../../ui/UiContactForm.vue').default
+        this.$options.components.UiMap = require('../../ui/UiMap.vue').default
+        this.$options.components.UiParagraph = require('../../ui/UiParagraph.vue').default
+        this.$options.components.UiQuote = require('../../ui/UiQuote.vue').default
+        this.$options.components.UiSimpleGrid = require('../../ui/UiSimpleGrid.vue').default
+        this.$options.components.UiTeam = require('../../ui/UiTeam.vue').default
+        this.$options.components.UiTitle = require('../../ui/UiTitle.vue').default
+        this.$options.components.UiVideo = require('../../ui/UiVideo.vue').default
     },
     mounted: function () {
         // console.log(this.module);

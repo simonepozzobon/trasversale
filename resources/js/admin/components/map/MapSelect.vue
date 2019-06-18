@@ -7,7 +7,7 @@
         data-projection="EPSG:4326"
     >
         <vl-view
-            :zoom.sync="zoom"
+            :zoom.sync="zoomCache"
             :center.sync="center"
             :rotation.sync="rotation"
         />
@@ -16,18 +16,15 @@
             <vl-source-osm />
         </vl-layer-tile>
 
-        <vl-feature
-            v-for="(address, i) in addresses"
-            :key="address.id"
-        >
+        <vl-feature>
 
-            <vl-geom-point :coordinates="[parseFloat(this.lng), parseFloat(this.lat)]" />
+            <vl-geom-point :coordinates.sync="coordinates"></vl-geom-point>
             <vl-style-box @click.native="showAddressDetails">
                 <vl-style-icon
                     src="/svg/pin.svg"
                     :scale="0.2"
                     :anchor="[1, 1]"
-                />
+                ></vl-style-icon>
             </vl-style-box>
         </vl-feature>
 
@@ -41,28 +38,39 @@ export default {
     props: {
         lat: [String, Number],
         lng: [String, Number],
+        zoom: {
+            type: Number,
+            default: 13
+        }
     },
     data: function () {
         return {
-            zoom: 13,
             center: [9.19131164549529, 45.461118675626096],
             rotation: 0,
-            addresses: [],
+            coordinates: [0, 0],
+            zoomCache: 13,
+        }
+    },
+    watch: {
+        zoomCache: function (zoom) {
+            this.$emit('update:zoom', zoom)
         }
     },
     methods: {
         onMapClick: function (event) {
-            this.addresses.splice(0, 1)
-            this.addresses.push({
-                lng: event.coordinate[0],
-                lat: event.coordinate[1],
-            })
-            this.$emit('update', event.coordinate)
+            let lat = event.coordinate[1]
+            let lng = event.coordinate[0]
+            this.coordinates = [parseFloat(lng), parseFloat(lat)]
+            this.$emit('update:lng', lng)
+            this.$emit('update:lat', lat)
         },
         showAddressDetails: function () {
             console.log('show detail');
         }
     },
+    created: function () {
+        this.zoomCache = this.zoom
+    }
 }
 </script>
 

@@ -114,8 +114,9 @@ export default {
             // console.log(columns, this.component);
         },
         formatTempData: function (obj) {
-            // console.log('formatTempData', this.item.type, obj);
             this.component.content = this.setPreview(obj)
+
+            console.log(this.component);
         },
         deleteComponent: function (id, isNew, uuid = false) {
             // console.log('module container delete', this.component);
