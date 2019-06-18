@@ -598,11 +598,14 @@ export default {
                             let parentValue = parent.value
                             // this.elements = []
 
-                            this.$nextTick(() => {
-                                for (let i = 0; i < parentValue; i++) {
-                                    this.selectPost(this.blocks[i])
-                                }
-                            })
+                            if (this.blocks.length === 0) {
+                                this.$nextTick(() => {
+                                    for (let i = 0; i < parentValue; i++) {
+                                        this.selectPost(this.blocks[i])
+                                    }
+                                })
+                            }
+
                         }
 
                         if (relatedKey == 'model' && value == 'last-mix') {

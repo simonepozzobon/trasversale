@@ -136,7 +136,7 @@ export default {
         }
     },
     mounted: function () {
-        this.debug()
+        // this.debug()
         // this.reset()
     },
 }

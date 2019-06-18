@@ -248,7 +248,7 @@ export default {
         debug: function () {
             if (this.cached.length === 0 && this.modelIdx !== 0) {
                 this.$nextTick(() => {
-                    this.newComponent('map')
+                    this.newComponent('grid')
                 })
             }
         },
