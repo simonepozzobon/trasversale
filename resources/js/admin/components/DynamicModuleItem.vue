@@ -51,34 +51,13 @@
         </div>
     </div>
 
-    <div
-        class="form-group row"
+    <file-input
         v-else-if="option.type === 'file-input'"
-    >
-        <label class="col-md-3">{{ option.label }}</label>
-        <div class="col-md-9">
-            <div class="input-group mb-3">
-                <div class="custom-file">
-                    <input
-                        ref="file"
-                        type="file"
-                        class="custom-file-input"
-                        :id="option.key"
-                        :accept="option.accept"
-                        @change="previewFile"
-                    />
-
-                    <label
-                        class="custom-file-label"
-                        :for="option.key"
-                        aria-describedby="inputGroupFileAddon02"
-                    >
-                        Seleziona File
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
+        :name="option.key"
+        :accept="option.accept"
+        :label="option.label"
+        @update="previewFile"
+    />
 
     <div
         class="form-group row"
@@ -354,9 +333,10 @@ import {
     isEqual
 }
 from '../../Utilities'
+import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
 import DummyModule from './DummyModule.vue'
 import DynamicSelect from './dynamicselect/DynamicSelect.vue'
-import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
+import FileInput from './fileinput/FileInput.vue'
 import MapModule from './map/MapModule.vue'
 import PostFields from './post-selector/PostFields'
 import Swatches from 'vue-swatches'
@@ -375,6 +355,7 @@ export default {
         ColumnsPreview,
         DummyModule,
         DynamicSelect,
+        FileInput,
         GridItem: VueGridLayout.GridItem,
         GridLayout: VueGridLayout.GridLayout,
         MapModule,
@@ -574,8 +555,8 @@ export default {
                 .getPropertyValue(key)
                 .trim()
         },
-        previewFile: function () {
-            this.value = this.$refs.file.files[0]
+        previewFile: function (value) {
+            this.value = value
         },
         updateEditor: function (json, html) {
             let paragraph = json.content
