@@ -11,7 +11,7 @@
         <p
             v-html="content"
             class="ui-paragraph__content"
-            :class="[colorClass]">
+            ref="paragraph">
             <slot></slot>
         </p>
     </div>
@@ -37,6 +37,10 @@ export default {
             type: String,
             default: null,
         },
+        bgColor: {
+            type: String,
+            default: null,
+        },
         size: {
             type: String,
             default: null,
@@ -50,36 +54,61 @@ export default {
             default: null,
         },
     },
+    watch: {
+        color: function (color) {
+            this.setColor()
+        },
+        bgColor: function (bgColor) {
+            this.setBgColor()
+        },
+    },
     computed: {
-        alignClass: function() {
+        alignClass: function () {
             if (this.align == 'center') {
                 return 'ui-paragraph--align-center'
-            } else if (this.align == 'justify') {
+            }
+            else if (this.align == 'justify') {
                 return 'ui-paragraph--align-justify'
             }
             return null
         },
-        noPaddingClass: function() {
+        noPaddingClass: function () {
             if (!this.hasPadding) {
                 return 'ui-paragraph--no-padding'
             }
         },
-        colorClass: function() {
-            if (this.color) {
-                return 'text-' + this.color
-            }
-        },
-        sizeClass: function() {
+        // colorClass: function () {
+        //     if (this.color) {
+        //         return 'text-' + this.color
+        //     }
+        // },
+        sizeClass: function () {
             if (this.size) {
                 return 'ui-paragraph--size-' + this.size
             }
         },
-        fullWidthClass: function() {
+        fullWidthClass: function () {
             if (this.fullWidth) {
                 return 'ui-paragraph--full-width'
             }
         },
-    }
+    },
+    methods: {
+        setColor: function () {
+            if (this.color) {
+                this.$refs.paragraph.style.color = this.color
+            }
+        },
+        setBgColor: function () {
+            if (this.bgColor) {
+                this.$refs.paragraph.style.backgroundColor = this.bgColor
+            }
+        }
+    },
+    mounted: function () {
+        this.setColor()
+        this.setBgColor()
+    },
 }
 </script>
 
@@ -94,10 +123,7 @@ export default {
     z-index: 1;
 
     &__content {
-        padding-left: 0;
-        padding-right: 0;
-        padding-bottom: 0;
-        padding-top: $spacer * $line-height-base;
+        padding: $spacer * $line-height-base 0 0;
         margin: 0;
     }
 

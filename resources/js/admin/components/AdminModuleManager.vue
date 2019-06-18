@@ -8,9 +8,9 @@
         v-if="module.type === 'title'"
         ref="title"
         :title="content.hasOwnProperty('content') ? content.content : 'titolo'"
-        :is-column="content.hasOwnProperty('isColumn') ? content.isColumn : null "
-        :uppercase="content.hasOwnProperty('uppercase') ? content.uppercase : null "
-        :color="content.hasOwnProperty('color') ? content.color : null "
+        :is-column="content.hasOwnProperty('isColumn') ? content.isColumn : null"
+        :uppercase="content.hasOwnProperty('uppercase') ? content.uppercase : null"
+        :color="content.hasOwnProperty('color') ? content.color : null"
         :font-size="content.hasOwnProperty('fontSize') ? content.fontSize : null"
     />
     <admin-ui-image
@@ -21,6 +21,8 @@
     <ui-paragraph
         v-else-if="module.type === 'paragraph'"
         :content="content.content"
+        :color="content.hasOwnProperty('color') ? content.color : null"
+        :bgColor="content.hasOwnProperty('bg_color') ? content.bg_color : null"
     />
     <ui-button
         v-else-if="module.type === 'button'"
