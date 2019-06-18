@@ -218,6 +218,14 @@ class AdminController extends Controller
     public function delete_component($id)
     {
         $module = Module::find($id);
+
+        if ($module->type === 'grid') {
+            $content = json_decode($module->content);
+            $grid_id = $content->id;
+            $grid = Grid::find($grid_id);
+            $grid->elements()->delete();
+        }
+
         $module->delete();
 
         return [
