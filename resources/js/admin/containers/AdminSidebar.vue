@@ -9,8 +9,13 @@
                     href="#"
                     @click.prevent="$root.goTo('home')"
                 >
-                    Admin Home <span class="sr-only">(current)</span>
+                    Statistiche
                 </a>
+            </li>
+            <li class="nav-item nav-item--sep">
+                <span class="nav-link nav-link--sep">
+                    <hr />
+                </span>
             </li>
             <li
                 class="nav-item"
@@ -56,8 +61,10 @@
                     </ul>
                 </div>
             </li>
-            <li class="nav-item">
-                <span class="nav-link">------</span>
+            <li class="nav-item nav-item--sep">
+                <span class="nav-link nav-link--sep">
+                    <hr />
+                </span>
             </li>
             <li class="nav-item">
                 <a
@@ -122,6 +129,11 @@ export default {
             color: $primary;
             display: inline-block;
             padding-left: 0;
+        }
+
+        &--sep {
+            padding-top: 0;
+            padding-bottom: 0;
         }
     }
 }
