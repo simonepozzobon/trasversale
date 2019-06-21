@@ -1,22 +1,22 @@
 <template>
 <div
-    class="page-template"
+    class="new-page-template"
     :class="[hasTitleClass]"
 >
     <notifications-container :toasts="notifications" />
-    <div class="page-template__container container">
-        <div class="page-template__row row">
-            <div class="page-template__main col-12">
+    <div class="new-page-template__container container">
+        <div class="new-page-template__row row">
+            <div class="new-page-template__main col-12">
                 <slot></slot>
-                <div class="page-template__header">
-                    <div class="page-template__head">
+                <div class="new-page-template__header">
+                    <div class="new-page-template__head">
                         <div
-                            class="page-template__title"
+                            class="new-page-template__title"
                             v-if="hasTitle"
                         >
                             <h1 class="pt-3">{{ title }}</h1>
                         </div>
-                        <div class="page-template__action">
+                        <div class="new-page-template__action">
                             <button
                                 class="btn btn-outline-primary"
                                 @click="addComponent"
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="page-template__content">
+                <div class="new-page-template__content">
                     <draggable
                         v-model="cached"
                         @update="sortModules"
@@ -50,7 +50,7 @@
                         />
                     </draggable>
                 </div>
-                <div class="page-template__footer">
+                <div class="new-page-template__footer">
                     <button
                         class="btn btn-outline-primary"
                         @click="addComponent"
@@ -180,7 +180,7 @@ export default {
         },
         hasTitleClass: function () {
             if (!this.hasTitle) {
-                return 'page-template--no-title'
+                return 'new-page-template--no-title'
             }
         }
     },
@@ -522,6 +522,7 @@ export default {
                 this.files.push(obj)
             }
         })
+        console.log('new page template montato');
     },
 }
 </script>
@@ -530,7 +531,7 @@ export default {
 @import '~styles/adminshared';
 $opacity-test: 0.6 !default;
 
-.page-template {
+.new-page-template {
     padding: $spacer * 2;
     min-height: 100vh;
     max-width: 100%;

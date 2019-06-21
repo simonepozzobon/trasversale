@@ -15,13 +15,11 @@
 
 <script>
 import NewPageTemplate from '../containers/NewPageTemplate.vue'
-import ModuleManager from '../../containers/ModuleManager.vue'
 
 export default {
     name: 'Page',
     components: {
         NewPageTemplate,
-        ModuleManager,
     },
     data: function () {
         return {
@@ -46,7 +44,7 @@ export default {
                 .then(response => {
                     this.title = response.data.title
                     this.modules = response.data.modules
-                    console.log(response.data);
+                    // console.log(response.data);
                     this.sidebarIdx = response.data.sidebar ? response.data.sidebar.id : 0
                     this.sidebarModules = response.data.sidebar ? response.data.sidebar.modules : []
                 })

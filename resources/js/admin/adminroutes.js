@@ -36,7 +36,7 @@ const routes = [
                 component: PostsCrud,
             },
             {
-                path: ':page',
+                path: 'page/:page',
                 component: PageContainer,
                 children: [
                     {

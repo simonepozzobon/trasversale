@@ -69,7 +69,7 @@ export default {
     },
     watch: {
         '$route.params': function (params) {
-            console.log('params cambiato', params);
+            // console.log('params cambiato', params);
         },
 
     },

@@ -51,9 +51,14 @@ const admin = new Vue({
                 pages: [],
             }
         },
+        watch: {
+            '$route': function(route) {
+                console.log(route.path);
+            }
+        },
         methods: {
             goTo: function (name) {
-                console.log(name);
+                // console.log(name);
                 if (name != this.$route.name) {
                     this.$router.push({
                         name: name
@@ -61,7 +66,7 @@ const admin = new Vue({
                 }
             },
             goToWithParams: function (name, params) {
-                console.log(name, params);
+                // console.log(name, params);
                 this.$router.push({
                     name: name,
                     params: params
