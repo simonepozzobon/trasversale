@@ -16,16 +16,25 @@
                 class="nav-item"
                 v-for="page in this.$root.pages"
             >
-                <a
-                    class="nav-link"
-                    :href="'#collapse-'+page.id"
-                    data-toggle="collapse"
-                    :data-target="'#collapse-'+page.id"
-                    @click.prevent="$root.goToWithParams('page', { page: page.id })"
-                >
+                <div class="nested-link">
+                    <a
+                        class="nav-link"
+                        href="#"
+                        @click.prevent="$root.goToWithParams('page', { page: page.id })"
+                    >
+                        {{ page.title }}
+                    </a>
+                    <a
+                        class="nav-link nav-link--cross"
+                        v-if="page.sub_pages.length > 0"
+                        :href="'#collapse-'+page.id"
+                        data-toggle="collapse"
+                        :data-target="'#collapse-'+page.id"
+                    >
+                        +
+                    </a>
+                </div>
 
-                    {{ page.title }} <span v-if="page.sub_pages.length > 0">+</span>
-                </a>
                 <div
                     :id="'collapse-'+page.id"
                     class="collapse pl-4"
@@ -78,23 +87,7 @@
 <script>
 export default {
     name: 'Sidebar',
-    methods: {
-        goTo: function (event, route) {
-            event.preventDefault()
-            this.$router.push(route)
-        },
-        goToSub: function (event, sub) {
-            event.preventDefault()
-            let route = {
-                name: 'sub',
-                params: {
-                    id: sub.id
-                }
-            }
-            console.log(route);
-            this.$router.push(route)
-        }
-    }
+    methods: {}
 }
 </script>
 
@@ -118,8 +111,18 @@ export default {
         background-color: rgba($light, .3);
     }
 
+    .nested-link {
+        display: flex;
+    }
+
     .nav-link {
         color: $gray-500;
+
+        &--cross {
+            color: $primary;
+            display: inline-block;
+            padding-left: 0;
+        }
     }
 }
 </style>

@@ -10,8 +10,8 @@ import VueDraggabillyPlugin from 'vue-packery-draggabilly-plugin'
 import VuejsClipper from 'vuejs-clipper'
 import VuePackeryPlugin from './PackeryTest'
 import VueLayers from 'vuelayers'
-import * as Sentry from '@sentry/browser';
-import * as Integrations from '@sentry/integrations';
+// import * as Sentry from '@sentry/browser';
+// import * as Integrations from '@sentry/integrations';
 
 import 'vuelayers/lib/style.css'
 
@@ -26,13 +26,13 @@ Vue.use(VueRouter)
 
 Vue.prototype.$http = axios
 
-Sentry.init({
-    dsn: 'https://c9eb05333e3847978f121143675cf80b@sentry.io/1478692',
-    integrations: [new Integrations.Vue({
-        Vue,
-        attachProps: true
-    })],
-})
+// Sentry.init({
+//     dsn: 'https://c9eb05333e3847978f121143675cf80b@sentry.io/1478692',
+//     integrations: [new Integrations.Vue({
+//         Vue,
+//         attachProps: true
+//     })],
+// })
 
 const router = new VueRouter({
     mode: 'history',
@@ -53,6 +53,7 @@ const admin = new Vue({
         },
         methods: {
             goTo: function (name) {
+                console.log(name);
                 if (name != this.$route.name) {
                     this.$router.push({
                         name: name
