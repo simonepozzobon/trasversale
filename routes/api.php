@@ -50,5 +50,11 @@ Route::prefix('admin')->group(
                 Route::get('/{id}', 'AdminController@get_page');
             }
         );
+
+        Route::prefix('utilities')->group(
+            function() {
+                Route::post('/save-image', 'AdminController@save_image');
+            }
+        );
     }
 );

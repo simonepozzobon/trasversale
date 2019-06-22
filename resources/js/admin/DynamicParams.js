@@ -9,6 +9,7 @@ import {
     PostNews,
     PostProduct,
     Row,
+    Team,
     Title,
     Video,
 } from './modulesopts/index.js'
@@ -24,6 +25,7 @@ const DynamicParams = [
     PostProduct,
     Quote,
     Row,
+    Team,
     Title,
     Video,
 ]

@@ -370,4 +370,13 @@ class AdminController extends Controller
 
         return $module;
     }
+
+    public function save_image(Request $request) {
+        $file = $request->file('file');
+        $media = Utility::save_image($file);
+
+        return [
+            'file' => $media
+        ];
+    }
 }

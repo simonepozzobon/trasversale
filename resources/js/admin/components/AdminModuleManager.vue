@@ -30,8 +30,8 @@
     />
     <ui-team
         v-else-if="module.type === 'team'"
-        :people="content.people"
-        :grid-col="content.gridCol"
+        :people="content | filterTeamPeople"
+        :grid-col="content | filterTeamColSize"
     />
     <admin-packery-container
         v-else-if="showPackery"
@@ -76,6 +76,10 @@
 </template>
 
 <script>
+import {
+    clone
+}
+from '../../Utilities'
 export default {
     name: 'AdminModuleManager',
     components: {},
@@ -100,6 +104,7 @@ export default {
     },
     watch: {
         module: function (module) {
+            // console.log(module);
             this.listener()
         },
     },
@@ -174,6 +179,30 @@ export default {
             this.$emit('delete', id, isNew, uuid)
         }
     },
+    filters: {
+        filterTeamPeople: function (content) {
+            if (content.hasOwnProperty('team')) {
+                return content.team.people
+            }
+            else if (content.hasOwnProperty('people')) {
+                return content.people
+            }
+            else {
+                return []
+            }
+        },
+        filterTeamColSize: function (content) {
+            if (content.hasOwnProperty('team')) {
+                return content.team.gridCol
+            }
+            else if (content.hasOwnProperty('gridCol')) {
+                return content.gridCol
+            }
+            else {
+                return 2
+            }
+        }
+    },
     beforeCreate: function () {
         this.$options.components.AdminPackeryContainer = require('./modulemanager/AdminPackeryContainer.vue').default
         this.$options.components.AdminUiImage = require('./modulemanager/AdminUiImage.vue').default
@@ -189,8 +218,10 @@ export default {
         this.$options.components.UiTitle = require('../../ui/UiTitle.vue').default
         this.$options.components.UiVideo = require('../../ui/UiVideo.vue').default
     },
+    created: function () {
+        // console.log('init', clone(this.module));
+    },
     mounted: function () {
-        // console.log(this.module);
         if (this.module.type == 'title') {
             if (this.$refs.title) {
                 let height = this.$refs.title.$el.offsetHeight + 'px'

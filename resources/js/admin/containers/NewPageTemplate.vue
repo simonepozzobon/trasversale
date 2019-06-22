@@ -170,6 +170,7 @@ export default {
             notifications: [],
             loaded: 0,
             counter: 0,
+            hasAwait: false,
         }
     },
     computed: {
@@ -248,7 +249,7 @@ export default {
         debug: function () {
             if (this.cached.length === 0 && this.modelIdx !== 0) {
                 this.$nextTick(() => {
-                    this.newComponent('paragraph')
+                    this.newComponent('team')
                 })
             }
         },
@@ -403,7 +404,34 @@ export default {
                             })
                         promises.push(requestRow)
                         break;
+                    case 'team':
+                        console.log(i);
+                        // wait uploads before run promises
+                        this.hasAwait = true
+
+                        let teamObj = this.cached[i]
+                        let content = teamObj.content.team
+                        let people = this.saveImage(content.people).then(people => {
+                            console.log(teamObj);
+                            let teamData = this.formatRequest(teamObj)
+                            let teamRequest = this.$http.post('/api/admin/save-component', teamData)
+                                .then(response => {
+                                    let temp = this.formatFromResponse(this.cached[i], response.data.module)
+                                    this.cached[i] = temp
+                                })
+                            promises.push(teamRequest)
+                            if (this.hasAwait) {
+                                this.processAllPromises(promises)
+                                this.hasAwait = false
+                                // console.log('dentro', promises);
+                            }
+                        })
+
+
+                        break;
+
                     default:
+                        // console.log('default');
                         let data = this.formatRequest(this.cached[i])
                         let request = this.$http.post('/api/admin/save-component', data)
                             .then(response => {
@@ -412,27 +440,55 @@ export default {
                             })
                         promises.push(request)
                     }
+
+                    // if (i === this.cached.length - 1 && this.hasAwait) {
+                    //     console.log('fine', i, this.cached.length, this.hasAwait);
+                    // }
                 }
-                this.$http.all(promises)
-                    .then(results => {
-                        // console.log('completato');
-                        // if (modelSaved) {
-                        this.notifications.push({
-                            uuid: Uuid.get(),
-                            title: 'Pagina Salvata',
-                            message: 'Salvataggio Completato'
-                        })
-                        // }
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        this.notifications.push({
-                            uuid: Uuid.get(),
-                            title: 'Errore',
-                            message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
-                        })
-                    })
+
+                if (!this.hasAwait) {
+                    this.processAllPromises(promises)
+                    // console.log('fuori');
+                }
             }
+        },
+        processAllPromises: async function (promises) {
+            return await this.$http.all(promises)
+                .then(results => {
+                    // console.log('completato', results);
+                    // if (modelSaved) {
+                    this.notifications.push({
+                        uuid: Uuid.get(),
+                        title: 'Pagina Salvata',
+                        message: 'Salvataggio Completato'
+                    })
+                    // }
+                })
+                .catch(err => {
+                    console.error(err);
+                    this.notifications.push({
+                        uuid: Uuid.get(),
+                        title: 'Errore',
+                        message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
+                    })
+                })
+        },
+        saveImage: async function (people) {
+            // console.log('start loop');
+            for (let i = 0; i < people.length; i++) {
+                if (people[i].hasOwnProperty('file')) {
+                    let fileData = new FormData()
+                    fileData.append('file', people[i].file)
+
+                    people[i] = await this.$http.post('/api/admin/utilities/save-image', fileData).then(response => {
+                        people[i].img = response.data.file.src
+                        delete people[i].file
+                        // console.log('upload finito');
+                        return people[i]
+                    })
+                }
+            }
+            return people
         },
         formatFromResponse: function (obj, newObj) {
             let temp = Object.assign({}, obj, newObj)
@@ -452,6 +508,7 @@ export default {
 
         },
         formatRequest: function (obj) {
+            // console.log(obj);
             let form = new FormData()
             // inserisco i campi normali
             for (let key in obj) {
@@ -522,7 +579,7 @@ export default {
                 this.files.push(obj)
             }
         })
-        console.log('new page template montato');
+        // console.log('new page template montato');
     },
 }
 </script>

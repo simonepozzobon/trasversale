@@ -86,6 +86,10 @@ export default {
                     label: 'Calendario',
                 },
                 {
+                    value: 'team',
+                    label: 'Team',
+                },
+                {
                     value: 'map',
                     label: 'Mappa',
                 },

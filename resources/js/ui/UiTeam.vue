@@ -17,7 +17,10 @@
 <script>
 import UiTeamDetail from './UiTeamDetail.vue'
 import UiTeamSingle from './UiTeamSingle.vue'
-import { TweenMax } from 'gsap'
+import {
+    TweenMax
+}
+from 'gsap'
 
 export default {
     name: 'UiTeam',
@@ -32,10 +35,10 @@ export default {
         },
         people: {
             type: Array,
-            default: function() {}
+            default: function () {}
         }
     },
-    data: function() {
+    data: function () {
         return {
             overlay: null,
             selected: {
@@ -45,19 +48,19 @@ export default {
             },
         }
     },
+    watch: {},
     methods: {
-        openMember: function(member) {
+        openMember: function (member) {
             this.selected = member
             this.$nextTick(() => {
-                this.$refs.panel.show()
+                this.$refs.panel.getHeight(true, true)
             })
         },
-        closeMember: function() {
+        closeMember: function () {
 
         }
     },
-    mounted: function() {
-    }
+    mounted: function () {}
 }
 </script>
 

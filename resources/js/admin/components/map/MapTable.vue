@@ -61,7 +61,9 @@ export default {
         deleteAddress: function (item) {
             let idx = this.addresses.findIndex(address => address.uuid === item.uuid)
             if (idx > -1) {
-                this.$emit('update:adresses', this.addresses.splice(idx, 1))
+                let newAddresses = Object.assign([], this.addresses)
+                newAddresses.splice(idx, 1)
+                this.$emit('update:adresses', newAddresses)
             }
         }
     },

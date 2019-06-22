@@ -279,6 +279,15 @@
         @update="subChanged"
     />
 
+    <team-module
+        v-else-if="option.type === 'team'"
+        :name="option.key"
+        :label="option.label"
+        :info="option.info"
+        :initial="initial"
+        @update="teamChanged"
+    />
+
     <!-- <div v-else>
         {{ option }}
     </div> -->
@@ -340,6 +349,7 @@ import FileInput from './fileinput/FileInput.vue'
 import MapModule from './map/MapModule.vue'
 import PostFields from './post-selector/PostFields'
 import Swatches from 'vue-swatches'
+import TeamModule from './team/TeamModule.vue'
 import TextEditor from './TextEditor.vue'
 import {
     UiCheckbox,
@@ -360,6 +370,7 @@ export default {
         GridLayout: VueGridLayout.GridLayout,
         MapModule,
         Swatches,
+        TeamModule,
         TextEditor,
         UiCheckbox,
         UiSwitch,
@@ -474,12 +485,13 @@ export default {
             }
         },
         subChanged: function (subModuleObj) {
-            // console.log('subModuleObj è differnte', !isEqual(this.value, subModuleObj));
             // bisogna risettare l'oggetto altrimenti non aggiorna l'evento
             if (!isEqual(this.value, subModuleObj)) {
-                // console.log('cambia');
                 this.value = clone(subModuleObj)
             }
+        },
+        teamChanged: function (teamModule) {
+            this.value = Object.assign({}, teamModule)
         },
         // mapUpdate: function (subModule) {
         //     this.value = clone(subModule)
@@ -699,6 +711,7 @@ export default {
             // }
         },
         setInitial: function () {
+            // console.log('imposta', this.initial, this.values);
             if (this.initial && this.option.type != 'post-select') {
                 this.value = this.initial
                 // console.log(clone(this.value));

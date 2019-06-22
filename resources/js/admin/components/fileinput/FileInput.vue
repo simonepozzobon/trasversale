@@ -27,7 +27,7 @@
     </div>
     <div
         class="crop"
-        v-if="this.accept === 'image/*' && this.showCrop"
+        v-if="this.hasCrop && this.accept === 'image/*' && this.showCrop"
     >
         <div class="form-group row mt-5">
             <div class="col-12">
@@ -87,6 +87,10 @@ export default {
             type: String,
             default: null,
         },
+        hasCrop: {
+            type: Boolean,
+            default: true
+        }
     },
     data: function () {
         return {
@@ -111,11 +115,23 @@ export default {
         },
         previewFile: function () {
             this.file = this.$refs.file.files[0]
-            let reader = new FileReader()
-            reader.addEventListener('load', () => {
-                this.src = reader.result
-            })
-            reader.readAsDataURL(this.file)
+            if (this.file) {
+                let reader = new FileReader()
+                // console.log('preview');
+                reader.addEventListener('load', () => {
+                    if (this.hasCrop) {
+                        this.src = reader.result
+                    }
+                    else {
+                        let src = reader.result
+                        let file = this.file
+
+                        this.$emit('update', file, src)
+                    }
+
+                })
+                reader.readAsDataURL(this.file)
+            }
         },
         crop: function () {
             // https://developer.mozilla.org/it/docs/Web/API/HTMLCanvasElement/toBlob
@@ -125,6 +141,14 @@ export default {
                 let file = new File([blob], this.file.name)
                 this.$emit('update', file)
             })
+        },
+        reset: function () {
+            this.$refs.file.value = ''
+            this.file = null
+            this.src = null
+            if (this.hasCrop) {
+                this.toggleCrop()
+            }
         }
     },
 }
