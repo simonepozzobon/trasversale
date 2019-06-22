@@ -121,6 +121,7 @@ export default {
                 for (let i = 0; i < items.length; i++) {
                     let current = items[i]
                     current.setUnitHeight(this.unitSize)
+                    current.setUnitWidth(this.unitSize)
                 }
                 for (let i = 0; i < this.packeryItems.length; i++) {
                     let current = this.packeryItems[i]
@@ -164,6 +165,9 @@ export default {
         // packeryEvents.$on('draggie', (data) => {
         //     console.log('jfhskjhfjkdshkfsf', data);
         // })
+        packeryEvents.$on('customEmit', (data) => {
+            console.log('jfhskjhfjkdshkfsf', data);
+        })
     }
 }
 </script>

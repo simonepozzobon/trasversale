@@ -190,7 +190,18 @@ packeryPlugin.install = function (Vue, options)
                     return
                 }
 
-                console.log(event.draggie);
+                let resizeTimeout
+                event.items.on('resize', (event, ui) => {
+                    if ( resizeTimeout ) {
+                        clearTimeout( resizeTimeout )
+                    }
+
+                    resizeTimeout = setTimeout( function() {
+                        packeryEvents.$emit('customEmit', {event: event, draggedItem: ui})
+                    }, 100)
+                    // packeryEmit('customEmit', {event: event, draggedItem: ui})
+                })
+                // console.log(event.draggie);
                 // el.packery.bindDraggabillyEvents(event.draggie)
                 el.packery.bindUIDraggableEvents(event.draggie)
             })

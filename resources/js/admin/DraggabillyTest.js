@@ -24,11 +24,11 @@ draggabillyPlugin.install = function (Vue, options)
             el.draggie = items.draggable().resizable({
                 containment: container
             }) //new Draggabilly(el)
-            packeryEvents.$emit('draggie', {draggie: el.draggie, node: el.parentNode})
+            packeryEvents.$emit('draggie', {draggie: el.draggie, node: el.parentNode, items: items})
         },
         unbind (el)
         {
-            el.draggie.destroy()
+            // el.draggie.destroy()
             el.draggie = null
         }
     })

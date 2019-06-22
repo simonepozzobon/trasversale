@@ -114,10 +114,10 @@ export default {
             }
         },
         widthClass: function () {
-            if (this.width) {
-                return 'col-md-' + this.width
-            }
-            return 'col'
+            // if (this.width) {
+            //     return 'col-md-' + this.width
+            // }
+            // return 'col'
         },
         heightClass: function () {
             if (this.height) {
@@ -150,7 +150,10 @@ export default {
         }
     },
     watch: {
-        width: function (w) {},
+        width: function (w) {
+
+
+        },
         height: function (h) {
             this.setUnitHeight(this.unitSize)
         }
@@ -168,6 +171,18 @@ export default {
             if (this.type !== 'module') {
                 this.obj = this.content
             }
+        },
+        setUnitWidth: function (width) {
+            let itemWidth = width * this.width
+            let realGutter = Math.round(this.gutter / 2)
+
+            if (this.width > 2) {
+                let deltaGutter = this.width * (realGutter / 2)
+                itemWidth = itemWidth + deltaGutter
+            }
+
+            this.$refs.item.style.width = itemWidth + 'px'
+            this.$refs.packeryItem.style.padding = realGutter + 'px'
         },
         setUnitHeight: function (height) {
             let realGutter = Math.round(this.gutter / 2)
@@ -202,6 +217,7 @@ export default {
         }
     },
     mounted: function () {
+        this.setUnitWidth()
         this.setBackground()
         this.addListener()
         // console.log('width', this.width, 'height', this.height);
