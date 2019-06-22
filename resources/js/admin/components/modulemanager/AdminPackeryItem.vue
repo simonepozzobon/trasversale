@@ -1,12 +1,14 @@
 <template lang="html">
     <div
         ref="packeryItem"
+        v-draggabilly
         v-packery-item
-        class="packery-item"
+        class="packery-item ui-resizable"
         :class="[
             widthClass,
             hoverableClass,
-        ]">
+        ]"
+        @draggie="test">
 
         <div
             ref="item"
@@ -37,6 +39,13 @@ import {
     UiParagraph
 }
 from '../../../ui'
+
+import {
+    packeryEvents
+}
+from '../../PackeryTest'
+
+// console.log(packeryEvents);
 
 export default {
     name: 'UiPackeryItem',
@@ -141,6 +150,7 @@ export default {
         }
     },
     watch: {
+        width: function (w) {},
         height: function (h) {
             this.setUnitHeight(this.unitSize)
         }
@@ -176,10 +186,25 @@ export default {
             //     page: 'post',
             //     subpage: this.obj.slug.slug,
             // })
+        },
+        test: function (event) {
+            console.log('safdasfasfasfd');
+        },
+        addListener: function () {
+            // console.log('listener');
+            // console.log(this.$refs.packeryItem);
+            this.$refs.packeryItem.addEventListener('dragItemPositioned', (event) => {
+                console.log('event');
+            })
+            this.$refs.packeryItem.addEventListener('dragend', (event) => {
+                console.log('event end');
+            })
         }
     },
     mounted: function () {
         this.setBackground()
+        this.addListener()
+        // console.log('width', this.width, 'height', this.height);
     }
 }
 </script>

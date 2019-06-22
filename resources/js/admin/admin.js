@@ -6,9 +6,11 @@ import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import VueRouter from 'vue-router'
 import routes from './adminroutes'
-import VueDraggabillyPlugin from 'vue-packery-draggabilly-plugin'
+import VueDraggabillyPlugin from './DraggabillyTest'
 import VuejsClipper from 'vuejs-clipper'
+
 import VuePackeryPlugin from './PackeryTest'
+
 import VueLayers from 'vuelayers'
 // import * as Sentry from '@sentry/browser';
 // import * as Integrations from '@sentry/integrations';
@@ -18,10 +20,10 @@ import 'vuelayers/lib/style.css'
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
+Vue.use(VuePackeryPlugin)
 Vue.use(VueDraggabillyPlugin)
 Vue.use(VuejsClipper)
 Vue.use(VueLayers)
-Vue.use(VuePackeryPlugin)
 Vue.use(VueRouter)
 
 Vue.prototype.$http = axios

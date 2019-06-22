@@ -33,6 +33,7 @@
     "dependencies": {
         "@sentry/browser": "^5.4.0",
         "@sentry/integrations": "^5.4.1",
+        "jquery-ui": "^1.12.1",
         "laravel-mix": "^4.0.15",
         "lodash.isequal": "^4.5.0",
         "lodash.orderby": "^4.6.0",

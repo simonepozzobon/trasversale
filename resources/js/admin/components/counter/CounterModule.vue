@@ -83,6 +83,9 @@ export default {
     watch: {
         value: function (value) {
             this.$emit('changed', value)
+        },
+        initial: function (value) {
+            this.value = value
         }
     },
     methods: {
@@ -95,11 +98,11 @@ export default {
             }
         },
         removeCounter: function () {
-            if (this.min && this.value > this.min) {
-                this.value--
+            if (this.min != null && this.value > this.min) {
+                this.value -= 1
             }
             else if (this.min == null) {
-                this.value--
+                this.value -= 1
             }
         },
     },

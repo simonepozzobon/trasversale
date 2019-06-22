@@ -1,14 +1,16 @@
 <template lang="html">
-        <!-- class="row no-gutters" -->
     <div
         v-packery="{
             itemSelector: '.packery-item',
             percentPosition: true,
-            initLayout: true,
+            /* initLayout: true, */
+            /* columnWidth: '.grid-sizer', */
+            /* columnWidth: 80, */
+            /* rowHeight: 80, */
             /* resizeContainer: false, */
         }"
-        class="row no-gutters"
-        ref="packery">
+        ref="packery"
+        @dragItemPositioned="test">
         <div class="grid-sizer"></div>
         <admin-packery-item
             ref="item"
@@ -19,8 +21,8 @@
             :y="item.y"
             :type="item.type"
             :sub-type="item.hasOwnProperty('sub_type') ? item.sub_type : null"
-            :width="item.width"
-            :height="item.height"
+            :width="item.w"
+            :height="item.h"
             :unit-size="unitSize"
             :color="item.hasOwnProperty('color') ? item.color : null"
             :bg-color="item.bgColor"
@@ -58,7 +60,7 @@ export default {
             default: 0,
         }
     },
-    data: function() {
+    data: function () {
         return {
             packeryOpts: {
                 itemSelector: ".packery-item",
@@ -75,24 +77,24 @@ export default {
         }
     },
     watch: {
-        items: function(items) {
+        items: function (items) {
             // console.log('verifica', items.map(o => o.x + ' ' + o.y));
-            this.setUnitHeight()
+            this.$nextTick(() => this.setUnitHeight())
             // packeryEvents.$emit('layout', this.$refs.packery)
         }
     },
     computed: {
-        uuid: function() {
+        uuid: function () {
             return Uuid.get()
         },
-        packery: function() {
+        packery: function () {
             if (this.$refs.packery && this.$refs.packery.hasOwnProperty('packery')) {
                 return this.$refs.packery.packery
             }
 
             return false
         },
-        packeryItems: function() {
+        packeryItems: function () {
             // console.log(this.packery.getItemElements());
             if (this.packery) {
                 return this.packery.items
@@ -101,31 +103,38 @@ export default {
         }
     },
     filters: {
-        setUUID: function(value) {
+        setUUID: function (value) {
             return Uuid.get()
+        },
+        setSize: function (w, h) {
+
         }
     },
     methods: {
-        setItems: function() {
-            this.cached = clone(this.items)
+        setItems: function () {
+            this.cached = Object.assign([], this.items)
         },
-        setUnitHeight: function() {
+        setUnitHeight: function () {
+            // console.log('setUnitHeight');
             let items = this.$refs.item
             if (items) {
                 for (let i = 0; i < items.length; i++) {
                     let current = items[i]
                     current.setUnitHeight(this.unitSize)
                 }
-
                 for (let i = 0; i < this.packeryItems.length; i++) {
                     let current = this.packeryItems[i]
                     let node = current.element
                     let idx = node.getAttribute('data-key')
 
                     let item = this.items.find(item => Number(item.idx) === Number(idx))
+                    // console.log(item, current);
                     if (item) {
+                        // this.bindUiEvents()
+
                         let x = item.x * this.unitSize
                         let y = item.y * this.unitSize
+
                         this.packery.fit(current, x, y)
                         this.packery.reloadItems()
                         this.packery.layout()
@@ -133,17 +142,28 @@ export default {
                 }
             }
         },
-        getContainerWidth: function() {
-            let container = this.$refs.packery.getBoundingClientRect()
-                .width
+        getContainerWidth: function () {
+            // console.log('container');
+            let container = this.$refs.packery.getBoundingClientRect().width
             this.unitSize = Math.round(container / this.units)
             this.$nextTick(() => {
                 this.setUnitHeight()
             })
         },
+        // bindUiEvents: function () {
+        //     let elements = this.packeryItems
+        //     console.log('elements', elements);
+        //     // this.packery.bindUIDraggableEvents(elements)
+        // },
+        test: function (event) {
+            // console.log('evento', event);
+        }
     },
-    mounted: function() {
+    mounted: function () {
         this.getContainerWidth()
+        // packeryEvents.$on('draggie', (data) => {
+        //     console.log('jfhskjhfjkdshkfsf', data);
+        // })
     }
 }
 </script>

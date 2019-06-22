@@ -192,65 +192,6 @@
         @changed="subChanged"
     />
 
-    <div
-        class="form-group row"
-        v-else-if="option.type === 'post-select'"
-    >
-        <label
-            :for="option.key"
-            class="col-md-3"
-        >
-            Anteprima
-        </label>
-        <div class="col-md-9">
-            <grid-layout
-                ref="gridLayout"
-                :layout="elements"
-                :col-num="12"
-                :row-height="60"
-                :is-draggable="true"
-                :is-resizable="true"
-                :auto-size="true"
-                :is-mirrored="false"
-                :vertical-compact="true"
-                :margin="[10, 10]"
-                :use-css-transforms="true"
-                @layout-updated="layoutUpdated"
-            >
-
-                <grid-item
-                    ref="gridItem"
-                    v-for="(element, i) in elements"
-                    :key="element.idx"
-                    class="element-item"
-                    :x="element.x"
-                    :y="element.y"
-                    :w="element.w"
-                    :h="element.h"
-                    :i="element.i"
-                >
-
-                    <div
-                        class="element-item__container"
-                        :style="'background-image: url('+ element.thumb +')'"
-                    >
-
-                        <div
-                            class="element-item__tools"
-                            v-if="!disableTable"
-                        >
-                            <button
-                                class="btn btn-outline-danger"
-                                @click="removeElement(element)"
-                            >
-                                Rimuovi
-                            </button>
-                        </div>
-                    </div>
-                </grid-item>
-            </grid-layout>
-        </div>
-    </div>
 
     <columns-preview
         v-else-if="option.type === 'row-preview'"
@@ -287,6 +228,8 @@
         :initial="initial"
         @update="teamChanged"
     />
+
+    <grid-module v-else-if="option.type === 'grid'" />
 
     <!-- <div v-else>
         {{ option }}
@@ -346,8 +289,9 @@ import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
 import DummyModule from './DummyModule.vue'
 import DynamicSelect from './dynamicselect/DynamicSelect.vue'
 import FileInput from './fileinput/FileInput.vue'
+import GridModule from './grid/GridModule.vue'
 import MapModule from './map/MapModule.vue'
-import PostFields from './post-selector/PostFields'
+import PostFields from './grid/PostFields'
 import Swatches from 'vue-swatches'
 import TeamModule from './team/TeamModule.vue'
 import TextEditor from './TextEditor.vue'
@@ -356,7 +300,6 @@ import {
     UiSwitch,
 }
 from '../../ui'
-import VueGridLayout from 'vue-grid-layout'
 import "vue-swatches/dist/vue-swatches.min.css"
 
 export default {
@@ -366,8 +309,7 @@ export default {
         DummyModule,
         DynamicSelect,
         FileInput,
-        GridItem: VueGridLayout.GridItem,
-        GridLayout: VueGridLayout.GridLayout,
+        GridModule,
         MapModule,
         Swatches,
         TeamModule,
@@ -578,6 +520,7 @@ export default {
         },
         getElements: function (value, relatedKey) {
             let url = '/api/admin/grid-elements/' + value
+            console.log(url);
             this.$http.get(url)
                 .then(response => {
                     // console.log(response.data.elements);

@@ -12,12 +12,17 @@ const DRAGGIE = 'draggie'
 const packeryPlugin = () => {}
 
 export default packeryPlugin
-export const packeryEvents = new Vue({})
+export const packeryEvents = new Vue({
+    mounted: function() {
+        console.log('mounted');
+    }
+})
 
 /* IE polyfill */
 
 function CustomEvent(event, params)
 {
+    // console.log(event, params);
     params = params || {bubbles: false, cancelable: false, detail: undefined};
     var evt = document.createEvent('CustomEvent');
     evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
@@ -33,6 +38,7 @@ packeryPlugin.install = function (Vue, options)
         bind (el, binding, vnode)
         {
             /* Packery DOM Reference */
+
             el.packery = new Packery(el, binding.value)
 
             /* init layout option */
@@ -93,6 +99,7 @@ packeryPlugin.install = function (Vue, options)
 
             const packeryEmit = (name, eventObj) =>
             {
+                // console.log(name, eventObj);
                 if (vnode.componentInstance)
                 {
                     vnode.componentInstance.$emit(name, eventObj)
@@ -111,6 +118,7 @@ packeryPlugin.install = function (Vue, options)
 
             el.packery.on('dragItemPositioned', (event, draggedItem) =>
             {
+                // console.log(event, draggedItem);
                 packeryEmit('dragItemPositioned', {event: event, draggedItem: draggedItem})
             })
 
@@ -176,12 +184,15 @@ packeryPlugin.install = function (Vue, options)
 
             packeryEvents.$on(DRAGGIE, event =>
             {
+                // console.log('qui qui qui');
                 if (!el.isSameNode(event.node))
                 {
                     return
                 }
 
-                el.packery.bindDraggabillyEvents(event.draggie)
+                console.log(event.draggie);
+                // el.packery.bindDraggabillyEvents(event.draggie)
+                el.packery.bindUIDraggableEvents(event.draggie)
             })
         },
         unbind (el)
