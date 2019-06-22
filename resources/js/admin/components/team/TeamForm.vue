@@ -25,7 +25,7 @@
         :ratio="1/1"
         @update="previewFile"
     />
-    <div class="form-group row">
+    <div class="form-group row pt-4">
         <label
             for="name"
             class="col-md-3"
@@ -134,10 +134,25 @@
         </label>
         <div class="col-md-9">
             <button
+                v-if="!isEdit"
                 class="btn btn-outline-primary"
                 @click="addMember"
             >
                 Aggiungi
+            </button>
+            <button
+                v-if="isEdit"
+                class="btn btn-outline-success"
+                @click="addMember"
+            >
+                Salva Modifiche
+            </button>
+            <button
+                v-if="isEdit"
+                class="btn btn-outline-warning"
+                @click="undoEdit"
+            >
+                Annulla Modifiche
             </button>
         </div>
     </div>
@@ -156,29 +171,62 @@ export default {
     components: {
         FileInput,
     },
+    props: {
+        obj: {
+            type: Object,
+            default: function () {
+                return {
+                    name: null,
+                    role: null,
+                    description: null,
+                    img: null,
+                    social: [],
+                    file: null,
+                }
+            },
+        },
+        isEdit: {
+            type: Boolean,
+            default: false,
+        },
+    },
     data: function () {
         return {
-            obj: {
-                name: null,
-                role: null,
-                description: null,
-                img: null,
-                social: [],
-                file: null,
-            },
             social: {
                 facebook: null,
                 linkedin: null,
                 twitter: null,
             },
             avatarPreview: null,
+            btnSave: 'Aggiungi',
+        }
+    },
+    watch: {
+        obj: {
+            handler: function (obj) {
+                if (obj.hasOwnProperty('img') && obj.img) {
+                    this.avatarPreview = obj.img
+                }
+
+            },
+            deep: true
+        },
+        isEdit: function (value) {
+            if (value) {
+                this.btnSave = 'Salva Modifiche'
+            }
+            else {
+                this.btnSave = 'Aggiungi'
+            }
         }
     },
     methods: {
         previewFile: function (file, src) {
-            this.avatarPreview = src
-            this.obj['img'] = src
-            this.obj['file'] = file
+            this.$emit('update:obj', {
+                ...this.obj,
+                img: src,
+                file: file,
+            })
             // console.log(file, src);
         },
         formatSocial: function () {
@@ -193,23 +241,15 @@ export default {
             }
             return socialArr
         },
-        addMember: function () {
-            this.obj['social'] = this.formatSocial()
-
-            // assegno un uuid
-            if (!this.obj.hasOwnProperty('id')) {
-                this.obj['id'] = Uuid.get()
-            }
-
-            this.$emit('update-member', this.obj)
-
+        reset: function () {
             this.$nextTick(() => {
-                delete this.obj['id']
-
+                let cacheObj = Object.assign({}, this.obj)
                 this.$refs.file.reset()
 
                 this.avatarPreview = null
-                this.obj = Object.assign({}, {
+                delete cacheObj['id']
+
+                cacheObj = Object.assign({}, {
                     name: null,
                     role: null,
                     description: null,
@@ -217,7 +257,26 @@ export default {
                     social: [],
                     file: null,
                 })
+                this.$emit('update:obj', cacheObj)
             })
+        },
+        addMember: function () {
+            let cacheObj = Object.assign({}, this.obj)
+
+            cacheObj['social'] = this.formatSocial()
+
+            // assegno un uuid
+            if (!cacheObj.hasOwnProperty('id')) {
+                cacheObj['id'] = Uuid.get()
+            }
+            console.log(cacheObj);
+
+            this.$emit('update-member', cacheObj)
+            this.reset()
+        },
+        undoEdit: function () {
+            this.$emit('undo')
+            this.reset()
         }
     },
 }

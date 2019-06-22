@@ -38,7 +38,7 @@
         >
             <button
                 class="btn btn-outline-primary"
-                @click="deleteMember(data.item)"
+                @click="editMember(data.item)"
             >
                 Modifica
             </button>
@@ -96,6 +96,10 @@ export default {
         }
     },
     methods: {
+        editMember: function (item) {
+            console.log(item, this.members);
+            this.$emit('edit-member', item)
+        },
         deleteMember: function (item) {
             let idx = this.members.findIndex(member => member.id === item.id)
             if (idx > -1) {

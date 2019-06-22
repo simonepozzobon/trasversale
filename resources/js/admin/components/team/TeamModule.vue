@@ -22,8 +22,10 @@
         </div>
     </div>
     <team-form
+        :obj.sync="form"
         @update-member="addMember"
-        :is-open="isOpen"
+        :is-edit="isEdit"
+        @undo="undoEdit"
     />
 
     <div class="form-group row pt-4">
@@ -32,7 +34,10 @@
             <hr />
         </div>
     </div>
-    <team-table :members.sync="obj.people" />
+    <team-table
+        :members.sync="obj.people"
+        @edit-member="editMember"
+    />
 </div>
 </template>
 
@@ -68,56 +73,27 @@ export default {
             },
             colSize: 0,
             isOpen: false,
+            isEdit: false,
+            form: {
+                name: null,
+                role: null,
+                description: null,
+                img: null,
+                social: [],
+                file: null,
+            }
         }
     },
     watch: {
         obj: {
             handler: function (obj) {
                 this.$emit('update', obj)
-                console.log(obj);
-
             },
             deep: true,
         }
     },
     methods: {
-        debug: function () {
-            let debug = [{
-                    "id": 1,
-                    "img": "/dummies/main-grid/dummy_2.jpg",
-                    "name": "Valeria Turchi",
-                    "role": "co-founder",
-                    "social": [{
-                            "twitter": "https://twitter.com"
-                        },
-                        {
-                            "linkedin": "https://linkedin.com"
-                        }
-                    ],
-                    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                },
-                {
-                    "id": 2,
-                    "img": "/dummies/main-grid/dummy_5.jpg",
-                    "name": "Federica Iurcovich",
-                    "role": "co-founder",
-                    "social": [{
-                            "twitter": "https://twitter.com"
-                        },
-                        {
-                            "linkedin": "https://linkedin.com"
-                        }
-                    ],
-                    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                },
-            ]
-
-            for (let i = 0; i < debug.length; i++) {
-                debug[i].id = Uuid.get()
-            }
-
-            this.obj.people = debug
-        },
+        debug: function () {},
         updateNumCol: function (cols) {
             let colSize = 12 / cols
             this.obj['gridCol'] = colSize
@@ -125,8 +101,24 @@ export default {
 
         },
         addMember: function (member) {
-            this.obj['people'].push(member)
-        }
+            if (this.isEdit) {
+                let idx = this.obj['people'].findIndex(person => person.id === member.id)
+                if (idx > -1) {
+                    this.obj['people'].splice(idx, 1, member)
+                    this.isEdit = false
+                }
+            }
+            else {
+                this.obj['people'].push(member)
+            }
+        },
+        editMember: function (member) {
+            this.isEdit = true
+            this.form = member
+        },
+        undoEdit: function () {
+            this.isEdit = false
+        },
     },
     created: function () {
         if (this.initial) {
