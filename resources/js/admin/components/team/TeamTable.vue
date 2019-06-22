@@ -37,6 +37,12 @@
             slot-scope="data"
         >
             <button
+                class="btn btn-outline-primary"
+                @click="deleteMember(data.item)"
+            >
+                Modifica
+            </button>
+            <button
                 class="btn btn-outline-danger"
                 @click="deleteMember(data.item)"
             >

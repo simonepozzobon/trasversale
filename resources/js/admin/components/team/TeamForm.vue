@@ -22,7 +22,7 @@
         name="img"
         accept="image/*"
         label="Immagine"
-        :has-crop="false"
+        :ratio="1/1"
         @update="previewFile"
     />
     <div class="form-group row">

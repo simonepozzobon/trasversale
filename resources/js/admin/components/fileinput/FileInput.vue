@@ -39,7 +39,7 @@
             <div class="col-md-6">
                 <clipper-fixed
                     ref="cropper"
-                    :ratio="16/9"
+                    :ratio="ratio"
                     :preview="name"
                     :src="src"
                 />
@@ -90,6 +90,10 @@ export default {
         hasCrop: {
             type: Boolean,
             default: true
+        },
+        ratio: {
+            type: Number,
+            default: 16 / 9
         }
     },
     data: function () {
@@ -139,8 +143,23 @@ export default {
             canvas.toBlob(blob => {
                 // blob.lastModifiedDate = new Date()
                 let file = new File([blob], this.file.name)
-                this.$emit('update', file)
+
+                this.getSrc(file).then(src => {
+                    this.$emit('update', file, src)
+                })
             })
+        },
+        getSrc: function (file) {
+            return new Promise(resolve => {
+                let reader = new FileReader()
+                // console.log('preview');
+                let src = reader.addEventListener('load', event => {
+                    resolve(reader.result)
+                })
+                reader.readAsDataURL(file)
+            })
+
+
         },
         reset: function () {
             this.$refs.file.value = ''

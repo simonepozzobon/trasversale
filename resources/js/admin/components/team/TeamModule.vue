@@ -21,7 +21,10 @@
             <hr />
         </div>
     </div>
-    <team-form @update-member="addMember" />
+    <team-form
+        @update-member="addMember"
+        :is-open="isOpen"
+    />
 
     <div class="form-group row pt-4">
         <div class="col-12">
@@ -64,6 +67,7 @@ export default {
                 gridCol: 0,
             },
             colSize: 0,
+            isOpen: false,
         }
     },
     watch: {
