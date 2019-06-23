@@ -15,7 +15,9 @@
                         <ui-link
                             class="nav-link"
                             :has-margin="false"
-                            :is-simple="true">
+                            :is-simple="true"
+                            url="https://www.facebook.com/Trasversale/"
+                            target="_blank">
                             <facebook
                                 width="32px"
                                 height="32px"
@@ -28,7 +30,9 @@
                         <ui-link
                             class="nav-link"
                             :has-margin="false"
-                            :is-simple="true">
+                            :is-simple="true"
+                            url="https://twitter.com/Trasversale_srl "
+                            target="_blank">
                             <twitter
                                 width="32px"
                                 height="32px"
@@ -41,8 +45,25 @@
                         <ui-link
                             class="nav-link"
                             :has-margin="false"
-                            :is-simple="true">
+                            :is-simple="true"
+                            url="https://www.linkedin.com/company/trasversale-srl"
+                            target="_blank">
                             <linkedin
+                                width="32px"
+                                height="32px"
+                                :hoverable="true"
+                                hover-color="primary"/>
+                        </ui-link>
+                        <!-- <a class="nav-link" href="#">Ln</a> -->
+                    </li>
+                    <li class="nav-item">
+                        <ui-link
+                            class="nav-link"
+                            :has-margin="false"
+                            :is-simple="true"
+                            url="https://www.linkedin.com/company/trasversale-srl"
+                            target="_blank">
+                            <youtube
                                 width="32px"
                                 height="32px"
                                 :hoverable="true"
@@ -90,8 +111,17 @@
 
 <script>
 import MenuItem from './MenuItem.vue'
-import { UiLink } from '../ui'
-import { Facebook, Linkedin, Twitter } from '../icons'
+import {
+    UiLink
+}
+from '../ui'
+import {
+    Facebook,
+    Linkedin,
+    Twitter,
+    Youtube
+}
+from '../icons'
 
 export default {
     name: 'MainMenu',
@@ -100,27 +130,28 @@ export default {
         UiLink,
         Facebook,
         Linkedin,
-        Twitter
+        Twitter,
+        Youtube
     },
     props: {
         pages: {
             type: Array,
-            default: function() {}
+            default: function () {}
         }
     },
-    data: function() {
+    data: function () {
         return {
             current: null,
             subpages: null,
         }
     },
     watch: {
-        '$route': function(route) {
+        '$route': function (route) {
             this.checkSubMenu()
         }
     },
     methods: {
-        checkSubMenu: function() {
+        checkSubMenu: function () {
             if (this.$route.hasOwnProperty('params') && this.$route.params.hasOwnProperty('page')) {
                 this.current = this.pages.filter(page => page.slug.slug == this.$route.params.page)[0]
                 if (this.current && this.current.sub_pages.length > 0) {
@@ -151,7 +182,7 @@ export default {
             }
         }
     },
-    created: function() {
+    created: function () {
         this.checkSubMenu()
     },
 }
