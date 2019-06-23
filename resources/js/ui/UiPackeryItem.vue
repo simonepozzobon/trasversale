@@ -203,7 +203,7 @@ export default {
         color: $black;
         line-height: 1.4;
         font-family: $font-family-sans-serif-var;
-        font-size: $font-size-base * 1.8;
+        font-size: $font-size-base * 1.6;
         letter-spacing: 0.05em;
         padding: $spacer;
         font-weight: 600;
