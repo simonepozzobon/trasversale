@@ -19,8 +19,8 @@ class MainController extends Controller
 
     public function test()
     {
-        $test = $this->get_dynamic_item('chi-siamo', null, null);
-        dd($test['item']->modules[0]->type);
+        $test = $this->get_dynamic_item('home', null, null);
+        dd($test);
     }
 
     public function get_dynamic_item($page = null, $subpage = null, $slug = null)
@@ -32,7 +32,7 @@ class MainController extends Controller
                     ['sluggable_type', '!=', 'App\\StaticPage'],
                     ['sluggable_type', '!=', 'App\\SubPage'],
                 ]
-            )->with('sluggable.modules')->first();
+            )->with('sluggable.modules', 'sluggable.sidebar.modules')->first();
         }
 
         else if ($subpage) {
@@ -51,7 +51,7 @@ class MainController extends Controller
                     ['slug', '=', $subpage],
                     ['sluggable_type', '=', 'App\\Post'],
                 ]
-            )->with('sluggable.modules')->first();
+            )->with('sluggable.modules', 'sluggable.sidebar.modules')->first();
         }
 
         else {
@@ -60,17 +60,24 @@ class MainController extends Controller
                     ['slug', '=', $page],
                     ['sluggable_type', '=', 'App\\StaticPage'],
                 ]
-            )->with('sluggable.modules')->first();
+            )->with('sluggable.modules', 'sluggable.sidebar.modules')->first();
         }
 
         if ($item) {
             if ($item->sluggable->modules->count() > 0) {
                 $modules = $item->sluggable->modules->sortBy('order')->values();
                 $item->sluggable->modules = Utility::format_complex_modules($modules, true);
+
+                $sidebar = $item->sluggable->sidebar;
+                if ($sidebar) {
+                    $sidebar->modules = $sidebar->modules;
+                } else {
+                    $sidebar = collect();
+                }
+                $item->sluggable->sidebar = $sidebar;
             }
 
             $item->sluggable->model = $this->stringify_class($item->sluggable);
-
 
             return [
                 'success' => true,
