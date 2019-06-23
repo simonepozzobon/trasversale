@@ -19,8 +19,8 @@ class MainController extends Controller
 
     public function test()
     {
-        $test = $this->get_dynamic_item('formazione', null, null);
-        dd($test);
+        $test = $this->get_dynamic_item('chi-siamo', null, null);
+        dd($test['item']->modules[0]->type);
     }
 
     public function get_dynamic_item($page = null, $subpage = null, $slug = null)
@@ -65,7 +65,8 @@ class MainController extends Controller
 
         if ($item) {
             if ($item->sluggable->modules->count() > 0) {
-                $item->sluggable->modules = Utility::format_complex_modules($item->sluggable->modules, true);
+                $modules = $item->sluggable->modules->sortBy('order')->values();
+                $item->sluggable->modules = Utility::format_complex_modules($modules, true);
             }
 
             $item->sluggable->model = $this->stringify_class($item->sluggable);
@@ -77,6 +78,7 @@ class MainController extends Controller
                 'item' => $item->sluggable,
             ];
         }
+
         return [
             'success' => false,
         ];
