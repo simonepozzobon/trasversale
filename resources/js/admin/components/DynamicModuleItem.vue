@@ -229,7 +229,11 @@
         @update="teamChanged"
     />
 
-    <grid-module v-else-if="option.type === 'grid'" />
+    <grid-module
+        v-else-if="option.type === 'grid'"
+        @update="subChanged"
+        :initial="initial"
+    />
 
     <!-- <div v-else>
         {{ option }}
@@ -427,8 +431,10 @@ export default {
             }
         },
         subChanged: function (subModuleObj) {
+            console.log('fuori', subModuleObj);
             // bisogna risettare l'oggetto altrimenti non aggiorna l'evento
             if (!isEqual(this.value, subModuleObj)) {
+                console.log('dentro', subModuleObj);
                 this.value = clone(subModuleObj)
             }
         },

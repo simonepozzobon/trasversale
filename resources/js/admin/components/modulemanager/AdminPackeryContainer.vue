@@ -3,7 +3,7 @@
         v-packery="{
             itemSelector: '.packery-item',
             percentPosition: true,
-            /* initLayout: true, */
+            initLayout: true,
             /* columnWidth: '.grid-sizer', */
             /* columnWidth: 80, */
             /* rowHeight: 80, */
@@ -79,6 +79,7 @@ export default {
     watch: {
         items: function (items) {
             // console.log('verifica', items.map(o => o.x + ' ' + o.y));
+            console.log('modified items');
             this.$nextTick(() => this.setUnitHeight())
             // packeryEvents.$emit('layout', this.$refs.packery)
         }
@@ -115,26 +116,30 @@ export default {
             this.cached = Object.assign([], this.items)
         },
         setUnitHeight: function () {
-            // console.log('setUnitHeight');
             let items = this.$refs.item
+            // console.log('setUnitHeight', items);
             if (items) {
                 for (let i = 0; i < items.length; i++) {
                     let current = items[i]
                     current.setUnitHeight(this.unitSize)
                     current.setUnitWidth(this.unitSize)
                 }
+
+                // console.log(this.packery);
                 for (let i = 0; i < this.packeryItems.length; i++) {
+
                     let current = this.packeryItems[i]
                     let node = current.element
                     let idx = node.getAttribute('data-key')
 
-                    let item = this.items.find(item => Number(item.idx) === Number(idx))
-                    // console.log(item, current);
+                    let item = items.find(item => Number(item.idx) === Number(idx))
+                    console.log('current', item, current);
                     if (item) {
                         // this.bindUiEvents()
-
                         let x = item.x * this.unitSize
                         let y = item.y * this.unitSize
+
+                        // console.log(current, x, y);
 
                         this.packery.fit(current, x, y)
                         this.packery.reloadItems()
@@ -156,6 +161,55 @@ export default {
         //     console.log('elements', elements);
         //     // this.packery.bindUIDraggableEvents(elements)
         // },
+        setItemWidth: function (data) {
+            // console.log(this.packery.items);
+            let newSize = data.draggedItem.size
+            let unitSize = this.unitSize
+            let newWidth = Math.round(newSize.width / unitSize)
+            let newHeight = Math.round(newSize.height / unitSize)
+            // console.log(newWidth, newHeight);
+
+
+            let ui = data.draggedItem.element[0].getAttribute('data-key')
+            let cached = Object.assign([], this.items)
+
+            if (cached) {
+                let idx = cached.findIndex(item => Number(item.idx) === Number(ui))
+
+                if (idx > -1) {
+                    let cache = Object.assign({}, cached[idx])
+                    cache.height = newHeight
+                    cache.h = newHeight
+                    cache.width = newWidth
+                    cache.w = newWidth
+
+                    cached.splice(idx, 1, cache)
+
+                    let domItems = this.$refs.item
+                    // console.log('elementi', domItems);
+                    if (domItems) {
+                        let domItem = domItems.find(single => Number(single.$el.getAttribute('data-key')) === Number(cache.idx))
+                        // console.log('elemento', domItem);
+                        if (domItem) {
+                            let x = domItem.x * this.unitSize
+                            let y = domItem.y * this.unitSize
+
+                            // console.log(domItem, x, y);
+
+                            this.packery.fit(domItem, x, y)
+                            this.packery.reloadItems()
+                            this.packery.layout()
+                        }
+                    }
+
+                    // console.log('cache', cache);
+                    // this.packery('fit', cache)
+
+                    this.$emit('update:items', cached)
+                }
+            }
+            // console.log(newWidth);
+        },
         test: function (event) {
             // console.log('evento', event);
         }
@@ -165,8 +219,15 @@ export default {
         // packeryEvents.$on('draggie', (data) => {
         //     console.log('jfhskjhfjkdshkfsf', data);
         // })
+        let resizeTimeout
         packeryEvents.$on('customEmit', (data) => {
-            console.log('jfhskjhfjkdshkfsf', data);
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout)
+            }
+            resizeTimeout = setTimeout(() => {
+                this.setItemWidth(data)
+            }, 100)
+
         })
     }
 }

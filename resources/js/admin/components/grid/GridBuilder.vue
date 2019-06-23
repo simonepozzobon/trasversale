@@ -10,55 +10,12 @@
         <div class="col-md-12">
             <div>
                 <admin-packery-container
-                    :items.sync="this.elements"
+                    :items.sync="items"
                     :gutter="8"
                     :units="12"
                     :drag="true"
                 />
             </div>
-            <!-- <grid-layout
-                ref="gridLayout"
-                :layout="elements"
-                :col-num="12"
-                :row-height="60"
-                :is-draggable="true"
-                :is-resizable="true"
-                :auto-size="true"
-                :is-mirrored="false"
-                :vertical-compact="true"
-                :margin="[10, 10]"
-                :use-css-transforms="true"
-                @layout-updated="layoutUpdated"
-            >
-
-                <grid-item
-                    ref="gridItem"
-                    v-for="(element, i) in elements"
-                    :key="element.uuid"
-                    class="element-item"
-                    :x="element.x"
-                    :y="element.y"
-                    :w="element.w"
-                    :h="element.h"
-                    :i="element.i"
-                >
-
-                    <div
-                        class="element-item__container"
-                        :style="'background-image: url('+ element.thumb +')'"
-                    >
-
-                        <div class="element-item__tools">
-                            <button
-                                class="btn btn-outline-danger"
-                                @click="removeElement(element)"
-                            >
-                                Rimuovi
-                            </button>
-                        </div>
-                    </div>
-                </grid-item>
-            </grid-layout> -->
         </div>
     </div>
 </div>
@@ -92,9 +49,19 @@ export default {
         return {
             obj: {},
             name: 'grid',
+            items: [],
+        }
+    },
+    watch: {
+        elements: function (els) {
+            this.items = els
+        },
+        items: function (items) {
+            this.$emit('update:elements', items)
         }
     },
     methods: {
+        hub: function () {},
         layoutUpdated: function (newLayout) {
             // console.log('layout aggiornato', newLayout);
 

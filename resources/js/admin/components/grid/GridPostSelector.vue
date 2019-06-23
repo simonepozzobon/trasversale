@@ -1,5 +1,5 @@
 <template>
-<div class="grid-post-selector">
+<div class="grid-post-selector pot-4">
     <div class="form-group row">
         <div class="col-12">
             <h5>Gestione dei contenuti</h5>

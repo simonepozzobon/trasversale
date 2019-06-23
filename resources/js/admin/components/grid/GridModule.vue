@@ -152,6 +152,12 @@ export default {
                 // limita i post
                 // console.log(this.elements.length);
             }
+        },
+        elements: {
+            handler: function (elements) {
+                this.$emit('update', elements)
+            },
+            deep: true,
         }
     },
     methods: {

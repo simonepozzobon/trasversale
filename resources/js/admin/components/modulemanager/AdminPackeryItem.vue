@@ -8,7 +8,7 @@
             widthClass,
             hoverableClass,
         ]"
-        @draggie="test">
+        >
 
         <div
             ref="item"
@@ -151,8 +151,7 @@ export default {
     },
     watch: {
         width: function (w) {
-
-
+            this.setUnitWidth(this.unitSize)
         },
         height: function (h) {
             this.setUnitHeight(this.unitSize)
@@ -172,17 +171,23 @@ export default {
                 this.obj = this.content
             }
         },
-        setUnitWidth: function (width) {
-            let itemWidth = width * this.width
-            let realGutter = Math.round(this.gutter / 2)
+        setUnitWidth: function (unitSize) {
+            if (unitSize) {
+                // console.log(unitSize, this.width);
+                let itemWidth = unitSize * this.width
+                let realGutter = Math.round(this.gutter / 2)
+                // console.log(realGutter, itemWidth);
 
-            if (this.width > 2) {
-                let deltaGutter = this.width * (realGutter / 2)
-                itemWidth = itemWidth + deltaGutter
+                if (this.width > 2) {
+                    let deltaGutter = this.width * (realGutter / 2)
+                    itemWidth = itemWidth + deltaGutter
+                }
+
+                this.$refs.item.style.width = itemWidth + 'px'
+
+                // console.log('--------');
+                this.$refs.packeryItem.style.padding = realGutter + 'px'
             }
-
-            this.$refs.item.style.width = itemWidth + 'px'
-            this.$refs.packeryItem.style.padding = realGutter + 'px'
         },
         setUnitHeight: function (height) {
             let realGutter = Math.round(this.gutter / 2)
@@ -201,9 +206,6 @@ export default {
             //     page: 'post',
             //     subpage: this.obj.slug.slug,
             // })
-        },
-        test: function (event) {
-            console.log('safdasfasfasfd');
         },
         addListener: function () {
             // console.log('listener');
