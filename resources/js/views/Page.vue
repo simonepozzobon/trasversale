@@ -9,44 +9,47 @@
 
 <script>
 import ModuleManager from '../containers/ModuleManager.vue'
+import {
+    sortModules
+}
+from '../Utilities'
 export default {
     name: 'Page',
     components: {
         ModuleManager,
     },
-    data: function() {
+    data: function () {
         return {
             name: null,
             modules: null,
         }
     },
     watch: {
-        '$route': function(v) {
+        '$route': function (v) {
             this.init()
         }
     },
     methods: {
-        init: function() {
+        init: function () {
             let url = '/api/get-page/' + this.$route.params.page
             this.getData(url)
         },
-        getData: function(url) {
+        getData: function (url) {
             if (url) {
                 this.$http.get(url).then(response => {
                     // console.log(response.data);
                     if (response.data.success) {
                         this.name = response.data.item.title
-                        this.modules = response.data.item.modules
+                        this.modules = sortModules(response.data.item.modules)
                     }
                 })
             }
         }
     },
-    created: function() {
+    created: function () {
         this.init()
     },
-    mounted: function() {
-    }
+    mounted: function () {}
 }
 </script>
 
