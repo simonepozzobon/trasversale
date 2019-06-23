@@ -5,6 +5,7 @@ import MailDark from './MailDark.vue'
 import Twitter from './Twitter.vue'
 import RadioCheck from './RadioCheck.vue'
 import RadioUncheck from './RadioUncheck.vue'
+import Youtube from './Youtube.vue'
 
 export {
     Facebook,
@@ -14,4 +15,5 @@ export {
     Twitter,
     RadioCheck,
     RadioUncheck,
+    Youtube,
 }
