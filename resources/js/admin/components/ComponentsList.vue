@@ -14,7 +14,9 @@
                 v-for="(module, i) in modules"
                 :key="i"
                 :value="module.value"
-            >{{module.label}}</option>
+            >
+                {{module.label}}
+            </option>
         </select>
     </div>
 
@@ -79,7 +81,7 @@ export default {
                 },
                 {
                     value: 'row',
-                    label: 'Griglia Contenuti',
+                    label: 'Tabella',
                 },
                 {
                     value: 'calendar',
