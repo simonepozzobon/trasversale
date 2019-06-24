@@ -8,6 +8,7 @@
     :sidebar-idx="sidebarIdx"
     :sidebarModules="sidebarModules"
     @save-page="savePost"
+    :has-slot="true"
 >
     <div class="page-template__content">
         <ui-title

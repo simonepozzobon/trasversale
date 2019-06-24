@@ -5,7 +5,10 @@
 >
     <notifications-container :toasts="notifications" />
     <div class="new-page-template__container container">
-        <div class="new-page-template__row row">
+        <div
+            class="new-page-template__row row"
+            v-if="hasSlot"
+        >
             <div class="new-page-template__header col-12">
                 <slot></slot>
             </div>
@@ -37,6 +40,7 @@
                 @deleted="deletedSidebar"
                 @sidebar-created="sidebarCreated"
                 @edit-sidebar="toggleActive"
+                @notify="notify"
             />
         </div>
     </div>
@@ -75,6 +79,10 @@ export default {
         NotificationsContainer,
     },
     props: {
+        hasSlot: {
+            type: Boolean,
+            default: false
+        },
         title: {
             type: String,
             default: 'titolo'

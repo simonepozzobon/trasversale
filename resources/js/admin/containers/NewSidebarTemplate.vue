@@ -422,7 +422,7 @@ export default {
 
             this.$http.all(promises)
                 .then(results => {
-                    this.notifications.push({
+                    this.$emit('notify', {
                         uuid: Uuid.get(),
                         title: 'Sidebar Salvata',
                         message: 'Salvataggio Completato'
