@@ -1,112 +1,143 @@
-<template lang="html">
-    <nav class="navbar navbar-main navbar-expand-lg navbar-light bg-white">
-        <div class="navbar-main__head">
-            <a class="navbar-brand"
-                href="/"
-                @click.prevent="$root.goTo('home')">
-                <img src="/svg/logo.svg" alt="" style="width: 250px">
-            </a>
-        </div>
+<template>
+<nav class="navbar navbar-main navbar-expand-lg navbar-light bg-white">
+    <div class="navbar-main__head">
+        <a
+            class="navbar-brand"
+            href="/"
+            @click.prevent="$root.goTo('home')"
+        >
+            <img
+                src="/svg/logo.svg"
+                alt=""
+                style="width: 250px"
+            >
+        </a>
+    </div>
 
-        <div class="navbar-collapse navbar-main__container" id="navbarSupportedContent">
-            <div class="navbar-main__topbar">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <ui-link
-                            class="nav-link"
-                            :has-margin="false"
-                            :is-simple="true"
-                            url="https://www.facebook.com/Trasversale/"
-                            target="_blank">
-                            <facebook
-                                width="32px"
-                                height="32px"
-                                :hoverable="true"
-                                hover-color="primary"/>
-                        </ui-link>
-                        <!-- <a class="nav-link" href="#">F</a> -->
-                    </li>
-                    <li class="nav-item">
-                        <ui-link
-                            class="nav-link"
-                            :has-margin="false"
-                            :is-simple="true"
-                            url="https://twitter.com/Trasversale_srl "
-                            target="_blank">
-                            <twitter
-                                width="32px"
-                                height="32px"
-                                :hoverable="true"
-                                hover-color="primary"/>
-                        </ui-link>
-                        <!-- <a class="nav-link" href="#">T</a> -->
-                    </li>
-                    <li class="nav-item">
-                        <ui-link
-                            class="nav-link"
-                            :has-margin="false"
-                            :is-simple="true"
-                            url="https://www.linkedin.com/company/trasversale-srl"
-                            target="_blank">
-                            <linkedin
-                                width="32px"
-                                height="32px"
-                                :hoverable="true"
-                                hover-color="primary"/>
-                        </ui-link>
-                        <!-- <a class="nav-link" href="#">Ln</a> -->
-                    </li>
-                    <li class="nav-item">
-                        <ui-link
-                            class="nav-link"
-                            :has-margin="false"
-                            :is-simple="true"
-                            url="https://www.linkedin.com/company/trasversale-srl"
-                            target="_blank">
-                            <youtube
-                                width="32px"
-                                height="32px"
-                                :hoverable="true"
-                                hover-color="primary"/>
-                        </ui-link>
-                        <!-- <a class="nav-link" href="#">Ln</a> -->
-                    </li>
-                </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                </form>
-            </div>
-            <div class="navbar-main__menubar">
-                <ul class="navbar-nav mr-auto">
-                    <menu-item
-                        v-for="(page, i) in pages"
-                        :key="i"
-                        :page="page"/>
-                </ul>
-            </div>
-            <div class="navbar-main__submenu main-submenu" v-if="this.subpages && this.current">
-                <ul class="navbar-nav mr-auto main-submenu__navbar">
-                    <li
-                        v-for="(subpage, j) in subpages"
-                        :key="j"
-                        class="nav-item main-submenu__item">
-                        <span
-                            v-if="subpage.hasOwnProperty('divider')"
-                            class="main-submenu__divider">
-                            |
-                        </span>
-                        <a
-                            v-else
-                            class="nav-link main-submenu__link"
-                            :href="'/' + current.slug.slug + '/' + subpage.slug.slug"
-                            @click.prevent="$root.goToWithParams('subpage', { page: current.slug.slug, subpage: subpage.slug.slug })">
-                            {{ subpage.title }}
-                        </a>
-                    </li>
-                </ul>
-            </div>
+    <div
+        class="navbar-collapse navbar-main__container"
+        id="navbarSupportedContent"
+    >
+        <div class="navbar-main__topbar">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <ui-link
+                        class="nav-link"
+                        :has-margin="false"
+                        :is-simple="true"
+                        url="https://www.facebook.com/Trasversale/"
+                        target="_blank"
+                    >
+                        <facebook
+                            width="32px"
+                            height="32px"
+                            :hoverable="true"
+                            hover-color="primary"
+                        />
+                    </ui-link>
+                    <!-- <a class="nav-link" href="#">F</a> -->
+                </li>
+                <li class="nav-item">
+                    <ui-link
+                        class="nav-link"
+                        :has-margin="false"
+                        :is-simple="true"
+                        url="https://twitter.com/Trasversale_srl "
+                        target="_blank"
+                    >
+                        <twitter
+                            width="32px"
+                            height="32px"
+                            :hoverable="true"
+                            hover-color="primary"
+                        />
+                    </ui-link>
+                    <!-- <a class="nav-link" href="#">T</a> -->
+                </li>
+                <li class="nav-item">
+                    <ui-link
+                        class="nav-link"
+                        :has-margin="false"
+                        :is-simple="true"
+                        url="https://www.linkedin.com/company/trasversale-srl"
+                        target="_blank"
+                    >
+                        <linkedin
+                            width="32px"
+                            height="32px"
+                            :hoverable="true"
+                            hover-color="primary"
+                        />
+                    </ui-link>
+                    <!-- <a class="nav-link" href="#">Ln</a> -->
+                </li>
+                <li class="nav-item">
+                    <ui-link
+                        class="nav-link"
+                        :has-margin="false"
+                        :is-simple="true"
+                        url="https://www.linkedin.com/company/trasversale-srl"
+                        target="_blank"
+                    >
+                        <youtube
+                            width="32px"
+                            height="32px"
+                            :hoverable="true"
+                            hover-color="primary"
+                        />
+                    </ui-link>
+                    <!-- <a class="nav-link" href="#">Ln</a> -->
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input
+                    class="form-control mr-sm-2"
+                    type="search"
+                    placeholder="Search"
+                    aria-label="Search"
+                >
+            </form>
         </div>
-    </nav>
+        <div class="navbar-main__menubar">
+            <ul class="navbar-nav mr-auto">
+                <menu-item
+                    v-for="(page, i) in pages"
+                    :key="i"
+                    :page="page"
+                />
+            </ul>
+        </div>
+        <div
+            class="navbar-main__submenu main-submenu"
+            v-if="this.subpages && this.current"
+        >
+            <ul class="navbar-nav mr-auto main-submenu__navbar">
+                <li
+                    v-for="(subpage, j) in subpages"
+                    :key="j"
+                    class="nav-item main-submenu__item"
+                >
+                    <span
+                        v-if="subpage.hasOwnProperty('divider')"
+                        class="main-submenu__divider"
+                    >
+                        |
+                    </span>
+                    <a
+                        v-else
+                        ref="item"
+                        class="nav-link main-submenu__link"
+                        :class="subpage | setActiveSubpage(subpage.slug.slug, current.slug.slug)"
+                        :href="'/' + current.slug.slug + '/' + subpage.slug.slug"
+                        @click.prevent="$root.goToWithParams('subpage', { page: current.slug.slug, subpage: subpage.slug.slug })"
+                    >
+                        {{ subpage.title }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 </template>
 
 <script>
@@ -149,6 +180,16 @@ export default {
         '$route': function (route) {
             this.checkSubMenu()
         }
+    },
+    filters: {
+        setActiveSubpage: function (pageSlug, slug) {
+            console.log(pageSlug, slug);
+            if (pageSlug == slug) {
+                return 'active'
+            }
+
+            return null
+        },
     },
     methods: {
         checkSubMenu: function () {
