@@ -6,82 +6,37 @@
     <notifications-container :toasts="notifications" />
     <div class="new-page-template__container container">
         <div class="new-page-template__row row">
-            <div class="new-page-template__main col-12">
+            <new-main-template
+                ref="main"
+                :active="isMainActive"
+                :content-height="mainHeight"
+                :title="title"
+                :has-title="hasTitle"
+                :model="model"
+                :modelIdx="modelIdx"
+                :modules="modules"
+                @notify="notify"
+                @edit-main="toggleActive"
+            >
                 <slot></slot>
-                <div class="new-page-template__header">
-                    <div class="new-page-template__head">
-                        <div
-                            class="new-page-template__title"
-                            v-if="hasTitle"
-                        >
-                            <h1 class="pt-3">{{ title }}</h1>
-                        </div>
-                        <div class="new-page-template__action">
-                            <button
-                                class="btn btn-outline-primary"
-                                @click="addComponent"
-                            >
-                                Aggiungi Componente
-                            </button>
-                            <button
-                                class="btn btn-outline-success"
-                                @click="savePage"
-                            >
-                                {{ customSave }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="new-page-template__content">
-                    <draggable
-                        v-model="cached"
-                        @update="sortModules"
-                    >
-                        <module-container
-                            v-for="(module, i) in cached"
-                            :key="module.uuid"
-                            :item="module"
-                            :model="model"
-                            :model-idx="modelIdx"
-                            @deleted="deletedComponent"
-                            @save="saveComponent"
-                            @delete="deleteComponent"
-                            @save-sub-module="saveSubModule"
-                        />
-                    </draggable>
-                </div>
-                <div class="new-page-template__footer">
-                    <button
-                        class="btn btn-outline-primary"
-                        @click="addComponent"
-                    >
-                        Aggiungi Componente
-                    </button>
-                    <button
-                        class="btn btn-outline-success ml-2"
-                        @click="savePage"
-                    >
-                        {{ customSave }}
-                    </button>
-                </div>
-                <components-list
-                    ref="componentSelector"
-                    @new-component="newComponent"
-                />
-            </div>
+            </new-main-template>
+            <new-sidebar-template
+                ref="sidebar"
+                class="col-3"
+                model="App\Sidebar"
+                :active="!isMainActive"
+                :content-height="sideHeight"
+                :model-idx="sidebarIdx"
+                :modules="sidebarModules"
+                :sidebarable_id="modelIdx"
+                :sidebarable_type="model"
+                @saved="savedSidebar"
+                @deleted="deletedSidebar"
+                @sidebar-created="sidebarCreated"
+                @edit-sidebar="toggleActive"
+            />
         </div>
     </div>
-    <new-sidebar-template
-        ref="sidebar"
-        model="App\Sidebar"
-        :model-idx="sidebarIdx"
-        :modules="sidebarModules"
-        :sidebarable_id="modelIdx"
-        :sidebarable_type="model"
-        @saved="savedSidebar"
-        @deleted="deletedSidebar"
-        @sidebar-created="sidebarCreated"
-    />
 </div>
 </template>
 
@@ -92,14 +47,18 @@ import DynamicParams from '../DynamicParams'
 import EditPanel from '../components/EditPanel.vue'
 import ModuleContainer from './ModuleContainer.vue'
 import NewSidebarTemplate from './NewSidebarTemplate.vue'
+import NewMainTemplate from './NewMainTemplate.vue'
 import NotificationsContainer from './NotificationsContainer.vue'
 
 import {
-    Uuid
+    Uuid,
+    SizeUtil,
 }
 from '../../Utilities'
 
 const orderBy = require('lodash.orderby')
+const elementResizeDetectorMaker = require('element-resize-detector')
+const debounce = require('lodash.debounce')
 
 export default {
     name: 'NewPageTemplate',
@@ -109,6 +68,7 @@ export default {
         EditPanel,
         ModuleContainer,
         NewSidebarTemplate,
+        NewMainTemplate,
         NotificationsContainer,
     },
     props: {
@@ -161,16 +121,11 @@ export default {
         return {
             component: null,
             moduleType: null,
-            moduleOpts: DynamicParams,
-            isEdit: false,
-            values: null,
-            cached: [],
-            cachedSides: [],
-            files: [],
             notifications: [],
-            loaded: 0,
-            counter: 0,
-            hasAwait: false,
+            isMainActive: true,
+            mainHeight: 0,
+            sideHeight: 0,
+            observer: null,
         }
     },
     computed: {
@@ -190,106 +145,74 @@ export default {
             // console.log('params cambiato', params);
         },
         modules: function (modules) {
-            this.init()
-        },
-        model: function (model) {
-            this.setModelKey('modulable_type', model)
-        },
-        modelIdx: function (id) {
-            this.setModelKey('modulable_id', id)
+            // this.debug()
         }
     },
     methods: {
-        setModelKey: function (key, value) {
-            for (let i = 0; i < this.cached.length; i++) {
-                this.cached[i][key] = value
-            }
-        },
-        init: function () {
-            // imposta una variabile intermedia per poter modificare i moduli
-            let sorted = orderBy(this.modules, ['order', 'created_at'], ['asc', 'asc'])
-            if (sorted.length > 0) {
-                for (let i = 0; i < sorted.length; i++) {
-                    if (sorted[i].type === 'row') {
-                        let sortedColumns = orderBy(sorted[i].content, ['order', 'created_at'], ['asc', 'asc'])
-                        sortedColumns = sortedColumns.map(column => {
-                            let sortedModules = orderBy(column.content.modules, ['order', 'created_at'], ['asc', 'asc'])
-                            column.content.modules = sortedModules
-                            return column
-                        })
-                        sorted[i].content = sortedColumns
-                    }
+        initAnim: function () {
+            if (!this.anim) {
+                let side = this.$refs.sidebar.$el
+                let main = this.$refs.main.$el
 
-                    let cache = {
-                        ...sorted[i],
-                        uuid: Uuid.get()
-                    }
+                let col3 = (3 * 100 / 12) + '%'
+                let col4 = (4 * 100 / 12) + '%'
+                let col8 = (8 * 100 / 12) + '%'
+                let col9 = (9 * 100 / 12) + '%'
 
-                    if (cache.type === 'row') {
-                        cache.content = this.setInitials(cache.content)
-                    }
-
-                    this.cached.push(cache)
-                }
-            }
-            // this.debug()
-        },
-        setInitials: function (objs) {
-            for (let i = 0; i < objs.length; i++) {
-                objs[i].uuid = Uuid.get()
-                objs[i].isNew = false
-
-                if (objs[i].content.hasOwnProperty('modules')) {
-                    objs[i].content.modules = this.setInitials(objs[i].content.modules)
-                }
-            }
-            return objs
-        },
-
-        debug: function () {
-            if (this.cached.length === 0 && this.modelIdx !== 0) {
-                this.$nextTick(() => {
-                    this.newComponent('team')
+                this.anim = new TimelineMax({
+                    paused: true,
+                    yoyo: true
                 })
-            }
-        },
-        addComponent: function () {
-            this.$refs.componentSelector.show()
-        },
-        newComponent: function (type) {
-            this.moduleType = type
-            this.dismissModal()
 
-            this.isEdit = false
-            const newModule = {
-                uuid: Uuid.get(),
-                type: type,
-                isNew: true,
-                order: this.cached.length,
-                modulable_id: this.modelIdx,
-                modulable_type: this.model,
-                content: {},
-            }
+                this.anim.fromTo(side, .6, {
+                    css: {
+                        flex: '0 0 ' + col3,
+                        maxWidth: col3,
+                    }
+                }, {
+                    css: {
+                        flex: '0 0 ' + col8,
+                        maxWidth: col8,
+                    },
+                    ease: Power4.easeInOut
+                }, 0)
 
-            // console.log(newModule);
-            this.cached.push(newModule)
-        },
-        saveSubModule: function (subModule) {
-            let idx = this.cached.findIndex(cache => cache.uuid === subModule.uuid)
-            if (idx > -1) {
-                this.cached.splice(idx, 1, subModule)
-                this.savePage()
+
+                this.anim.fromTo(main, .6, {
+                    css: {
+                        flex: '0 0 ' + col9,
+                        maxWidth: col9,
+                    }
+                }, {
+                    css: {
+                        flex: '0 0 ' + col4,
+                        maxWidth: col4,
+                    },
+                    ease: Power4.easeInOut
+                }, 0)
+
+                this.anim.progress(1).progress(0)
             }
-            // console.log(idx, subModule.uuid);
         },
-        deletedComponent: function (component) {
-            let idx = this.cached.findIndex(cache => cache.uuid === component.uuid)
-            if (idx > -1) {
-                this.cached.splice(idx, 1)
+        show: function () {
+            if (this.anim) {
+                this.anim.play()
             }
         },
-        dismissModal: function () {
-            this.$refs.componentSelector.hide()
+        hide: function () {
+            if (this.anim) {
+                this.anim.reverse()
+            }
+        },
+        toggleActive: function () {
+            if (this.isMainActive) {
+                this.show()
+                this.isMainActive = false
+            }
+            else {
+                this.hide()
+                this.isMainActive = true
+            }
         },
         setModule: function (module) {
             console.log('deprecata');
@@ -297,257 +220,6 @@ export default {
         deleted: function (module) {
             this.moduleType = null
             this.$emit('deleted', module)
-        },
-        deleteComponent: function (id, isNew, uuid) {
-            console.log('elimina componente', id, isNew, uuid);
-
-            // se è nuovo elimina il componente dalla visuale
-            if (isNew) {
-                this.cached = this.searchAndDelete(this.cached, uuid)
-            }
-            else {
-                // Se non è un nuovo modulo, effettua l'eliminazione sul DB
-                let url = '/api/admin/delete-component/' + id
-                this.$http.delete(url)
-                    .then(response => {
-                        // console.log(response.data);
-                        // console.log('modulo eliminato', uuid);
-                        if (response.data.success) {
-                            this.cached = this.searchAndDelete(this.cached, uuid)
-                        }
-                    })
-            }
-        },
-        searchAndDelete: function (objs, uuid) {
-            let idx = objs.findIndex(obj => obj.uuid === uuid)
-            if (idx > -1) {
-                console.log('trovato');
-                objs.splice(idx, 1)
-            }
-            else {
-                for (let i = 0; i < objs.length; i++) {
-                    if (objs[i].content.hasOwnProperty('modules')) {
-                        objs[i].content.modules = this.searchAndDelete(objs[i].content.modules,
-                            uuid)
-                    }
-                    else if (objs[i].content.length > 0) {
-                        objs[i].content = this.searchAndDelete(objs[i].content, uuid)
-                    }
-                }
-            }
-            return objs
-        },
-
-        savePage: function (modelSaved = true) {
-            // console.log('salva pagina', this.cached);
-            if (modelSaved) {
-                this.$emit('save-page')
-            }
-            // console.log(this.model);
-
-            // console.log('this.model', this.model);
-            if (this.model) {
-                this.$root.$emit('close-all-panels')
-                this.counter = this.cached.length
-                let promises = []
-                for (let i = 0; i < this.cached.length; i++) {
-                    // temps[i] = this.saveComponent(temps[i])
-                    switch (this.cached[i].type) {
-                    case 'row':
-                        let rowData = Object.assign({}, this.cached[i])
-                        delete rowData.content
-                        rowData.content = {
-                            columns: this.cached[i].content.length
-                        }
-
-                        rowData = this.formatRequest(rowData)
-
-                        let requestRow = this.$http.post('/api/admin/save-component', rowData)
-                            .then(rowResponse => {
-                                this.cached[i] = this.formatFromResponse(this.cached[i], rowResponse.data.module)
-                                let columns = this.cached[i].content
-                                for (let j = 0; j < columns.length; j++) {
-                                    let modules = columns[j].content.modules
-                                    let columnData = Object.assign({}, columns[j])
-                                    columnData.modulable_id = rowResponse.data.module.id
-                                    columnData.modulable_type = 'App\\Module'
-                                    delete columnData.content.modules
-
-                                    columnData = this.formatRequest(columnData)
-                                    let requestColumn = this.$http.post('/api/admin/save-component', columnData)
-                                        .then(columnResponse => {
-                                            this.cached[i].content[j] = this.formatFromResponse(this.cached[i].content[j], columnResponse.data.module)
-                                            if (modules) {
-                                                for (let k = 0; k < modules.length; k++) {
-                                                    let moduleData = Object.assign({}, modules[k])
-                                                    moduleData.modulable_id = columnResponse.data.module.id
-                                                    moduleData.modulable_type = 'App\\Module'
-                                                    moduleData = this.formatRequest(moduleData)
-                                                    let requestModule = this.$http.post('/api/admin/save-component', moduleData)
-                                                        .then(moduleResponse => {
-                                                            let newModule = this.formatFromResponse(modules[k], moduleResponse.data.module)
-                                                            this.cached[i].content[j].modules[k] = newModule
-                                                            if (!this.cached[i].content[j].content.hasOwnProperty('modules')) {
-                                                                this.cached[i].content[j].content.modules = []
-                                                                this.cached[i].content[j].content.modules[k] = newModule
-                                                            }
-                                                            else {
-                                                                this.cached[i].content[j].content.modules[k] = newModule
-                                                            }
-                                                        })
-                                                    promises.push(requestModule)
-                                                }
-                                            }
-                                        })
-                                    promises.push(requestColumn)
-                                }
-                            })
-                        promises.push(requestRow)
-                        break;
-                    case 'team':
-                        console.log(i);
-                        // wait uploads before run promises
-                        this.hasAwait = true
-
-                        let teamObj = this.cached[i]
-                        let content = teamObj.content.team
-                        let people = this.saveImage(content.people).then(people => {
-                            console.log(teamObj);
-                            let teamData = this.formatRequest(teamObj)
-                            let teamRequest = this.$http.post('/api/admin/save-component', teamData)
-                                .then(response => {
-                                    let temp = this.formatFromResponse(this.cached[i], response.data.module)
-                                    this.cached[i] = temp
-                                })
-                            promises.push(teamRequest)
-                            if (this.hasAwait) {
-                                this.processAllPromises(promises)
-                                this.hasAwait = false
-                                // console.log('dentro', promises);
-                            }
-                        })
-
-
-                        break;
-
-                    default:
-                        // console.log('default');
-                        let data = this.formatRequest(this.cached[i])
-                        let request = this.$http.post('/api/admin/save-component', data)
-                            .then(response => {
-                                let temp = this.formatFromResponse(this.cached[i], response.data.module)
-                                this.cached[i] = temp
-                            })
-                        promises.push(request)
-                    }
-
-                    // if (i === this.cached.length - 1 && this.hasAwait) {
-                    //     console.log('fine', i, this.cached.length, this.hasAwait);
-                    // }
-                }
-
-                if (!this.hasAwait) {
-                    this.processAllPromises(promises)
-                    // console.log('fuori');
-                }
-            }
-        },
-        processAllPromises: async function (promises) {
-            return await this.$http.all(promises)
-                .then(results => {
-                    // console.log('completato', results);
-                    // if (modelSaved) {
-                    this.notifications.push({
-                        uuid: Uuid.get(),
-                        title: 'Pagina Salvata',
-                        message: 'Salvataggio Completato'
-                    })
-                    // }
-                })
-                .catch(err => {
-                    console.error(err);
-                    this.notifications.push({
-                        uuid: Uuid.get(),
-                        title: 'Errore',
-                        message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
-                    })
-                })
-        },
-        saveImage: async function (people) {
-            // console.log('start loop');
-            for (let i = 0; i < people.length; i++) {
-                if (people[i].hasOwnProperty('file')) {
-                    let fileData = new FormData()
-                    fileData.append('file', people[i].file)
-
-                    people[i] = await this.$http.post('/api/admin/utilities/save-image', fileData).then(response => {
-                        people[i].img = response.data.file.src
-                        delete people[i].file
-                        // console.log('upload finito');
-                        return people[i]
-                    })
-                }
-            }
-            return people
-        },
-        formatFromResponse: function (obj, newObj) {
-            let temp = Object.assign({}, obj, newObj)
-            temp.id = Number(temp.id)
-            temp.modulable_id = Number(temp.modulable_id)
-            temp.isNew = false
-            temp.order = Number(temp.order)
-            temp.content = obj.content
-            // console.log('temp', temp, obj, newObj);
-            return temp
-        },
-        saveComponent: function (current) {
-
-        },
-        formatModuleData: function (source) {
-            let obj = Object.assign({}, source)
-
-        },
-        formatRequest: function (obj) {
-            // console.log(obj);
-            let form = new FormData()
-            // inserisco i campi normali
-            for (let key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    if (key === 'content') {
-                        let content = obj[key]
-
-                        form.append(key, JSON.stringify(content))
-                    }
-                    else if (key === 'uuid') {
-                        let hasFile = this.hasFile(obj[key])
-                        // se nel contenuto del modulo c'è un file
-                        if (hasFile) {
-                            form.append('file', hasFile)
-                        }
-                    }
-                    else {
-                        form.append(key, obj[key])
-                    }
-                }
-            }
-            return form
-        },
-        hasFile: function (uuid) {
-            // console.log(uuid);
-            let idx = this.files.findIndex(file => file.uuid === uuid)
-            if (idx > -1) {
-                return this.files[idx].file
-            }
-            return false
-        },
-        sortModules: function (modules) {
-            this.cached = this.cached.map((cache, i) => {
-                let newModule = Object.assign({}, cache)
-                newModule['order'] = i
-                return newModule
-            })
-
-            this.savePage()
         },
         savedSidebar: function (module) {
             let idx = this.sidebarModules.findIndex(item => item.id == module.id)
@@ -566,19 +238,55 @@ export default {
         },
         sidebarCreated: function (sidebar) {
             this.sidebarIdx = sidebar.id
+        },
+        notify: function (notification) {
+            this.notifications.push(notification)
+        },
+        addListenerResize: function () {
+            // console.log('resize');
+            this.initAnim()
+            let sidebarContainer = this.$refs.sidebar
+            let mainContainer = this.$refs.main
+
+            if (sidebarContainer && mainContainer) {
+                let sidebar = sidebarContainer.$refs.content
+                let main = mainContainer.$refs.content
+
+                if (sidebar && main) {
+                    let mainHeight = SizeUtil.get(main).h
+                    let sideHeight = SizeUtil.get(sidebar).h
+
+                    let initialHeight = Math.max(mainHeight, sideHeight)
+                    this.mainHeight = initialHeight
+                    this.sideHeight = initialHeight
+
+                    this.observer.listenTo(sidebar, debounce(element => {
+                        let height = SizeUtil.get(element).h
+                        if (height != this.sideHeight && height > this.mainHeight) {
+                            this.sideHeight = height
+                        }
+                        // console.log('fuori side', this.sideHeight);
+                    }, 150))
+
+                    this.observer.listenTo(main, debounce(element => {
+                        let height = SizeUtil.get(element).h
+                        if (height != this.mainHeight && height > this.sideHeight) {
+                            this.sideHeight = height
+                        }
+                        // console.log('fuori main', height);
+                    }, 150))
+                }
+            }
         }
     },
-    mounted: function () {
-        this.init()
-        this.$root.$on('add-file-to-upload', obj => {
-            let idx = this.files.findIndex(file => file.uuid === obj.uuid)
-            if (idx > -1) {
-                this.files[idx].file = obj.file
-            }
-            else {
-                this.files.push(obj)
-            }
+    created: function () {
+        this.observer = elementResizeDetectorMaker({
+            strategy: 'scroll'
         })
+
+    },
+    mounted: function () {
+        this.addListenerResize()
         // console.log('new page template montato');
     },
 }
