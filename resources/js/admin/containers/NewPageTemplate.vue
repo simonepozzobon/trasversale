@@ -23,6 +23,7 @@
                 :model="model"
                 :modelIdx="modelIdx"
                 :modules="modules"
+                :custom-save="customSave"
                 @notify="notify"
                 @edit-main="toggleActive"
             />

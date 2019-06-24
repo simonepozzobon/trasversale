@@ -93,7 +93,7 @@ export default {
 
             let request = this.$http.post(url, data)
                 .then(response => {
-                    // console.log('response', response);
+                    console.log('response', response);
                     if (response.data.success) {
                         this.modelIdx = Number(response.data.post.id)
                         this.model = 'App\\' + this.type.model.charAt(0)

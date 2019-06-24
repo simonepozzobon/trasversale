@@ -8,7 +8,6 @@
         >
             <img
                 src="/svg/logo.svg"
-                alt=""
                 style="width: 250px"
             >
         </a>

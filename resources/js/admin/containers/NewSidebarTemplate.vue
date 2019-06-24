@@ -489,7 +489,6 @@ export default {
         }
     },
     mounted: function () {
-        console.log('sidebar');
         this.init()
         this.$root.$on('add-file-to-upload', obj => {
             let idx = this.files.findIndex(file => file.uuid === obj.uuid)
