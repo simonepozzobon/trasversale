@@ -6,6 +6,11 @@
     <notifications-container :toasts="notifications" />
     <div class="new-page-template__container container">
         <div class="new-page-template__row row">
+            <div class="new-page-template__header col-12">
+                <slot></slot>
+            </div>
+        </div>
+        <div class="new-page-template__row row">
             <new-main-template
                 ref="main"
                 :active="isMainActive"
@@ -17,9 +22,7 @@
                 :modules="modules"
                 @notify="notify"
                 @edit-main="toggleActive"
-            >
-                <slot></slot>
-            </new-main-template>
+            />
             <new-sidebar-template
                 ref="sidebar"
                 class="col-3"
