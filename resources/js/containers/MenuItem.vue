@@ -37,24 +37,22 @@
         :class="dropdownStatus"
         :aria-labelledby="page.slug.slug"
     >
-        <dropdown-subitem
+        <a
             v-for="subpage in page.sub_pages"
-            :key="subpage.id"
-            :title="subpage.title"
-            :slug="subpage.slug.slug"
-            :page-slug="page.slug.slug"
-        />
+            class="dropdown-item dropdown-custom__item"
+            :href="'/' + page.slug.slug + '/' + subpage.slug.slug"
+            @click.prevent="$root.goToWithParams('subpage', { page: page.slug.slug, subpage: subpage.slug.slug })"
+        >
+            {{ subpage.title }}
+        </a>
     </div>
 </li>
 </template>
 
 <script>
-import DropdownSubitem from './DropDownSubItem.vue'
 export default {
     name: 'MenuItem',
-    components: {
-        DropdownSubitem,
-    },
+    components: {},
     props: {
         page: {
             type: Object,

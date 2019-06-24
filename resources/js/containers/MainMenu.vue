@@ -122,16 +122,12 @@
                     >
                         |
                     </span>
-                    <a
+                    <main-menu-subitem
                         v-else
-                        ref="item"
-                        class="nav-link main-submenu__link"
-                        :class="subpage | setActiveSubpage(subpage.slug.slug, current.slug.slug)"
-                        :href="'/' + current.slug.slug + '/' + subpage.slug.slug"
-                        @click.prevent="$root.goToWithParams('subpage', { page: current.slug.slug, subpage: subpage.slug.slug })"
-                    >
-                        {{ subpage.title }}
-                    </a>
+                        :title="subpage.title"
+                        :page-slug="current.slug.slug"
+                        :slug="subpage.slug.slug"
+                    />
                 </li>
             </ul>
         </div>
@@ -140,6 +136,7 @@
 </template>
 
 <script>
+import MainMenuSubitem from './MainMenuSubitem.vue'
 import MenuItem from './MenuItem.vue'
 import {
     UiLink
@@ -156,11 +153,12 @@ from '../icons'
 export default {
     name: 'MainMenu',
     components: {
-        MenuItem,
-        UiLink,
         Facebook,
         Linkedin,
+        MainMenuSubitem,
+        MenuItem,
         Twitter,
+        UiLink,
         Youtube
     },
     props: {
@@ -179,16 +177,6 @@ export default {
         '$route': function (route) {
             this.checkSubMenu()
         }
-    },
-    filters: {
-        setActiveSubpage: function (pageSlug, slug) {
-            console.log(pageSlug, slug);
-            if (pageSlug == slug) {
-                return 'active'
-            }
-
-            return null
-        },
     },
     methods: {
         checkSubMenu: function () {
