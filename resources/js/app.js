@@ -31,7 +31,9 @@ const app = new Vue({
         data: function () {
             return {
                 sidebarPaddingTop: false,
-                sidebar: {},
+                sidebar: {
+                    modules: []
+                },
             }
         },
         methods: {
