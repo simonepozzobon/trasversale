@@ -48,6 +48,7 @@ export default {
                     // console.log(response.data);
                     if (response.data.success) {
                         this.name = response.data.item.title
+                        this.$root.sidebar = response.data.item.sidebar
                         this.modules = sortModules(response.data.item.modules)
                         this.isNews = response.data.item.model == 'news' ? true : false
                     }

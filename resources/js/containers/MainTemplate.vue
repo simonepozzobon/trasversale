@@ -12,7 +12,11 @@
                     ref="sidebar"
                     v-if="this.$root.sidebar"
                 >
-
+                    <module-manager
+                        v-for="module in this.modules"
+                        :key="module.id"
+                        :module="module"
+                    />
                 </div>
             </div>
         </div>
@@ -22,30 +26,36 @@
 </template>
 
 <script>
-import Partners from '../contents/Partners'
+// import Partners from '../contents/Partners'
 import MainMenu from './MainMenu.vue'
 import MainFooter from './MainFooter.vue'
+import ModuleManager from './ModuleManager.vue'
 import {
-    UiCalendar,
-    UiPartner,
-    UiSidebarImage,
-    UiSidebarParagraph,
-    UiSidebarTitle,
-    UiTitle,
+    sortModules
 }
-from '../ui'
+from '../Utilities'
+// import {
+//     UiCalendar,
+//     UiPartner,
+//     UiSidebarImage,
+//     UiSidebarParagraph,
+//     UiSidebarTitle,
+//     UiTitle,
+// }
+// from '../ui'
 
 export default {
     name: 'MainTemplate',
     components: {
         MainMenu,
         MainFooter,
-        UiCalendar,
-        UiPartner,
-        UiSidebarImage,
-        UiSidebarParagraph,
-        UiSidebarTitle,
-        UiTitle,
+        ModuleManager,
+        // UiCalendar,
+        // UiPartner,
+        // UiSidebarImage,
+        // UiSidebarParagraph,
+        // UiSidebarTitle,
+        // UiTitle,
     },
     props: {
         pages: {
@@ -55,18 +65,34 @@ export default {
     },
     data: function () {
         return {
-            partners: Partners,
+            // partners: Partners,
+            modules: []
         }
     },
     watch: {
         '$root.sidebarPaddingTop': function (h) {
             if (h) {
-                this.$refs.sidebar.style.paddingTop = h
+                if (this.$refs.sidebar) {
+                    this.$refs.sidebar.style.paddingTop = h
+                }
             }
             else {
-                delete this.$refs.sidebar.style.paddingTop
+                if (this.$refs.sidebar) {
+                    delete this.$refs.sidebar.style.paddingTop
+                }
             }
-        }
+        },
+        '$root.sidebar': {
+            handler: function (sidebar) {
+                if (sidebar && sidebar.hasOwnProperty('modules')) {
+                    this.modules = Object.assign([], sortModules(sidebar.modules))
+                }
+                else {
+                    this.modules = []
+                }
+            },
+            deep: true,
+        },
     },
     computed: {
         parsedPages: function () {
