@@ -8,8 +8,9 @@ import VuePackeryPlugin from 'vue-packery-plugin'
 import VueRouter from 'vue-router'
 import * as Sentry from '@sentry/browser';
 import * as Integrations from '@sentry/integrations';
-
 import routes from './routes'
+
+Vue.config.productionTip = false
 
 Vue.use(VueRouter)
 Vue.use(VuePackeryPlugin)
@@ -31,6 +32,9 @@ const app = new Vue({
         data: function () {
             return {
                 sidebarPaddingTop: false,
+                sidebar: {
+                    modules: []
+                },
             }
         },
         methods: {

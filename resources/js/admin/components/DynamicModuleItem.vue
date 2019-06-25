@@ -209,6 +209,7 @@
         :name="option.key"
         :label="option.label"
         :info="option.info"
+        :initial="initial"
         @changed="subChanged"
     />
 
@@ -217,6 +218,7 @@
         :name="option.key"
         :label="option.label"
         :info="option.info"
+        :initial="initial"
         @update="subChanged"
     />
 

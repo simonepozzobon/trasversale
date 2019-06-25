@@ -70,10 +70,31 @@ const isFile = function(obj) {
     return false
 }
 
+const orderBy = require('lodash.orderby')
+
+const sortModules = function(modules) {
+    let sorted = orderBy(modules, ['order', 'created_at'], ['asc', 'asc'])
+    if (sorted.length > 0) {
+        for (let i = 0; i < sorted.length; i++) {
+            if (sorted[i].type === 'row') {
+                let sortedColumns = orderBy(sorted[i].content, ['order', 'created_at'], ['asc', 'asc'])
+                sortedColumns = sortedColumns.map(column => {
+                    let sortedModules = orderBy(column.content.modules, ['order', 'created_at'], ['asc', 'asc'])
+                    column.content.modules = sortedModules
+                    return column
+                })
+                sorted[i].content = sortedColumns
+            }
+        }
+    }
+    return sorted
+}
+
 export {
     clone,
     isEqual,
     isFile,
     SizeUtil,
+    sortModules,
     Uuid,
 }

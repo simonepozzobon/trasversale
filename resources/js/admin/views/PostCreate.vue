@@ -7,7 +7,9 @@
     :modelIdx="modelIdx"
     :sidebar-idx="sidebarIdx"
     :sidebarModules="sidebarModules"
-    @save-page="savePost"
+    :is-post="true"
+    :has-slot="true"
+    @before-save="savePost"
 >
     <div class="page-template__content">
         <ui-title
@@ -18,8 +20,8 @@
         />
         <dynamic-module
             v-if="module"
-            :uuid="uuid"
             name="post"
+            :uuid="uuid"
             :is-edit="false"
             :options="module.options"
             @changed="setObj"
@@ -76,7 +78,9 @@ export default {
         setObj: function (obj) {
             this.postObj = obj
         },
-        savePost: function () {
+        savePost: function (ref) {
+            console.log(ref);
+
             let url = '/api/admin/post-type/save'
             this.postObj.model = this.type.model
 
@@ -85,20 +89,15 @@ export default {
             }
 
             let data = this.formatRequest(this.postObj)
-
-            // for (let value of data) {
-            //     console.log('post', value[0], value[1]);
-            // }
-
-            let request = this.$http.post(url, data)
+            this.$http.post(url, data)
                 .then(response => {
-                    // console.log('response', response);
+                    console.log('response', response);
                     if (response.data.success) {
                         this.modelIdx = Number(response.data.post.id)
-                        this.model = 'App\\' + this.type.model.charAt(0)
-                            .toUpperCase() + this.type.model.slice(1)
+                        this.model = 'App\\' + this.type.model.charAt(0).toUpperCase() + this.type.model.slice(1)
                         this.$nextTick(() => {
-                            this.$refs.page.savePage(false)
+                            let page = this.$refs.page
+                            page.$refs[ref].savePage(null, true)
                         })
                     }
                 })

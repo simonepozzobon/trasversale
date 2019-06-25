@@ -3,8 +3,8 @@
         <top-bar></top-bar>
         <div class="container-fluid p-0">
             <div class="row no-gutters">
-                <admin-sidebar></admin-sidebar>
-                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pr-0">
+                <admin-sidebar :size="sidebar"></admin-sidebar>
+                <main ref="main" role="main" class="ml-sm-auto pr-0" :class="mainSizeClass">
                     <router-view></router-view>
                 </main>
             </div>
@@ -28,16 +28,25 @@ export default {
             default: null,
         }
     },
+    data: function () {
+        return {
+            sidebar: 2,
+        }
+    },
     computed: {
-        parsedPages: function() {
+        parsedPages: function () {
             if (this.pages) {
                 return JSON.parse(this.pages)
             }
             return []
+        },
+        mainSizeClass: function () {
+            return 'col-md-9 col-lg-10'
         }
     },
-    mounted: function() {
+    mounted: function () {
         this.$root.pages = this.parsedPages
+        this.$root.mainEl = this.$refs.main
     }
 }
 </script>

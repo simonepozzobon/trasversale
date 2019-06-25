@@ -1,47 +1,32 @@
 <template>
-<div class="page-tamplate__container container">
-    <div class="page-template__row row">
-        <div class="page-template__main col-12">
-            <div class="page-template__header">
-                <div class="page-template__head">
-                    <div class="page-template__title">
-                        <h1 class="pt-3">Sidebar</h1>
-                    </div>
-                    <div class="page-template__action">
-                        <button
-                            class="btn btn-outline-primary"
-                            @click="addComponent"
-                        >
-                            Aggiungi Componente
-                        </button>
-                        <button
-                            class="btn btn-outline-success"
-                            @click="saveSidebar"
-                        >
-                            Salva Sidebar
-                        </button>
-                    </div>
-                </div>
+<div
+    class="new-sidebar-template"
+    :class="activeClass"
+    ref="container"
+>
+    <div class="new-sidebar-template__header">
+        <div class="new-sidebar-template__head">
+            <div
+                v-if="active"
+                class="new-sidebar-template__title"
+            >
+                <h1 class="pt-3">Sidebar</h1>
             </div>
-            <div class="page-template__content">
-                <draggable
-                    v-model="cached"
-                    @update="sortModules"
+            <div
+                v-else
+                class="new-sidebar-template__title"
+            >
+                <button
+                    class="btn btn-outline-dark"
+                    @click="editSidebar"
                 >
-                    <module-container
-                        v-for="(module, i) in cached"
-                        :key="module.uuid"
-                        :item="module"
-                        :model="model"
-                        :model-idx="cacheIdx"
-                        @deleted="deletedComponent"
-                        @save="saveComponent"
-                        @delete="deleteComponent"
-                        @save-sub-module="saveSubModule"
-                    />
-                </draggable>
+                    Modifica Sidebar
+                </button>
             </div>
-            <div class="page-template__footer">
+            <div
+                class="new-sidebar-template__action"
+                v-if="active"
+            >
                 <button
                     class="btn btn-outline-primary"
                     @click="addComponent"
@@ -49,19 +34,56 @@
                     Aggiungi Componente
                 </button>
                 <button
-                    class="btn btn-outline-success ml-2"
-                    @click="saveSidebar"
+                    class="btn btn-outline-success"
+                    @click="savePage"
                 >
                     Salva Sidebar
                 </button>
             </div>
-            <components-list
-                ref="componentSelector"
-                :exclude="['grid']"
-                @new-component="newComponent"
-            />
         </div>
     </div>
+    <div
+        ref="content"
+        class="new-sidebar-template__content"
+    >
+        <draggable
+            v-model="cached"
+            @update="sortModules"
+        >
+            <module-container
+                v-for="(module, i) in cached"
+                :key="module.uuid"
+                :item="module"
+                :model="model"
+                :model-idx="cacheIdx"
+                @deleted="deletedComponent"
+                @save="saveComponent"
+                @delete="deleteComponent"
+                @save-sub-module="saveSubModule"
+            />
+        </draggable>
+    </div>
+    <div class="new-sidebar-template__footer">
+        <button
+            class="btn btn-outline-primary"
+            @click="addComponent"
+            v-if="active"
+        >
+            Aggiungi Componente
+        </button>
+        <button
+            class="btn btn-outline-success ml-2"
+            @click="savePage"
+            v-if="active"
+        >
+            Salva Sidebar
+        </button>
+    </div>
+    <components-list
+        ref="componentSelector"
+        :exclude="['grid']"
+        @new-component="newComponent"
+    />
 </div>
 </template>
 
@@ -90,6 +112,18 @@ export default {
         NotificationsContainer,
     },
     props: {
+        isPost: {
+            type: Boolean,
+            default: false,
+        },
+        active: {
+            type: Boolean,
+            default: false,
+        },
+        contentHeight: {
+            type: Number,
+            default: 0,
+        },
         title: {
             type: String,
             default: 'titolo'
@@ -138,11 +172,12 @@ export default {
         }
     },
     computed: {
-        contentClass: function () {
-            if (this.hasSidebar) {
-                return 'col-md-9'
+        activeClass: function () {
+            if (this.active) {
+                return 'new-sidebar-template--is-active'
             }
-        },
+            return null
+        }
     },
     watch: {
         '$route.params': function (params) {
@@ -150,9 +185,16 @@ export default {
         },
         modules: function (modules) {
             this.init()
+        },
+        contentHeight: function (height) {
+            // console.log(height);
+            this.$refs.content.style.minHeight = height + 'px'
         }
     },
     methods: {
+        editSidebar: function () {
+            this.$emit('edit-sidebar')
+        },
         init: function () {
             // imposta una variabile intermedia per poter modificare i moduli
             this.cacheIdx = this.modelIdx
@@ -229,7 +271,7 @@ export default {
             let idx = this.cached.findIndex(cache => cache.uuid === subModule.uuid)
             if (idx > -1) {
                 this.cached.splice(idx, 1, subModule)
-                this.saveSidebar()
+                this.savePage()
             }
             // console.log(idx, subModule.uuid);
         },
@@ -288,10 +330,13 @@ export default {
             }
             return objs
         },
-
-        saveSidebar: function () {
-            // console.log('salva pagina', this.cached);
+        savePage: function (modelSaved = false) {
             this.$root.$emit('close-all-panels')
+
+            if (this.isPost && modelSaved == false) {
+                this.$emit('before-save', 'sidebar')
+                return null
+            }
 
             if (this.cacheIdx === 0) {
                 // console.log('sto salvando sidebar', this.sidebarable_id, this.sidebarable_type);
@@ -384,7 +429,7 @@ export default {
 
             this.$http.all(promises)
                 .then(results => {
-                    this.notifications.push({
+                    this.$emit('notify', {
                         uuid: Uuid.get(),
                         title: 'Sidebar Salvata',
                         message: 'Salvataggio Completato'
@@ -447,7 +492,7 @@ export default {
                 return newModule
             })
 
-            this.saveSidebar()
+            this.savePage()
         }
     },
     mounted: function () {
@@ -469,7 +514,7 @@ export default {
 @import '~styles/adminshared';
 $opacity-test: 0.6 !default;
 
-.page-template {
+.new-sidebar-template {
     padding: $spacer * 2;
     min-height: 100vh;
     max-width: 100%;
@@ -478,25 +523,29 @@ $opacity-test: 0.6 !default;
     flex-direction: column;
     align-items: center;
 
-    background: linear-gradient(45deg, rgba($green, $opacity-test), rgba($teal, $opacity-test), rgba($cyan, $opacity-test), rgba($blue, $opacity-test), rgba($indigo, $opacity-test), rgba($purple, $opacity-test), rgba($pink, $opacity-test), rgba($red, $opacity-test), rgba($orange, $opacity-test), rgba($yellow, $opacity-test),);
-    background-size: 800% 800%;
-    animation: Gradient 360s ease infinite;
+    // background: linear-gradient(45deg, rgba($green, $opacity-test), rgba($teal, $opacity-test), rgba($cyan, $opacity-test), rgba($blue, $opacity-test), rgba($indigo, $opacity-test), rgba($purple, $opacity-test), rgba($pink, $opacity-test), rgba($red, $opacity-test), rgba($orange, $opacity-test), rgba($yellow, $opacity-test),);
+    // background-size: 800% 800%;
+    // animation: Gradient 360s ease infinite;
 
     &__content {
+        width: 100%;
         margin-top: $spacer * 4;
         margin-bottom: $spacer * 4;
         padding: $spacer * 2;
-        @include gradient-directional($gray-300, $light, 135deg);
+        // @include gradient-directional($gray-300, $light, 135deg);
         @include border-radius($spacer / 2);
-        @include box-shadows($gray-500);
+        // @include box-shadows($gray-500);
+        transition: $transition-base;
     }
 
     &__header {
+        width: 100%;
         margin-top: $spacer * 4;
         padding: $spacer * 2;
-        @include gradient-directional($gray-300, $light, 135deg);
+        // @include gradient-directional($gray-300, $light, 135deg);
         @include border-radius($spacer / 2);
-        @include box-shadows($gray-500);
+        // @include box-shadows($gray-500);
+        transition: $transition-base;
     }
 
     &__head {
@@ -507,27 +556,37 @@ $opacity-test: 0.6 !default;
     }
 
     &__footer {
+        width: 100%;
         margin-top: $spacer * 4;
         margin-bottom: $spacer * 4;
         padding: $spacer * 2;
-        @include gradient-directional($gray-300, $light, 135deg);
+        // @include gradient-directional($gray-300, $light, 135deg);
         @include border-radius($spacer / 2);
-        @include box-shadows($gray-500);
+        // @include box-shadows($gray-500);
         display: flex;
         justify-content: center;
         align-items: center;
+        transition: $transition-base;
     }
-}
 
-@keyframes Gradient {
-    0% {
-        background-position: 0 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0 50%;
+    &--is-active & {
+        &__content {
+            @include gradient-directional($gray-300, $light, 135deg);
+            @include box-shadows($gray-500);
+            transition: $transition-base;
+        }
+
+        &__header {
+            @include gradient-directional($gray-300, $light, 135deg);
+            @include box-shadows($gray-500);
+            transition: $transition-base;
+        }
+
+        &__footer {
+            @include gradient-directional($gray-300, $light, 135deg);
+            @include box-shadows($gray-500);
+            transition: $transition-base;
+        }
     }
 }
 </style>

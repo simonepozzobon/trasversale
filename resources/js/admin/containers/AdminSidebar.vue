@@ -1,5 +1,9 @@
 <template>
-<nav class="col-md-2 d-none d-md-block sidebar admin-sidebar">
+<nav
+    ref="sidebar"
+    class="d-none d-md-block sidebar admin-sidebar"
+    :class="sizeClass"
+>
     <div class="sidebar-sticky">
         <h5 class="text-dark pl-3">Pagine</h5>
         <ul class="nav flex-column">
@@ -92,9 +96,35 @@
 </template>
 
 <script>
+import {
+    SizeUtil
+}
+from '../../Utilities'
 export default {
     name: 'Sidebar',
-    methods: {}
+    props: {
+        size: {
+            type: Number,
+            default: 2,
+        },
+    },
+    data: function () {
+        return {
+            anim: null,
+        }
+    },
+    computed: {
+        sizeClass: function () {
+            return 'col-md-' + this.size
+        }
+    },
+    watch: {},
+    methods: {
+        init: function () {}
+    },
+    mounted: function () {
+        this.$root.sidebarEl = this.$refs.sidebar
+    }
 }
 </script>
 
@@ -106,6 +136,7 @@ export default {
     @include gradient-directional($gray-300, $light, 135deg);
     @include box-shadows($gray-500);
     z-index: 1;
+    overflow: hidden;
 
     .sidebar-sticky {
         padding-top: $spacer * 4.5;

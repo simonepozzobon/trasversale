@@ -34,7 +34,7 @@ class AdminController extends Controller
         //     ]
         // );
         // return $this->save_component($request);
-        return $this->get_sub_page(15);
+        return $this->get_page(4);
     }
 
     public function index($slug = null)
@@ -254,11 +254,14 @@ class AdminController extends Controller
         return $page;
     }
 
-    public function create_sidebar(Request $request) {
-        $sidebar = Sidebar::where([
+    public function create_sidebar(Request $request)
+    {
+        $sidebar = Sidebar::where(
+            [
             ['sidebarable_id', '=', $request->sidebarable_id],
             ['sidebarable_type', '=', $request->sidebarable_type]
-            ])->first();
+            ]
+        )->first();
 
         if (!$sidebar) {
             $sidebar = new Sidebar();
@@ -371,7 +374,8 @@ class AdminController extends Controller
         return $module;
     }
 
-    public function save_image(Request $request) {
+    public function save_image(Request $request)
+    {
         $file = $request->file('file');
         $media = Utility::save_image($file);
 

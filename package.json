@@ -33,8 +33,9 @@
     "dependencies": {
         "@sentry/browser": "^5.4.0",
         "@sentry/integrations": "^5.4.1",
-        "jquery-ui": "^1.12.1",
+        "element-resize-detector": "^1.1.15",
         "laravel-mix": "^4.0.15",
+        "lodash.debounce": "^4.0.8",
         "lodash.isequal": "^4.5.0",
         "lodash.orderby": "^4.6.0",
         "tiptap": "^1.19.3",
