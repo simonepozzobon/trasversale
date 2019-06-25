@@ -1,5 +1,6 @@
 <template>
-<div class="page-template">
+<div>Deprecata</div>
+<!-- <div class="page-template">
     <notifications-container :toasts="notifications" />
     <div class="page-tamplate__container container">
         <div class="page-template__row row">
@@ -64,7 +65,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 </template>
 
 <script>

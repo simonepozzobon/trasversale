@@ -35,7 +35,7 @@
                 </button>
                 <button
                     class="btn btn-outline-success"
-                    @click="saveSidebar"
+                    @click="savePage"
                 >
                     Salva Sidebar
                 </button>
@@ -73,7 +73,7 @@
         </button>
         <button
             class="btn btn-outline-success ml-2"
-            @click="saveSidebar"
+            @click="savePage"
             v-if="active"
         >
             Salva Sidebar
@@ -112,6 +112,10 @@ export default {
         NotificationsContainer,
     },
     props: {
+        isPost: {
+            type: Boolean,
+            default: false,
+        },
         active: {
             type: Boolean,
             default: false,
@@ -267,7 +271,7 @@ export default {
             let idx = this.cached.findIndex(cache => cache.uuid === subModule.uuid)
             if (idx > -1) {
                 this.cached.splice(idx, 1, subModule)
-                this.saveSidebar()
+                this.savePage()
             }
             // console.log(idx, subModule.uuid);
         },
@@ -326,10 +330,13 @@ export default {
             }
             return objs
         },
-
-        saveSidebar: function () {
-            // console.log('salva pagina', this.cached);
+        savePage: function (modelSaved = false) {
             this.$root.$emit('close-all-panels')
+
+            if (this.isPost && modelSaved == false) {
+                this.$emit('before-save', 'sidebar')
+                return null
+            }
 
             if (this.cacheIdx === 0) {
                 // console.log('sto salvando sidebar', this.sidebarable_id, this.sidebarable_type);
@@ -485,7 +492,7 @@ export default {
                 return newModule
             })
 
-            this.saveSidebar()
+            this.savePage()
         }
     },
     mounted: function () {

@@ -111,6 +111,10 @@ export default {
         ModuleContainer,
     },
     props: {
+        isPost: {
+            type: Boolean,
+            default: false,
+        },
         active: {
             type: Boolean,
             default: false,
@@ -300,12 +304,17 @@ export default {
             }
             // console.log(idx, subModule.uuid);
         },
-        savePage: function (modelSaved = true) {
+        savePage: function (event = null, modelSaved = false) {
             // console.log('salva pagina', this.cached);
-            if (modelSaved) {
-                this.$emit('save-page')
+            // if (modelSaved) {
+            //     this.$emit('save-page')
+            // }
+
+            if (this.isPost && modelSaved == false) {
+                console.log('before save main')
+                this.$emit('before-save', 'main')
+                return null
             }
-            // console.log(this.model);
 
             // console.log('this.model', this.model);
             if (this.model) {

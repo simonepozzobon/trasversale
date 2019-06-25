@@ -24,8 +24,10 @@
                 :modelIdx="modelIdx"
                 :modules="modules"
                 :custom-save="customSave"
+                :is-post="isPost"
                 @notify="notify"
                 @edit-main="toggleActive"
+                @before-save="beforeSave"
             />
             <new-sidebar-template
                 ref="sidebar"
@@ -37,11 +39,13 @@
                 :modules="sidebarModules"
                 :sidebarable_id="modelIdx"
                 :sidebarable_type="model"
+                :is-post="isPost"
                 @saved="savedSidebar"
                 @deleted="deletedSidebar"
                 @sidebar-created="sidebarCreated"
                 @edit-sidebar="toggleActive"
                 @notify="notify"
+                @before-save="beforeSave"
             />
         </div>
     </div>
@@ -114,7 +118,7 @@ export default {
             type: String,
             default: 'Salva Pagina'
         },
-        hasInterceptor: {
+        isPost: {
             type: Boolean,
             default: false,
         },
@@ -289,6 +293,9 @@ export default {
                     }, 150))
                 }
             }
+        },
+        beforeSave: function (ref) {
+            this.$emit('before-save', ref)
         }
     },
     created: function () {
