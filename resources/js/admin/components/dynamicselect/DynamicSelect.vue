@@ -50,7 +50,8 @@ export default {
         info: {
             type: String,
             default: null,
-        }
+        },
+        initial: [Number]
     },
     data: function () {
         return {
@@ -69,7 +70,13 @@ export default {
                 this.$http.get(this.request.url)
                     .then(response => {
                         this.options = this.request.handleResponse(response)
+                        this.setInitial()
                     })
+            }
+        },
+        setInitial: function () {
+            if (this.initial) {
+                this.value = this.initial
             }
         }
     },
