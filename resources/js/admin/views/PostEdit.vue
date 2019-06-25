@@ -101,8 +101,6 @@ export default {
                 })
         },
         setInitialValues: function (post) {
-            console.log(this.module.options);
-            console.log(post);
             this.values = {
                 title: post.title,
                 price: post.price,
