@@ -45,10 +45,10 @@ export default {
     props: {
         blocks: {
             type: Array,
-            default: function() {},
+            default: function () {},
         },
     },
-    data: function() {
+    data: function () {
         return {
             categories: [],
             filtered: [],
@@ -56,31 +56,34 @@ export default {
         }
     },
     methods: {
-        setBlocks: function(id = false) {
+        setBlocks: function (id = false) {
             // if (id) {
             //     this.filtered = this.blocks.filter(block => block.id == id)
             // }
         },
-        addCategory: function(category, blockID) {
-            let idx = this.categories.findIndex(single => single.id == category.id)
-            if (idx < 0) {
-                let categoryFormatted = {
-                    ...category,
-                    blockIds: [blockID]
+        addCategory: function (category, blockID) {
+            if (category && category.hasOwnProperty('id')) {
+                let idx = this.categories.findIndex(single => single.id == category.id)
+                if (idx < 0) {
+                    let categoryFormatted = {
+                        ...category,
+                        blockIds: [blockID]
+                    }
+                    this.categories.push(categoryFormatted)
                 }
-                this.categories.push(categoryFormatted)
-            } else {
-                let ids = this.categories[idx].blockIds
-                ids.push(blockID)
-                this.categories[idx] = {
-                    ...this.categories[idx],
-                    blockIds: ids
+                else {
+                    let ids = this.categories[idx].blockIds
+                    ids.push(blockID)
+                    this.categories[idx] = {
+                        ...this.categories[idx],
+                        blockIds: ids
+                    }
                 }
             }
 
             // console.log(this.categories);
         },
-        filterNews: function(id) {
+        filterNews: function (id) {
             // console.log(id);
             let category = this.categories.filter(category => category.id == id)[0]
             if (category) {
@@ -88,7 +91,7 @@ export default {
                     // https://stackoverflow.com/questions/4607991/javascript-transform-object-into-array
                     let ids = Object.keys(category.blockIds).map(key => category.blockIds[key])
                     this.currentId = category.id
-                    this.filtered = this.blocks.filter(function(e){
+                    this.filtered = this.blocks.filter(function (e) {
                         return this.indexOf(e.id) > -1
                     }, ids)
                 }
@@ -100,11 +103,10 @@ export default {
             }
         },
     },
-    created: function() {
+    created: function () {
         this.filtered = this.blocks
     },
-    mounted: function() {
-    },
+    mounted: function () {},
 }
 </script>
 

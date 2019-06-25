@@ -4,7 +4,9 @@
         :title="title"
         :model="model"
         :model-idx="idx"
-        :modules="this.modules"
+        :modules="modules"
+        :sidebar-idx="sidebarIdx"
+        :sidebarModules="sidebarModules"
         @saved="saved"
         @deleted="deleted">
     </new-page-template>
@@ -20,35 +22,40 @@ export default {
         NewPageTemplate,
         ModuleManager,
     },
-    data: function() {
+    data: function () {
         return {
             title: null,
             modules: [],
+            sidebarModules: [],
+            sidebarIdx: 0,
             idx: 0,
             model: 'App\\SubPage',
         }
     },
     watch: {
-        '$route.params': function(params) {
+        '$route.params': function (params) {
             this.modules = []
             this.getPage(params.sub)
         }
     },
     methods: {
-        getPage: function(id) {
+        getPage: function (id) {
             this.idx = Number(id)
 
             this.$http.get('/api/admin/sub-page/' + id)
                 .then(response => {
                     this.title = response.data.title
                     this.modules = response.data.modules
+                    console.log(response.data);
+                    this.sidebarIdx = response.data.sidebar ? response.data.sidebar.id : 0
+                    this.sidebarModules = response.data.sidebar ? response.data.sidebar.modules : []
                     // console.log(this.modules);
                 })
         },
-        saved: function(module) {
+        saved: function (module) {
             this.modules.push(module)
         },
-        saved: function(module) {
+        saved: function (module) {
             let idx = this.modules.findIndex(item => item.id == module.id)
             if (idx > -1) {
                 this.modules.splice(idx, 1, module)
@@ -57,17 +64,17 @@ export default {
                 this.modules.push(module)
             }
         },
-        deleted: function(module) {
+        deleted: function (module) {
             let idx = this.modules.findIndex(item => item.id == module.id)
             if (idx > -1) {
                 this.modules.splice(idx, 1)
             }
         },
-        selected: function(module) {
+        selected: function (module) {
             this.$children[0].setModule(module)
         },
     },
-    mounted: function() {
+    mounted: function () {
         this.getPage(this.$route.params.sub)
     }
 

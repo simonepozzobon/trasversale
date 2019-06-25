@@ -29,22 +29,25 @@ export default {
     props: {
         block: {
             type: Object,
-            default: function() {},
+            default: function () {},
         },
     },
     computed: {
-        content: function() {
-            return JSON.parse(this.block.content)
+        content: function () {
+            if (typeof this.block.content === 'string') {
+                return JSON.parse(this.block.content)
+            }
+            return this.block.content
         },
     },
     methods: {
-        filterCategory: function(id) {
+        filterCategory: function (id) {
             this.$nextTick(() => {
                 this.$emit('filter-category', id)
             })
         },
     },
-    mounted: function() {
+    mounted: function () {
         this.$emit('category', this.content.category, this.block.id)
     }
 }

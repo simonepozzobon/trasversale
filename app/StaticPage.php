@@ -17,4 +17,8 @@ class StaticPage extends Model
     public function modules() {
         return $this->morphMany(Module::class, 'modulable');
     }
+
+    public function sidebar() {
+        return $this->morphOne(Sidebar::class, 'sidebarable');
+    }
 }

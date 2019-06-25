@@ -5,6 +5,8 @@
         :model="model"
         :model-idx="idx"
         :modules="this.modules"
+        :sidebar-idx="sidebarIdx"
+        :sidebarModules="sidebarModules"
         @saved="saved"
         @deleted="deleted"
         :has-sidebar="true">
@@ -13,18 +15,18 @@
 
 <script>
 import NewPageTemplate from '../containers/NewPageTemplate.vue'
-import ModuleManager from '../../containers/ModuleManager.vue'
 
 export default {
     name: 'Page',
     components: {
         NewPageTemplate,
-        ModuleManager,
     },
     data: function () {
         return {
             title: null,
             modules: [],
+            sidebarModules: [],
+            sidebarIdx: 0,
             idx: 0,
             model: 'App\\StaticPage',
         }
@@ -42,6 +44,9 @@ export default {
                 .then(response => {
                     this.title = response.data.title
                     this.modules = response.data.modules
+                    // console.log(response.data);
+                    this.sidebarIdx = response.data.sidebar ? response.data.sidebar.id : 0
+                    this.sidebarModules = response.data.sidebar ? response.data.sidebar.modules : []
                 })
         },
         // saved: function (module) {

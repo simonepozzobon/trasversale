@@ -91,7 +91,7 @@ export default {
         addComponent: function (column, component) {
             let columns = this.component.content
             let colID = columns.findIndex(col => col.uuid === column.uuid)
-            console.log('aggiungi componente nella colonna', column, colID, component);
+            // console.log('aggiungi componente nella colonna', column, colID, component);
             if (colID > -1) {
                 // aggiunge il componente alla colonna
                 columns[colID].content.modules.push(component)
@@ -114,8 +114,9 @@ export default {
             // console.log(columns, this.component);
         },
         formatTempData: function (obj) {
-            // console.log('formatTempData', this.item.type, obj);
+            // console.log('formatTempData');
             this.component.content = this.setPreview(obj)
+            // console.log(this.component);
         },
         deleteComponent: function (id, isNew, uuid = false) {
             // console.log('module container delete', this.component);
@@ -180,8 +181,9 @@ export default {
 
                 return {
                     src: src,
-                    alt: obj.alt
+                        alt: obj.alt
                 }
+                break;
 
             case 'video':
                 // Video
@@ -199,6 +201,7 @@ export default {
                     ...obj,
                     url: url,
                 }
+                break;
 
             case 'grid':
                 console.log(obj);
@@ -210,21 +213,22 @@ export default {
                 }
                 return {
                     options: null,
-                    title: obj.title,
-                    type: obj.type,
-                    blocks: blocks.map((block, i) => {
-                        return {
-                            ...block,
-                            height: block.h,
-                            width: block.w,
-                            content: {
-                                id: block.id,
-                                slug: block.slug,
-                                title: block.title,
+                        title: obj.title,
+                        type: obj.type,
+                        blocks: blocks.map((block, i) => {
+                            return {
+                                ...block,
+                                height: block.h,
+                                width: block.w,
+                                content: {
+                                    id: block.id,
+                                    slug: block.slug,
+                                    title: block.title,
+                                }
                             }
-                        }
-                    })
+                        })
                 }
+                break;
 
             default:
                 // DEfault
@@ -246,12 +250,14 @@ export default {
             this.hide()
         },
         show: function () {
-            this.$refs.panel.show()
-            // console.log(this.cache, this.item);
-            // console.log(this.component, this.item);
+            if (this.$refs.hasOwnProperty('panel') && this.$refs.panel) {
+                this.$refs.panel.show()
+            }
         },
         hide: function () {
-            this.$refs.panel.hide()
+            if (this.$refs.hasOwnProperty('panel') && this.$refs.panel) {
+                this.$refs.panel.hide()
+            }
         },
         updateSize: function (data) {
             // https://stackoverflow.com/questions/1230233/how-to-find-the-sum-of-an-array-of-numbers

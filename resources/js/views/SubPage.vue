@@ -11,14 +11,21 @@
 
 <script>
 import ModuleManager from '../containers/ModuleManager.vue'
-import { UiSharing } from '../ui'
+import {
+    sortModules
+}
+from '../Utilities'
+import {
+    UiSharing
+}
+from '../ui'
 export default {
     name: 'Subpage',
     components: {
         ModuleManager,
         UiSharing,
     },
-    data: function() {
+    data: function () {
         return {
             name: null,
             modules: null,
@@ -26,33 +33,32 @@ export default {
         }
     },
     watch: {
-        '$route': function(v) {
+        '$route': function (v) {
             this.init()
         }
     },
     methods: {
-        init: function() {
+        init: function () {
             let url = '/api/get-page/' + this.$route.params.page + '/' + this.$route.params.subpage
             this.getData(url)
         },
-        getData: function(url) {
+        getData: function (url) {
             if (url) {
                 this.$http.get(url).then(response => {
                     // console.log(response.data);
                     if (response.data.success) {
                         this.name = response.data.item.title
-                        this.modules = response.data.item.modules
+                        this.modules = sortModules(response.data.item.modules)
                         this.isNews = response.data.item.model == 'news' ? true : false
                     }
                 })
             }
         }
     },
-    created: function() {
+    created: function () {
         this.init()
     },
-    mounted: function() {
-    }
+    mounted: function () {}
 }
 </script>
 

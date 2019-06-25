@@ -30,21 +30,21 @@ export default {
             default: 'Image',
         },
     },
-    data: function() {
+    data: function () {
         return {
             ready: false,
             source: null,
         }
     },
     watch: {
-        src: function(src) {
+        src: function (src) {
             // console.log('sorgento', image);
             this.ready = false
             this.loader()
         }
     },
     methods: {
-        appendToDOM: function(img) {
+        appendToDOM: function (img) {
             this.ready = true
 
             // se non c'è nessuna immagine
@@ -54,10 +54,12 @@ export default {
 
                 // modifico il DOM
                 let container = this.$refs.container
-                container.appendChild(img)
-                this.$nextTick(() => {
-                    container.classList.add('ui-image--loaded')
-                })
+                if (container) {
+                    container.appendChild(img)
+                    this.$nextTick(() => {
+                        container.classList.add('ui-image--loaded')
+                    })
+                }
             }
             else {
                 this.source.remove()
@@ -69,7 +71,7 @@ export default {
 
 
         },
-        loader: function() {
+        loader: function () {
             // console.log('loading image');
             if (this.src) {
                 let img = new Image()
@@ -91,10 +93,10 @@ export default {
             }
         },
     },
-    created: function() {
+    created: function () {
         this.loader()
     },
-    mounted: function() {
+    mounted: function () {
 
     },
 }

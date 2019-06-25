@@ -72,7 +72,6 @@ export default {
     },
     watch: {
         '$route.params': function (params) {
-            // console.log(params);
             this.getPosts()
         }
     },

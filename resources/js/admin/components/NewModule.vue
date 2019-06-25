@@ -15,10 +15,6 @@
         />
         <hr>
         <div class="new-module__tools">
-            <!-- <button class="btn btn-outline-primary"
-                @click="saveComponent">
-                Salva Modifiche
-            </button> -->
             <button
                 class="btn btn-outline-secondary"
                 @click="closeComponent"
@@ -129,6 +125,7 @@ export default {
         },
         setObj: function (obj) {
             this.obj = obj
+            // console.log(obj);
             this.$emit('changed', obj)
         },
         saveComponent: function () {

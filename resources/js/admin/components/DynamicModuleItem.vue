@@ -51,34 +51,13 @@
         </div>
     </div>
 
-    <div
-        class="form-group row"
+    <file-input
         v-else-if="option.type === 'file-input'"
-    >
-        <label class="col-md-3">{{ option.label }}</label>
-        <div class="col-md-9">
-            <div class="input-group mb-3">
-                <div class="custom-file">
-                    <input
-                        ref="file"
-                        type="file"
-                        class="custom-file-input"
-                        :id="option.key"
-                        :accept="option.accept"
-                        @change="previewFile"
-                    />
-
-                    <label
-                        class="custom-file-label"
-                        :for="option.key"
-                        aria-describedby="inputGroupFileAddon02"
-                    >
-                        Seleziona File
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
+        :name="option.key"
+        :accept="option.accept"
+        :label="option.label"
+        @update="previewFile"
+    />
 
     <div
         class="form-group row"
@@ -292,6 +271,23 @@
         @changed="subChanged"
     />
 
+    <map-module
+        v-else-if="option.type === 'map'"
+        :name="option.key"
+        :label="option.label"
+        :info="option.info"
+        @update="subChanged"
+    />
+
+    <team-module
+        v-else-if="option.type === 'team'"
+        :name="option.key"
+        :label="option.label"
+        :info="option.info"
+        :initial="initial"
+        @update="teamChanged"
+    />
+
     <!-- <div v-else>
         {{ option }}
     </div> -->
@@ -346,11 +342,14 @@ import {
     isEqual
 }
 from '../../Utilities'
+import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
 import DummyModule from './DummyModule.vue'
 import DynamicSelect from './dynamicselect/DynamicSelect.vue'
-import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
+import FileInput from './fileinput/FileInput.vue'
+import MapModule from './map/MapModule.vue'
 import PostFields from './post-selector/PostFields'
 import Swatches from 'vue-swatches'
+import TeamModule from './team/TeamModule.vue'
 import TextEditor from './TextEditor.vue'
 import {
     UiCheckbox,
@@ -366,9 +365,12 @@ export default {
         ColumnsPreview,
         DummyModule,
         DynamicSelect,
+        FileInput,
         GridItem: VueGridLayout.GridItem,
         GridLayout: VueGridLayout.GridLayout,
+        MapModule,
         Swatches,
+        TeamModule,
         TextEditor,
         UiCheckbox,
         UiSwitch,
@@ -483,12 +485,17 @@ export default {
             }
         },
         subChanged: function (subModuleObj) {
-            // console.log('subModuleObj è differnte', !isEqual(this.value, subModuleObj));
             // bisogna risettare l'oggetto altrimenti non aggiorna l'evento
             if (!isEqual(this.value, subModuleObj)) {
                 this.value = clone(subModuleObj)
             }
         },
+        teamChanged: function (teamModule) {
+            this.value = Object.assign({}, teamModule)
+        },
+        // mapUpdate: function (subModule) {
+        //     this.value = clone(subModule)
+        // },
         setDefault: function () {
             if (this.option.hasOwnProperty('default') && !this.edit) {
                 this.value = this.option.default
@@ -560,8 +567,8 @@ export default {
                 .getPropertyValue(key)
                 .trim()
         },
-        previewFile: function () {
-            this.value = this.$refs.file.files[0]
+        previewFile: function (value) {
+            this.value = value
         },
         updateEditor: function (json, html) {
             let paragraph = json.content
@@ -584,11 +591,14 @@ export default {
                             let parentValue = parent.value
                             // this.elements = []
 
-                            this.$nextTick(() => {
-                                for (let i = 0; i < parentValue; i++) {
-                                    this.selectPost(this.blocks[i])
-                                }
-                            })
+                            if (this.blocks.length === 0) {
+                                this.$nextTick(() => {
+                                    for (let i = 0; i < parentValue; i++) {
+                                        this.selectPost(this.blocks[i])
+                                    }
+                                })
+                            }
+
                         }
 
                         if (relatedKey == 'model' && value == 'last-mix') {
@@ -701,6 +711,7 @@ export default {
             // }
         },
         setInitial: function () {
+            // console.log('imposta', this.initial, this.values);
             if (this.initial && this.option.type != 'post-select') {
                 this.value = this.initial
                 // console.log(clone(this.value));

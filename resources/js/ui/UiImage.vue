@@ -12,7 +12,10 @@
 </template>
 
 <script>
-import { SizeUtil } from '../Utilities'
+import {
+    SizeUtil
+}
+from '../Utilities'
 
 export default {
     name: 'UiImage',
@@ -26,24 +29,26 @@ export default {
             default: 'Image',
         },
     },
-    data: function() {
+    data: function () {
         return {
             ready: false,
             source: null,
         }
     },
     methods: {
-        appendToDOM: function(img) {
+        appendToDOM: function (img) {
             this.ready = true
 
             let container = this.$refs.container
-            container.appendChild(img)
+            if (container) {
+                container.appendChild(img)
 
-            this.$nextTick(() => {
-                container.classList.add('ui-image--loaded')
-            })
+                this.$nextTick(() => {
+                    container.classList.add('ui-image--loaded')
+                })
+            }
         },
-        loader: function() {
+        loader: function () {
             let img = new Image()
 
             img.addEventListener('load', () => {
@@ -63,10 +68,10 @@ export default {
             }
         },
     },
-    created: function() {
+    created: function () {
         this.loader()
     },
-    mounted: function() {
+    mounted: function () {
 
     },
 }
@@ -111,7 +116,7 @@ export default {
         transition: $transition-base;
     }
 
-    &--loaded  & {
+    &--loaded & {
         &__placeholder {
             height: 0;
             opacity: 0;

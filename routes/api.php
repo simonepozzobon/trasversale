@@ -23,6 +23,7 @@ Route::get('get-page/{page}/{subpage?}/{slug?}', 'MainController@get_dynamic_ite
 
 Route::prefix('admin')->group(
     function () {
+        Route::post('create-sidebar', 'AdminController@create_sidebar');
         Route::post('save-component', 'AdminController@save_component');
         Route::delete('delete-component/{id}', 'AdminController@delete_component');
         Route::get('grid-elements/{type}', 'AdminController@get_grid_elements');
@@ -47,6 +48,12 @@ Route::prefix('admin')->group(
         Route::prefix('page')->group(
             function () {
                 Route::get('/{id}', 'AdminController@get_page');
+            }
+        );
+
+        Route::prefix('utilities')->group(
+            function() {
+                Route::post('/save-image', 'AdminController@save_image');
             }
         );
     }

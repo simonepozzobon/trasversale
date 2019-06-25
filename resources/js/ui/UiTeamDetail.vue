@@ -18,17 +18,20 @@
 </template>
 
 <script>
-import { TweenMax } from 'gsap'
+import {
+    TweenMax
+}
+from 'gsap'
 
 export default {
     name: 'UiTeamDetail',
     props: {
         member: {
             type: Object,
-            default: function() {}
+            default: function () {}
         }
     },
-    data: function() {
+    data: function () {
         return {
             height: 0,
             width: 0,
@@ -36,70 +39,88 @@ export default {
         }
     },
     methods: {
-        getHeight: function() {
+        getHeight: function (reset = false, playAsInit = false) {
             let container = this.$refs.container
+
+            if (container.style.display === 'none') {
+                container.style.display = ''
+            }
+
             let rect = container.getBoundingClientRect()
             this.width = rect.width
             this.height = rect.height
 
             container.style.display = 'none'
-            this.initAnim()
+            this.initAnim(reset, playAsInit)
         },
-        initAnim: function() {
+        initAnim: function (reset = false, playAsInit = false) {
             let el = this.$refs.container
             let close = this.$refs.close
             let name = this.$refs.name
             let role = this.$refs.role
             let description = this.$refs.description
 
-            this.anim = new TimelineMax({
-                paused: true,
-                reversed: true,
-            })
+            if (reset === false) {
+                this.anim = new TimelineMax({
+                    paused: true,
+                    reversed: true,
+                })
 
-            this.anim.fromTo([close, name, role, description], .6, {
-                display: 'none',
-                autoAlpha: 0,
-            }, {
-                display: 'block',
-                autoAlpha: 1,
-            }, .6)
+                this.anim.fromTo([close, name, role, description], .6, {
+                    display: 'none',
+                    autoAlpha: 0,
+                }, {
+                    display: 'block',
+                    autoAlpha: 1,
+                }, .6)
 
-            this.anim.fromTo(el, .3, {
-                display: 'none',
-                autoAlpha: 0,
-            }, {
-                display: 'block',
-                autoAlpha: 1,
-                ease: Sine.easeInOut,
-            }, 0)
+                this.anim.fromTo(el, .3, {
+                    display: 'none',
+                    autoAlpha: 0,
+                }, {
+                    display: 'block',
+                    autoAlpha: 1,
+                    ease: Sine.easeInOut,
+                }, 0)
 
-            this.anim.fromTo(el, .6, {
-                height: 0,
-            }, {
-                height: this.height,
-                ease: Power2.easeInOut,
-            }, .2)
+                this.anim.fromTo(el, .6, {
+                    height: 0,
+                }, {
+                    height: this.height,
+                    ease: Power2.easeInOut,
+                }, .2)
 
-            this.anim.fromTo(el, .6, {
-                width: 0,
-                padding: 0,
-            }, {
-                padding: '2rem',
-                width: this.width,
-                ease: Power4.easeInOut,
-            }, .1)
+                this.anim.fromTo(el, .6, {
+                    width: 0,
+                    padding: 0,
+                }, {
+                    padding: '2rem',
+                    width: this.width,
+                    ease: Power4.easeInOut,
+                }, .1)
 
-            this.anim.progress(1).progress(0)
+                this.anim.progress(1).progress(0)
+                if (playAsInit) {
+                    this.show()
+                }
+            }
+            else {
+
+                this.anim.kill()
+                TweenMax.set([el, close, name, role, description], {
+                    clearProps: 'all'
+                })
+                this.getHeight(false, playAsInit)
+            }
         },
-        show: function() {
+        show: function () {
             this.anim.progress(0).play()
         },
-        hide: function() {
+        hide: function () {
             this.anim.progress(1).reverse()
         }
     },
-    mounted: function() {
+    mounted: function () {
         this.getHeight()
     }
 }

@@ -5,6 +5,8 @@
     :custom-save="saveButton"
     :model="model"
     :modelIdx="modelIdx"
+    :sidebar-idx="sidebarIdx"
+    :sidebarModules="sidebarModules"
     @save-page="savePost"
 >
     <div class="page-template__content">
@@ -50,6 +52,8 @@ export default {
         return {
             model: null,
             modelIdx: null,
+            sidebarModules: [],
+            sidebarIdx: 0,
             postObj: {}
         }
     },
@@ -93,7 +97,6 @@ export default {
                         this.modelIdx = Number(response.data.post.id)
                         this.model = 'App\\' + this.type.model.charAt(0)
                             .toUpperCase() + this.type.model.slice(1)
-
                         this.$nextTick(() => {
                             this.$refs.page.savePage(false)
                         })

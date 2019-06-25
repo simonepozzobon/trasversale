@@ -5,6 +5,7 @@ import UiCheckbox from './UiCheckbox.vue'
 import UiContactForm from './UiContactForm.vue'
 import UiImage from './UiImage.vue'
 import UiLink from './UiLink.vue'
+import UiMap from './UiMap.vue'
 import UiModuleContainer from './UiModuleContainer.vue'
 import UiModuleRow from './UiModuleRow.vue'
 import UiPackeryContainer from './UiPackeryContainer.vue'
@@ -30,6 +31,7 @@ export {
     UiContactForm,
     UiImage,
     UiLink,
+    UiMap,
     UiModuleContainer,
     UiModuleRow,
     UiPackeryContainer,

@@ -23,7 +23,11 @@
 </template>
 
 <script>
-import { Facebook, Twitter } from '../icons'
+import {
+    Facebook,
+    Twitter
+}
+from '../icons'
 
 export default {
     name: 'UiTeamSingle',
@@ -34,27 +38,45 @@ export default {
         },
         member: {
             type: Object,
-            default: function() {}
+            default: function () {
+                return {
+                    name: null,
+                    role: null,
+                    social: [],
+                }
+            }
         }
     },
     components: {
         Facebook,
         Twitter,
     },
+    watch: {
+        gridCol: function () {
+            this.$nextTick(() => this.setAvatarWidth())
+        },
+        member: {
+            handler: function () {
+                this.$nextTick(() => this.setAvatarWidth())
+            },
+            deep: true
+        },
+    },
     computed: {
-        socials: function() {
+        socials: function () {
             let newlist = []
             let social = this.member.social
-
-            for (var i = 0; i < social.length; i++) {
-                let temp = social[i]
-                for (let key in temp) {
-                    if (temp.hasOwnProperty(key)) {
-                        let obj = {
-                            name: key,
-                            value: temp[key]
+            if (social) {
+                for (var i = 0; i < social.length; i++) {
+                    let temp = social[i]
+                    for (let key in temp) {
+                        if (temp.hasOwnProperty(key)) {
+                            let obj = {
+                                name: key,
+                                value: temp[key]
+                            }
+                            newlist.push(obj)
                         }
-                        newlist.push(obj)
                     }
                 }
             }
@@ -62,20 +84,23 @@ export default {
         }
     },
     methods: {
-        setAvatarWidth: function() {
+        setAvatarWidth: function () {
             let container = this.$refs.member
-            let width = container.getBoundingClientRect().width
             let avatar = this.$refs.avatar
-            avatar.style.width = width + 'px'
-            avatar.style.height = width + 'px'
-            avatar.style.backgroundImage = 'url('+ this.member.img +')'
+            if (container && avatar) {
+                let width = container.getBoundingClientRect().width
+                avatar.style.width = width + 'px'
+                avatar.style.height = width + 'px'
+                avatar.style.backgroundImage = 'url(' + this.member.img + ')'
+            }
+
         },
-        openMember: function() {
+        openMember: function () {
             this.$emit('open-member', this.member)
         }
     },
-    mounted: function() {
-        this.setAvatarWidth()
+    mounted: function () {
+        this.$nextTick(() => this.setAvatarWidth())
     }
 }
 </script>

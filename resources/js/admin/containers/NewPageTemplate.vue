@@ -1,22 +1,22 @@
 <template>
 <div
-    class="page-template"
+    class="new-page-template"
     :class="[hasTitleClass]"
 >
     <notifications-container :toasts="notifications" />
-    <div class="page-template__container container">
-        <div class="page-template__row row">
-            <div class="page-template__main col-12">
+    <div class="new-page-template__container container">
+        <div class="new-page-template__row row">
+            <div class="new-page-template__main col-12">
                 <slot></slot>
-                <div class="page-template__header">
-                    <div class="page-template__head">
+                <div class="new-page-template__header">
+                    <div class="new-page-template__head">
                         <div
-                            class="page-template__title"
+                            class="new-page-template__title"
                             v-if="hasTitle"
                         >
                             <h1 class="pt-3">{{ title }}</h1>
                         </div>
-                        <div class="page-template__action">
+                        <div class="new-page-template__action">
                             <button
                                 class="btn btn-outline-primary"
                                 @click="addComponent"
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="page-template__content">
+                <div class="new-page-template__content">
                     <draggable
                         v-model="cached"
                         @update="sortModules"
@@ -50,7 +50,7 @@
                         />
                     </draggable>
                 </div>
-                <div class="page-template__footer">
+                <div class="new-page-template__footer">
                     <button
                         class="btn btn-outline-primary"
                         @click="addComponent"
@@ -71,7 +71,17 @@
             </div>
         </div>
     </div>
-
+    <new-sidebar-template
+        ref="sidebar"
+        model="App\Sidebar"
+        :model-idx="sidebarIdx"
+        :modules="sidebarModules"
+        :sidebarable_id="modelIdx"
+        :sidebarable_type="model"
+        @saved="savedSidebar"
+        @deleted="deletedSidebar"
+        @sidebar-created="sidebarCreated"
+    />
 </div>
 </template>
 
@@ -81,6 +91,7 @@ import draggable from 'vuedraggable'
 import DynamicParams from '../DynamicParams'
 import EditPanel from '../components/EditPanel.vue'
 import ModuleContainer from './ModuleContainer.vue'
+import NewSidebarTemplate from './NewSidebarTemplate.vue'
 import NotificationsContainer from './NotificationsContainer.vue'
 
 import {
@@ -97,6 +108,7 @@ export default {
         draggable,
         EditPanel,
         ModuleContainer,
+        NewSidebarTemplate,
         NotificationsContainer,
     },
     props: {
@@ -118,12 +130,6 @@ export default {
                 return []
             },
         },
-        sides: {
-            type: Array,
-            default: function () {
-                return []
-            },
-        },
         hasSidebar: {
             type: Boolean,
             default: false,
@@ -139,7 +145,17 @@ export default {
         hasInterceptor: {
             type: Boolean,
             default: false,
-        }
+        },
+        sidebarIdx: {
+            type: Number,
+            default: 0,
+        },
+        sidebarModules: {
+            type: Array,
+            default: function () {
+                return []
+            },
+        },
     },
     data: function () {
         return {
@@ -154,6 +170,7 @@ export default {
             notifications: [],
             loaded: 0,
             counter: 0,
+            hasAwait: false,
         }
     },
     computed: {
@@ -164,7 +181,7 @@ export default {
         },
         hasTitleClass: function () {
             if (!this.hasTitle) {
-                return 'page-template--no-title'
+                return 'new-page-template--no-title'
             }
         }
     },
@@ -232,7 +249,7 @@ export default {
         debug: function () {
             if (this.cached.length === 0 && this.modelIdx !== 0) {
                 this.$nextTick(() => {
-                    this.newComponent('row')
+                    this.newComponent('team')
                 })
             }
         },
@@ -387,7 +404,34 @@ export default {
                             })
                         promises.push(requestRow)
                         break;
+                    case 'team':
+                        console.log(i);
+                        // wait uploads before run promises
+                        this.hasAwait = true
+
+                        let teamObj = this.cached[i]
+                        let content = teamObj.content.team
+                        let people = this.saveImage(content.people).then(people => {
+                            console.log(teamObj);
+                            let teamData = this.formatRequest(teamObj)
+                            let teamRequest = this.$http.post('/api/admin/save-component', teamData)
+                                .then(response => {
+                                    let temp = this.formatFromResponse(this.cached[i], response.data.module)
+                                    this.cached[i] = temp
+                                })
+                            promises.push(teamRequest)
+                            if (this.hasAwait) {
+                                this.processAllPromises(promises)
+                                this.hasAwait = false
+                                // console.log('dentro', promises);
+                            }
+                        })
+
+
+                        break;
+
                     default:
+                        // console.log('default');
                         let data = this.formatRequest(this.cached[i])
                         let request = this.$http.post('/api/admin/save-component', data)
                             .then(response => {
@@ -396,27 +440,55 @@ export default {
                             })
                         promises.push(request)
                     }
+
+                    // if (i === this.cached.length - 1 && this.hasAwait) {
+                    //     console.log('fine', i, this.cached.length, this.hasAwait);
+                    // }
                 }
-                this.$http.all(promises)
-                    .then(results => {
-                        // console.log('completato');
-                        // if (modelSaved) {
-                        this.notifications.push({
-                            uuid: Uuid.get(),
-                            title: 'Pagina Salvata',
-                            message: 'Salvataggio Completato'
-                        })
-                        // }
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        this.notifications.push({
-                            uuid: Uuid.get(),
-                            title: 'Errore',
-                            message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
-                        })
-                    })
+
+                if (!this.hasAwait) {
+                    this.processAllPromises(promises)
+                    // console.log('fuori');
+                }
             }
+        },
+        processAllPromises: async function (promises) {
+            return await this.$http.all(promises)
+                .then(results => {
+                    // console.log('completato', results);
+                    // if (modelSaved) {
+                    this.notifications.push({
+                        uuid: Uuid.get(),
+                        title: 'Pagina Salvata',
+                        message: 'Salvataggio Completato'
+                    })
+                    // }
+                })
+                .catch(err => {
+                    console.error(err);
+                    this.notifications.push({
+                        uuid: Uuid.get(),
+                        title: 'Errore',
+                        message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
+                    })
+                })
+        },
+        saveImage: async function (people) {
+            // console.log('start loop');
+            for (let i = 0; i < people.length; i++) {
+                if (people[i].hasOwnProperty('file')) {
+                    let fileData = new FormData()
+                    fileData.append('file', people[i].file)
+
+                    people[i] = await this.$http.post('/api/admin/utilities/save-image', fileData).then(response => {
+                        people[i].img = response.data.file.src
+                        delete people[i].file
+                        // console.log('upload finito');
+                        return people[i]
+                    })
+                }
+            }
+            return people
         },
         formatFromResponse: function (obj, newObj) {
             let temp = Object.assign({}, obj, newObj)
@@ -436,6 +508,7 @@ export default {
 
         },
         formatRequest: function (obj) {
+            // console.log(obj);
             let form = new FormData()
             // inserisco i campi normali
             for (let key in obj) {
@@ -475,6 +548,24 @@ export default {
             })
 
             this.savePage()
+        },
+        savedSidebar: function (module) {
+            let idx = this.sidebarModules.findIndex(item => item.id == module.id)
+            if (idx > -1) {
+                this.sidebarModules.splice(idx, 1, module)
+            }
+            else {
+                this.sidebarModules.push(module)
+            }
+        },
+        deletedSidebar: function (module) {
+            let idx = this.sidebarModules.findIndex(item => item.id == module.id)
+            if (idx > -1) {
+                this.sidebarModules.splice(idx, 1)
+            }
+        },
+        sidebarCreated: function (sidebar) {
+            this.sidebarIdx = sidebar.id
         }
     },
     mounted: function () {
@@ -488,6 +579,7 @@ export default {
                 this.files.push(obj)
             }
         })
+        // console.log('new page template montato');
     },
 }
 </script>
@@ -496,7 +588,7 @@ export default {
 @import '~styles/adminshared';
 $opacity-test: 0.6 !default;
 
-.page-template {
+.new-page-template {
     padding: $spacer * 2;
     min-height: 100vh;
     max-width: 100%;
