@@ -59,9 +59,9 @@ const admin = new Vue({
             }
         },
         watch: {
-            '$route': function(route) {
-                console.log(route.path);
-            },
+            // '$route': function(route) {
+            //     // console.log(route.path);
+            // },
             sidebarEl: function() {
                 this.init()
             },

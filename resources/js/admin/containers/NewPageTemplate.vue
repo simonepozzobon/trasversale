@@ -216,13 +216,13 @@ export default {
                 this.anim.play()
             }
         },
-        debug: function () {
-            if (this.cached.length === 0 && this.modelIdx !== 0) {
-                this.$nextTick(() => {
-                    this.newComponent('grid')
-                })
-            }
-        },
+        // debug: function () {
+        //     if (this.modelIdx !== 0) {
+        //         this.$nextTick(() => {
+        //             this.$refs.page.newComponent('grid')
+        //         })
+        //     }
+        // },
         hide: function () {
             if (this.anim) {
                 this.anim.reverse()
@@ -269,38 +269,38 @@ export default {
         addListenerResize: function () {
             // console.log('resize');
             this.initAnim()
-            let sidebarContainer = this.$refs.sidebar
-            let mainContainer = this.$refs.main
-
-            if (sidebarContainer && mainContainer) {
-                let sidebar = sidebarContainer.$refs.content
-                let main = mainContainer.$refs.content
-
-                if (sidebar && main) {
-                    let mainHeight = SizeUtil.get(main).h
-                    let sideHeight = SizeUtil.get(sidebar).h
-
-                    let initialHeight = Math.max(mainHeight, sideHeight)
-                    this.mainHeight = initialHeight
-                    this.sideHeight = initialHeight
-
-                    this.observer.listenTo(sidebar, debounce(element => {
-                        let height = SizeUtil.get(element).h
-                        if (height != this.sideHeight && height > this.mainHeight) {
-                            this.sideHeight = height
-                        }
-                        // console.log('fuori side', this.sideHeight);
-                    }, 150))
-
-                    this.observer.listenTo(main, debounce(element => {
-                        let height = SizeUtil.get(element).h
-                        if (height != this.mainHeight && height > this.sideHeight) {
-                            this.sideHeight = height
-                        }
-                        // console.log('fuori main', height);
-                    }, 150))
-                }
-            }
+            // let sidebarContainer = this.$refs.sidebar
+            // let mainContainer = this.$refs.main
+            //
+            // if (sidebarContainer && mainContainer) {
+            //     let sidebar = sidebarContainer.$refs.content
+            //     let main = mainContainer.$refs.content
+            //
+            //     if (sidebar && main) {
+            //         let mainHeight = SizeUtil.get(main).h
+            //         let sideHeight = SizeUtil.get(sidebar).h
+            //
+            //         let initialHeight = Math.max(mainHeight, sideHeight)
+            //         this.mainHeight = initialHeight
+            //         this.sideHeight = initialHeight
+            //
+            //         this.observer.listenTo(sidebar, debounce(element => {
+            //             let height = SizeUtil.get(element).h
+            //             if (height != this.sideHeight && height > this.mainHeight) {
+            //                 this.sideHeight = height
+            //             }
+            //             // console.log('fuori side', this.sideHeight);
+            //         }, 150))
+            //
+            //         this.observer.listenTo(main, debounce(element => {
+            //             let height = SizeUtil.get(element).h
+            //             if (height != this.mainHeight && height > this.sideHeight) {
+            //                 this.sideHeight = height
+            //             }
+            //             // console.log('fuori main', height);
+            //         }, 150))
+            //     }
+            // }
         },
         beforeSave: function (ref) {
             this.$emit('before-save', ref)
