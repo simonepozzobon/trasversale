@@ -187,7 +187,7 @@ export default {
             this.init()
         },
         contentHeight: function (height) {
-            console.log(height);
+            // console.log(height);
             this.$refs.content.style.minHeight = height + 'px'
         }
     },

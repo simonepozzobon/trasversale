@@ -8,6 +8,8 @@
     :modules="modules"
     :sidebar-idx="sidebarIdx"
     :sidebarModules="sidebarModules"
+    :is-post="true"
+    :has-slot="true"
     @save-page="savePost"
 >
     <div class="page-template__content">
@@ -18,11 +20,12 @@
             class="mb-5"
         />
         <dynamic-module
-            v-if="module"
-            :uuid="uuid"
+            v-if="this.module && this.initialised"
             name="post"
+            :uuid="uuid"
             :is-edit="false"
             :options="module.options"
+            :values="values"
             @changed="setObj"
         />
     </div>
@@ -51,12 +54,14 @@ export default {
     },
     data: function () {
         return {
+            initialised: false,
             model: null,
             modelIdx: null,
             sidebarModules: [],
             sidebarIdx: 0,
             postObj: {},
             modules: [],
+            values: null,
         }
     },
     computed: {
@@ -80,19 +85,34 @@ export default {
     methods: {
         getPost: function () {
             this.modelIdx = Number(this.$route.params.id)
-            this.model = 'App\\' + this.type.model.charAt(0)
-                .toUpperCase() + this.type.model.slice(1)
+            this.model = 'App\\' + this.type.model.charAt(0).toUpperCase() + this.type.model.slice(1)
 
             let url = '/api/admin/post-type/' + this.type.model + '/' + this.$route.params.id
             this.$http.get(url)
                 .then(response => {
-                    console.log(response);
+                    // console.log(response);
                     if (response.data.success) {
+                        let post = Object.assign({}, response.data.post)
+                        this.setInitialValues(post)
                         this.modules = response.data.post.modules
                         this.sidebarIdx = response.data.sidebar ? response.data.sidebar.id : 0
                         this.sidebarModules = response.data.sidebar ? response.data.sidebar.modules : []
                     }
                 })
+        },
+        setInitialValues: function (post) {
+            console.log(this.module.options);
+            console.log(post);
+            this.values = {
+                title: post.title,
+                price: post.price,
+                slug: post.slug.slug,
+                preview: post.thumb,
+                category: post.category.id
+            }
+            this.$nextTick(() => {
+                this.initialised = true
+            })
         },
         setObj: function (obj) {
             this.postObj = obj
@@ -104,11 +124,7 @@ export default {
 
             let data = this.formatRequest(this.postObj)
 
-            // for (let value of data) {
-            //     console.log('post', value[0], value[1]);
-            // }
-
-            let request = this.$http.post(url, data)
+            request = this.$http.post(url, data)
                 .then(response => {
                     // console.log('response', response);
                     if (response.data.success) {

@@ -20,8 +20,8 @@
         />
         <dynamic-module
             v-if="module"
-            :uuid="uuid"
             name="post"
+            :uuid="uuid"
             :is-edit="false"
             :options="module.options"
             @changed="setObj"
