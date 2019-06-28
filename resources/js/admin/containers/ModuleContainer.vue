@@ -147,7 +147,7 @@ export default {
             switch (this.item.type) {
             case 'row':
                 // Riga
-                // console.log('setting preview della row', obj);
+                console.log('setting preview della row', obj);
                 let cols = []
                 let newCols = []
                 let content = this.component.content
@@ -181,7 +181,7 @@ export default {
 
                 return {
                     src: src,
-                        alt: obj.alt
+                    alt: obj.alt
                 }
                 break;
 
@@ -213,20 +213,20 @@ export default {
                 }
                 return {
                     options: null,
-                        title: obj.title,
-                        type: obj.type,
-                        blocks: blocks.map((block, i) => {
-                            return {
-                                ...block,
-                                height: block.h,
-                                width: block.w,
-                                content: {
-                                    id: block.id,
-                                    slug: block.slug,
-                                    title: block.title,
-                                }
+                    title: obj.title,
+                    type: obj.type,
+                    blocks: blocks.map((block, i) => {
+                        return {
+                            ...block,
+                            height: block.h,
+                            width: block.w,
+                            content: {
+                                id: block.id,
+                                slug: block.slug,
+                                title: block.title,
                             }
-                        })
+                        }
+                    })
                 }
                 break;
 

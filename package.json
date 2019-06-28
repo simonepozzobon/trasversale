@@ -34,6 +34,7 @@
         "@sentry/browser": "^5.4.0",
         "@sentry/integrations": "^5.4.1",
         "element-resize-detector": "^1.1.15",
+        "jquery-ui": "^1.12.1",
         "laravel-mix": "^4.0.15",
         "lodash.debounce": "^4.0.8",
         "lodash.isequal": "^4.5.0",

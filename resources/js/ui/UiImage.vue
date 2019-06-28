@@ -41,6 +41,7 @@ export default {
 
             let container = this.$refs.container
             if (container) {
+                img.style.width = '100%'
                 container.appendChild(img)
 
                 this.$nextTick(() => {
