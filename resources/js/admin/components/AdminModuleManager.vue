@@ -34,7 +34,7 @@
         :grid-col="content | filterTeamColSize"
     />
     <admin-packery-container
-        v-else-if="showPackery"
+        v-else-if="module.type === 'grid'"
         :items="content.blocks"
         :gutter="8"
         :units="12"

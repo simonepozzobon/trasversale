@@ -1,12 +1,14 @@
 <template lang="html">
     <div
         ref="packeryItem"
+        v-draggabilly
         v-packery-item
-        class="packery-item"
+        class="packery-item ui-resizable"
         :class="[
             widthClass,
             hoverableClass,
-        ]">
+        ]"
+        >
 
         <div
             ref="item"
@@ -37,6 +39,13 @@ import {
     UiParagraph
 }
 from '../../../ui'
+
+import {
+    packeryEvents
+}
+from '../../PackeryTest'
+
+// console.log(packeryEvents);
 
 export default {
     name: 'UiPackeryItem',
@@ -105,10 +114,10 @@ export default {
             }
         },
         widthClass: function () {
-            if (this.width) {
-                return 'col-md-' + this.width
-            }
-            return 'col'
+            // if (this.width) {
+            //     return 'col-md-' + this.width
+            // }
+            // return 'col'
         },
         heightClass: function () {
             if (this.height) {
@@ -141,6 +150,9 @@ export default {
         }
     },
     watch: {
+        width: function (w) {
+            this.setUnitWidth(this.unitSize)
+        },
         height: function (h) {
             this.setUnitHeight(this.unitSize)
         }
@@ -157,6 +169,24 @@ export default {
 
             if (this.type !== 'module') {
                 this.obj = this.content
+            }
+        },
+        setUnitWidth: function (unitSize) {
+            if (unitSize) {
+                // console.log(unitSize, this.width);
+                let itemWidth = unitSize * this.width
+                let realGutter = Math.round(this.gutter / 2)
+                // console.log(realGutter, itemWidth);
+
+                if (this.width > 2) {
+                    let deltaGutter = this.width * (realGutter / 2)
+                    itemWidth = itemWidth + deltaGutter
+                }
+
+                this.$refs.item.style.width = itemWidth + 'px'
+
+                // console.log('--------');
+                this.$refs.packeryItem.style.padding = realGutter + 'px'
             }
         },
         setUnitHeight: function (height) {
@@ -176,10 +206,23 @@ export default {
             //     page: 'post',
             //     subpage: this.obj.slug.slug,
             // })
+        },
+        addListener: function () {
+            // console.log('listener');
+            // console.log(this.$refs.packeryItem);
+            this.$refs.packeryItem.addEventListener('dragItemPositioned', (event) => {
+                console.log('event');
+            })
+            this.$refs.packeryItem.addEventListener('dragend', (event) => {
+                console.log('event end');
+            })
         }
     },
     mounted: function () {
+        this.setUnitWidth()
         this.setBackground()
+        this.addListener()
+        // console.log('width', this.width, 'height', this.height);
     }
 }
 </script>

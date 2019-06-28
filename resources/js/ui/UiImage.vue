@@ -41,10 +41,12 @@ export default {
 
             let container = this.$refs.container
             if (container) {
+                img.style.width = '100%'
                 container.appendChild(img)
 
                 this.$nextTick(() => {
                     container.classList.add('ui-image--loaded')
+                    console.log(img);
                 })
             }
         },
