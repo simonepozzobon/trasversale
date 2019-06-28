@@ -46,7 +46,6 @@ export default {
 
                 this.$nextTick(() => {
                     container.classList.add('ui-image--loaded')
-                    console.log(img);
                 })
             }
         },
