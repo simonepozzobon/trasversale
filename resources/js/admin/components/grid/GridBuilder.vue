@@ -8,16 +8,16 @@
     </div>
     <div class="form-group row">
         <div class="col-md-12">
-            <div>
+            <div ref="packery">
                 <grid-layout
                     :layout.sync="items"
-                    :col-num="12"
-                    :row-height="30"
+                    :col-num="colsNum"
+                    :row-height="unitSize"
                     :is-draggable="true"
                     :is-resizable="true"
                     :is-mirrored="false"
                     :vertical-compact="true"
-                    :margin="[10, 10]"
+                    :margin="[this.gutter, this.gutter]"
                     :use-css-transforms="true"
                 >
                     <grid-item
@@ -67,6 +67,9 @@ export default {
             obj: {},
             name: 'grid',
             items: [],
+            unitSize: 0,
+            gutter: 10,
+            colsNum: 12
         }
     },
     watch: {
@@ -78,15 +81,13 @@ export default {
         }
     },
     methods: {
-        hub: function () {},
-        // layoutUpdated: function (newLayout) {
-        //     console.log('layout aggiornato', newLayout);
-        //
-        //     // https://coderwall.com/p/ebqhca/javascript-sort-by-two-fields
-        //     const sorted = Object.assign([], newLayout)
-        //     sorted.sort((a, b) => (a.y - b.y || a.x - b.x))
-        //     this.$emit('update:elements', sorted)
-        // },
+        getContainerWidth: function () {
+            let container = this.$refs.packery.getBoundingClientRect().width
+            this.unitSize = Math.round(container / 12) - (this.gutter)
+        },
+    },
+    mounted: function () {
+        this.getContainerWidth()
     },
 }
 </script>

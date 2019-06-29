@@ -191,12 +191,21 @@ export default {
         },
         elements: {
             handler: function (elements) {
-                this.$emit('update', elements)
+                // this.$emit('update', elements)
+                this.updateParent()
             },
             deep: true,
         }
     },
     methods: {
+        updateParent: function () {
+            let obj = {
+                ...this.obj,
+                elements: this.elements
+            }
+
+            this.$emit('update', obj)
+        },
         debug: function () {
             this.obj = {
                 title: 'Titolo',

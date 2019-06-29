@@ -39,10 +39,6 @@ import {
 }
 from '../../../Utilities'
 import AdminPackeryItem from './AdminPackeryItem.vue'
-import {
-    packeryEvents
-}
-from '../../PackeryTest'
 
 export default {
     name: 'PackeryContainer',

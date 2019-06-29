@@ -204,17 +204,18 @@ export default {
                 break;
 
             case 'grid':
-                console.log(obj);
-                let blocks = []
-                if (obj.elements) {
-                    if (obj.elements.hasOwnProperty('blocks') && obj.elements.blocks) {
-                        blocks = obj.elements.blocks
-                    }
-                }
-                return {
-                    options: null,
-                    title: obj.title,
-                    type: obj.type,
+                // console.log(obj);
+                let grid = obj.grid
+                let blocks = grid.elements
+                let options = JSON.stringify({
+                    mode: grid.mode,
+                    models: grid.models,
+                })
+
+                let newGrid = {
+                    options: options,
+                    title: grid.title,
+                    type: grid.type,
                     blocks: blocks.map((block, i) => {
                         return {
                             ...block,
@@ -228,6 +229,7 @@ export default {
                         }
                     })
                 }
+                return newGrid
                 break;
 
             default:

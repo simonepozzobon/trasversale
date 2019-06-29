@@ -33,12 +33,17 @@
         :people="content | filterTeamPeople"
         :grid-col="content | filterTeamColSize"
     />
-    <admin-packery-container
+    <!-- <admin-packery-container
         v-else-if="module.type === 'grid'"
         :items="content.blocks"
         :gutter="8"
         :units="12"
+    /> -->
+    <ui-packery-grid
+        v-else-if="module.type === 'grid'"
+        :items="content.blocks"
     />
+
     <ui-simple-grid
         v-else-if="showSimpleGrid"
         :blocks="content.blocks"
@@ -204,13 +209,14 @@ export default {
         }
     },
     beforeCreate: function () {
-        this.$options.components.AdminPackeryContainer = require('./modulemanager/AdminPackeryContainer.vue').default
+        // this.$options.components.AdminPackeryContainer = require('./modulemanager/AdminPackeryContainer.vue').default
         this.$options.components.AdminUiImage = require('./modulemanager/AdminUiImage.vue').default
         this.$options.components.AdminUiModuleRow = require('./modulemanager/AdminUiModuleRow.vue').default
         this.$options.components.UiButton = require('../../ui/UiButton.vue').default
         this.$options.components.UiCalendar = require('../../ui/UiCalendar.vue').default
         this.$options.components.UiContactForm = require('../../ui/UiContactForm.vue').default
         this.$options.components.UiMap = require('../../ui/UiMap.vue').default
+        this.$options.components.UiPackeryGrid = require('../../ui/UiPackeryGrid.vue').default
         this.$options.components.UiParagraph = require('../../ui/UiParagraph.vue').default
         this.$options.components.UiQuote = require('../../ui/UiQuote.vue').default
         this.$options.components.UiSimpleGrid = require('../../ui/UiSimpleGrid.vue').default
@@ -220,6 +226,7 @@ export default {
     },
     created: function () {
         // console.log('init', clone(this.module));
+        console.log('modulo', this.module);
     },
     mounted: function () {
         if (this.module.type == 'title') {

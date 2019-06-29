@@ -8,8 +8,7 @@ import UiLink from './UiLink.vue'
 import UiMap from './UiMap.vue'
 import UiModuleContainer from './UiModuleContainer.vue'
 import UiModuleRow from './UiModuleRow.vue'
-import UiPackeryContainer from './UiPackeryContainer.vue'
-import UiPackeryItem from './UiPackeryItem.vue'
+import UiPackeryGrid from './UiPackeryGrid.vue'
 import UiParagraph from './UiParagraph.vue'
 import UiPartner from './UiPartner.vue'
 import UiQuote from './UiQuote.vue'
@@ -34,8 +33,7 @@ export {
     UiMap,
     UiModuleContainer,
     UiModuleRow,
-    UiPackeryContainer,
-    UiPackeryItem,
+    UiPackeryGrid,
     UiParagraph,
     UiPartner,
     UiQuote,

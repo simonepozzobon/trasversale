@@ -21,9 +21,11 @@
 </template>
 
 <script>
-import { Uuid } from '../Utilities'
+import {
+    Uuid
+}
+from '../Utilities'
 import UiPackeryItem from './UiPackeryItem.vue'
-import {packeryEvents} from '../admin/PackeryTest'
 
 export default {
     name: 'PackeryContainer',
@@ -41,7 +43,7 @@ export default {
             default: 0,
         }
     },
-    data: function() {
+    data: function () {
         return {
             packeryOpts: {
                 itemSelector: ".packery-item",
@@ -54,22 +56,21 @@ export default {
         }
     },
     watch: {
-        items: function(items) {
-        }
+        items: function (items) {}
     },
     filters: {
-        setUUID: function(value) {
+        setUUID: function (value) {
             return Uuid.get()
         }
     },
     methods: {
-        setUnitHeight: function() {
+        setUnitHeight: function () {
             let items = this.$refs.item
             for (let i = 0; i < items.length; i++) {
                 items[i].setUnitHeight(this.unitSize)
             }
         },
-        getContainerWidth: function() {
+        getContainerWidth: function () {
             let container = this.$refs.packery.getBoundingClientRect().width
             this.unitSize = Math.round(container / this.units)
             // console.log(container, this.unitSize);
@@ -78,7 +79,7 @@ export default {
             })
         },
     },
-    mounted: function() {
+    mounted: function () {
         this.getContainerWidth()
     }
 }
@@ -90,5 +91,4 @@ export default {
 .packery-container {
     position: relative;
 }
-
 </style>

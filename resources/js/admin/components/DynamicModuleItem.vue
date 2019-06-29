@@ -233,8 +233,8 @@
 
     <grid-module
         v-else-if="option.type === 'grid'"
-        @update="subChanged"
         :initial="initial"
+        @update="subChanged"
     />
 
     <!-- <div v-else>

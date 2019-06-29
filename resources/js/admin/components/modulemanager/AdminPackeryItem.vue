@@ -46,11 +46,6 @@ import {
 }
 from '../../../ui'
 
-import {
-    packeryEvents
-}
-from '../../PackeryTest'
-
 // console.log(packeryEvents);
 
 export default {
