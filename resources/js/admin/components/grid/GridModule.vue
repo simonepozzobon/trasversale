@@ -99,6 +99,7 @@
         :elements.sync="elements"
     />
     <grid-post-selector
+        v-if="obj.mode === 'manual'"
         :posts.sync="posts"
         :elements.sync="elements"
         @add-element="addElementToGrid"
@@ -111,6 +112,10 @@ import CheckboxModule from '../checkbox/CheckboxModule.vue'
 import CounterModule from '../counter/CounterModule.vue'
 import GridBuilder from './GridBuilder.vue'
 import GridPostSelector from './GridPostSelector.vue'
+import {
+    formatEl
+}
+from './GridUtilities'
 
 export default {
     name: 'GridModule',
@@ -150,7 +155,38 @@ export default {
         'obj.post_count': function (count) {
             if (this.obj.mode == 'last') {
                 // limita i post
-                // console.log(this.elements.length);
+                this.resetPostsPool(this.obj.models).then(() => {
+                    let length = this.elements.length
+                    // console.log('limita i post', this.posts);
+                    if (length == 0) {
+                        // console.log('da zero');
+                        this.posts.slice(0, count).forEach((element, i) => {
+                            let newElement = formatEl(element, i, this.elements)
+                            this.elements.push(newElement)
+                        })
+                    }
+                    else if (length < count) {
+                        let start = length - 1
+                        let difference = count - length
+                        this.posts.slice(start, difference).forEach((element, i) => {
+                            // console.log(i);
+                            let newElement = formatEl(element, this.elements.length, this.elements)
+                            this.elements.push(newElement)
+                        })
+                        // console.log('differenza', start, difference, newpost);
+
+                    }
+                    else if (length > count) {
+                        let difference = Math.abs(count - length)
+                        let idx = this.elements.length - difference
+                        this.elements.splice(idx, difference)
+                        // console.log(idx, difference);
+                    }
+                    else {
+                        // console.log('nulla', length, count);
+                    }
+                })
+
             }
         },
         elements: {
@@ -177,29 +213,35 @@ export default {
             }
         },
         resetPostsPool: function (models) {
-            this.posts = []
-            let promises = []
+            return new Promise(resolve => {
+                this.posts = []
+                let promises = []
 
-            for (let i = 0; i < models.length; i++) {
-                let model = models[i]
-                let type = Object.keys(model)[0]
-                let value = model[type]
+                for (let i = 0; i < models.length; i++) {
+                    let model = models[i]
+                    let type = Object.keys(model)[0]
+                    let value = model[type]
 
-                if (value == true) {
-                    let url = '/api/admin/grid-elements/' + type
-                    let request = this.$http.get(url)
-                    promises.push(request)
-                }
-            }
-
-            this.$http.all(promises).then(results => {
-                results.forEach(response => {
-                    if (response.data.success) {
-                        this.posts = this.posts.concat(response.data.elements)
-                        // console.log(this.posts);
+                    if (value == true) {
+                        let url = '/api/admin/grid-elements/' + type
+                        let request = this.$http.get(url)
+                        promises.push(request)
                     }
+                }
+
+                this.$http.all(promises).then(results => {
+                    results.forEach((response, i) => {
+                        if (response.data.success) {
+                            this.posts = this.posts.concat(response.data.elements)
+                            // console.log(this.posts);
+                            if (i === promises.length - 1) {
+                                resolve()
+                            }
+                        }
+                    })
                 })
             })
+
         },
         updateCounter: function (value) {
             this.obj['post_count'] = value

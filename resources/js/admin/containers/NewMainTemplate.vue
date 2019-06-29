@@ -568,6 +568,7 @@ export default {
         margin-top: $spacer * 4;
         margin-bottom: $spacer * 4;
         padding: $spacer * 2;
+        width: 100%;
         // @include gradient-directional(rgba($gray-300, 0), rgba($light, 0), 135deg);
         @include border-radius($spacer / 2);
         // @include box-shadows($gray-500);

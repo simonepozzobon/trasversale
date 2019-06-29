@@ -79,7 +79,7 @@ export default {
     watch: {
         items: function (items) {
             // console.log('verifica', items.map(o => o.x + ' ' + o.y));
-            console.log('modified items');
+            // console.log('modified items');
             this.$nextTick(() => this.setUnitHeight())
             // packeryEvents.$emit('layout', this.$refs.packery)
         }

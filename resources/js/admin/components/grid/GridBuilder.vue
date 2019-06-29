@@ -63,7 +63,7 @@ export default {
     methods: {
         hub: function () {},
         layoutUpdated: function (newLayout) {
-            // console.log('layout aggiornato', newLayout);
+            console.log('layout aggiornato', newLayout);
 
             // https://coderwall.com/p/ebqhca/javascript-sort-by-two-fields
             const sorted = Object.assign([], newLayout)

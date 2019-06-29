@@ -97,6 +97,8 @@ packeryPlugin.install = function (Vue, options)
                 })
             }
 
+            let counter = 0
+
             const packeryEmit = (name, eventObj) =>
             {
                 // console.log(name, eventObj);
@@ -118,8 +120,12 @@ packeryPlugin.install = function (Vue, options)
 
             el.packery.on('dragItemPositioned', (event, draggedItem) =>
             {
-                // console.log(event, draggedItem);
-                packeryEmit('dragItemPositioned', {event: event, draggedItem: draggedItem})
+                packeryEmit('dragItemPositioned', {event: event, draggedItem: el})
+                let length = el.packery.items.length - 1
+                if (counter >= length) {
+                    packeryDraw()
+                }
+                counter++
             })
 
             el.packery.on('fitComplete', (event, item) =>
@@ -184,7 +190,7 @@ packeryPlugin.install = function (Vue, options)
 
             packeryEvents.$on(DRAGGIE, event =>
             {
-                // console.log('qui qui qui');
+                console.log('qui qui qui');
                 if (!el.isSameNode(event.node))
                 {
                     return
@@ -192,6 +198,7 @@ packeryPlugin.install = function (Vue, options)
 
 
                 event.items.on('resize', (event, ui) => {
+                        console.log('customEmit');
                         packeryEvents.$emit('customEmit', {event: event, draggedItem: ui})
                     // packeryEmit('customEmit', {event: event, draggedItem: ui})
                 })

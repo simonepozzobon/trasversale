@@ -1,37 +1,43 @@
-<template lang="html">
-    <div
-        ref="packeryItem"
-        v-draggabilly
-        v-packery-item
-        class="packery-item ui-resizable"
-        :class="[
+<template>
+<div
+    ref="packeryItem"
+    v-draggabilly
+    v-packery-item
+    class="packery-item ui-resizable"
+    :class="[
             widthClass,
             hoverableClass,
         ]"
-        >
+>
+
+    <div
+        ref="item"
+        class="packery-item__item"
+        :class="[
+                bgClass,
+            ]"
+    >
+        <ui-paragraph
+            v-if="type == 'module' && subType == 'paragraph'"
+            class="packery-item__paragraph"
+            ref="item"
+            :has-padding="false"
+            :color="this.color"
+            :content="content"
+        />
 
         <div
-            ref="item"
-            class="packery-item__item"
-            :class="[
-                bgClass,
-            ]">
-            <ui-paragraph
-                v-if="type == 'module' && subType == 'paragraph'"
-                class="packery-item__paragraph"
-                ref="item"
-                :has-padding="false"
-                :color="this.color"
-                :content="content"/>
-
-            <div class="packery-item__overlay" v-if="hoverable" @click="goToItem">
-                <div class="packery-item__title">
-                    {{ obj.title }}
-                </div>
+            class="packery-item__overlay"
+            v-if="hoverable"
+            @click="goToItem"
+        >
+            <div class="packery-item__title">
+                {{ obj.title }}
             </div>
         </div>
-
     </div>
+
+</div>
 </template>
 
 <script>
