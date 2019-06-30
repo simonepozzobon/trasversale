@@ -4,16 +4,19 @@ import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
 import MainTemplate from './containers/MainTemplate.vue'
 import Vue from 'vue'
-import VuePackeryPlugin from 'vue-packery-plugin'
+import VueLayers from 'vuelayers'
+// import VuePackeryPlugin from 'vue-packery-plugin'
 import VueRouter from 'vue-router'
 import * as Sentry from '@sentry/browser';
 import * as Integrations from '@sentry/integrations';
 import routes from './routes'
+import 'vuelayers/lib/style.css'
 
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
-Vue.use(VuePackeryPlugin)
+Vue.use(VueLayers)
+// Vue.use(VuePackeryPlugin)
 Vue.use(BootstrapVue)
 
 Vue.prototype.$http = axios

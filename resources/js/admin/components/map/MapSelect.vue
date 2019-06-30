@@ -45,7 +45,10 @@ export default {
     },
     data: function () {
         return {
-            center: [9.19131164549529, 45.461118675626096],
+            center: [
+                12.492507845163345,
+                41.890135383777334
+            ],
             rotation: 0,
             coordinates: [0, 0],
             zoomCache: 13,
