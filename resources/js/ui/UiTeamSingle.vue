@@ -1,36 +1,63 @@
-<template lang="html">
-    <div class="team-member"
-        :class="'col-md-'+gridCol">
-        <div ref="member" class="team-member__sizer"></div>
-        <div ref="avatar" class="team-member__avatar" @click="openMember"></div>
-        <div class="team-member__name">
-            {{ member.name }}
-        </div>
-        <div class="team-member__role">
-            {{ member.role }}
-        </div>
-        <div class="team-member__social">
-            <div v-for="(social, i, key) in this.socials">
-                <a :href="social.value" v-if="social.name == 'twitter'">
-                    <twitter />
-                </a>
-                <a :href="social.value" v-else>
-                    <facebook />
-                </a>
-            </div>
+<template>
+<div
+    class="team-member"
+    :class="'col-md-'+gridCol"
+>
+    <div
+        ref="member"
+        class="team-member__sizer"
+    ></div>
+    <div
+        ref="avatar"
+        class="team-member__avatar"
+        @click="openMember"
+    ></div>
+    <div class="team-member__name">
+        {{ member.name }}
+    </div>
+    <div class="team-member__role">
+        {{ member.role }}
+    </div>
+    <div class="team-member__social">
+        <div v-for="(social, i, key) in this.socials">
+            <a
+                :href="social.value"
+                v-if="social.name == 'twitter'"
+            >
+                <twitter />
+            </a>
+            <a
+                :href="social.value"
+                v-else-if="social.name == 'facebook'"
+            >
+                <facebook />
+            </a>
+            <a
+                :href="social.value"
+                v-else-if="social.name == 'linkedin'"
+            >
+                <linkedin />
+            </a>
         </div>
     </div>
+</div>
 </template>
 
 <script>
 import {
     Facebook,
+    Linkedin,
     Twitter
 }
 from '../icons'
 
 export default {
     name: 'UiTeamSingle',
+    components: {
+        Facebook,
+        Linkedin,
+        Twitter,
+    },
     props: {
         gridCol: {
             type: Number,
@@ -46,10 +73,6 @@ export default {
                 }
             }
         }
-    },
-    components: {
-        Facebook,
-        Twitter,
     },
     watch: {
         gridCol: function () {

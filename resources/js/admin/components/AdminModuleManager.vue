@@ -13,21 +13,25 @@
         :color="content.hasOwnProperty('color') ? content.color : null"
         :font-size="content.hasOwnProperty('fontSize') ? content.fontSize : null"
     />
+
     <admin-ui-image
         v-else-if="module.type === 'image'"
         :src="content.src"
         :alt="content.alt"
     />
+
     <ui-paragraph
         v-else-if="module.type === 'paragraph'"
         :content="content.content"
         :color="content.hasOwnProperty('color') ? content.color : null"
         :bgColor="content.hasOwnProperty('bg_color') ? content.bg_color : null"
     />
+
     <ui-button
         v-else-if="module.type === 'button'"
         :text="content.text"
     />
+
     <ui-team
         v-else-if="module.type === 'team'"
         :people="content | filterTeamPeople"
@@ -58,23 +62,29 @@
         @delete-sub-component="deleteSubComponent"
         @update-size="updateSize"
     />
+
     <ui-video
         v-else-if="module.type === 'video'"
         :url="this.content.url"
     />
+
     <ui-quote
         v-else-if="module.type === 'quote'"
         :quote="content.content"
         :source="content.source"
     />
+
     <ui-calendar v-else-if="module.type === 'calendar'" />
+
     <ui-contact-form v-else-if="module.type === 'contact-form'" />
+
     <ui-map
         v-else-if="module.type === 'map' && content.hasOwnProperty('map')"
         :addresses="content.map.addresses"
         :zoom="content.map.zoom"
         :center="content.map.center"
     />
+
     <div v-else>
         {{ module }}
     </div>
