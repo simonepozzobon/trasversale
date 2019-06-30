@@ -237,6 +237,13 @@
         @update="subChanged"
     />
 
+
+    <ui-spacer
+        v-else-if="option.type === 'spacer'"
+        :initial="initial"
+        @update="subChanged"
+    />
+
     <!-- <div v-else>
         {{ option }}
     </div> -->
@@ -304,6 +311,7 @@ import TextEditor from './TextEditor.vue'
 import {
     UiCheckbox,
     UiSwitch,
+    UiSpacer,
 }
 from '../../ui'
 import "vue-swatches/dist/vue-swatches.min.css"
@@ -443,9 +451,6 @@ export default {
         teamChanged: function (teamModule) {
             this.value = Object.assign({}, teamModule)
         },
-        // mapUpdate: function (subModule) {
-        //     this.value = clone(subModule)
-        // },
         setDefault: function () {
             if (this.option.hasOwnProperty('default') && !this.edit) {
                 this.value = this.option.default
@@ -690,15 +695,16 @@ export default {
         },
     },
     beforeCreate: function () {
-        this.$options.components.DynamicModule = require('./DynamicModule.vue')
-            .default
+        this.$options.components.DynamicModule = require('./DynamicModule.vue').default
     },
     created: function () {
         this.getColors()
         this.setDefault()
         this.setInitial()
     },
-    mounted: function () {}
+    mounted: function () {
+        console.log('modulo', this.module);
+    }
 }
 </script>
 

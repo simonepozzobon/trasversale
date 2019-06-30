@@ -9,6 +9,7 @@ import PostNews from './PostNews.js'
 import PostProduct from './PostProduct.js'
 import Quote from './Quote.js'
 import Row from './Row.js'
+import Spacer from './Spacer.js'
 import Team from './Team.js' // fatto
 import Title from './Title.js' // fatto
 import Video from './Video.js' // fatto
@@ -25,6 +26,7 @@ export {
     PostProduct,
     Quote,
     Row,
+    Spacer,
     Team,
     Title,
     Video,

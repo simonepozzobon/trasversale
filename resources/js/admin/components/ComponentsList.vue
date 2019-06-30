@@ -99,6 +99,10 @@ export default {
                     value: 'contact-form',
                     label: 'Modulo Contatti',
                 },
+                {
+                    value: 'spacer',
+                    label: 'Spaziatore',
+                },
             ]
         }
     },

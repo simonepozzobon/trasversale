@@ -60,7 +60,10 @@
             </select>
         </div>
     </div>
-    <div class="form-group row">
+    <div
+        class="form-group row"
+        v-if="obj.type === 'packery'"
+    >
         <label
             for="type"
             class="col-md-3"
@@ -86,6 +89,36 @@
             </div>
         </div>
     </div>
+    <div
+        class="form-group row"
+        v-else
+    >
+        <label
+            for="type"
+            class="col-md-3"
+        >
+            Tipologia di post
+        </label>
+        <div class="col-md-9">
+            <select
+                class="form-control"
+                name="post_type"
+                v-model="postType"
+            >
+                <option value="products">Prodotti</option>
+                <option value="news">News</option>
+            </select>
+        </div>
+    </div>
+
+    <counter-module
+        v-if="obj.type === 'simple'"
+        label="Post per riga"
+        name="post_per_row"
+        :min="0"
+        :initial="obj.post_per_row"
+        @changed="updateRowCounter"
+    />
     <counter-module
         v-if="obj.mode === 'last'"
         label="Numero di post"
@@ -139,54 +172,53 @@ export default {
                     },
                 ],
                 post_count: 0,
+                post_per_row: 0,
             },
             name: 'grid',
             elements: [],
             posts: [],
+            postType: null,
         }
     },
     watch: {
+        postType: function (type) {
+            this.elements = []
+            for (let i = 0; i < this.obj.models.length; i++) {
+                let key = Object.keys(this.obj.models[i])[0]
+                if (key == type) {
+                    this.obj.models[i][key] = true
+                }
+                else {
+                    this.obj.models[i][key] = false
+                }
+            }
+            this.addElements()
+
+        },
+        obj: {
+            handler: function (obj) {
+                this.updateParent()
+            },
+            deep: true
+        },
         'obj.models': {
             handler: function (models) {
                 this.resetPostsPool(models)
             },
             deep: true,
         },
+        'obj.type': {
+            handler: function (type) {
+                if (type === 'simple') {
+                    this.elements = []
+                }
+            },
+            deep: true,
+        },
         'obj.post_count': function (count) {
             if (this.obj.mode == 'last') {
                 // limita i post
-                this.resetPostsPool(this.obj.models).then(() => {
-                    let length = this.elements.length
-                    // console.log('limita i post', this.posts);
-                    if (length == 0) {
-                        // console.log('da zero');
-                        this.posts.slice(0, count).forEach((element, i) => {
-                            let newElement = formatEl(element, i, this.elements)
-                            this.elements.push(newElement)
-                        })
-                    }
-                    else if (length < count) {
-                        let start = length - 1
-                        let difference = count - length
-                        this.posts.slice(start, difference).forEach((element, i) => {
-                            // console.log(i);
-                            let newElement = formatEl(element, this.elements.length, this.elements)
-                            this.elements.push(newElement)
-                        })
-                        // console.log('differenza', start, difference, newpost);
-
-                    }
-                    else if (length > count) {
-                        let difference = Math.abs(count - length)
-                        let idx = this.elements.length - difference
-                        this.elements.splice(idx, difference)
-                        // console.log(idx, difference);
-                    }
-                    else {
-                        // console.log('nulla', length, count);
-                    }
-                })
-
+                this.addElements()
             }
         },
         elements: {
@@ -207,19 +239,20 @@ export default {
             this.$emit('update', obj)
         },
         debug: function () {
-            this.obj = {
-                title: 'Titolo',
-                type: 'packery',
-                mode: 'last',
-                models: [{
-                        products: true,
-                    },
-                    {
-                        news: true,
-                    },
-                ],
-                post_count: 10,
-            }
+            // this.obj = {
+            //     title: 'Titolo',
+            //     type: 'packery',
+            //     mode: 'last',
+            //     models: [{
+            //             products: true,
+            //         },
+            //         {
+            //             news: false,
+            //         },
+            //     ],
+            //     post_count: 10,
+            //     post_per_row: 0,
+            // }
         },
         resetPostsPool: function (models) {
             return new Promise(resolve => {
@@ -255,8 +288,45 @@ export default {
         updateCounter: function (value) {
             this.obj['post_count'] = value
         },
+        updateRowCounter: function (value) {
+            this.obj['post_per_row'] = value
+        },
         addElementToGrid: function (element) {
             this.elements.push(element)
+        },
+        addElements: function () {
+            this.resetPostsPool(this.obj.models).then(() => {
+                let length = this.elements.length
+                let count = this.obj.post_count
+                // console.log('limita i post', this.posts);
+                if (length == 0) {
+                    // console.log('da zero');
+                    this.posts.slice(0, count).forEach((element, i) => {
+                        let newElement = formatEl(element, i, this.elements)
+                        this.elements.push(newElement)
+                    })
+                }
+                else if (length < count) {
+                    let start = length - 1
+                    let difference = count - length
+                    this.posts.slice(start, difference).forEach((element, i) => {
+                        // console.log(i);
+                        let newElement = formatEl(element, this.elements.length, this.elements)
+                        this.elements.push(newElement)
+                    })
+                    // console.log('differenza', start, difference, newpost);
+
+                }
+                else if (length > count) {
+                    let difference = Math.abs(count - length)
+                    let idx = this.elements.length - difference
+                    this.elements.splice(idx, difference)
+                    // console.log(idx, difference);
+                }
+                else {
+                    // console.log('nulla', length, count);
+                }
+            })
         }
     },
     mounted: function () {

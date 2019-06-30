@@ -204,7 +204,7 @@ export default {
                 break;
 
             case 'grid':
-                // console.log(obj);
+                // console.log('preview', obj);
                 let grid = obj.grid
                 let blocks = grid.elements
                 let options = JSON.stringify({
