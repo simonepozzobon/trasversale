@@ -8,8 +8,7 @@ import UiLink from './UiLink.vue'
 import UiMap from './UiMap.vue'
 import UiModuleContainer from './UiModuleContainer.vue'
 import UiModuleRow from './UiModuleRow.vue'
-import UiPackeryContainer from './UiPackeryContainer.vue'
-import UiPackeryItem from './UiPackeryItem.vue'
+import UiPackeryGrid from './UiPackeryGrid.vue'
 import UiParagraph from './UiParagraph.vue'
 import UiPartner from './UiPartner.vue'
 import UiQuote from './UiQuote.vue'
@@ -19,6 +18,7 @@ import UiSidebarImage from './UiSidebarImage.vue'
 import UiSidebarParagraph from './UiSidebarParagraph.vue'
 import UiSidebarTitle from './UiSidebarTitle.vue'
 import UiSimpleGrid from './UiSimpleGrid.vue'
+import UiSpacer from './UiSpacer.vue'
 import UiSwitch from './UiSwitch.vue'
 import UiTitle from './UiTitle.vue'
 import UiVideo from './UiVideo.vue'
@@ -34,8 +34,7 @@ export {
     UiMap,
     UiModuleContainer,
     UiModuleRow,
-    UiPackeryContainer,
-    UiPackeryItem,
+    UiPackeryGrid,
     UiParagraph,
     UiPartner,
     UiQuote,
@@ -45,6 +44,7 @@ export {
     UiSidebarParagraph,
     UiSidebarTitle,
     UiSimpleGrid,
+    UiSpacer,
     UiSwitch,
     UiTitle,
     UiVideo,

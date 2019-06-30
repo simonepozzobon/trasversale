@@ -33,16 +33,22 @@
         :people="content | filterTeamPeople"
         :grid-col="content | filterTeamColSize"
     />
-    <admin-packery-container
-        v-else-if="module.type === 'grid'"
-        :items="content.blocks"
-        :gutter="8"
-        :units="12"
-    />
+
     <ui-simple-grid
-        v-else-if="showSimpleGrid"
+        v-else-if="module && module.type === 'grid' && content.type === 'simple'"
         :blocks="content.blocks"
     />
+
+    <ui-packery-grid
+        v-else-if="module && module.type === 'grid' && content.type === 'packery'"
+        :items="content.blocks"
+    />
+
+    <ui-spacer
+        v-else-if="module.type === 'spacer' && content && content.hasOwnProperty('spacer')"
+        :height="content.spacer"
+    />
+
     <admin-ui-module-row
         v-else-if="module.type === 'row'"
         :columns="content"
@@ -126,7 +132,7 @@ export default {
             if (this.module.type == 'grid') {
                 if (this.content.hasOwnProperty('type') && this.content.hasOwnProperty('blocks')) {
                     if (this.content.type == 'packery' && this.content.blocks.length > 0) {
-                        // console.log('packery');
+                        console.log('packery');
                         return true
                     }
                 }
@@ -138,7 +144,7 @@ export default {
             if (this.module.type == 'grid') {
                 if (this.content.hasOwnProperty('type') && this.content.hasOwnProperty('blocks')) {
                     if (this.content.type == 'simple' && this.content.blocks.length > 0) {
-                        // console.log('simple');
+                        console.log('simple');
                         return true
                     }
                 }
@@ -204,24 +210,28 @@ export default {
         }
     },
     beforeCreate: function () {
-        this.$options.components.AdminPackeryContainer = require('./modulemanager/AdminPackeryContainer.vue').default
+        // this.$options.components.AdminPackeryContainer = require('./modulemanager/AdminPackeryContainer.vue').default
         this.$options.components.AdminUiImage = require('./modulemanager/AdminUiImage.vue').default
         this.$options.components.AdminUiModuleRow = require('./modulemanager/AdminUiModuleRow.vue').default
         this.$options.components.UiButton = require('../../ui/UiButton.vue').default
         this.$options.components.UiCalendar = require('../../ui/UiCalendar.vue').default
         this.$options.components.UiContactForm = require('../../ui/UiContactForm.vue').default
         this.$options.components.UiMap = require('../../ui/UiMap.vue').default
+        this.$options.components.UiPackeryGrid = require('../../ui/UiPackeryGrid.vue').default
         this.$options.components.UiParagraph = require('../../ui/UiParagraph.vue').default
         this.$options.components.UiQuote = require('../../ui/UiQuote.vue').default
         this.$options.components.UiSimpleGrid = require('../../ui/UiSimpleGrid.vue').default
+        this.$options.components.UiSpacer = require('../../ui/UiSpacer.vue').default
         this.$options.components.UiTeam = require('../../ui/UiTeam.vue').default
         this.$options.components.UiTitle = require('../../ui/UiTitle.vue').default
         this.$options.components.UiVideo = require('../../ui/UiVideo.vue').default
     },
     created: function () {
         // console.log('init', clone(this.module));
+        // console.log('modulo', this.module);
     },
     mounted: function () {
+        console.log('modulo admin', this.module);
         if (this.module.type == 'title') {
             if (this.$refs.title) {
                 let height = this.$refs.title.$el.offsetHeight + 'px'

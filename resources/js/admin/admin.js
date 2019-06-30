@@ -6,10 +6,7 @@ import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import VueRouter from 'vue-router'
 import routes from './adminroutes'
-import VueDraggabillyPlugin from './DraggabillyTest'
 import VuejsClipper from 'vuejs-clipper'
-
-import VuePackeryPlugin from './PackeryTest'
 
 import VueLayers from 'vuelayers'
 // import * as Sentry from '@sentry/browser';
@@ -20,8 +17,6 @@ import 'vuelayers/lib/style.css'
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
-Vue.use(VuePackeryPlugin)
-Vue.use(VueDraggabillyPlugin)
 Vue.use(VuejsClipper)
 Vue.use(VueLayers)
 Vue.use(VueRouter)
