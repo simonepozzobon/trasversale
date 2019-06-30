@@ -71,16 +71,16 @@ export default {
     },
     watch: {
         '$root.sidebarPaddingTop': function (h) {
-            if (h) {
-                if (this.$refs.sidebar) {
-                    this.$refs.sidebar.style.paddingTop = h
-                }
-            }
-            else {
-                if (this.$refs.sidebar) {
-                    delete this.$refs.sidebar.style.paddingTop
-                }
-            }
+            // if (h) {
+            //     if (this.$refs.sidebar) {
+            //         this.$refs.sidebar.style.paddingTop = h
+            //     }
+            // }
+            // else {
+            //     if (this.$refs.sidebar) {
+            //         delete this.$refs.sidebar.style.paddingTop
+            //     }
+            // }
         },
         '$root.sidebar': {
             handler: function (sidebar) {

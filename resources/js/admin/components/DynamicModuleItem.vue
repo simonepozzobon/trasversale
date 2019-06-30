@@ -504,15 +504,17 @@ export default {
             }
         },
         getColors: function () {
-            let themeColors = ['blue', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'white', 'gray', 'gray-dark', 'black', 'primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
+            // let themeColors = ['blue', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'white', 'gray', 'gray-dark', 'black', 'primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
+            let themeColors = ['#25A2B6', '#6EC3D0', '#BCE3E9', '#FCC02F', '#FED668', '#FEECB8', '#000000', '#595959', '#B2B2B2', ]
             let colors = []
 
             for (let i = 0; i < themeColors.length; i++) {
-                let color = this.getColor('--' + themeColors[i])
-                let idx = colors.findIndex(item => item == color)
-                if (idx < 0) {
-                    colors.push(color)
-                }
+                // let color = this.getColor('--' + themeColors[i])
+                // let idx = colors.findIndex(item => item == color)
+                // if (idx < 0) {
+                // colors.push(color)
+                colors.push(themeColors[i])
+                // }
             }
 
             this.colors = colors
