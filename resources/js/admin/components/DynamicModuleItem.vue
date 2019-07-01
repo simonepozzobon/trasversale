@@ -244,6 +244,14 @@
         @update="subChanged"
     />
 
+    <admin-date-picker
+        v-else-if="option.type === 'date-picker'"
+        :label="option.label"
+        :name="option.key"
+        :initial="initial"
+        @update="subChanged"
+    />
+
     <!-- <div v-else>
         {{ option }}
     </div> -->
@@ -298,6 +306,7 @@ import {
     isEqual
 }
 from '../../Utilities'
+import AdminDatePicker from './datepicker/AdminDatePicker.vue'
 import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
 import DummyModule from './DummyModule.vue'
 import DynamicSelect from './dynamicselect/DynamicSelect.vue'
@@ -319,6 +328,7 @@ import "vue-swatches/dist/vue-swatches.min.css"
 export default {
     name: 'DynamicModuleItem',
     components: {
+        AdminDatePicker,
         ColumnsPreview,
         DummyModule,
         DynamicSelect,
