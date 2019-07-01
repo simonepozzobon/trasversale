@@ -141,11 +141,11 @@ export default {
             this.postObj.model = this.type.model
             this.postObj.id = this.$route.params.id
 
-            console.log('before save', this.postObj);
+            // console.log('before save', this.postObj);
             let data = this.formatRequest(this.postObj)
             this.$http.post(url, data)
                 .then(response => {
-                    console.log('response', response.data);
+                    // console.log('response', response.data);
                     if (response.data.success) {
                         this.modelIdx = Number(response.data.post.id)
                         this.model = 'App\\' + this.type.model.charAt(0).toUpperCase() + this.type.model.slice(1)
