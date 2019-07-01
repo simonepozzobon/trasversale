@@ -126,7 +126,7 @@ $debug-opacity: 0 !default;
     }
 
     &__sidebar {
-        margin-top: $spacer * 3;
+        // margin-top: $spacer * 3;
         padding-top: $spacer;
     }
 }
