@@ -105,7 +105,7 @@ export default {
             this.values = {
                 title: post.title,
                 price: post.price,
-                slug: post.slug.slug,
+                slug: post.slug && post.slug.hasOwnProperty('slug') ? post.slug.slug : null,
                 preview: post.thumb,
                 category: post.category.id,
             }
@@ -141,6 +141,7 @@ export default {
             this.postObj.model = this.type.model
             this.postObj.id = this.$route.params.id
 
+            console.log('salva il post');
             // console.log('before save', this.postObj);
             let data = this.formatRequest(this.postObj)
             this.$http.post(url, data)

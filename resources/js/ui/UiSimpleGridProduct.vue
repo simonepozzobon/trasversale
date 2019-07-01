@@ -13,9 +13,6 @@
             <div class="grid-product__reviews">
                 *****
             </div>
-            <div class="grid-product__price">
-                {{ price }} €
-            </div>
             <div class="grid-product__action">
                 <a
                     href=""

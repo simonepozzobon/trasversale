@@ -168,6 +168,9 @@ class AdminController extends Controller
         // salva slug
         if (isset($request->id)) {
             $slug = $post->slug()->first();
+            if (!$slug) {
+                $slug = new Slug();
+            }
         } else {
             $slug = new Slug();
         }

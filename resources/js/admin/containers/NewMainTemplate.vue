@@ -311,7 +311,7 @@ export default {
             // }
 
             if (this.isPost && modelSaved == false) {
-                console.log('before save main')
+                // console.log('before save main')
                 this.$emit('before-save', 'main')
                 return null
             }

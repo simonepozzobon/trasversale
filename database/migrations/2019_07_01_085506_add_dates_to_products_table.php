@@ -18,6 +18,7 @@ class AddDatesToProductsTable extends Migration
                 $table->dateTime('start_at')->after('price')->nullable();
                 $table->dateTime('end_at')->after('start_at')->nullable();
                 $table->integer('hours')->after('end_at')->nullable()->default(0);
+                $table->string('address')->after('hours')->nullable();
             }
         );
     }
@@ -34,6 +35,7 @@ class AddDatesToProductsTable extends Migration
                 $table->dropColumn('start_at');
                 $table->dropColumn('end_at');
                 $table->dropColumn('hours');
+                $table->dropColumn('address');
             }
         );
     }
