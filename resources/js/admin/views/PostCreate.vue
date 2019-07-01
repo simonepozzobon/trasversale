@@ -87,11 +87,11 @@ export default {
             if (this.modelIdx) {
                 this.postObj.id = this.modelIdx
             }
-
+            // console.log('before save', this.postObj);
             let data = this.formatRequest(this.postObj)
             this.$http.post(url, data)
                 .then(response => {
-                    console.log('response', response);
+                    console.log('response', response.data);
                     if (response.data.success) {
                         this.modelIdx = Number(response.data.post.id)
                         this.model = 'App\\' + this.type.model.charAt(0).toUpperCase() + this.type.model.slice(1)

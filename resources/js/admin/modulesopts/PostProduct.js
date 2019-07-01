@@ -51,13 +51,13 @@ const PostProduct = {
             },
         },
         {
-            key: 'start_date',
+            key: 'start_at',
             label: 'Data di inizio',
             type: 'date-picker',
             required: true,
         },
         {
-            key: 'end_date',
+            key: 'end_at',
             label: 'Data di fine',
             type: 'date-picker',
             required: true,

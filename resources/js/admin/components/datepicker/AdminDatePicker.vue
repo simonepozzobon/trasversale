@@ -1,12 +1,18 @@
-<template lang="html">
-    <div class="form-group row">
-        <label :for="name" class="col-md-3">
-            {{ label }}
-        </label>
-        <div class="col-md-9">
-            <datepicker v-model="value" :bootstrap-styling="true"/>
-        </div>
+<template>
+<div class="form-group row">
+    <label
+        :for="name"
+        class="col-md-3"
+    >
+        {{ label }}
+    </label>
+    <div class="col-md-9">
+        <datepicker
+            v-model="value"
+            :bootstrap-styling="true"
+        />
     </div>
+</div>
 </template>
 
 <script>
@@ -37,13 +43,20 @@ export default {
     },
     watch: {
         value: function (value) {
-            this.$emit('changed', value)
-        }
+            // console.log(value);
+            this.$emit('update', value)
+        },
+        initial: function () {
+            this.setInitial()
+        },
     },
     methods: {
         setInitial: function () {
-
+            this.value = this.initial
         }
+    },
+    mounted: function () {
+        this.setInitial()
     },
 }
 </script>

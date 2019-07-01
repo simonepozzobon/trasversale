@@ -33,6 +33,7 @@
     "dependencies": {
         "@sentry/browser": "^5.4.0",
         "@sentry/integrations": "^5.4.1",
+        "@storefrontui/vue": "0.0.4-aplha.6",
         "element-resize-detector": "^1.1.15",
         "isotope-packery": "^2.0.1",
         "jquery-ui": "^1.12.1",

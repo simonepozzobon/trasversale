@@ -249,7 +249,7 @@
         :label="option.label"
         :name="option.key"
         :initial="initial"
-        @update="subChanged"
+        @update="setValue"
     />
 
     <!-- <div v-else>
@@ -435,6 +435,9 @@ export default {
         }
     },
     methods: {
+        setValue: function (value) {
+            this.value = value
+        },
         getModuleOption: function (key) {
             if (this.options && this.options.hasOwnProperty(key)) {
                 return this.options[key]
@@ -546,7 +549,7 @@ export default {
         },
         getElements: function (value, relatedKey) {
             let url = '/api/admin/grid-elements/' + value
-            console.log(url);
+            // console.log(url);
             this.$http.get(url)
                 .then(response => {
                     // console.log(response.data.elements);
@@ -716,7 +719,7 @@ export default {
         this.setInitial()
     },
     mounted: function () {
-        console.log('modulo', this.module);
+        // console.log('modulo', this.module);
     }
 }
 </script>
