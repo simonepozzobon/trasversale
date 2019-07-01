@@ -69,8 +69,13 @@ const PostProduct = {
             type: 'counter',
             default: 0,
             required: true,
-        }
-
+        },
+        {
+            key: 'address',
+            label: 'Indirizzo',
+            type: 'text',
+            required: true,
+        },
     ],
 }
 

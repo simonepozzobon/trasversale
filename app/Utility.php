@@ -108,6 +108,14 @@ class Utility extends Model
                         'created_at' => $block->created_at,
                     ];
 
+                if (isset($options->x)) {
+                    $grid_block['x'] = $options->x;
+                }
+
+                if (isset($options->y)) {
+                    $grid_block['y'] = $options->y;
+                }
+
                 switch ($type) {
                 case 'module':
                     $sub_module = json_decode($block->content);

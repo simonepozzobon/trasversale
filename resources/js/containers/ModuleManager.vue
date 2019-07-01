@@ -127,7 +127,7 @@ export default {
         this.$options.components.UiButton = require('../ui/UiButton.vue').default
         this.$options.components.UiImage = require('../ui/UiImage.vue').default
         this.$options.components.UiMap = require('../ui/UiMap.vue').default
-        this.$options.components.UiPackeryContainer = require('../ui/UiPackeryContainer.vue').default
+        this.$options.components.UiPackeryGrid = require('../ui/UiPackeryGrid.vue').default
         this.$options.components.UiTitle = require('../ui/UiTitle.vue').default
         this.$options.components.UiTeam = require('../ui/UiTeam.vue').default
         this.$options.components.UiSimpleGrid = require('../ui/UiSimpleGrid.vue').default
@@ -141,6 +141,9 @@ export default {
             let height = this.$refs.title.$el.offsetHeight + 'px'
             this.$root.sidebarPaddingTop = height
             this.$emit('title', height)
+        }
+        else if (this.module.type === 'grid') {
+            console.log(this.module);
         }
     },
     beforeDestroy: function () {

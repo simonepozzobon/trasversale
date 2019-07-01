@@ -128,6 +128,12 @@ export default {
                     end_at: post.end_at,
                 }
             }
+            if (post.hasOwnProperty('address')) {
+                this.values = {
+                    ...this.values,
+                    address: post.address,
+                }
+            }
 
             this.$nextTick(() => {
                 this.initialised = true
