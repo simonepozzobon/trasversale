@@ -48,6 +48,9 @@ export default {
             this.$emit('dismiss', this.uuid)
         },
     },
+    mounted: function () {
+        setTimeout(() => this.dismissToast(), 10000)
+    },
 }
 </script>
 
