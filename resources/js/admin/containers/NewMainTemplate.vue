@@ -228,7 +228,7 @@ export default {
         debug: function () {
             if (this.cached.length === 0 && this.modelIdx !== 0) {
                 this.$nextTick(() => {
-                    this.newComponent('spacer')
+                    this.newComponent('row')
                 })
             }
         },
@@ -528,7 +528,7 @@ export default {
                 content: {},
             }
 
-            // console.log(newModule);
+            console.log(newModule);
             this.cached.push(newModule)
         },
     },

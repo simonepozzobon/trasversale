@@ -377,6 +377,7 @@ export default {
                 // if (this.option.key == 'elements') {
                 //     console.log('dynamic item change');
                 // }
+                // console.log(this.option.key, newValue, this.option.type);
                 this.$emit('changed', this.option.key, newValue, this.option.type)
             }
         },

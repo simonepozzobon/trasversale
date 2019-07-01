@@ -142,7 +142,7 @@ export default {
     },
     mounted: function () {
         // console.log('module.options', this.module);
-        this.$nextTick(this.init)
+        this.$nextTick(() => this.init())
     },
     beforeDestroy: function () {
         if (this.master) {

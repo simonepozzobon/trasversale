@@ -91,6 +91,11 @@ export default {
             if (!isEqual(prev, value) && type != 'file-input') {
                 this.emitChanged(key, value)
             }
+            else if (key == 'columns') {
+                // console.log('Dynamic module è diverso', prev, value);
+                this.emitChanged(key, value)
+
+            }
             else if (type === 'file-input') {
                 this.emitChanged(key, value)
                 // console.log(this.uuid, value);
