@@ -158,6 +158,14 @@ export default {
         GridBuilder,
         GridPostSelector,
     },
+    props: {
+        initial: {
+            type: Object,
+            default: function () {
+                return {}
+            },
+        },
+    },
     data: function () {
         return {
             obj: {
@@ -181,6 +189,9 @@ export default {
         }
     },
     watch: {
+        initial: function () {
+            this.setInitial()
+        },
         postType: function (type) {
             this.elements = []
             for (let i = 0; i < this.obj.models.length; i++) {
@@ -239,20 +250,20 @@ export default {
             this.$emit('update', obj)
         },
         debug: function () {
-            // this.obj = {
-            //     title: 'Titolo',
-            //     type: 'packery',
-            //     mode: 'last',
-            //     models: [{
-            //             products: true,
-            //         },
-            //         {
-            //             news: false,
-            //         },
-            //     ],
-            //     post_count: 10,
-            //     post_per_row: 0,
-            // }
+            this.obj = {
+                title: 'Titolo',
+                type: 'packery',
+                mode: 'last',
+                models: [{
+                        products: true,
+                    },
+                    {
+                        news: false,
+                    },
+                ],
+                post_count: 10,
+                post_per_row: 0,
+            }
         },
         resetPostsPool: function (models) {
             return new Promise(resolve => {
@@ -327,10 +338,14 @@ export default {
                     // console.log('nulla', length, count);
                 }
             })
+        },
+        setInitial: function () {
+            console.log(this.initial);
         }
     },
     mounted: function () {
-        this.$nextTick(() => this.debug())
+        this.setInitial()
+        // this.$nextTick(() => this.debug())
     },
 }
 </script>

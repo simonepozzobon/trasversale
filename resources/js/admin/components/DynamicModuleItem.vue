@@ -719,7 +719,8 @@ export default {
         this.setInitial()
     },
     mounted: function () {
-        // console.log('modulo', this.module);
+        console.log('modulo', this.module);
+        console.log(this.values);
     }
 }
 </script>

@@ -241,13 +241,13 @@ export default {
         // console.log('modulo', this.module);
     },
     mounted: function () {
-        console.log('modulo admin', this.module);
+        // console.log('modulo admin', this.module);
         if (this.module.type == 'title') {
-            if (this.$refs.title) {
-                let height = this.$refs.title.$el.offsetHeight + 'px'
-                this.$root.sidebarPaddingTop = height
-                this.$emit('title', height)
-            }
+            // if (this.$refs.title) {
+            //     // let height = this.$refs.title.$el.offsetHeight + 'px'
+            //     // this.$root.sidebarPaddingTop = height
+            //     // this.$emit('title', height)
+            // }
         }
     },
     beforeDestroy: function () {
