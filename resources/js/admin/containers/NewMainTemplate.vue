@@ -223,7 +223,7 @@ export default {
                     this.cached.push(cache)
                 }
             }
-            this.debug()
+            // this.debug()
         },
         debug: function () {
             if (this.cached.length === 0 && this.modelIdx !== 0) {
@@ -528,7 +528,7 @@ export default {
                 content: {},
             }
 
-            console.log(newModule);
+            // console.log(newModule);
             this.cached.push(newModule)
         },
     },
