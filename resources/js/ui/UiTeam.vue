@@ -1,16 +1,18 @@
 <template lang="html">
-    <div class="row team">
-        <div class="team__overlay" ref="overlay"></div>
-        <ui-team-single
-            v-for="member in people"
-            :key="member.id"
-            :grid-col="gridCol"
-            :member="member"
-            @open-member="openMember"/>
+    <div class="team">
+        <div class="row">
+            <!-- <div class="team__overlay" ref="overlay"></div> -->
+            <ui-team-single
+                v-for="member in people"
+                :key="member.id"
+                :grid-col="gridCol"
+                :member="member"
+                @open-member="openMember"/>
 
-        <ui-team-detail
-            ref="panel"
-            :member="this.selected"/>
+            <ui-team-detail
+                ref="panel"
+                :member="this.selected"/>
+        </div>
     </div>
 </template>
 
@@ -51,6 +53,7 @@ export default {
     watch: {},
     methods: {
         openMember: function (member) {
+            console.log(member);
             this.selected = member
             this.$nextTick(() => {
                 this.$refs.panel.getHeight(true, true)
@@ -60,7 +63,11 @@ export default {
 
         }
     },
-    mounted: function () {}
+    mounted: function () {
+        // this.$nextTick(() => {
+        //     this.openMember(this.people[0])
+        // })
+    }
 }
 </script>
 
@@ -68,18 +75,7 @@ export default {
 @import '~styles/shared';
 
 .team {
+    padding-top: $spacer * 1.618;
     position: relative;
-    margin-top: $spacer * 1.618;
-
-    &__overlay {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba($white, .5);
-        z-index: 1;
-        display: none;
-    }
 }
 </style>

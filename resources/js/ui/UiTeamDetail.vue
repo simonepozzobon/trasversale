@@ -1,20 +1,38 @@
-<template lang="html">
-    <div class="team-detail" ref="container">
-        <div class="team-detail__content">
-            <div class="team-detail__close" @click="hide" ref="close">
-                X
-            </div>
-            <div class="team-detail__name" ref="name">
-                {{ member.name }}
-            </div>
-            <div class="team-detail__role" ref="role">
-                {{ member.role }}
-            </div>
-            <div class="team-detail__desription" ref="description">
-                <p v-html="member.description"></p>
+<template>
+<div
+    class="team-detail"
+    ref="container"
+>
+    <div class="team-detail__content">
+        <div
+            class="team-detail__close"
+            @click="hide"
+            ref="close"
+        >
+            <div class="team-detail__cross">
+                +
             </div>
         </div>
+        <div
+            class="team-detail__name"
+            ref="name"
+        >
+            {{ member.name }}
+        </div>
+        <div
+            class="team-detail__role"
+            ref="role"
+        >
+            {{ member.role }}
+        </div>
+        <div
+            class="team-detail__desription"
+            ref="description"
+        >
+            <p v-html="member.description"></p>
+        </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -40,18 +58,20 @@ export default {
     },
     methods: {
         getHeight: function (reset = false, playAsInit = false) {
-            let container = this.$refs.container
+            if (this.$refs.container) {
+                let container = this.$refs.container
 
-            if (container.style.display === 'none') {
-                container.style.display = ''
+                if (container.style.display === 'none') {
+                    container.style.display = ''
+                }
+
+                let rect = container.getBoundingClientRect()
+                this.width = rect.width
+                this.height = rect.height
+
+                container.style.display = 'none'
+                this.initAnim(reset, playAsInit)
             }
-
-            let rect = container.getBoundingClientRect()
-            this.width = rect.width
-            this.height = rect.height
-
-            container.style.display = 'none'
-            this.initAnim(reset, playAsInit)
         },
         initAnim: function (reset = false, playAsInit = false) {
             let el = this.$refs.container
@@ -59,8 +79,12 @@ export default {
             let name = this.$refs.name
             let role = this.$refs.role
             let description = this.$refs.description
-
+            //
             if (reset === false) {
+                TweenMax.set([el, close, name, role, description], {
+                    clearProps: 'all'
+                })
+
                 this.anim = new TimelineMax({
                     paused: true,
                     reversed: true,
@@ -100,8 +124,11 @@ export default {
                 }, .1)
 
                 this.anim.progress(1).progress(0)
+
                 if (playAsInit) {
-                    this.show()
+                    this.$nextTick(() => {
+                        this.show()
+                    })
                 }
             }
             else {
@@ -114,10 +141,14 @@ export default {
             }
         },
         show: function () {
-            this.anim.progress(0).play()
+            if (this.anim) {
+                this.anim.play()
+            }
         },
         hide: function () {
-            this.anim.progress(1).reverse()
+            if (this.anim) {
+                this.anim.reverse()
+            }
         }
     },
     mounted: function () {
@@ -133,19 +164,29 @@ export default {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 95%;
-    height: 110%;
-    background-color: rgba(lighten($primary, 15), .96);
+    width: 100%;
+    height: 100%;
+    background-color: rgba(lighten($primary, 15), .93);
     transform: translate(-50%, -50%);
-    padding: $spacer * 2;
+    z-index: 2;
+
+    &__content {
+        padding: $spacer * 2;
+    }
 
     &__close {
         color: $white;
         position: absolute;
         right: $spacer * 2;
-        top: $spacer * 2;
         cursor: pointer;
-        font-size: $font-size-lg;
+    }
+
+    &__cross {
+        position: relative;
+        font-size: $h2-font-size;
+        font-weight: $font-weight-bold;
+        line-height: 0.5;
+        transform: rotate(-45deg);
     }
 
     &__name {
