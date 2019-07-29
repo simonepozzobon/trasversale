@@ -29,6 +29,7 @@
     <ui-switch
         v-else-if="option.type === 'switch'"
         :label="option.label"
+        :initial="initial"
         @changed="subChanged"
     />
 
@@ -534,9 +535,7 @@ export default {
             this.colors = colors
         },
         getColor: function (key) {
-            return getComputedStyle(document.documentElement)
-                .getPropertyValue(key)
-                .trim()
+            return getComputedStyle(document.documentElement).getPropertyValue(key).trim()
         },
         previewFile: function (value) {
             this.value = value
@@ -719,8 +718,8 @@ export default {
         this.setInitial()
     },
     mounted: function () {
-        console.log('modulo', this.module);
-        console.log(this.values);
+        // console.log('modulo', this.module);
+        // console.log(this.values);
     }
 }
 </script>

@@ -340,7 +340,7 @@ export default {
             })
         },
         setInitial: function () {
-            console.log(this.initial);
+            // console.log(this.initial);
         }
     },
     mounted: function () {

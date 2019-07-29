@@ -24,7 +24,8 @@
         v-else-if="module.type === 'paragraph'"
         :content="content.content"
         :color="content.hasOwnProperty('color') ? content.color : null"
-        :bgColor="content.hasOwnProperty('bg_color') ? content.bg_color : null"
+        :bg-color="content.hasOwnProperty('bg_color') ? content.bg_color : null"
+        :has-padding="content.hasOwnProperty('padding_top') ? content.padding_top : true"
     />
 
     <ui-button

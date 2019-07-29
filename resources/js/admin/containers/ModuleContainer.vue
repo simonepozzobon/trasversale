@@ -181,7 +181,7 @@ export default {
 
                 return {
                     src: src,
-                    alt: obj.alt
+                        alt: obj.alt
                 }
                 break;
 
@@ -265,14 +265,13 @@ export default {
             // https://stackoverflow.com/questions/1230233/how-to-find-the-sum-of-an-array-of-numbers
             let columns = this.component.content
             let total = columns.map((col, idx) => {
-                    let content = col.content
-                    let size = content.size
-                    if (idx == data.idx) {
-                        size = content.size + data.size
-                    }
-                    return size
-                })
-                .reduce((a, b) => a + b, 0)
+                let content = col.content
+                let size = content.size
+                if (idx == data.idx) {
+                    size = content.size + data.size
+                }
+                return size
+            }).reduce((a, b) => a + b, 0)
 
 
             if (total > 12) {

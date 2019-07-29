@@ -1,18 +1,18 @@
-<template lang="html">
-    <div class="page-template">
-        <notifications-container :toasts="notifications" />
-        <div class="page-template__container container">
-            <div class="page-template__head">
-                <div class="page-template__title">
-                    <h1 class="pt-3">{{ title }}</h1>
-                </div>
-                <div class="page-template__action">
-                </div>
+<template>
+<div class="page-template">
+    <notifications-container :toasts="notifications" />
+    <div class="page-template__container container">
+        <div class="page-template__head">
+            <div class="page-template__title">
+                <h1 class="pt-3">{{ title }}</h1>
             </div>
-            <hr>
-            <slot></slot>
+            <div class="page-template__action">
+            </div>
         </div>
+        <hr>
+        <slot></slot>
     </div>
+</div>
 </template>
 
 <script>

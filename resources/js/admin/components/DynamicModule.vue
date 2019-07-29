@@ -68,18 +68,25 @@ export default {
             // }
         },
         setInitial: function (option) {
+            // set initial with default value if there is one
+            let initial = option.hasOwnProperty('default') ? option.default : null
+
             if (this.values) {
+
                 let key = option.key
                 if (option.hasOwnProperty('childrens') && option.childrens.length > 0) {
-                    // console.log('children', key,  this.values);
+                    // console.log('children', key, this.values);
                     return this.values
                 }
                 // console.log('not-children', key,  this.values[key] ? this.values[key] : null);
+                if (this.values.hasOwnProperty(key)) {
+                    initial = this.values[key]
+                }
 
-                return this.values[key] ? this.values[key] : null
+                return initial
             }
 
-            return null
+            return initial
         },
         emitChanged: function (key, value) {
             this.dataObj[key] = value

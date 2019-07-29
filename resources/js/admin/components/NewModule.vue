@@ -85,7 +85,9 @@ export default {
     },
     computed: {
         module: function () {
-            return DynamicParams.filter(params => params.name == this.name)[0]
+            let params = DynamicParams.find(params => params.name == this.name)
+            // console.log('parametri', params);
+            return params
         },
     },
     methods: {
