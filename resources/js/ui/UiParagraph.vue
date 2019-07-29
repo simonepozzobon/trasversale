@@ -7,6 +7,7 @@
             noPaddingClass,
             padding,
             fullWidthClass,
+            paddingTopClass
         ]">
         <p
             v-html="content"
@@ -26,6 +27,10 @@ export default {
             default: null,
         },
         hasPadding: {
+            type: Boolean,
+            default: true,
+        },
+        paddingTop: {
             type: Boolean,
             default: true,
         },
@@ -75,6 +80,11 @@ export default {
         noPaddingClass: function () {
             if (!this.hasPadding) {
                 return 'ui-paragraph--no-padding'
+            }
+        },
+        paddingTopClass: function () {
+            if (!this.paddingTop) {
+                return 'ui-paragraph--no-padding-top'
             }
         },
         // colorClass: function () {
@@ -145,6 +155,10 @@ export default {
 
     &--full-width {
         width: 100%;
+    }
+
+    &--no-padding-top &__content {
+        padding-top: 0 !important;
     }
 }
 </style>

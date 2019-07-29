@@ -26,7 +26,7 @@
     <ui-paragraph
         v-else-if="module.type == 'paragraph'"
         :content="content.content"
-        :has-padding="content.hasOwnProperty('padding_top') && content.padding_top == false ? false : true"
+        :padding-top="content.hasOwnProperty('padding_top') && content.padding_top == false ? false : true"
     />
 
     <ui-button
