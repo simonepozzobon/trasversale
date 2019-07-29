@@ -26,6 +26,7 @@
     <ui-paragraph
         v-else-if="module.type == 'paragraph'"
         :content="content.content"
+        :has-padding="content.hasOwnProperty('padding_top') && content.padding_top == false ? false : true"
     />
 
     <ui-button
@@ -119,7 +120,12 @@ export default {
             if (this.isAdmin) {
                 this.$emit('selected', this.module)
             }
-        }
+        },
+        debug: function () {
+            if (this.module.type == 'paragraph') {
+                console.log(this.content);
+            }
+        },
     },
     beforeCreate: function () {
         this.$options.components.UiModuleRow = require('../ui/UiModuleRow.vue').default
@@ -145,6 +151,9 @@ export default {
         else if (this.module.type === 'grid') {
             console.log(this.module);
         }
+        // this.$nextTick(() => {
+        //     this.debug()
+        // })
     },
     beforeDestroy: function () {
         if (this.module.type == 'title') {
