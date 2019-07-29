@@ -53,7 +53,7 @@ export default {
     watch: {},
     methods: {
         openMember: function (member) {
-            console.log(member);
+            // console.log(member);
             this.selected = member
             this.$nextTick(() => {
                 this.$refs.panel.getHeight(true, true)
