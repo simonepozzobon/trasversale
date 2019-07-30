@@ -40,6 +40,12 @@
                 >
                     {{ customSave }}
                 </button>
+                <button
+                    class="btn btn-outline-danger"
+                    @click="deleteAll"
+                >
+                    Elimina tutto
+                </button>
             </div>
         </div>
     </div>
@@ -197,6 +203,7 @@ export default {
             }
         },
         init: function () {
+            // console.log('iniiinini');
             // imposta una variabile intermedia per poter modificare i moduli
             let sorted = orderBy(this.modules, ['order', 'created_at'], ['asc', 'asc'])
             if (sorted.length > 0) {
@@ -223,14 +230,14 @@ export default {
                     this.cached.push(cache)
                 }
             }
-            this.debug()
+            // this.debug()
         },
         debug: function () {
-            if (this.cached.length === 0 && this.modelIdx !== 0) {
-                this.$nextTick(() => {
-                    this.newComponent('contact-form')
-                })
-            }
+            // if (this.cached.length === 0 && this.modelIdx !== 0) {
+            //     this.$nextTick(() => {
+            //         this.newComponent('contact-form')
+            //     })
+            // }
         },
         setInitials: function (objs) {
             for (let i = 0; i < objs.length; i++) {
@@ -255,14 +262,23 @@ export default {
                 this.cached.splice(idx, 1)
             }
         },
+        deleteAll: function () {
+            // this.$emit('delete-all')
+            let cached = Object.assign([], this.cached)
+            for (var i = 0; i < cached.length; i++) {
+                let data = Object.assign({}, cached[i])
+                // console.log(data);
+                this.deleteComponent(data.id, data.isNew, data.uuid)
+            }
+        },
         saveComponent: function (current) {
 
         },
-        deleteComponent: function (id, isNew, uuid) {
-            console.log('elimina componente', id, isNew, uuid);
+        deleteComponent: function (id = false, isNew, uuid) {
+            // console.log('elimina componente', id, isNew, uuid);
 
             // se è nuovo elimina il componente dalla visuale
-            if (isNew) {
+            if (isNew || id == false) {
                 this.cached = this.searchAndDelete(this.cached, uuid)
             }
             else {
@@ -270,7 +286,7 @@ export default {
                 let url = '/api/admin/delete-component/' + id
                 this.$http.delete(url)
                     .then(response => {
-                        // console.log(response.data);
+                        console.log(response.data);
                         // console.log('modulo eliminato', uuid);
                         if (response.data.success) {
                             this.cached = this.searchAndDelete(this.cached, uuid)
@@ -281,7 +297,7 @@ export default {
         searchAndDelete: function (objs, uuid) {
             let idx = objs.findIndex(obj => obj.uuid === uuid)
             if (idx > -1) {
-                console.log('trovato');
+                // console.log('trovato');
                 objs.splice(idx, 1)
             }
             else {
@@ -305,7 +321,6 @@ export default {
             // console.log(idx, subModule.uuid);
         },
         savePage: function (event = null, modelSaved = false) {
-            // console.log('salva pagina', this.cached);
             // if (modelSaved) {
             //     this.$emit('save-page')
             // }
@@ -320,6 +335,7 @@ export default {
             if (this.model) {
                 this.$root.$emit('close-all-panels')
                 this.counter = this.cached.length
+                // console.log('cached', this.cached);
                 let promises = []
                 for (let i = 0; i < this.cached.length; i++) {
                     // temps[i] = this.saveComponent(temps[i])
@@ -376,14 +392,14 @@ export default {
                         promises.push(requestRow)
                         break;
                     case 'team':
-                        console.log(i);
+                        // console.log(i);
                         // wait uploads before run promises
                         this.hasAwait = true
 
                         let teamObj = this.cached[i]
                         let content = teamObj.content.team
                         let people = this.saveImage(content.people).then(people => {
-                            console.log(teamObj);
+                            // console.log(teamObj);
                             let teamData = this.formatRequest(teamObj)
                             let teamRequest = this.$http.post('/api/admin/save-component', teamData)
                                 .then(response => {
@@ -413,9 +429,10 @@ export default {
                     }
 
                     // if (i === this.cached.length - 1 && this.hasAwait) {
-                    //     console.log('fine', i, this.cached.length, this.hasAwait);
+                    // console.log('fine', i, this.cached.length, this.hasAwait);
                     // }
                 }
+
 
                 if (!this.hasAwait) {
                     this.processAllPromises(promises)
@@ -469,11 +486,11 @@ export default {
                     // }
                 })
                 .catch(err => {
-                    console.error(err);
+                    // console.error(err);
                     this.$emit('notify', {
                         uuid: Uuid.get(),
                         title: 'Errore',
-                        message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
+                        // message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
                     })
                 })
         },

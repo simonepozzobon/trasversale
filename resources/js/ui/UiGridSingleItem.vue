@@ -52,14 +52,6 @@ export default {
             counter: 0,
         }
     },
-    watch: {
-        title: {
-            handler: function (title) {
-                console.log(title);
-            },
-            deep: true,
-        }
-    },
     computed: {
         size: function () {
             return {

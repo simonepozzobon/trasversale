@@ -8,22 +8,6 @@
     </div>
     <div class="form-group row">
         <label
-            for="title"
-            class="col-md-3"
-        >
-            Titolo
-        </label>
-        <div class="col-md-9">
-            <input
-                type="text"
-                name="title"
-                class="form-control"
-                v-model="obj.title"
-            >
-        </div>
-    </div>
-    <div class="form-group row">
-        <label
             for="type"
             class="col-md-3"
         >
@@ -116,6 +100,7 @@
         label="Post per riga"
         name="post_per_row"
         :min="0"
+        :max="6"
         :initial="obj.post_per_row"
         @changed="updateRowCounter"
     />
@@ -169,8 +154,7 @@ export default {
     data: function () {
         return {
             obj: {
-                title: 'Titolo',
-                type: 'packery',
+                type: 'simple',
                 mode: 'last',
                 models: [{
                         products: false,
@@ -232,6 +216,13 @@ export default {
                 this.addElements()
             }
         },
+        'obj.post_per_row': {
+            handler: function (count) {
+
+                // console.log('post_per_row');
+            },
+            deep: true
+        },
         elements: {
             handler: function (elements) {
                 // this.$emit('update', elements)
@@ -246,13 +237,12 @@ export default {
                 ...this.obj,
                 elements: this.elements
             }
-
+            // console.log('update', obj);
             this.$emit('update', obj)
         },
         debug: function () {
             this.obj = {
-                title: 'Titolo',
-                type: 'packery',
+                type: 'simple',
                 mode: 'last',
                 models: [{
                         products: true,
@@ -267,6 +257,7 @@ export default {
         },
         resetPostsPool: function (models) {
             return new Promise(resolve => {
+                let posts = []
                 this.posts = []
                 let promises = []
 
@@ -277,6 +268,7 @@ export default {
 
                     if (value == true) {
                         let url = '/api/admin/grid-elements/' + type
+                        // console.log('uuuuor', url);
                         let request = this.$http.get(url)
                         promises.push(request)
                     }
@@ -285,10 +277,11 @@ export default {
                 this.$http.all(promises).then(results => {
                     results.forEach((response, i) => {
                         if (response.data.success) {
-                            this.posts = this.posts.concat(response.data.elements)
+                            posts = posts.concat(response.data.elements)
                             // console.log(this.posts);
                             if (i === promises.length - 1) {
-                                resolve()
+                                this.posts = posts
+                                resolve(posts)
                             }
                         }
                     })
@@ -306,21 +299,23 @@ export default {
             this.elements.push(element)
         },
         addElements: function () {
-            this.resetPostsPool(this.obj.models).then(() => {
+            this.resetPostsPool(this.obj.models).then(posts => {
+                // console.log('qui', posts);
                 let length = this.elements.length
                 let count = this.obj.post_count
-                // console.log('limita i post', this.posts);
+                // console.log('prima', this.elements.length, length, count);
                 if (length == 0) {
                     // console.log('da zero');
-                    this.posts.slice(0, count).forEach((element, i) => {
+                    posts.slice(0, count).forEach((element, i) => {
                         let newElement = formatEl(element, i, this.elements)
                         this.elements.push(newElement)
                     })
                 }
                 else if (length < count) {
+                    // console.log('devo aggiungere un post');
                     let start = length - 1
                     let difference = count - length
-                    this.posts.slice(start, difference).forEach((element, i) => {
+                    posts.slice(start, difference).forEach((element, i) => {
                         // console.log(i);
                         let newElement = formatEl(element, this.elements.length, this.elements)
                         this.elements.push(newElement)
@@ -328,16 +323,25 @@ export default {
                     // console.log('differenza', start, difference, newpost);
 
                 }
-                else if (length > count) {
+                else if (length >= count) {
+                    // console.log('devo togliere un post');
                     let difference = Math.abs(count - length)
                     let idx = this.elements.length - difference
                     this.elements.splice(idx, difference)
                     // console.log(idx, difference);
                 }
+
+                else if (count == 0) {
+                    this.elements = []
+                }
                 else {
+                    console.log(length);
                     // console.log('nulla', length, count);
                 }
+                // console.log('dopo', this.elements.length, length, count);
             })
+            // console.log('qui', this.elements);
+
         },
         setInitial: function () {
             // console.log(this.initial);
@@ -345,7 +349,9 @@ export default {
     },
     mounted: function () {
         this.setInitial()
-        // this.$nextTick(() => this.debug())
+        this.$nextTick(() => {
+            this.debug()
+        })
     },
 }
 </script>

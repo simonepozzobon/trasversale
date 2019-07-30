@@ -12,6 +12,7 @@
     :has-slot="true"
     @save-page="savePost"
     @before-save="savePost"
+    @delete-all="deleteAll"
 >
     <div class="page-template__content">
         <ui-title
@@ -47,7 +48,7 @@ import {
 }
 from '../../Utilities'
 export default {
-    name: 'PostCreate',
+    name: 'PostEdit',
     components: {
         DynamicModule,
         NewPageTemplate,
@@ -91,7 +92,7 @@ export default {
             let url = '/api/admin/post-type/' + this.type.model + '/' + this.$route.params.id
             this.$http.get(url)
                 .then(response => {
-                    console.log('get post', response);
+                    // console.log('get post', response);
                     if (response.data.success) {
                         let post = Object.assign({}, response.data.post)
                         this.setInitialValues(post)
@@ -147,7 +148,7 @@ export default {
             this.postObj.model = this.type.model
             this.postObj.id = this.$route.params.id
 
-            console.log('salva il post');
+            // console.log('salva il post', this.postObj);
             // console.log('before save', this.postObj);
             let data = this.formatRequest(this.postObj)
             this.$http.post(url, data)
@@ -158,6 +159,7 @@ export default {
                         this.model = 'App\\' + this.type.model.charAt(0).toUpperCase() + this.type.model.slice(1)
                         this.$nextTick(() => {
                             let page = this.$refs.page
+                            // console.log(page.$refs[ref]);
                             page.$refs[ref].savePage(null, true)
                         })
                     }
@@ -183,6 +185,9 @@ export default {
                 return true
             }
             return false
+        },
+        deleteAll: function () {
+            this.modules = []
         },
     },
     mounted: function () {

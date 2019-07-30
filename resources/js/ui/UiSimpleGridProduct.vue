@@ -2,8 +2,9 @@
     <div class="grid-product">
         <div class="grid-product__image">
             <img
+                v-if="image"
                 class="grid-product__figure"
-                :src="content.thumb"
+                :src="image"
                 :alt="content.title" />
         </div>
         <div class="grid-product__details">
@@ -36,6 +37,12 @@ export default {
             type: Object,
             default: function () {},
         },
+        options: {
+            type: Object,
+            default: function () {
+                return {}
+            },
+        },
     },
     computed: {
         price: function () {
@@ -50,17 +57,26 @@ export default {
             }
             return this.block.content
         },
+        image: function () {
+            if (this.block.thumb && this.block.thumb != 'no-image') {
+                return this.block.thumb
+            }
+
+            return false
+        },
     },
     methods: {
         goToProduct: function () {
-            console.log(this.$route.params.page);
+            // console.log(this.$route.params.page);
             this.$root.goToWithParams('subpage', {
                 page: this.$route.params.page,
                 subpage: this.content.slug.slug,
             })
         },
     },
-    mounted: function () {},
+    mounted: function () {
+        // console.log('ora', this.block);
+    },
 }
 </script>
 

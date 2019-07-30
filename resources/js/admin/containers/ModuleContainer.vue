@@ -116,7 +116,7 @@ export default {
         formatTempData: function (obj) {
             // console.log('formatTempData');
             this.component.content = this.setPreview(obj)
-            // console.log(this.component);
+            // console.log('ciao', this.component.content);
         },
         deleteComponent: function (id, isNew, uuid = false) {
             // console.log('module container delete', this.component);
@@ -205,12 +205,13 @@ export default {
                 break;
 
             case 'grid':
-                // console.log('preview', obj);
+                // console.log('\preview', obj);
                 let grid = obj.grid
                 let blocks = grid.elements
                 let options = JSON.stringify({
                     mode: grid.mode,
                     models: grid.models,
+                    post_per_row: grid.post_per_row,
                 })
 
                 let newGrid = {

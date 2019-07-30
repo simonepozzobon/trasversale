@@ -76,7 +76,7 @@ export default {
             type: Boolean,
             default: true,
         },
-        values: [Object, Array],
+        values: [Object, Array, String],
     },
     data: function () {
         return {

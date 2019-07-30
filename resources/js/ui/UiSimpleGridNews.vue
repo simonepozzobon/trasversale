@@ -56,6 +56,12 @@ export default {
             type: Object,
             default: function () {},
         },
+        options: {
+            type: Object,
+            default: function () {
+                return {}
+            },
+        },
     },
     computed: {
         content: function () {

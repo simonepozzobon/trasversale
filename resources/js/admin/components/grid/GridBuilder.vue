@@ -8,7 +8,10 @@
     </div>
     <div class="form-group row">
         <div class="col-md-12">
-            <div ref="packery">
+            <div
+                ref="packery"
+                v-if="items.lenght > 0"
+            >
                 <grid-layout
                     :layout.sync="items"
                     :col-num="colsNum"
@@ -82,8 +85,10 @@ export default {
     },
     methods: {
         getContainerWidth: function () {
-            let container = this.$refs.packery.getBoundingClientRect().width
-            this.unitSize = Math.round(container / 12) - (this.gutter)
+            if (this.$refs.packerytho) {
+                let container = this.$refs.packery.getBoundingClientRect().width
+                this.unitSize = Math.round(container / 12) - (this.gutter)
+            }
         },
     },
     mounted: function () {

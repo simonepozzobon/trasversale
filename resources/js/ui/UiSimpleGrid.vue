@@ -1,32 +1,36 @@
-<template lang="html">
-    <div class="ui-simple-grid">
-        <ui-row>
-            <ui-block
-                :size="12"
-                :has-container="false">
-                    <ui-button
-                        v-for="(cat, i) in categories"
-                        :key="i"
-                        class="mr-3"
-                        :title="cat.title"
-                        color="primary"
-                        :has-container="false"
-                        :has-margin="true"
-                        display="inline-block"
-                        :is-active="cat.id == currentId"
-                        :event-params="cat.id"
-                        @click="filterNews"/>
-            </ui-block>
-        </ui-row>
-        <ui-row>
-            <ui-simple-grid-loop
-                v-for="(block, i) in filtered"
+<template>
+<div class="ui-simple-grid">
+    <ui-row>
+        <ui-block
+            :size="12"
+            :has-container="false"
+        >
+            <ui-button
+                v-for="(cat, i) in categories"
                 :key="i"
-                :block="block"
-                @category="addCategory"
-                @filter-category="filterNews"/>
-        </ui-row>
-    </div>
+                class="mr-3"
+                :title="cat.title"
+                color="primary"
+                :has-container="false"
+                :has-margin="true"
+                display="inline-block"
+                :is-active="cat.id == currentId"
+                :event-params="cat.id"
+                @click="filterNews"
+            />
+        </ui-block>
+    </ui-row>
+    <ui-row>
+        <ui-simple-grid-loop
+            v-for="(block, i) in filtered"
+            :key="i"
+            :block="block"
+            :options="options"
+            @category="addCategory"
+            @filter-category="filterNews"
+        />
+    </ui-row>
+</div>
 </template>
 
 <script>
@@ -46,6 +50,12 @@ export default {
         blocks: {
             type: Array,
             default: function () {},
+        },
+        options: {
+            type: Object,
+            default: function () {
+                return {}
+            },
         },
     },
     data: function () {

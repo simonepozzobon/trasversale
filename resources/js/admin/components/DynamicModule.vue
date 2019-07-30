@@ -36,7 +36,7 @@ export default {
             default: null,
         },
         options: [Object, Array],
-        values: [Object, Array],
+        values: [Object, Array, String],
         isEdit: {
             type: Boolean,
             default: false,
@@ -70,17 +70,21 @@ export default {
         setInitial: function (option) {
             // set initial with default value if there is one
             let initial = option.hasOwnProperty('default') ? option.default : null
+            let values = this.values
+            if (values) {
 
-            if (this.values) {
+                if (typeof values == 'string') {
+                    values = JSON.parse(values)
+                }
 
                 let key = option.key
                 if (option.hasOwnProperty('childrens') && option.childrens.length > 0) {
-                    // console.log('children', key, this.values);
-                    return this.values
+                    // console.log('children', key, values);
+                    return values
                 }
-                // console.log('not-children', key,  this.values[key] ? this.values[key] : null);
-                if (this.values.hasOwnProperty(key)) {
-                    initial = this.values[key]
+                // console.log('not-children', key,  values[key] ? values[key] : null);
+                if (values.hasOwnProperty(key)) {
+                    initial = values[key]
                 }
 
                 return initial
@@ -144,6 +148,9 @@ export default {
                     }
                 }
             }
+
+
+            // console.log('emit', key, value, type);
         }
     },
     created: function () {

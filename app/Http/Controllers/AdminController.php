@@ -129,7 +129,9 @@ class AdminController extends Controller
         $post = isset($request->id) ? $model::find($request->id) : new $model();
 
         $post->category_id = $request->category;
-        $post->title = $request->title;
+        if (isset($request->title)) {
+            $post->title = $request->title;
+        }
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
@@ -349,7 +351,7 @@ class AdminController extends Controller
 
             $grid = isset($content->id) ? Grid::find($content->id) : new Grid();
 
-            $grid->title = $content->title;
+            // $grid->title = $content->title;
             $grid->type = $content->type;
             $grid->save();
 

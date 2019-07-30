@@ -42,6 +42,7 @@
     <ui-simple-grid
         v-else-if="module && module.type === 'grid' && content.type === 'simple'"
         :blocks="content.blocks"
+        :options="options"
         :is-admin="true"
     />
 
@@ -134,6 +135,12 @@ export default {
         },
     },
     computed: {
+        options: function () {
+            if (this.module.content && this.module.content.options) {
+                return JSON.parse(this.module.content.options)
+            }
+            return {}
+        },
         content: function () {
             // console.log('contenuto', this.module.content);
             if (this.module && this.module.hasOwnProperty('content')) {
@@ -173,7 +180,7 @@ export default {
     },
     methods: {
         listener: function () {
-            // console.log('modulo cambiato');
+            // console.log('modulo cambiato', this.module);
             // if (this.module.type === 'row') {
             //     console.log(this.content);
             // }
