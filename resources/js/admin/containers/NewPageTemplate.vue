@@ -47,6 +47,7 @@
                 @edit-sidebar="toggleActive"
                 @notify="notify"
                 @before-save="beforeSave"
+                @delete-all="deleteAll"
             />
         </div>
     </div>

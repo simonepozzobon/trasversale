@@ -35,13 +35,13 @@
                     Aggiungi Componente
                 </button>
                 <button
-                    class="btn btn-outline-success"
+                    class="btn btn-outline-success ml-2"
                     @click="savePage"
                 >
                     {{ customSave }}
                 </button>
                 <button
-                    class="btn btn-outline-danger"
+                    class="btn btn-outline-danger ml-auto"
                     @click="deleteAll"
                 >
                     Elimina tutto
@@ -84,6 +84,13 @@
             @click="savePage"
         >
             {{ customSave }}
+        </button>
+        <button
+            class="btn btn-outline-danger ml-auto"
+            v-if="active"
+            @click="deleteAll"
+        >
+            Elimina tutto
         </button>
     </div>
     <components-list
@@ -598,12 +605,23 @@ export default {
         // @include gradient-directional(rgba($gray-300, 0), rgba($light, 0), 135deg);
         @include border-radius($spacer / 2);
         // @include box-shadows($gray-500);
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     &__head {
-        display: flex;
+        width: 100%;
         flex-wrap: wrap;
-        justify-content: space-between;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__action {
+        width: 100%;
+        display: flex;
+        justify-content: center;
         align-items: center;
     }
 
@@ -621,7 +639,8 @@ export default {
     }
 
     &--no-title &__head {
-        justify-content: center;
+        // justify-content: space-between;
+        // justify-content: center;
     }
 
     &--is-active & {
