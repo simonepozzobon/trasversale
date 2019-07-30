@@ -10,12 +10,13 @@
         id="submitTransaction"
         @click="dropinRequestPaymentMethod"
     >
-        Drop-in Test
+        Request Payment Method
     </button>
 </div>
 </template>
 
 <script>
+const client = require('braintree-web/client')
 export default {
     props: {
         authToken: {
@@ -45,34 +46,35 @@ export default {
     },
     data: function () {
         return {
+            auth: null,
             errorMessage: '',
-            dropinInstance: '',
+            dropinInstance: null,
             paymentPayload: '',
             dataCollectorPayload: '',
         }
     },
     methods: {
+        init: function () {},
         dropinCreate: function () {
             const dropin = require('braintree-web-drop-in')
             // setup drop-in options
-            const dropinOptions = {
-                authorization: this.authToken,
-                selector: '#dropin-container',
-            }
-            // if PayPal enabled, add to options settings
-            if (this.enablePayPal) {
-                dropinOptions.paypal = {
-                    flow: 'vault'
-                }
-            }
-            dropin.create(dropinOptions, (dropinError, dropinInstance) => {
-                if (dropinError) {
-                    this.errorMessage = 'There was an error setting up the client instance. Message: ' + dropinError.message
-                    this.$emit('bt.error', this.errorMessage)
-                    return
-                }
-                this.dropinInstance = dropinInstance
+            this.$http.get('/api/payment/auth').then(response => {
+                // console.log(response.data);
+                let auth = response.data.token
+                dropin.create({
+                    authorization: auth,
+                    container: '#dropin-container'
+                }, (dropinError, dropinInstance) => {
+                    if (dropinError) {
+                        this.errorMessage = 'There was an error setting up the client instance. Message: ' + dropinError.message
+                        this.$emit('bt.error', this.errorMessage)
+                        return
+                    }
+                    this.dropinInstance = dropinInstance
+                })
             })
+
+
         },
         dropinRequestPaymentMethod: function () {
             this.dropinInstance.requestPaymentMethod((requestErr, payload) => {
