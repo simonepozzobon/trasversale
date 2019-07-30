@@ -343,11 +343,11 @@ export default {
             if (this.model) {
                 this.$root.$emit('close-all-panels')
                 this.counter = this.cached.length
-                console.log('cached', this.cached);
+                // console.log('cached', this.cached);
                 let cached = Object.assign([], this.cached)
                 cached.push(cached[0])
                 let duplicates = checkDuplicateInObject('id', cached)
-                console.log('cached', cached);
+                // console.log('cached', cached);
                 if (duplicates.check) {
                     let duplicate = false
                     cached = cached.map(cache => {
@@ -366,7 +366,7 @@ export default {
                         }
                     }).filter(cache => cache != false)
                 }
-                console.log('cached', cached);
+                // console.log('cached', cached);
                 let promises = []
                 for (let i = 0; i < cached.length; i++) {
                     // temps[i] = this.saveComponent(temps[i])
