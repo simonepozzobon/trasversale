@@ -33,7 +33,7 @@ import {
 from '../Utilities'
 
 export default {
-    name: 'GridSingleItem',
+    name: 'UiGridSingleItem',
     components: {},
     props: {
         item: {
@@ -41,6 +41,10 @@ export default {
             default: function () {
                 return {}
             },
+        },
+        isAdmin: {
+            type: Boolean,
+            default: false
         },
     },
     data: function () {
@@ -77,7 +81,12 @@ export default {
         },
         content: function () {
             if (this.item.content) {
-                return JSON.parse(this.item.content)
+                if (typeof this.item.content == 'string') {
+                    return JSON.parse(this.item.content)
+                }
+                else {
+                    return this.item.content
+                }
             }
         },
         title: function () {
@@ -128,26 +137,27 @@ export default {
             })
         },
         openItem: function () {
-            console.log(this.content);
-            let slugObj = this.content.slug
-            let type = slugObj.sluggable_type
-            let slug = slugObj.slug
+            if (!this.isAdmin) {
+                let slugObj = this.content.slug
+                let type = slugObj.sluggable_type
+                let slug = slugObj.slug
 
-            switch (type) {
-            case 'App\\News':
-                this.$root.goToWithParams('subpage', {
-                    page: 'notizie',
-                    subpage: slug,
-                })
-                break;
-            case 'App\Product':
-                this.$root.goToWithParams('subpage', {
-                    page: 'corsi',
-                    subpage: slug,
-                })
-                break;
-            default:
-                alert('no route')
+                switch (type) {
+                case 'App\\News':
+                    this.$root.goToWithParams('subpage', {
+                        page: 'notizie',
+                        subpage: slug,
+                    })
+                    break;
+                case 'App\Product':
+                    this.$root.goToWithParams('subpage', {
+                        page: 'corsi',
+                        subpage: slug,
+                    })
+                    break;
+                default:
+                    alert('no route')
+                }
             }
         },
     },

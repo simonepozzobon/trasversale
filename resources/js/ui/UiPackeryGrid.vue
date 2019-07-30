@@ -21,7 +21,7 @@
                 :h="item.height | setDimension"
                 :i="item.i"
             >
-                <ui-grid-single-item :item="item" />
+                <ui-grid-single-item :item="item" :is-admin="isAdmin"/>
             </grid-item>
         </grid-layout>
     </div>
@@ -48,6 +48,10 @@ export default {
             default: function () {
                 return []
             },
+        },
+        isAdmin: {
+            type: Boolean,
+            default: false
         },
     },
     data: function () {
