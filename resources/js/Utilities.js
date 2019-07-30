@@ -74,20 +74,52 @@ const orderBy = require('lodash.orderby')
 
 const sortModules = function(modules) {
     let sorted = orderBy(modules, ['order', 'created_at'], ['asc', 'asc'])
-    if (sorted.length > 0) {
-        for (let i = 0; i < sorted.length; i++) {
-            if (sorted[i].type === 'row') {
-                let sortedColumns = orderBy(sorted[i].content, ['order', 'created_at'], ['asc', 'asc'])
-                sortedColumns = sortedColumns.map(column => {
-                    let sortedModules = orderBy(column.content.modules, ['order', 'created_at'], ['asc', 'asc'])
-                    column.content.modules = sortedModules
-                    return column
-                })
-                sorted[i].content = sortedColumns
+
+    let formattedContents = sorted.map(module => {
+        if (module.type === 'row') {
+
+            let rowContent = module.content
+            if (typeof rowContent == 'string') {
+                rowContent = JSON.parse(rowContent)
             }
+
+            let sortedColumns = orderBy(rowContent, ['order', 'created_at'], ['asc', 'asc'])
+            let formattedColumns = sortedColumns.map(column => {
+
+                    let columnContent = column.content
+                    if (typeof columnContent == 'string') {
+                        columnContent = JSON.parse(columnContent)
+                    }
+                    // console.log(columnContent);
+
+
+                    let sortedModules = []
+                    let modulesArr = []
+
+                    if (columnContent.hasOwnProperty('modules')) {
+                        modulesArr = Array.from(columnContent.modules)
+
+                        sortedModules = orderBy(modulesArr, ['order', 'created_at'], ['asc', 'asc'])
+
+                    }
+
+                    let formattedColumn = {
+                        size: columnContent.size,
+                        modules: JSON.stringify(sortedModules)
+                    }
+
+                    column.content = JSON.stringify(formattedColumn)
+
+                return column
+            })
+
+            module.content = JSON.stringify(rowContent)
         }
-    }
-    return sorted
+
+        return module
+    })
+
+    return formattedContents
 }
 
 export {

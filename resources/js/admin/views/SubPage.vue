@@ -42,15 +42,14 @@ export default {
         getPage: function (id) {
             this.idx = Number(id)
 
-            this.$http.get('/api/admin/sub-page/' + id)
-                .then(response => {
-                    this.title = response.data.title
-                    this.modules = response.data.modules
-                    console.log(response.data);
-                    this.sidebarIdx = response.data.sidebar ? response.data.sidebar.id : 0
-                    this.sidebarModules = response.data.sidebar ? response.data.sidebar.modules : []
-                    // console.log(this.modules);
-                })
+            this.$http.get('/api/admin/sub-page/' + id).then(response => {
+                this.title = response.data.title
+                this.modules = response.data.modules
+                console.log(response.data);
+                this.sidebarIdx = response.data.sidebar ? response.data.sidebar.id : 0
+                this.sidebarModules = response.data.sidebar ? response.data.sidebar.modules : []
+                // console.log(this.modules);
+            })
         },
         saved: function (module) {
             this.modules.push(module)
