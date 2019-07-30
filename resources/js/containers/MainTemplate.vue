@@ -21,12 +21,14 @@
             </div>
         </div>
     </div>
+    <cart-checkout></cart-checkout>
     <main-footer />
 </div>
 </template>
 
 <script>
 // import Partners from '../contents/Partners'
+import CartCheckout from './CartCheckout.vue'
 import MainMenu from './MainMenu.vue'
 import MainFooter from './MainFooter.vue'
 import ModuleManager from './ModuleManager.vue'
@@ -47,6 +49,7 @@ from '../Utilities'
 export default {
     name: 'MainTemplate',
     components: {
+        CartCheckout,
         MainMenu,
         MainFooter,
         ModuleManager,

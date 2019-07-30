@@ -71,6 +71,7 @@ const isFile = function(obj) {
 }
 
 const orderBy = require('lodash.orderby')
+const debounce = require('lodash.debounce')
 
 const sortModules = function(modules) {
     let sorted = orderBy(modules, ['order', 'created_at'], ['asc', 'asc'])
@@ -172,6 +173,7 @@ export {
     checkDuplicateInObject,
     checkOverflow,
     clone,
+    debounce,
     isEqual,
     isFile,
     SizeUtil,

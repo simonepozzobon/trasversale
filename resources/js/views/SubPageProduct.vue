@@ -61,7 +61,8 @@
                     <ui-button
                         title="prosegui"
                         color="primary"
-                        align="center"/>
+                        align="center"
+                        @click="addToCart"/>
                 </div>
             </div>
         </div>
@@ -77,7 +78,9 @@
 
 <script>
 import {
-    sortModules
+    debounce,
+    sortModules,
+    Uuid,
 }
 from '../Utilities'
 import {
@@ -128,12 +131,33 @@ export default {
                 this.title = true
                 this.$refs.info.style.paddingTop = height
             }
-        }
+        },
+        addToCart: function (eventParams) {
+            this.debounceCart()
+        },
+        debug: function () {
+            for (let i = 0; i < 10; i++) {
+                this.$root.$emit('add-to-cart', {
+                    ...this.content,
+                    uuid: Uuid.get()
+                })
+            }
+        },
     },
     created: function () {
         this.init()
+        this.debounceCart = debounce(() => {
+            this.$root.$emit('add-to-cart', {
+                ...this.content,
+                uuid: Uuid.get()
+            })
+        }, 50)
     },
-    mounted: function () {}
+    mounted: function () {
+        this.$nextTick(() => {
+            this.debug()
+        })
+    }
 }
 </script>
 

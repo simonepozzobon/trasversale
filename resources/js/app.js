@@ -38,6 +38,7 @@ const app = new Vue({
                 sidebar: {
                     modules: []
                 },
+                cart: []
             }
         },
         methods: {
@@ -52,10 +53,30 @@ const app = new Vue({
                     name: name,
                     params: params
                 })
+            },
+            addToCart: function(content) {
+                let itemID = content.item.id
+                let itemCheck = this.cart.findIndex(item => item.item.id == itemID)
+                if (itemCheck > -1) {
+                    this.cart[itemCheck].item.quantity = this.cart[itemCheck].item.quantity + 1
+                } else {
+                    let item = Object.assign({}, content)
+                    item.item.quantity = 1
+
+                    this.cart.push(item)
+
+                }
+            },
+            showCart: function() {
+
             }
+
         },
         mounted: function () {
             // console.log(this.$route.name);
+            this.$on('add-to-cart', (content) => {
+                this.addToCart(content)
+            })
         }
     })
     .$mount('#app');
