@@ -42,12 +42,15 @@
             @click="setPrivacy"
             :value="privacy"
         >
-            Test
+            Inviando il form autorizzate il trattamento dei dati personali trasmessi ai sensi della legge 675/96. Si autorizza anche al trattamento dei dati per ricevere informazioni o promozioni di iniziative future.
         </ui-checkbox>
     </div>
     <div class="row">
         <div class="col">
-            <button class="btn btn-outline-primary">
+            <button
+                class="btn btn-outline-primary"
+                :class="hasBigBtnClass"
+            >
                 Invia
             </button>
         </div>
@@ -62,6 +65,12 @@ export default {
     components: {
         UiCheckbox,
     },
+    props: {
+        hasBigBtn: {
+            type: Boolean,
+            default: true,
+        },
+    },
     data: function () {
         return {
             name: null,
@@ -69,6 +78,14 @@ export default {
             message: null,
             privacy: false,
         }
+    },
+    computed: {
+        hasBigBtnClass: function () {
+            if (this.hasBigBtn) {
+                return 'btn-block'
+            }
+            return null
+        },
     },
     methods: {
         setPrivacy: function (value) {

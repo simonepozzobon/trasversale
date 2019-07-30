@@ -77,7 +77,10 @@
 
     <ui-calendar v-else-if="module.type === 'calendar'" />
 
-    <ui-contact-form v-else-if="module.type === 'contact-form'" />
+    <ui-contact-form
+        v-else-if="module.type === 'contact-form'"
+        :has-big-btn="content.hasOwnProperty('full_width_btn') && content.full_width_btn == false ? false : true"
+    />
 
     <ui-map
         v-else-if="module.type === 'map' && content.hasOwnProperty('map')"
@@ -120,9 +123,12 @@ export default {
         }
     },
     watch: {
-        module: function (module) {
-            // console.log(module);
-            this.listener()
+        module: {
+            handler: function (module) {
+                // console.log('moduliooo', module);
+                this.listener()
+            },
+            deep: true,
         },
     },
     computed: {
@@ -165,7 +171,7 @@ export default {
     },
     methods: {
         listener: function () {
-            console.log('modulo cambiato');
+            // console.log('modulo cambiato');
             // if (this.module.type === 'row') {
             //     console.log(this.content);
             // }
@@ -243,6 +249,10 @@ export default {
     },
     mounted: function () {
         // console.log('modulo admin', this.module);
+        if (this.module.type == 'contact-form') {
+            console.log('ciao', this.module);
+        }
+
         if (this.module.type == 'title') {
             // if (this.$refs.title) {
             //     // let height = this.$refs.title.$el.offsetHeight + 'px'

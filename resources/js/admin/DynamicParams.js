@@ -1,6 +1,7 @@
 import {
     Calendar,
     Column,
+    ContactForm,
     Grid,
     Image,
     Map,
@@ -18,6 +19,7 @@ import {
 const DynamicParams = [
     Calendar,
     Column,
+    ContactForm,
     Grid,
     Image,
     Map,

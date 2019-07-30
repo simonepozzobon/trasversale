@@ -55,6 +55,12 @@ export default {
 
 .ui-checkbox {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    // justify-content: flex-start;
+
+    &__text {
+        padding-left: $spacer / 2;
+        font-size: $font-size-sm;
+    }
 }
 </style>

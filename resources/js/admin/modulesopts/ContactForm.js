@@ -2,9 +2,11 @@ const ContactForm = {
     name: 'contact-form',
     options: [
         {
-            key: 'dummy',
-            type: 'info',
-            label: 'Questo componente non ha opzioni',
+            key: 'full_width_btn',
+            label: 'Bottone largo',
+            default: true,
+            required: false,
+            type: 'switch'
         }
     ]
 }

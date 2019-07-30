@@ -144,10 +144,11 @@ export default {
         },
         setPreview: function (obj) {
             // console.log('setting preview', obj);
+            // console.log('setting preview', this.item.type);
             switch (this.item.type) {
             case 'row':
                 // Riga
-                console.log('setting preview della row', obj);
+                // console.log('setting preview della row', obj);
                 let cols = []
                 let newCols = []
                 let content = this.component.content
@@ -181,7 +182,7 @@ export default {
 
                 return {
                     src: src,
-                        alt: obj.alt
+                        alt: obj.alt,
                 }
                 break;
 
@@ -234,8 +235,11 @@ export default {
 
             default:
                 // DEfault
-                return obj
+                let newObj = Object.assign({}, obj)
+                return newObj
+                break
             }
+
         },
         changed: function (obj) {
             // console.log('changed', obj);

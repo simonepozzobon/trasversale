@@ -73,7 +73,10 @@
 
     <ui-calendar v-else-if="module.type === 'calendar'" />
 
-    <ui-contact-form v-else-if="module.type === 'contact-form'" />
+    <ui-contact-form
+        v-else-if="module.type === 'contact-form'"
+        :has-big-btn="content.hasOwnProperty('full_width_btn') && content.full_width_btn == false ? false : true"
+    />
 
     <ui-map
         v-else-if="module.type === 'map' && content.hasOwnProperty('map')"
