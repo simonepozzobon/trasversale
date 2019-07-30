@@ -65,8 +65,9 @@ import NewMainTemplate from './NewMainTemplate.vue'
 import NotificationsContainer from './NotificationsContainer.vue'
 
 import {
-    Uuid,
+    checkDuplicateInObject,
     SizeUtil,
+    Uuid,
 }
 from '../../Utilities'
 

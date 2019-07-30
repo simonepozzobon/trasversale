@@ -141,9 +141,35 @@ const checkOverflow = function (el) {
     return isOverflowing
 }
 
+const checkDuplicateInObject = function (propertyName, inputArray) {
+    let seenDuplicate = false,
+    itemProp = null,
+    testObject = {}
+
+    inputArray.map(function(item) {
+        let itemPropertyName = item[propertyName]
+
+        if (itemPropertyName in testObject) {
+            testObject[itemPropertyName].duplicate = true
+            item.duplicate = true
+            seenDuplicate = true
+            itemProp = item[propertyName]
+        }
+        else {
+            testObject[itemPropertyName] = item
+            delete item.duplicate
+        }
+    })
+
+    return {
+        check: seenDuplicate,
+        prop: itemProp
+    }
+}
 
 
 export {
+    checkDuplicateInObject,
     checkOverflow,
     clone,
     isEqual,

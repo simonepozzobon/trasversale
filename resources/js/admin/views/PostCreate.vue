@@ -124,6 +124,9 @@ export default {
             }
             return false
         },
+        deleteAll: function () {
+            this.modules = []
+        },
     },
     mounted: function () {
         // console.log(this.type);

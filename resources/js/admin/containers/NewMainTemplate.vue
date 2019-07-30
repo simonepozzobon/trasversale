@@ -108,8 +108,9 @@ import EditPanel from '../components/EditPanel.vue'
 import ModuleContainer from './ModuleContainer.vue'
 
 import {
-    Uuid,
+    checkDuplicateInObject,
     SizeUtil,
+    Uuid,
 }
 from '../../Utilities'
 
@@ -342,24 +343,47 @@ export default {
             if (this.model) {
                 this.$root.$emit('close-all-panels')
                 this.counter = this.cached.length
-                // console.log('cached', this.cached);
+                console.log('cached', this.cached);
+                let cached = Object.assign([], this.cached)
+                cached.push(cached[0])
+                let duplicates = checkDuplicateInObject('id', cached)
+                console.log('cached', cached);
+                if (duplicates.check) {
+                    let duplicate = false
+                    cached = cached.map(cache => {
+                        if (cache.id == duplicates.prop) {
+                            if (duplicate == false) {
+                                duplicate = true
+                                return cache
+                            }
+                            else {
+                                return false
+                            }
+                        }
+                        else {
+                            return cache
+
+                        }
+                    }).filter(cache => cache != false)
+                }
+                console.log('cached', cached);
                 let promises = []
-                for (let i = 0; i < this.cached.length; i++) {
+                for (let i = 0; i < cached.length; i++) {
                     // temps[i] = this.saveComponent(temps[i])
-                    switch (this.cached[i].type) {
+                    switch (cached[i].type) {
                     case 'row':
-                        let rowData = Object.assign({}, this.cached[i])
+                        let rowData = Object.assign({}, cached[i])
                         delete rowData.content
                         rowData.content = {
-                            columns: this.cached[i].content.length
+                            columns: cached[i].content.length
                         }
 
                         rowData = this.formatRequest(rowData)
 
                         let requestRow = this.$http.post('/api/admin/save-component', rowData)
                             .then(rowResponse => {
-                                this.cached[i] = this.formatFromResponse(this.cached[i], rowResponse.data.module)
-                                let columns = this.cached[i].content
+                                cached[i] = this.formatFromResponse(cached[i], rowResponse.data.module)
+                                let columns = cached[i].content
                                 for (let j = 0; j < columns.length; j++) {
                                     let modules = columns[j].content.modules
                                     let columnData = Object.assign({}, columns[j])
@@ -370,7 +394,7 @@ export default {
                                     columnData = this.formatRequest(columnData)
                                     let requestColumn = this.$http.post('/api/admin/save-component', columnData)
                                         .then(columnResponse => {
-                                            this.cached[i].content[j] = this.formatFromResponse(this.cached[i].content[j], columnResponse.data.module)
+                                            cached[i].content[j] = this.formatFromResponse(cached[i].content[j], columnResponse.data.module)
                                             if (modules) {
                                                 for (let k = 0; k < modules.length; k++) {
                                                     let moduleData = Object.assign({}, modules[k])
@@ -380,13 +404,13 @@ export default {
                                                     let requestModule = this.$http.post('/api/admin/save-component', moduleData)
                                                         .then(moduleResponse => {
                                                             let newModule = this.formatFromResponse(modules[k], moduleResponse.data.module)
-                                                            this.cached[i].content[j].modules[k] = newModule
-                                                            if (!this.cached[i].content[j].content.hasOwnProperty('modules')) {
-                                                                this.cached[i].content[j].content.modules = []
-                                                                this.cached[i].content[j].content.modules[k] = newModule
+                                                            cached[i].content[j].modules[k] = newModule
+                                                            if (!cached[i].content[j].content.hasOwnProperty('modules')) {
+                                                                cached[i].content[j].content.modules = []
+                                                                cached[i].content[j].content.modules[k] = newModule
                                                             }
                                                             else {
-                                                                this.cached[i].content[j].content.modules[k] = newModule
+                                                                cached[i].content[j].content.modules[k] = newModule
                                                             }
                                                         })
                                                     promises.push(requestModule)
@@ -403,15 +427,15 @@ export default {
                         // wait uploads before run promises
                         this.hasAwait = true
 
-                        let teamObj = this.cached[i]
+                        let teamObj = cached[i]
                         let content = teamObj.content.team
                         let people = this.saveImage(content.people).then(people => {
                             // console.log(teamObj);
                             let teamData = this.formatRequest(teamObj)
                             let teamRequest = this.$http.post('/api/admin/save-component', teamData)
                                 .then(response => {
-                                    let temp = this.formatFromResponse(this.cached[i], response.data.module)
-                                    this.cached[i] = temp
+                                    let temp = this.formatFromResponse(cached[i], response.data.module)
+                                    cached[i] = temp
                                 })
                             promises.push(teamRequest)
                             if (this.hasAwait) {
@@ -426,11 +450,11 @@ export default {
 
                     default:
                         // console.log('default');
-                        let data = this.formatRequest(this.cached[i])
+                        let data = this.formatRequest(cached[i])
                         let request = this.$http.post('/api/admin/save-component', data)
                             .then(response => {
-                                let temp = this.formatFromResponse(this.cached[i], response.data.module)
-                                this.cached[i] = temp
+                                let temp = this.formatFromResponse(cached[i], response.data.module)
+                                cached[i] = temp
                             })
                         promises.push(request)
                     }
