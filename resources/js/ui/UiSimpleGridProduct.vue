@@ -27,7 +27,7 @@
 import UiBlock from './UiBlock.vue'
 
 export default {
-    name: 'UiSimpleGrid',
+    name: 'UiSimpleGridProduct',
     components: {
         UiBlock,
     },
@@ -53,11 +53,10 @@ export default {
     },
     methods: {
         goToProduct: function () {
-            // console.log(this.$route.params.page);
-            this.$root.goToWithParams('item', {
+            console.log(this.$route.params.page);
+            this.$root.goToWithParams('subpage', {
                 page: this.$route.params.page,
-                subpage: this.$route.params.subpage,
-                item: this.content.slug.slug
+                subpage: this.content.slug.slug,
             })
         },
     },

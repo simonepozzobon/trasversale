@@ -122,7 +122,29 @@ const sortModules = function(modules) {
     return formattedContents
 }
 
+const checkOverflow = function (el) {
+    // Determines if the passed element is overflowing its bounds,
+    // either vertically or horizontally.
+    // Will temporarily modify the "overflow" style to detect this
+    // if necessary.
+    let curOverflow = el.style.overflow
+
+    if ( !curOverflow || curOverflow === "visible" ) {
+        el.style.overflow = "hidden"
+    }
+
+    let isOverflowing = el.clientWidth < el.scrollWidth || el.clientHeight < el.scrollHeight
+    // console.log(el, el.clientWidth, el.scrollWidth,el.clientHeight, el.scrollHeight);
+
+    el.style.overflow = curOverflow
+
+    return isOverflowing
+}
+
+
+
 export {
+    checkOverflow,
     clone,
     isEqual,
     isFile,
