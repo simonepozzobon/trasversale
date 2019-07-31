@@ -6,7 +6,6 @@
         hide-header
         hide-footer
     >
-
         <div class="checkout__container">
             <ui-title
                 title="Checkout"
@@ -15,28 +14,23 @@
             />
             <div class="checkout__row">
                 <div class="checkout__resume-container">
-                    <div class="checkout__resume">
-                        <div class="sub-section sub-section--light">
-                            <div class="sub-section__title">
-                                <ui-title
-                                    title="Riepilogo"
-                                    :is-column="true"
-                                    tag="h4"
-                                    font-size="h4"
-                                    color="gray"
-                                />
-                            </div>
-                        </div>
-                        <cart-item
-                            v-for="item in $root.cart"
-                            :key="item.uuid"
-                            :item="item.item"
+                    <div class="checkout__resume resume">
+                        <cart-resume
+                            :items="this.$root.cart"
+                            :total-item="totalItem"
                         />
-                        <cart-item :item="totalItem" />
                     </div>
                 </div>
                 <div class="checkout__short">
-                    <payment />
+                    <personal-data
+                        :items="this.$root.cart"
+                        @completed="showPayment"
+                        v-if="process == 1"
+                    />
+                    <payment
+                        v-else
+                        :order="order"
+                    />
                 </div>
             </div>
             <div class="cart-actions">
@@ -63,13 +57,17 @@ import {
 from '../ui'
 
 import CartItem from './CartItem.vue'
+import CartResume from './CartResume.vue'
 import Payment from './Payment.vue'
+import PersonalData from './PersonalData.vue'
 
 export default {
     name: 'CartCheckout',
     components: {
         CartItem,
+        CartResume,
         Payment,
+        PersonalData,
         UiBlock,
         UiButton,
         UiRow,
@@ -87,12 +85,15 @@ export default {
                 title: null,
                 bold: true,
                 price: 0,
-            }
+            },
+            process: 1,
+            order: null,
         }
     },
     watch: {
         '$root.cart': {
-            handler: function () {
+            handler: function (cart) {
+                // console.log('cambiato');
                 this.calculateTotal()
                 this.showCart()
             },
@@ -100,9 +101,7 @@ export default {
         }
     },
     methods: {
-        init: function () {
-
-        },
+        init: function () {},
         calculateTotal: function () {
             if (this.$root.cart && this.$root.cart.length > 0) {
                 let total = 0
@@ -137,9 +136,16 @@ export default {
         },
         hideCart: function () {
             this.$refs.modal.hide()
+        },
+        showPayment: function (order) {
+            // console.log('completo', order);
+            this.order = order
+            this.process = 2
         }
     },
-    mounted: function () {},
+    mounted: function () {
+        this.init()
+    },
 }
 </script>
 
@@ -147,6 +153,7 @@ export default {
 @import '~styles/shared';
 
 .checkout {
+
     &__title {
         padding: 0 ($spacer / 1.8) ($spacer * 1.618);
     }
@@ -162,14 +169,14 @@ export default {
     }
 
     &__resume {
-        background-color: darken($white, 5);
-        padding-right: $spacer;
-        padding-left: $spacer;
+        @include gradient-directional(darken($white, 10), darken($white, 5), 305deg);
+        @include box-shadows-size(rgba($light, .33), 0px, 2px, 30px, 0);
+        height: 100%;
     }
 
     &__short {
         flex: 1 1 40%;
-        background-color: lighten($dark, 25);
+        @include gradient-directional(lighten($primary, 10), lighten($primary, 0), 125deg);
         @include box-shadows($black);
     }
 }

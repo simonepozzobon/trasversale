@@ -111,7 +111,8 @@
   border: $modal-content-border-width solid $modal-content-border-color;
   @include border-radius($modal-content-border-radius);
   @include box-shadow($modal-content-box-shadow-xs);
-  @include gradient-directional($white, darken($white, 5), -220deg);
+  @include gradient-directional(darken($white, 10), darken($white, 3), 305deg);
+  // @include gradient-directional($white, darken($white, 5), -220deg);
   // Remove focus outline from opened modal
   outline: 0;
 }

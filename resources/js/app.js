@@ -55,10 +55,14 @@ const app = new Vue({
                 })
             },
             addToCart: function(content) {
+                // console.log('add');
                 let itemID = content.item.id
-                let itemCheck = this.cart.findIndex(item => item.item.id == itemID)
-                if (itemCheck > -1) {
-                    this.cart[itemCheck].item.quantity = this.cart[itemCheck].item.quantity + 1
+                let idx = this.cart.findIndex(item => item.item.id == itemID)
+                if (idx > -1) {
+                    let item = Object.assign({}, this.cart[idx])
+                    item.item.quantity = item.item.quantity + 1
+
+                    this.cart.splice(idx, 1, item)
                 } else {
                     let item = Object.assign({}, content)
                     item.item.quantity = 1
