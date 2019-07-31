@@ -11,4 +11,9 @@ class Order extends Model
     public function products() {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

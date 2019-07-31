@@ -4,15 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use App\OrderItem;
+use App\Transaction;
 
 use Braintree\ClientToken;
+use Braintree\Gateway;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+    public function __construct ()
+    {
+        $this->gateway = new Gateway([
+            'environment' => env('BRAINTREE_ENV'),
+            'merchantId' => env('BRAINTREE_MERCHANT_ID'),
+            'publicKey' => env('BRAINTREE_PUBLIC_KEY'),
+            'privateKey' => env('BRAINTREE_PRIVATE_KEY'),
+        ]);
+    }
+
+
     public function generate_token()
     {
-        $token = ClientToken::generate();
+        $token = $this->gateway->clientToken()->generate();
         return [
             'token' => $token
         ];
@@ -46,6 +59,48 @@ class PaymentController extends Controller
         return [
             'success' => true,
             'order' => $order
+        ];
+    }
+
+    public function create_transaction(Request $request)
+    {
+        $nonce = $request->nonce;
+
+        $order = Order::find($request->order_id);
+        $items = $order->products;
+
+        $amount = 0;
+        foreach ($items as $key => $item) {
+            $subtotal = $item->price * $item->quantity;
+            $amount = $amount + $subtotal;
+        }
+
+        try {
+            $results = $this->gateway->transaction()->sale([
+                'amount' => $amount,
+                'paymentMethodNonce' => $nonce,
+                'options' => [
+                    'submitForSettlement' => True
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'errors' => $e
+            ];
+        }
+
+        $transaction = new Transaction();
+        $transaction->order_id = $request->order_id;
+        $transaction->braintree_id = $results->transaction->id;
+        $transaction->nonce = $nonce;
+        $transaction->amount = $amount;
+        $transaction->status = $results->success;
+        $transaction->save();
+
+        return [
+            'success' => true,
+            'results' => $results,
         ];
     }
 }

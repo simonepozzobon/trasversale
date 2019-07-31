@@ -240,6 +240,7 @@ export default {
             let data = new FormData()
             data.append('nonce', payload.nonce)
             data.append('order_id', this.order.id)
+
             this.$http.post('/api/payment/transaction', data).then(response => {
                 console.log(response);
             })
