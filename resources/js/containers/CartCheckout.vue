@@ -82,6 +82,7 @@
                     :has-margin="false"
                     :is-active="true"
                     display="inline-block"
+                    @click="hideCart"
                 />
             </div>
         </div>
@@ -103,6 +104,9 @@ import CartItem from './CartItem.vue'
 import CartResume from './CartResume.vue'
 import Payment from './Payment.vue'
 import PersonalData from './PersonalData.vue'
+
+require('gsap/CSSRulePlugin')
+require('gsap/CSSPlugin')
 
 export default {
     name: 'CartCheckout',
@@ -164,7 +168,7 @@ export default {
                 this.total = total
 
                 this.totalItem = {
-                    title: 'Sub Totale',
+                    title: 'Totale',
                     hasDescription: false,
                     hasQuantity: false,
                     bold: true,
@@ -211,11 +215,15 @@ export default {
 
         },
         showSuccess: function () {
+            let success = this.$refs.success
+            let payment = this.$refs.payment
+
+            TweenMax.set(success, {
+                display: 'flex'
+            })
+
             let resume = this.$refs.resume
             let panel = this.$refs.container
-
-            let payment = this.$refs.payment
-            let success = this.$refs.success
 
             let container = payment.$refs.container
             let title = payment.$refs.title.$el
@@ -226,9 +234,7 @@ export default {
             let successMessage = this.$refs.successMessage.$el
             let successBtn = this.$refs.successBtn.$el
 
-            TweenMax.set(success, {
-                display: 'flex'
-            })
+
 
             let master = new TimelineMax({
                 paused: true,
@@ -243,18 +249,28 @@ export default {
 
             master.addLabel('size', '+=0')
 
-            master.fromTo(resume, .3, {
-                overflow: 'hidden',
-                flexBasis: '60%',
+            master.fromTo(resume, .4, {
+                css: {
+                    overflow: 'hidden',
+                    flexBasis: '60%',
+                },
             }, {
-                overflow: 'hidden',
-                flexBasis: 0,
+                css: {
+                    overflow: 'hidden',
+                    flexBasis: 0,
+                },
+                ease: Sine.easeIn,
             }, 'size')
 
-            master.fromTo(panel, .3, {
-                flexBasis: '40%',
+            master.fromTo(panel, .5, {
+                css: {
+                    flexBasis: '40%',
+                }
             }, {
-                flexBasis: '100%',
+                css: {
+                    flexBasis: '100%',
+                },
+                ease: Sine.easeInOut,
             }, 'size')
 
             master.addLabel('hide-payment', '+=0')
