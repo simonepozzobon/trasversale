@@ -17,8 +17,8 @@
         <dropin
             ref="dropin"
             :order="order"
-        >
-        </dropin>
+            @completed="completed"
+        />
     </div>
     <div class="payment__action">
         <ui-button
@@ -89,7 +89,7 @@ export default {
                 autoAlpha: 0,
             }, {
                 autoAlpha: 1
-            }, .1)
+            }, .1, 0)
 
             master.progress(1).progress(0)
 
@@ -99,6 +99,9 @@ export default {
         },
         submitPayment: function () {
             this.$refs.dropin.tokenize()
+        },
+        completed: function () {
+            this.$emit('completed')
         },
     },
     mounted: function () {
@@ -119,6 +122,10 @@ export default {
     &__dropin {
         padding-top: $spacer * 2;
         padding-bottom: $spacer;
+    }
+
+    &--hidden {
+        display: none;
     }
 }
 </style>

@@ -158,17 +158,17 @@ export default {
                     number: {
                         selector: '#number',
                         placeholder: '4111 1111 1111 1111',
-                        prefill: '4111111111111111'
+                        // prefill: '4111111111111111'
                     },
                     cvv: {
                         selector: '#cvv',
                         placeholder: '123',
-                        prefill: '400'
+                        // prefill: '400'
                     },
                     expirationDate: {
                         selector: '#expiration-date',
-                        placeholder: '10/2019',
-                        prefill: '09/20'
+                        placeholder: '10/19',
+                        // prefill: '09/20'
                     },
                 }
             }, (hostedFieldsErr, hfInstance) => {
@@ -193,19 +193,14 @@ export default {
 
                     this.hfInstance = hfInstance
 
-                    this.$nextTick(() => {
-                        // this.debug()
-                        console.log(fields);
-                        this.tokenize()
-                    })
+                    // this.$nextTick(() => {
+                    //     // this.debug()
+                    // })
                 }
             })
         },
         debug: function () {
-            this.hfInstance.tokenize({
-                fieldsToTokenize: ['number', 'cvv', 'expirationDate'],
-
-            })
+            this.tokenize()
         },
         initVaultManager: function () {
             vaultManager.create({
@@ -225,15 +220,19 @@ export default {
         },
         tokenize: function () {
             if (this.hfInstance) {
-                this.hfInstance.tokenize((err, payload) => {
-                    if (err) {
-                        console.error('Some fields are invalid:', err.details);
-                    }
-                    else {
-                        console.log(err, payload);
-                        this.startTransaction(payload)
-                    }
+
+                this.master.eventCallback('onReverseComplete', () => {
+                    this.hfInstance.tokenize((err, payload) => {
+                        if (err) {
+                            console.error('Some fields are invalid:', err.details);
+                        }
+                        else {
+                            console.log(err, payload);
+                            this.startTransaction(payload)
+                        }
+                    })
                 })
+                this.master.reverse()
             }
         },
         startTransaction: function (payload) {
@@ -243,6 +242,9 @@ export default {
 
             this.$http.post('/api/payment/transaction', data).then(response => {
                 console.log(response);
+                if (response.data.success) {
+                    this.$emit('completed')
+                }
             })
         }
     },

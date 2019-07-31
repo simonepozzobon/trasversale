@@ -185,7 +185,7 @@ export default {
                 this.$nextTick(() => {
                     this.submitOrder()
                 })
-            }, 1000)
+            }, 500)
         },
         initAnim: function () {
             let container = this.$refs.form
@@ -227,7 +227,7 @@ export default {
 
             this.$nextTick(() => {
                 this.master.play()
-                this.debug()
+                // this.debug()
             })
         },
         submitOrder: function () {
@@ -252,7 +252,7 @@ export default {
                             this.leavingAnim().then(() => {
                                 this.$emit('completed', response.data.order)
                             })
-                        }, 2000)
+                        }, 1000)
                     }
                     else {
                         this.disableBtn = false
@@ -276,7 +276,7 @@ export default {
                     clearProps: 'all'
                 })
 
-                master.staggerFromTo([btn, loader, title], .6, {
+                master.staggerFromTo([btn, title], .6, {
                     autoAlpha: 1,
                 }, {
                     autoAlpha: 0

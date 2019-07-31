@@ -5,15 +5,21 @@
         size="xl"
         hide-header
         hide-footer
+        no-close-on-backdrop
+        dialog-class="checkout__modal-container"
+        content-class="checkout__modal"
     >
         <div class="checkout__container">
-            <ui-title
+            <!-- <ui-title
                 title="Checkout"
                 :is-column="true"
                 class="checkout__title"
-            />
+            /> -->
             <div class="checkout__row">
-                <div class="checkout__resume-container">
+                <div
+                    class="checkout__resume-container"
+                    ref="resume"
+                >
                     <div class="checkout__resume resume">
                         <cart-resume
                             :items="this.$root.cart"
@@ -21,24 +27,60 @@
                         />
                     </div>
                 </div>
-                <div class="checkout__short">
+                <div
+                    class="checkout__short"
+                    ref="container"
+                >
                     <personal-data
+                        ref="billing"
+                        v-if="process == 1"
                         :items="this.$root.cart"
                         @completed="showPayment"
-                        v-if="process == 1"
                     />
                     <payment
+                        ref="payment"
                         v-else
                         :order="order"
+                        @completed="showSuccess"
                     />
+                    <div
+                        class="succes-message"
+                        ref="success"
+                    >
+                        <ui-title
+                            ref="successTitle"
+                            title="Pagamento riuscito"
+                            color="white"
+                            :is-column="true"
+                            align="center"
+                        />
+                        <ui-paragraph
+                            ref="successMessage"
+                            color="white"
+                            content="A breve riceverà una mail di conferma"
+                            align="center"
+                        />
+
+                        <ui-button
+                            ref="successBtn"
+                            class="succes-message__btn"
+                            title="Chiudi"
+                            color="yellow"
+                            :is-active="true"
+                            :has-margin="false"
+                            display="inline-block"
+                            @click="hideCart"
+                        />
+                    </div>
                 </div>
             </div>
             <div class="cart-actions">
                 <ui-button
                     title="Continua lo shopping"
-                    color="primary"
+                    color="light"
                     :has-container="false"
                     :has-margin="false"
+                    :is-active="true"
                     display="inline-block"
                 />
             </div>
@@ -52,6 +94,7 @@ import {
     UiBlock,
     UiButton,
     UiRow,
+    UiParagraph,
     UiTitle,
 }
 from '../ui'
@@ -71,6 +114,7 @@ export default {
         UiBlock,
         UiButton,
         UiRow,
+        UiParagraph,
         UiTitle,
     },
     data: function () {
@@ -102,6 +146,11 @@ export default {
     },
     methods: {
         init: function () {},
+        debug: function () {
+            setTimeout(() => {
+                this.showSuccess()
+            }, 1000)
+        },
         calculateTotal: function () {
             if (this.$root.cart && this.$root.cart.length > 0) {
                 let total = 0
@@ -137,22 +186,124 @@ export default {
         hideCart: function () {
             this.$refs.modal.hide()
         },
+        smoothHeight: function () {
+            return new Promise((resolve, reject) => {
+                let container = this.$refs.container
+                // let payment = this.$refs.payment.$el
+                // let billing = this.$refs.billing.$el
+
+
+                let size = container.getBoundingClientRect()
+                let height = size.height
+
+                container.style.height = height + 'px'
+
+                this.$nextTick(() => {
+                    resolve()
+                })
+            });
+        },
         showPayment: function (order) {
-            // console.log('completo', order);
             this.order = order
-            this.process = 2
-        }
+            this.smoothHeight().then(() => {
+                this.process = 2
+            })
+
+        },
+        showSuccess: function () {
+            let resume = this.$refs.resume
+            let panel = this.$refs.container
+
+            let payment = this.$refs.payment
+            let success = this.$refs.success
+
+            let container = payment.$refs.container
+            let title = payment.$refs.title.$el
+            let dropin = payment.$refs.dropin.$el
+            let btn = payment.$refs.btn.$el
+
+            let successTitle = this.$refs.successTitle.$el
+            let successMessage = this.$refs.successMessage.$el
+            let successBtn = this.$refs.successBtn.$el
+
+            TweenMax.set(success, {
+                display: 'flex'
+            })
+
+            let master = new TimelineMax({
+                paused: true,
+                yoyo: true,
+            })
+
+            master.staggerFromTo([title, dropin, btn], .6, {
+                autoAlpha: 1,
+            }, {
+                autoAlpha: 0,
+            }, .1)
+
+            master.addLabel('size', '+=0')
+
+            master.fromTo(resume, .3, {
+                overflow: 'hidden',
+                flexBasis: '60%',
+            }, {
+                overflow: 'hidden',
+                flexBasis: 0,
+            }, 'size')
+
+            master.fromTo(panel, .3, {
+                flexBasis: '40%',
+            }, {
+                flexBasis: '100%',
+            }, 'size')
+
+            master.addLabel('hide-payment', '+=0')
+
+            master.fromTo(payment.$el, .1, {
+                className: '-=payment--hidden'
+            }, {
+                className: '+=payment--hidden'
+            }, 'hide-payment')
+
+            master.addLabel('success-panel', '+=0')
+
+            master.fromTo(success, .2, {
+                autoAlpha: 0,
+            }, {
+                autoAlpha: 1,
+            }, 'success-panel')
+
+            master.addLabel('show-message', '+=0')
+
+            master.staggerFromTo([successTitle, successMessage, successBtn], .6, {
+                autoAlpha: 0,
+            }, {
+                autoAlpha: 1,
+            }, .3, 'show-message')
+
+            master.progress(1).progress(0)
+
+            this.$nextTick(() => {
+                console.log('ciao');
+                master.play()
+            })
+        },
     },
     mounted: function () {
         this.init()
+        // this.debug()
     },
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~styles/shared';
 
 .checkout {
+    &__modal {
+        background-image: none;
+        border: none;
+    }
 
     &__title {
         padding: 0 ($spacer / 1.8) ($spacer * 1.618);
@@ -170,7 +321,7 @@ export default {
 
     &__resume {
         @include gradient-directional(darken($white, 10), darken($white, 5), 305deg);
-        @include box-shadows-size(rgba($light, .33), 0px, 2px, 30px, 0);
+        @include box-shadows-size(rgba($black, .33), 0px, 2px, 30px, 0);
         height: 100%;
     }
 
@@ -181,30 +332,22 @@ export default {
     }
 }
 
-.sub-section {
+.succes-message {
     width: 100%;
-    padding: ($spacer / 1.8) ($spacer * 2);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: none;
 
-    &__border {
-        margin-top: 2px;
-        @include border-gradient(1px, rgba($yellow, 1), rgba($yellow, 0));
-    }
-
-    &__action {
-        margin-top: $spacer;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    &--no-padding {
-        padding: ($spacer / 1.8) 0;
+    &__btn {
+        margin-top: $spacer * 2;
     }
 }
 
 .cart-actions {
-    margin-top: $spacer;
+    margin-top: $spacer * 2;
     width: 100%;
     display: flex;
     justify-content: space-around;
