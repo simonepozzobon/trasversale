@@ -345,7 +345,7 @@ export default {
                 this.counter = this.cached.length
                 // console.log('cached', this.cached);
                 let cached = Object.assign([], this.cached)
-                cached.push(cached[0])
+                // cached.push(cached[0])
                 let duplicates = checkDuplicateInObject('id', cached)
                 // console.log('cached', cached);
                 if (duplicates.check) {
