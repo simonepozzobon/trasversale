@@ -520,7 +520,7 @@ export default {
         },
         getColors: function () {
             // let themeColors = ['blue', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'white', 'gray', 'gray-dark', 'black', 'primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
-            let themeColors = ['#25A2B6', '#6EC3D0', '#BCE3E9', '#FCC02F', '#FED668', '#FEECB8', '#000000', '#595959', '#B2B2B2', ]
+            let themeColors = ['#25A2B6', '#6EC3D0', '#BCE3E9', '#FCC02F', '#FED668', '#FEECB8', '#000000', '#FFFFFF', '#595959', '#B2B2B2', ]
             let colors = []
 
             for (let i = 0; i < themeColors.length; i++) {
