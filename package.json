@@ -18,7 +18,7 @@
         "cross-env": "^5.1",
         "gsap": "^2.1.2",
         "jquery": "^3.4.1",
-        "lodash": "^4.17.5",
+        "lodash": "^4.17.15",
         "moment": "^2.24.0",
         "node-sass": "^4.12.0",
         "popper.js": "^1.15.0",
@@ -33,12 +33,17 @@
     "dependencies": {
         "@sentry/browser": "^5.4.0",
         "@sentry/integrations": "^5.4.1",
+        "@storefrontui/vue": "0.0.4-aplha.6",
+        "braintree-web": "^3.50.0",
+        "braintree-web-drop-in": "^1.19.0",
         "element-resize-detector": "^1.1.15",
+        "isotope-packery": "^2.0.1",
         "jquery-ui": "^1.12.1",
         "laravel-mix": "^4.0.15",
         "lodash.debounce": "^4.0.8",
         "lodash.isequal": "^4.5.0",
         "lodash.orderby": "^4.6.0",
+        "packery": "^2.1.2",
         "tiptap": "^1.19.3",
         "tiptap-extensions": "^1.19.4",
         "vue-grid-layout": "^2.3.4",
@@ -48,6 +53,7 @@
         "vuedraggable": "^2.21.0",
         "vueisotope": "^3.1.2",
         "vuejs-clipper": "^1.0.1",
+        "vuejs-datepicker": "^1.6.2",
         "vuelayers": "^0.11.4"
     }
 }

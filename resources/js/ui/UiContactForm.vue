@@ -1,71 +1,56 @@
 <template>
 <div class="ui-contact-form">
-    <div class="form-group row">
-        <label
-            for="name"
-            class="col-md-2"
-        >
+    <div class="form-group">
+        <label for="name">
             Nome
         </label>
-        <div class="col-md-10">
-            <input
-                type="text"
-                class="form-control"
-                name="name"
-                v-model="name"
-                placeholder="Il tuo nome ..."
-            >
-        </div>
-    </div>
-    <div class="form-group row">
-        <label
-            for="email"
-            class="col-md-2"
+        <input
+            type="text"
+            class="form-control"
+            name="name"
+            v-model="name"
+            placeholder="Il tuo nome ..."
         >
+    </div>
+    <div class="form-group">
+        <label for="email">
             Email
         </label>
-        <div class="col-md-10">
-            <input
-                type="email"
-                class="form-control"
-                name="email"
-                v-model="email"
-                placeholder="La mail per contattarti ..."
-            >
-        </div>
-    </div>
-    <div class="form-group row">
-        <label
-            for="message"
-            class="col-md-2"
+        <input
+            type="email"
+            class="form-control"
+            name="email"
+            v-model="email"
+            placeholder="La mail per contattarti ..."
         >
+    </div>
+    <div class="form-group">
+        <label for="message">
             Messaggio
         </label>
-        <div class="col-md-10">
-            <textarea
-                name="message"
-                class="form-control"
-                placeholder="Il tuo messaggio ..."
-            ></textarea>
-        </div>
+        <textarea
+            name="message"
+            class="form-control"
+            placeholder="Il tuo messaggio ..."
+        ></textarea>
     </div>
-    <div class="form-group row">
-        <label
-            for="privacy"
-            class="col-md-2"
-        >
+    <div class="form-group">
+        <label for="privacy">
             Privacy
         </label>
-        <div class="col-md-10">
-            <ui-checkbox
-                @click="setPrivacy"
-                :value="privacy"
-            />
-        </div>
+        <ui-checkbox
+            @click="setPrivacy"
+            :value="privacy"
+        >
+            Inviando il form autorizzate il trattamento dei dati personali trasmessi ai sensi della legge 675/96. Si autorizza anche al trattamento dei dati per ricevere informazioni o promozioni di iniziative future.
+        </ui-checkbox>
     </div>
     <div class="row">
         <div class="col">
-            <button class="btn btn-outline-primary">
+            <button
+                class="btn btn-outline-primary"
+                :class="hasBigBtnClass"
+            >
                 Invia
             </button>
         </div>
@@ -80,7 +65,13 @@ export default {
     components: {
         UiCheckbox,
     },
-    data: function() {
+    props: {
+        hasBigBtn: {
+            type: Boolean,
+            default: true,
+        },
+    },
+    data: function () {
         return {
             name: null,
             email: null,
@@ -88,8 +79,16 @@ export default {
             privacy: false,
         }
     },
+    computed: {
+        hasBigBtnClass: function () {
+            if (this.hasBigBtn) {
+                return 'btn-block'
+            }
+            return null
+        },
+    },
     methods: {
-        setPrivacy: function(value) {
+        setPrivacy: function (value) {
             this.privacy = value
         }
     },

@@ -19,6 +19,13 @@ const Paragraph = {
             required: false,
             type: 'color-picker',
         },
+        {
+            key: 'padding_top',
+            label: 'Spazio sopra',
+            default: true,
+            required: false,
+            type: 'switch',
+        },
     ],
 }
 

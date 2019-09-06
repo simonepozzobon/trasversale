@@ -26,6 +26,7 @@
     <ui-paragraph
         v-else-if="module.type == 'paragraph'"
         :content="content.content"
+        :padding-top="content.hasOwnProperty('padding_top') && content.padding_top == false ? false : true"
     />
 
     <ui-button
@@ -35,20 +36,23 @@
 
     <ui-team
         v-else-if="module.type == 'team'"
-        :people="content.people"
-        :grid-col="content.gridCol"
-    />
-
-    <ui-packery-container
-        v-else-if="module.type == 'grid' && this.content.type == 'packery' && this.content.blocks.length > 0"
-        :items="this.content.blocks"
-        :gutter="8"
-        :units="12"
+        :people="content.team.people"
+        :grid-col="content.team.gridCol"
     />
 
     <ui-simple-grid
-        v-else-if="module.type == 'grid' && this.content.type == 'simple' && this.content.blocks.length > 0"
-        :blocks="this.content.blocks"
+        v-else-if="module && module.type === 'grid' && content.type === 'simple'"
+        :blocks="content.blocks"
+    />
+
+    <ui-packery-grid
+        v-else-if="module && module.type === 'grid' && content.type === 'packery'"
+        :items="content.blocks"
+    />
+
+    <ui-spacer
+        v-else-if="module.type === 'spacer' && content && content.hasOwnProperty('spacer')"
+        :height="content.spacer"
     />
 
     <ui-module-row
@@ -69,7 +73,17 @@
 
     <ui-calendar v-else-if="module.type === 'calendar'" />
 
-    <ui-contact-form v-else-if="module.type === 'contact-form'" />
+    <ui-contact-form
+        v-else-if="module.type === 'contact-form'"
+        :has-big-btn="content.hasOwnProperty('full_width_btn') && content.full_width_btn == false ? false : true"
+    />
+
+    <ui-map
+        v-else-if="module.type === 'map' && content.hasOwnProperty('map')"
+        :addresses="content.map.addresses"
+        :zoom="content.map.zoom"
+        :center="content.map.center"
+    />
 
     <div v-else>
         {{ module }}
@@ -84,68 +98,67 @@ export default {
     props: {
         module: {
             type: Object,
-            default: function() {}
+            default: function () {}
         },
         isAdmin: {
             type: Boolean,
             default: false,
         },
     },
-    data: function() {
+    data: function () {
         return {}
     },
     computed: {
-        content: function() {
+        content: function () {
             return JSON.parse(this.module.content)
         },
-        isAdminClass: function() {
+        isAdminClass: function () {
             if (this.isAdmin) {
                 return 'module-manager--is-admin'
             }
         }
     },
     methods: {
-        selected: function() {
+        selected: function () {
             if (this.isAdmin) {
                 this.$emit('selected', this.module)
             }
-        }
+        },
+        debug: function () {
+            if (this.module.type == 'paragraph') {
+                console.log(this.content);
+            }
+        },
     },
-    beforeCreate: function() {
-        this.$options.components.UiModuleRow = require('../ui/UiModuleRow.vue')
-            .default
-        this.$options.components.UiParagraph = require('../ui/UiParagraph.vue')
-            .default
-        this.$options.components.UiButton = require('../ui/UiButton.vue')
-            .default
-        this.$options.components.UiImage = require('../ui/UiImage.vue')
-            .default
-        this.$options.components.UiPackeryContainer = require('../ui/UiPackeryContainer.vue')
-            .default
-        this.$options.components.UiTitle = require('../ui/UiTitle.vue')
-            .default
-        this.$options.components.UiTeam = require('../ui/UiTeam.vue')
-            .default
-        this.$options.components.UiSimpleGrid = require('../ui/UiSimpleGrid.vue')
-            .default
-        this.$options.components.UiVideo = require('../ui/UiVideo.vue')
-            .default
-        this.$options.components.UiQuote = require('../ui/UiQuote.vue')
-            .default
-        this.$options.components.UiCalendar = require('../ui/UiCalendar.vue')
-            .default
-        this.$options.components.UiContactForm = require('../ui/UiContactForm.vue')
-            .default
+    beforeCreate: function () {
+        this.$options.components.UiModuleRow = require('../ui/UiModuleRow.vue').default
+        this.$options.components.UiParagraph = require('../ui/UiParagraph.vue').default
+        this.$options.components.UiButton = require('../ui/UiButton.vue').default
+        this.$options.components.UiImage = require('../ui/UiImage.vue').default
+        this.$options.components.UiMap = require('../ui/UiMap.vue').default
+        this.$options.components.UiPackeryGrid = require('../ui/UiPackeryGrid.vue').default
+        this.$options.components.UiTitle = require('../ui/UiTitle.vue').default
+        this.$options.components.UiTeam = require('../ui/UiTeam.vue').default
+        this.$options.components.UiSimpleGrid = require('../ui/UiSimpleGrid.vue').default
+        this.$options.components.UiVideo = require('../ui/UiVideo.vue').default
+        this.$options.components.UiQuote = require('../ui/UiQuote.vue').default
+        this.$options.components.UiCalendar = require('../ui/UiCalendar.vue').default
+        this.$options.components.UiContactForm = require('../ui/UiContactForm.vue').default
     },
-    mounted: function() {
-        // console.log(this.module);
+    mounted: function () {
         if (this.module.type == 'title') {
             let height = this.$refs.title.$el.offsetHeight + 'px'
             this.$root.sidebarPaddingTop = height
             this.$emit('title', height)
         }
+        else if (this.module.type === 'grid') {
+            console.log(this.module);
+        }
+        // this.$nextTick(() => {
+        //     this.debug()
+        // })
     },
-    beforeDestroy: function() {
+    beforeDestroy: function () {
         if (this.module.type == 'title') {
             this.$root.sidebarPaddingTop = false
             this.$emit('title', false)

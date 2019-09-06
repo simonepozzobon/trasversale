@@ -75,7 +75,7 @@
                         class="nav-link"
                         :has-margin="false"
                         :is-simple="true"
-                        url="https://www.linkedin.com/company/trasversale-srl"
+                        url="https://www.youtube.com/channel/UCFIPNXBLcaXO7JU9sUBebag"
                         target="_blank"
                     >
                         <youtube

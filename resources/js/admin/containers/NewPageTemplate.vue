@@ -28,6 +28,7 @@
                 @notify="notify"
                 @edit-main="toggleActive"
                 @before-save="beforeSave"
+                @delete-all="deleteAll"
             />
             <new-sidebar-template
                 ref="sidebar"
@@ -46,6 +47,7 @@
                 @edit-sidebar="toggleActive"
                 @notify="notify"
                 @before-save="beforeSave"
+                @delete-all="deleteAll"
             />
         </div>
     </div>
@@ -63,8 +65,9 @@ import NewMainTemplate from './NewMainTemplate.vue'
 import NotificationsContainer from './NotificationsContainer.vue'
 
 import {
-    Uuid,
+    checkDuplicateInObject,
     SizeUtil,
+    Uuid,
 }
 from '../../Utilities'
 
@@ -216,13 +219,13 @@ export default {
                 this.anim.play()
             }
         },
-        // debug: function () {
-        //     if (this.modelIdx !== 0) {
-        //         this.$nextTick(() => {
-        //             this.$refs.page.newComponent('grid')
-        //         })
-        //     }
-        // },
+        debug: function () {
+            // if (this.modelIdx !== 0) {
+            this.$nextTick(() => {
+                this.$refs.main.newComponent('grid')
+            })
+            // }
+        },
         hide: function () {
             if (this.anim) {
                 this.anim.reverse()
@@ -304,7 +307,10 @@ export default {
         },
         beforeSave: function (ref) {
             this.$emit('before-save', ref)
-        }
+        },
+        deleteAll: function () {
+            this.$emit('delete-all')
+        },
     },
     created: function () {
         this.observer = elementResizeDetectorMaker({

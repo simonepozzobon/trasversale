@@ -51,6 +51,11 @@ class MainController extends Controller
                     ['slug', '=', $subpage],
                     ['sluggable_type', '=', 'App\\Post'],
                 ]
+            )->orWhere(
+                [
+                    ['slug', '=', $subpage],
+                    ['sluggable_type', '=', 'App\\Product'],
+                ]
             )->with('sluggable.modules', 'sluggable.sidebar.modules')->first();
         }
 

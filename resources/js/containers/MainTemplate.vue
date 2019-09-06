@@ -21,12 +21,14 @@
             </div>
         </div>
     </div>
+    <cart-checkout></cart-checkout>
     <main-footer />
 </div>
 </template>
 
 <script>
 // import Partners from '../contents/Partners'
+import CartCheckout from './CartCheckout.vue'
 import MainMenu from './MainMenu.vue'
 import MainFooter from './MainFooter.vue'
 import ModuleManager from './ModuleManager.vue'
@@ -47,6 +49,7 @@ from '../Utilities'
 export default {
     name: 'MainTemplate',
     components: {
+        CartCheckout,
         MainMenu,
         MainFooter,
         ModuleManager,
@@ -71,16 +74,16 @@ export default {
     },
     watch: {
         '$root.sidebarPaddingTop': function (h) {
-            if (h) {
-                if (this.$refs.sidebar) {
-                    this.$refs.sidebar.style.paddingTop = h
-                }
-            }
-            else {
-                if (this.$refs.sidebar) {
-                    delete this.$refs.sidebar.style.paddingTop
-                }
-            }
+            // if (h) {
+            //     if (this.$refs.sidebar) {
+            //         this.$refs.sidebar.style.paddingTop = h
+            //     }
+            // }
+            // else {
+            //     if (this.$refs.sidebar) {
+            //         delete this.$refs.sidebar.style.paddingTop
+            //     }
+            // }
         },
         '$root.sidebar': {
             handler: function (sidebar) {
@@ -126,7 +129,6 @@ $debug-opacity: 0 !default;
     }
 
     &__sidebar {
-        margin-top: $spacer * 3;
         padding-top: $spacer;
     }
 }

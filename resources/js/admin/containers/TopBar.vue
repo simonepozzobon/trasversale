@@ -3,7 +3,9 @@
     <a
         class="navbar-brand col-sm-3 col-md-2 mr-0"
         href="#"
-    >Trasversale</a>
+    >
+        Trasversale
+    </a>
     <div class="navbar-nav">
         <a
             href="#"
@@ -18,7 +20,9 @@
             <a
                 class="nav-link"
                 href="#"
-            >Sign out</a>
+            >
+                Sign out
+            </a>
         </li>
     </ul>
 </nav>

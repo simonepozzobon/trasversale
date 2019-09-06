@@ -57,10 +57,6 @@ export default {
             type: Boolean,
             default: false,
         },
-        display: {
-            type: String,
-            default: null,
-        },
         hasContainer: {
             type: Boolean,
             default: true,
@@ -77,15 +73,19 @@ export default {
             type: String,
             default: null,
         },
+        display: {
+            type: String,
+            default: null,
+        },
         eventParams: [String, Object, Array, Number],
     },
-    data: function() {
+    data: function () {
         return {
             colorClass: null,
         }
     },
     watch: {
-        isActive: function(value) {
+        isActive: function (value) {
             this.setStatus()
         },
     },
@@ -95,47 +95,48 @@ export default {
         //         return 'btn-outline-'+this.color
         //     }
         // },
-        blockClass: function() {
+        blockClass: function () {
             if (this.block) {
                 return 'btn-block'
             }
         },
-        displayClass: function() {
+        displayClass: function () {
             if (this.display) {
-                return 'ui-button--'+this.display
+                return 'ui-button--' + this.display
             }
         },
-        noContainerClass: function() {
+        noContainerClass: function () {
             if (!this.hasContainer) {
                 return 'ui-button--no-container'
             }
         },
-        alignSelfClass: function() {
+        alignSelfClass: function () {
             if (this.alignSelf == 'start') {
                 return 'ui-button--align-self-start'
             }
         },
-        marginClass: function() {
-            if (!this.hasMargin ) {
+        marginClass: function () {
+            if (!this.hasMargin) {
                 return 'ui-button--no-margin'
             }
         },
     },
     methods: {
-        clicked: function() {
-            if (!this.disable) {
+        clicked: function () {
+            if (this.disable == false) {
                 this.$emit('click', this.eventParams)
             }
         },
-        setStatus: function() {
+        setStatus: function () {
             if (!this.disable && this.isActive) {
                 this.colorClass = 'btn-' + this.color
-            } else {
+            }
+            else {
                 this.colorClass = 'btn-outline-' + this.color
             }
         }
     },
-    created: function() {
+    created: function () {
         this.setStatus()
     },
 

@@ -36,7 +36,7 @@ export default {
             default: null,
         },
         options: [Object, Array],
-        values: [Object, Array],
+        values: [Object, Array, String],
         isEdit: {
             type: Boolean,
             default: false,
@@ -68,18 +68,29 @@ export default {
             // }
         },
         setInitial: function (option) {
-            if (this.values) {
+            // set initial with default value if there is one
+            let initial = option.hasOwnProperty('default') ? option.default : null
+            let values = this.values
+            if (values) {
+
+                if (typeof values == 'string') {
+                    values = JSON.parse(values)
+                }
+
                 let key = option.key
                 if (option.hasOwnProperty('childrens') && option.childrens.length > 0) {
-                    // console.log('children', key,  this.values);
-                    return this.values
+                    // console.log('children', key, values);
+                    return values
                 }
-                // console.log('not-children', key,  this.values[key] ? this.values[key] : null);
+                // console.log('not-children', key,  values[key] ? values[key] : null);
+                if (values.hasOwnProperty(key)) {
+                    initial = values[key]
+                }
 
-                return this.values[key] ? this.values[key] : null
+                return initial
             }
 
-            return null
+            return initial
         },
         emitChanged: function (key, value) {
             this.dataObj[key] = value
@@ -90,6 +101,11 @@ export default {
             // console.log('Dynamic module è diverso', !isEqual(prev, value), key);
             if (!isEqual(prev, value) && type != 'file-input') {
                 this.emitChanged(key, value)
+            }
+            else if (key == 'columns') {
+                // console.log('Dynamic module è diverso', prev, value);
+                this.emitChanged(key, value)
+
             }
             else if (type === 'file-input') {
                 this.emitChanged(key, value)
@@ -132,6 +148,9 @@ export default {
                     }
                 }
             }
+
+
+            // console.log('emit', key, value, type);
         }
     },
     created: function () {

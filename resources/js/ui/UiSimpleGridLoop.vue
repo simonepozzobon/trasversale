@@ -1,11 +1,12 @@
 <template lang="html">
     <ui-block
         class="grid-product"
-        :size="block.hasOwnProperty('width') ? block.width : null">
+        :size="postPerRow">
 
         <ui-simple-grid-product
             v-if="block.type == 'product'"
-            :block="block"/>
+            :block="block"
+            />
 
         <ui-simple-grid-news
             v-if="block.type == 'news'"
@@ -29,7 +30,15 @@ export default {
     props: {
         block: {
             type: Object,
-            default: function () {},
+            default: function () {
+                return {}
+            },
+        },
+        options: {
+            type: Object,
+            default: function () {
+                return {}
+            },
         },
     },
     computed: {
@@ -38,6 +47,24 @@ export default {
                 return JSON.parse(this.block.content)
             }
             return this.block.content
+        },
+        postPerRow: function () {
+            let postSize = 0
+            let size = 0
+            if (this.options) {
+                postSize = this.options.post_per_row
+                if (postSize && postSize > 0) {
+                    size = Math.round(12 / postSize)
+                    if (size >= 2) {
+                        // console.log('si', size);
+                        return size
+                    }
+                    // console.log('no', size);
+                    return 2
+                }
+            }
+            // console.log(postSize, size);
+            return 3
         },
     },
     methods: {
@@ -48,6 +75,7 @@ export default {
         },
     },
     mounted: function () {
+        // console.log('blocco qui', this.block);
         this.$emit('category', this.content.category, this.block.id)
     }
 }

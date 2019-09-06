@@ -29,6 +29,7 @@
     <ui-switch
         v-else-if="option.type === 'switch'"
         :label="option.label"
+        :initial="initial"
         @changed="subChanged"
     />
 
@@ -233,8 +234,23 @@
 
     <grid-module
         v-else-if="option.type === 'grid'"
-        @update="subChanged"
         :initial="initial"
+        @update="subChanged"
+    />
+
+
+    <ui-spacer
+        v-else-if="option.type === 'spacer'"
+        :initial="initial"
+        @update="subChanged"
+    />
+
+    <admin-date-picker
+        v-else-if="option.type === 'date-picker'"
+        :label="option.label"
+        :name="option.key"
+        :initial="initial"
+        @update="setValue"
     />
 
     <!-- <div v-else>
@@ -291,6 +307,7 @@ import {
     isEqual
 }
 from '../../Utilities'
+import AdminDatePicker from './datepicker/AdminDatePicker.vue'
 import ColumnsPreview from './rowcolumn/ColumnsPreview.vue'
 import DummyModule from './DummyModule.vue'
 import DynamicSelect from './dynamicselect/DynamicSelect.vue'
@@ -304,6 +321,7 @@ import TextEditor from './TextEditor.vue'
 import {
     UiCheckbox,
     UiSwitch,
+    UiSpacer,
 }
 from '../../ui'
 import "vue-swatches/dist/vue-swatches.min.css"
@@ -311,6 +329,7 @@ import "vue-swatches/dist/vue-swatches.min.css"
 export default {
     name: 'DynamicModuleItem',
     components: {
+        AdminDatePicker,
         ColumnsPreview,
         DummyModule,
         DynamicSelect,
@@ -369,6 +388,7 @@ export default {
                 // if (this.option.key == 'elements') {
                 //     console.log('dynamic item change');
                 // }
+                // console.log(this.option.key, newValue, this.option.type);
                 this.$emit('changed', this.option.key, newValue, this.option.type)
             }
         },
@@ -416,6 +436,9 @@ export default {
         }
     },
     methods: {
+        setValue: function (value) {
+            this.value = value
+        },
         getModuleOption: function (key) {
             if (this.options && this.options.hasOwnProperty(key)) {
                 return this.options[key]
@@ -433,19 +456,16 @@ export default {
             }
         },
         subChanged: function (subModuleObj) {
-            console.log('fuori', subModuleObj);
+            // console.log('fuori', subModuleObj);
             // bisogna risettare l'oggetto altrimenti non aggiorna l'evento
             if (!isEqual(this.value, subModuleObj)) {
-                console.log('dentro', subModuleObj);
+                // console.log('dentro', subModuleObj);
                 this.value = clone(subModuleObj)
             }
         },
         teamChanged: function (teamModule) {
             this.value = Object.assign({}, teamModule)
         },
-        // mapUpdate: function (subModule) {
-        //     this.value = clone(subModule)
-        // },
         setDefault: function () {
             if (this.option.hasOwnProperty('default') && !this.edit) {
                 this.value = this.option.default
@@ -499,23 +519,23 @@ export default {
             }
         },
         getColors: function () {
-            let themeColors = ['blue', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'white', 'gray', 'gray-dark', 'black', 'primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
+            // let themeColors = ['blue', 'indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'white', 'gray', 'gray-dark', 'black', 'primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
+            let themeColors = ['#25A2B6', '#6EC3D0', '#BCE3E9', '#FCC02F', '#FED668', '#FEECB8', '#000000', '#595959', '#B2B2B2', ]
             let colors = []
 
             for (let i = 0; i < themeColors.length; i++) {
-                let color = this.getColor('--' + themeColors[i])
-                let idx = colors.findIndex(item => item == color)
-                if (idx < 0) {
-                    colors.push(color)
-                }
+                // let color = this.getColor('--' + themeColors[i])
+                // let idx = colors.findIndex(item => item == color)
+                // if (idx < 0) {
+                // colors.push(color)
+                colors.push(themeColors[i])
+                // }
             }
 
             this.colors = colors
         },
         getColor: function (key) {
-            return getComputedStyle(document.documentElement)
-                .getPropertyValue(key)
-                .trim()
+            return getComputedStyle(document.documentElement).getPropertyValue(key).trim()
         },
         previewFile: function (value) {
             this.value = value
@@ -528,7 +548,7 @@ export default {
         },
         getElements: function (value, relatedKey) {
             let url = '/api/admin/grid-elements/' + value
-            console.log(url);
+            // console.log(url);
             this.$http.get(url)
                 .then(response => {
                     // console.log(response.data.elements);
@@ -690,15 +710,17 @@ export default {
         },
     },
     beforeCreate: function () {
-        this.$options.components.DynamicModule = require('./DynamicModule.vue')
-            .default
+        this.$options.components.DynamicModule = require('./DynamicModule.vue').default
     },
     created: function () {
         this.getColors()
         this.setDefault()
         this.setInitial()
     },
-    mounted: function () {}
+    mounted: function () {
+        // console.log('modulo', this.module);
+        // console.log(this.values);
+    }
 }
 </script>
 

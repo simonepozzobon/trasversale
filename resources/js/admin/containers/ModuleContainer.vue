@@ -116,7 +116,7 @@ export default {
         formatTempData: function (obj) {
             // console.log('formatTempData');
             this.component.content = this.setPreview(obj)
-            // console.log(this.component);
+            // console.log('ciao', this.component.content);
         },
         deleteComponent: function (id, isNew, uuid = false) {
             // console.log('module container delete', this.component);
@@ -144,10 +144,11 @@ export default {
         },
         setPreview: function (obj) {
             // console.log('setting preview', obj);
+            // console.log('setting preview', this.item.type);
             switch (this.item.type) {
             case 'row':
                 // Riga
-                console.log('setting preview della row', obj);
+                // console.log('setting preview della row', obj);
                 let cols = []
                 let newCols = []
                 let content = this.component.content
@@ -181,7 +182,7 @@ export default {
 
                 return {
                     src: src,
-                    alt: obj.alt
+                        alt: obj.alt,
                 }
                 break;
 
@@ -204,17 +205,19 @@ export default {
                 break;
 
             case 'grid':
-                console.log(obj);
-                let blocks = []
-                if (obj.elements) {
-                    if (obj.elements.hasOwnProperty('blocks') && obj.elements.blocks) {
-                        blocks = obj.elements.blocks
-                    }
-                }
-                return {
-                    options: null,
-                    title: obj.title,
-                    type: obj.type,
+                // console.log('\preview', obj);
+                let grid = obj.grid
+                let blocks = grid.elements
+                let options = JSON.stringify({
+                    mode: grid.mode,
+                    models: grid.models,
+                    post_per_row: grid.post_per_row,
+                })
+
+                let newGrid = {
+                    options: options,
+                    title: grid.title,
+                    type: grid.type,
                     blocks: blocks.map((block, i) => {
                         return {
                             ...block,
@@ -228,12 +231,16 @@ export default {
                         }
                     })
                 }
+                return newGrid
                 break;
 
             default:
                 // DEfault
-                return obj
+                let newObj = Object.assign({}, obj)
+                return newObj
+                break
             }
+
         },
         changed: function (obj) {
             // console.log('changed', obj);
@@ -263,14 +270,13 @@ export default {
             // https://stackoverflow.com/questions/1230233/how-to-find-the-sum-of-an-array-of-numbers
             let columns = this.component.content
             let total = columns.map((col, idx) => {
-                    let content = col.content
-                    let size = content.size
-                    if (idx == data.idx) {
-                        size = content.size + data.size
-                    }
-                    return size
-                })
-                .reduce((a, b) => a + b, 0)
+                let content = col.content
+                let size = content.size
+                if (idx == data.idx) {
+                    size = content.size + data.size
+                }
+                return size
+            }).reduce((a, b) => a + b, 0)
 
 
             if (total > 12) {

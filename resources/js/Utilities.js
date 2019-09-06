@@ -71,27 +71,109 @@ const isFile = function(obj) {
 }
 
 const orderBy = require('lodash.orderby')
+const debounce = require('lodash.debounce')
 
 const sortModules = function(modules) {
     let sorted = orderBy(modules, ['order', 'created_at'], ['asc', 'asc'])
-    if (sorted.length > 0) {
-        for (let i = 0; i < sorted.length; i++) {
-            if (sorted[i].type === 'row') {
-                let sortedColumns = orderBy(sorted[i].content, ['order', 'created_at'], ['asc', 'asc'])
-                sortedColumns = sortedColumns.map(column => {
-                    let sortedModules = orderBy(column.content.modules, ['order', 'created_at'], ['asc', 'asc'])
-                    column.content.modules = sortedModules
-                    return column
-                })
-                sorted[i].content = sortedColumns
+
+    let formattedContents = sorted.map(module => {
+        if (module.type === 'row') {
+
+            let rowContent = module.content
+            if (typeof rowContent == 'string') {
+                rowContent = JSON.parse(rowContent)
             }
+
+            let sortedColumns = orderBy(rowContent, ['order', 'created_at'], ['asc', 'asc'])
+            let formattedColumns = sortedColumns.map(column => {
+
+                    let columnContent = column.content
+                    if (typeof columnContent == 'string') {
+                        columnContent = JSON.parse(columnContent)
+                    }
+                    // console.log(columnContent);
+
+
+                    let sortedModules = []
+                    let modulesArr = []
+
+                    if (columnContent.hasOwnProperty('modules')) {
+                        modulesArr = Array.from(columnContent.modules)
+
+                        sortedModules = orderBy(modulesArr, ['order', 'created_at'], ['asc', 'asc'])
+
+                    }
+
+                    let formattedColumn = {
+                        size: columnContent.size,
+                        modules: JSON.stringify(sortedModules)
+                    }
+
+                    column.content = JSON.stringify(formattedColumn)
+
+                return column
+            })
+
+            module.content = JSON.stringify(rowContent)
         }
-    }
-    return sorted
+
+        return module
+    })
+
+    return formattedContents
 }
 
+const checkOverflow = function (el) {
+    // Determines if the passed element is overflowing its bounds,
+    // either vertically or horizontally.
+    // Will temporarily modify the "overflow" style to detect this
+    // if necessary.
+    let curOverflow = el.style.overflow
+
+    if ( !curOverflow || curOverflow === "visible" ) {
+        el.style.overflow = "hidden"
+    }
+
+    let isOverflowing = el.clientWidth < el.scrollWidth || el.clientHeight < el.scrollHeight
+    // console.log(el, el.clientWidth, el.scrollWidth,el.clientHeight, el.scrollHeight);
+
+    el.style.overflow = curOverflow
+
+    return isOverflowing
+}
+
+const checkDuplicateInObject = function (propertyName, inputArray) {
+    let seenDuplicate = false,
+    itemProp = null,
+    testObject = {}
+
+    inputArray.map(function(item) {
+        let itemPropertyName = item[propertyName]
+
+        if (itemPropertyName in testObject) {
+            testObject[itemPropertyName].duplicate = true
+            item.duplicate = true
+            seenDuplicate = true
+            itemProp = item[propertyName]
+        }
+        else {
+            testObject[itemPropertyName] = item
+            delete item.duplicate
+        }
+    })
+
+    return {
+        check: seenDuplicate,
+        prop: itemProp
+    }
+}
+
+
 export {
+    checkDuplicateInObject,
+    checkOverflow,
     clone,
+    debounce,
     isEqual,
     isFile,
     SizeUtil,

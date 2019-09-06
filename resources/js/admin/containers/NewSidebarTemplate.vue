@@ -34,10 +34,16 @@
                     Aggiungi Componente
                 </button>
                 <button
-                    class="btn btn-outline-success"
+                    class="btn btn-outline-success ml-2"
                     @click="savePage"
                 >
                     Salva Sidebar
+                </button>
+                <button
+                    class="btn btn-outline-danger ml-auto"
+                    @click="deleteAll"
+                >
+                    Elimina tutto
                 </button>
             </div>
         </div>
@@ -77,6 +83,13 @@
             v-if="active"
         >
             Salva Sidebar
+        </button>
+        <button
+            class="btn btn-outline-danger ml-auto"
+            v-if="active"
+            @click="deleteAll"
+        >
+            Elimina tutto
         </button>
     </div>
     <components-list
@@ -291,8 +304,17 @@ export default {
             this.moduleType = null
             this.$emit('deleted', module)
         },
+        deleteAll: function () {
+            // this.$emit('delete-all')
+            let cached = Object.assign([], this.cached)
+            for (var i = 0; i < cached.length; i++) {
+                let data = Object.assign({}, cached[i])
+                // console.log(data);
+                this.deleteComponent(data.id, data.isNew, data.uuid)
+            }
+        },
         deleteComponent: function (id, isNew, uuid) {
-            console.log('elimina componente', id, isNew, uuid);
+            // console.log('elimina componente', id, isNew, uuid);
 
             // se è nuovo elimina il componente dalla visuale
             if (isNew) {
@@ -314,7 +336,7 @@ export default {
         searchAndDelete: function (objs, uuid) {
             let idx = objs.findIndex(obj => obj.uuid === uuid)
             if (idx > -1) {
-                console.log('trovato');
+                // console.log('trovato');
                 objs.splice(idx, 1)
             }
             else {

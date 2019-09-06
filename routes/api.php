@@ -19,6 +19,12 @@ Route::middleware('auth:api')->get(
     }
 );
 
+Route::prefix('payment')->group(function() {
+    Route::get('auth', 'PaymentController@generate_token');
+    Route::post('order', 'PaymentController@save_order');
+    Route::post('transaction', 'PaymentController@create_transaction');
+});
+
 Route::get('get-page/{page}/{subpage?}/{slug?}', 'MainController@get_dynamic_item');
 
 Route::prefix('admin')->group(

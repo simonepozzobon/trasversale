@@ -76,7 +76,7 @@ export default {
             type: Boolean,
             default: true,
         },
-        values: [Object, Array],
+        values: [Object, Array, String],
     },
     data: function () {
         return {
@@ -85,7 +85,9 @@ export default {
     },
     computed: {
         module: function () {
-            return DynamicParams.filter(params => params.name == this.name)[0]
+            let params = DynamicParams.find(params => params.name == this.name)
+            // console.log('parametri', params);
+            return params
         },
     },
     methods: {
@@ -142,7 +144,7 @@ export default {
     },
     mounted: function () {
         // console.log('module.options', this.module);
-        this.$nextTick(this.init)
+        this.$nextTick(() => this.init())
     },
     beforeDestroy: function () {
         if (this.master) {

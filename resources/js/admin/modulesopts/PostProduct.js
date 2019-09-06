@@ -49,7 +49,33 @@ const PostProduct = {
                     })
                 }
             },
-        }
+        },
+        {
+            key: 'start_at',
+            label: 'Data di inizio',
+            type: 'date-picker',
+            required: true,
+        },
+        {
+            key: 'end_at',
+            label: 'Data di fine',
+            type: 'date-picker',
+            required: true,
+        },
+        {
+            key: 'hours',
+            label: 'Durata del corso',
+            info: 'La durate è espressa in ore',
+            type: 'counter',
+            default: 0,
+            required: true,
+        },
+        {
+            key: 'address',
+            label: 'Indirizzo',
+            type: 'text',
+            required: true,
+        },
     ],
 }
 

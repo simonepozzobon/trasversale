@@ -17,3 +17,31 @@
 @mixin box-shadow-inset($color) {
   box-shadow: inset 0px 0px ($spacer * 2) rgba($color, .1);
 }
+
+@mixin box-shadows-size($color, $x, $y, $blur, $stop) {
+  box-shadow: $x $y $blur $stop $color;
+}
+
+@mixin border-bottom-gradient($size, $start, $stop) {
+    border-bottom: $size solid;
+    border-image-source: linear-gradient(to right, $start, $stop);
+    border-image-slice: 1;
+}
+
+@mixin border-gradient($size, $start, $stop) {
+    border: $size solid;
+    border-image-source: linear-gradient(to right, $start, $stop);
+    border-image-slice: 1;
+}
+
+@mixin border-bottom-gradient-three($size, $start, $stop, $percent, $end) {
+    border-bottom: $size solid;
+    border-image-source: linear-gradient(to right, $start, $stop $percent, $end);
+    border-image-slice: 1;
+}
+
+@mixin border-gradient-three($size, $start, $stop, $percent, $end) {
+    border: $size solid;
+    border-image-source: linear-gradient(to right, $start, $stop $percent, $end);
+    border-image-slice: 1;
+}

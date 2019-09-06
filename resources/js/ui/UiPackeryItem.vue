@@ -77,7 +77,11 @@ export default {
         gutter: {
             type: Number,
             default: 0,
-        }
+        },
+        isAdmin: {
+            type: Boolean,
+            default: false
+        },
     },
     computed: {
         bgClass: function () {
@@ -166,10 +170,12 @@ export default {
             // })
         },
         goToItem: function () {
-            this.$root.goToWithParams('subpage', {
-                page: 'post',
-                subpage: this.obj.slug.slug,
-            })
+            if (!this.isAdmin) {
+                this.$root.goToWithParams('subpage', {
+                    page: 'post',
+                    subpage: this.obj.slug.slug,
+                })
+            }
         }
     },
     mounted: function () {

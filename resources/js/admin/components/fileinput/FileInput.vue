@@ -143,6 +143,7 @@ export default {
             canvas.toBlob(blob => {
                 // blob.lastModifiedDate = new Date()
                 let file = new File([blob], this.file.name)
+                console.log(file);
 
                 this.getSrc(file).then(src => {
                     this.$emit('update', file, src)

@@ -1,6 +1,7 @@
 import {
     Calendar,
     Column,
+    ContactForm,
     Grid,
     Image,
     Map,
@@ -9,6 +10,7 @@ import {
     PostNews,
     PostProduct,
     Row,
+    Spacer,
     Team,
     Title,
     Video,
@@ -17,6 +19,7 @@ import {
 const DynamicParams = [
     Calendar,
     Column,
+    ContactForm,
     Grid,
     Image,
     Map,
@@ -25,6 +28,7 @@ const DynamicParams = [
     PostProduct,
     Quote,
     Row,
+    Spacer,
     Team,
     Title,
     Video,

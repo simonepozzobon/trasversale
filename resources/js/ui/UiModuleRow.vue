@@ -1,12 +1,13 @@
-<template lang="html">
-    <ui-row>
-        <ui-module-block
-            v-if="columns.length > 0"
-            v-for="column in columns"
-            :key="column.id"
-            :column="column">
-        </ui-module-block>
-    </ui-row>
+<template >
+<ui-row>
+    <ui-module-block
+        v-if="columns.length > 0"
+        v-for="column in columns"
+        :key="column.id"
+        :column="column"
+        :has-container="false"
+    />
+</ui-row>
 </template>
 
 <script>
@@ -22,11 +23,10 @@ export default {
     props: {
         columns: {
             type: Array,
-            default: function() {},
+            default: function () {},
         },
     },
-    mounted: function() {
-    }
+    mounted: function () {}
 }
 </script>
 

@@ -35,10 +35,16 @@
                     Aggiungi Componente
                 </button>
                 <button
-                    class="btn btn-outline-success"
+                    class="btn btn-outline-success ml-2"
                     @click="savePage"
                 >
                     {{ customSave }}
+                </button>
+                <button
+                    class="btn btn-outline-danger ml-auto"
+                    @click="deleteAll"
+                >
+                    Elimina tutto
                 </button>
             </div>
         </div>
@@ -79,6 +85,13 @@
         >
             {{ customSave }}
         </button>
+        <button
+            class="btn btn-outline-danger ml-auto"
+            v-if="active"
+            @click="deleteAll"
+        >
+            Elimina tutto
+        </button>
     </div>
     <components-list
         ref="componentSelector"
@@ -95,8 +108,9 @@ import EditPanel from '../components/EditPanel.vue'
 import ModuleContainer from './ModuleContainer.vue'
 
 import {
-    Uuid,
+    checkDuplicateInObject,
     SizeUtil,
+    Uuid,
 }
 from '../../Utilities'
 
@@ -197,6 +211,7 @@ export default {
             }
         },
         init: function () {
+            // console.log('iniiinini');
             // imposta una variabile intermedia per poter modificare i moduli
             let sorted = orderBy(this.modules, ['order', 'created_at'], ['asc', 'asc'])
             if (sorted.length > 0) {
@@ -223,14 +238,14 @@ export default {
                     this.cached.push(cache)
                 }
             }
-            this.debug()
+            // this.debug()
         },
         debug: function () {
-            if (this.cached.length === 0 && this.modelIdx !== 0) {
-                this.$nextTick(() => {
-                    this.newComponent('grid')
-                })
-            }
+            // if (this.cached.length === 0 && this.modelIdx !== 0) {
+            //     this.$nextTick(() => {
+            //         this.newComponent('contact-form')
+            //     })
+            // }
         },
         setInitials: function (objs) {
             for (let i = 0; i < objs.length; i++) {
@@ -255,14 +270,23 @@ export default {
                 this.cached.splice(idx, 1)
             }
         },
+        deleteAll: function () {
+            // this.$emit('delete-all')
+            let cached = Object.assign([], this.cached)
+            for (var i = 0; i < cached.length; i++) {
+                let data = Object.assign({}, cached[i])
+                // console.log(data);
+                this.deleteComponent(data.id, data.isNew, data.uuid)
+            }
+        },
         saveComponent: function (current) {
 
         },
-        deleteComponent: function (id, isNew, uuid) {
-            console.log('elimina componente', id, isNew, uuid);
+        deleteComponent: function (id = false, isNew, uuid) {
+            // console.log('elimina componente', id, isNew, uuid);
 
             // se è nuovo elimina il componente dalla visuale
-            if (isNew) {
+            if (isNew || id == false) {
                 this.cached = this.searchAndDelete(this.cached, uuid)
             }
             else {
@@ -270,7 +294,7 @@ export default {
                 let url = '/api/admin/delete-component/' + id
                 this.$http.delete(url)
                     .then(response => {
-                        // console.log(response.data);
+                        console.log(response.data);
                         // console.log('modulo eliminato', uuid);
                         if (response.data.success) {
                             this.cached = this.searchAndDelete(this.cached, uuid)
@@ -281,7 +305,7 @@ export default {
         searchAndDelete: function (objs, uuid) {
             let idx = objs.findIndex(obj => obj.uuid === uuid)
             if (idx > -1) {
-                console.log('trovato');
+                // console.log('trovato');
                 objs.splice(idx, 1)
             }
             else {
@@ -305,13 +329,12 @@ export default {
             // console.log(idx, subModule.uuid);
         },
         savePage: function (event = null, modelSaved = false) {
-            // console.log('salva pagina', this.cached);
             // if (modelSaved) {
             //     this.$emit('save-page')
             // }
 
             if (this.isPost && modelSaved == false) {
-                console.log('before save main')
+                // console.log('before save main')
                 this.$emit('before-save', 'main')
                 return null
             }
@@ -320,23 +343,47 @@ export default {
             if (this.model) {
                 this.$root.$emit('close-all-panels')
                 this.counter = this.cached.length
+                // console.log('cached', this.cached);
+                let cached = Object.assign([], this.cached)
+                // cached.push(cached[0])
+                let duplicates = checkDuplicateInObject('id', cached)
+                // console.log('cached', cached);
+                if (duplicates.check) {
+                    let duplicate = false
+                    cached = cached.map(cache => {
+                        if (cache.id == duplicates.prop) {
+                            if (duplicate == false) {
+                                duplicate = true
+                                return cache
+                            }
+                            else {
+                                return false
+                            }
+                        }
+                        else {
+                            return cache
+
+                        }
+                    }).filter(cache => cache != false)
+                }
+                // console.log('cached', cached);
                 let promises = []
-                for (let i = 0; i < this.cached.length; i++) {
+                for (let i = 0; i < cached.length; i++) {
                     // temps[i] = this.saveComponent(temps[i])
-                    switch (this.cached[i].type) {
+                    switch (cached[i].type) {
                     case 'row':
-                        let rowData = Object.assign({}, this.cached[i])
+                        let rowData = Object.assign({}, cached[i])
                         delete rowData.content
                         rowData.content = {
-                            columns: this.cached[i].content.length
+                            columns: cached[i].content.length
                         }
 
                         rowData = this.formatRequest(rowData)
 
                         let requestRow = this.$http.post('/api/admin/save-component', rowData)
                             .then(rowResponse => {
-                                this.cached[i] = this.formatFromResponse(this.cached[i], rowResponse.data.module)
-                                let columns = this.cached[i].content
+                                cached[i] = this.formatFromResponse(cached[i], rowResponse.data.module)
+                                let columns = cached[i].content
                                 for (let j = 0; j < columns.length; j++) {
                                     let modules = columns[j].content.modules
                                     let columnData = Object.assign({}, columns[j])
@@ -347,7 +394,7 @@ export default {
                                     columnData = this.formatRequest(columnData)
                                     let requestColumn = this.$http.post('/api/admin/save-component', columnData)
                                         .then(columnResponse => {
-                                            this.cached[i].content[j] = this.formatFromResponse(this.cached[i].content[j], columnResponse.data.module)
+                                            cached[i].content[j] = this.formatFromResponse(cached[i].content[j], columnResponse.data.module)
                                             if (modules) {
                                                 for (let k = 0; k < modules.length; k++) {
                                                     let moduleData = Object.assign({}, modules[k])
@@ -357,13 +404,13 @@ export default {
                                                     let requestModule = this.$http.post('/api/admin/save-component', moduleData)
                                                         .then(moduleResponse => {
                                                             let newModule = this.formatFromResponse(modules[k], moduleResponse.data.module)
-                                                            this.cached[i].content[j].modules[k] = newModule
-                                                            if (!this.cached[i].content[j].content.hasOwnProperty('modules')) {
-                                                                this.cached[i].content[j].content.modules = []
-                                                                this.cached[i].content[j].content.modules[k] = newModule
+                                                            cached[i].content[j].modules[k] = newModule
+                                                            if (!cached[i].content[j].content.hasOwnProperty('modules')) {
+                                                                cached[i].content[j].content.modules = []
+                                                                cached[i].content[j].content.modules[k] = newModule
                                                             }
                                                             else {
-                                                                this.cached[i].content[j].content.modules[k] = newModule
+                                                                cached[i].content[j].content.modules[k] = newModule
                                                             }
                                                         })
                                                     promises.push(requestModule)
@@ -376,19 +423,19 @@ export default {
                         promises.push(requestRow)
                         break;
                     case 'team':
-                        console.log(i);
+                        // console.log(i);
                         // wait uploads before run promises
                         this.hasAwait = true
 
-                        let teamObj = this.cached[i]
+                        let teamObj = cached[i]
                         let content = teamObj.content.team
                         let people = this.saveImage(content.people).then(people => {
-                            console.log(teamObj);
+                            // console.log(teamObj);
                             let teamData = this.formatRequest(teamObj)
                             let teamRequest = this.$http.post('/api/admin/save-component', teamData)
                                 .then(response => {
-                                    let temp = this.formatFromResponse(this.cached[i], response.data.module)
-                                    this.cached[i] = temp
+                                    let temp = this.formatFromResponse(cached[i], response.data.module)
+                                    cached[i] = temp
                                 })
                             promises.push(teamRequest)
                             if (this.hasAwait) {
@@ -403,19 +450,20 @@ export default {
 
                     default:
                         // console.log('default');
-                        let data = this.formatRequest(this.cached[i])
+                        let data = this.formatRequest(cached[i])
                         let request = this.$http.post('/api/admin/save-component', data)
                             .then(response => {
-                                let temp = this.formatFromResponse(this.cached[i], response.data.module)
-                                this.cached[i] = temp
+                                let temp = this.formatFromResponse(cached[i], response.data.module)
+                                cached[i] = temp
                             })
                         promises.push(request)
                     }
 
                     // if (i === this.cached.length - 1 && this.hasAwait) {
-                    //     console.log('fine', i, this.cached.length, this.hasAwait);
+                    // console.log('fine', i, this.cached.length, this.hasAwait);
                     // }
                 }
+
 
                 if (!this.hasAwait) {
                     this.processAllPromises(promises)
@@ -469,11 +517,11 @@ export default {
                     // }
                 })
                 .catch(err => {
-                    console.error(err);
+                    // console.error(err);
                     this.$emit('notify', {
                         uuid: Uuid.get(),
                         title: 'Errore',
-                        message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
+                        // message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
                     })
                 })
         },
@@ -568,6 +616,7 @@ export default {
         margin-top: $spacer * 4;
         margin-bottom: $spacer * 4;
         padding: $spacer * 2;
+        width: 100%;
         // @include gradient-directional(rgba($gray-300, 0), rgba($light, 0), 135deg);
         @include border-radius($spacer / 2);
         // @include box-shadows($gray-500);
@@ -580,12 +629,23 @@ export default {
         // @include gradient-directional(rgba($gray-300, 0), rgba($light, 0), 135deg);
         @include border-radius($spacer / 2);
         // @include box-shadows($gray-500);
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     &__head {
-        display: flex;
+        width: 100%;
         flex-wrap: wrap;
-        justify-content: space-between;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__action {
+        width: 100%;
+        display: flex;
+        justify-content: center;
         align-items: center;
     }
 
@@ -603,7 +663,8 @@ export default {
     }
 
     &--no-title &__head {
-        justify-content: center;
+        // justify-content: space-between;
+        // justify-content: center;
     }
 
     &--is-active & {

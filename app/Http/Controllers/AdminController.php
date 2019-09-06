@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Post;
 use App\News;
 use App\Grid;
+use App\Slug;
 use App\Module;
 use App\Product;
 use App\Element;
@@ -14,6 +15,7 @@ use App\Sidebar;
 use App\Category;
 use App\StaticPage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class AdminController extends Controller
 {
@@ -123,10 +125,13 @@ class AdminController extends Controller
     public function save_post_type(Request $request)
     {
         $model = 'App\\'.ucfirst($request->model);
+
         $post = isset($request->id) ? $model::find($request->id) : new $model();
 
         $post->category_id = $request->category;
-        $post->title = $request->title;
+        if (isset($request->title)) {
+            $post->title = $request->title;
+        }
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
@@ -140,12 +145,44 @@ class AdminController extends Controller
             $post->price = $request->price;
         }
 
+        if (isset($request->start_at) && $request->start_at && $request->start_at != 'null') {
+            $string = strtotime($request->start_at);
+            $start_at = Carbon::parse($string)->format('Y-m-d H:i:s');
+            $post->start_at = $start_at;
+        }
+
+        if (isset($request->end_at) && $request->end_at && $request->end_at != 'null') {
+            $string = strtotime($request->end_at);
+            $end_at = Carbon::parse($string)->format('Y-m-d H:i:s');
+            $post->end_at = $end_at;
+        }
+
+        if (isset($request->hours)) {
+            $post->hours = $request->hours;
+        }
+
         if (isset($request->options)) {
             $post->options = $request->options;
         }
 
         $post->save();
 
+        // salva slug
+        if (isset($request->id)) {
+            $slug = $post->slug()->first();
+            if (!$slug) {
+                $slug = new Slug();
+            }
+        } else {
+            $slug = new Slug();
+        }
+
+        $slug->sluggable_type = $model;
+        $slug->sluggable_id = $post->id;
+        $slug->slug = $request->slug;
+        $slug->save();
+
+        $post->slug = $post->slug;
 
         return [
             'success' => true,
@@ -314,7 +351,7 @@ class AdminController extends Controller
 
             $grid = isset($content->id) ? Grid::find($content->id) : new Grid();
 
-            $grid->title = $content->title;
+            // $grid->title = $content->title;
             $grid->type = $content->type;
             $grid->save();
 

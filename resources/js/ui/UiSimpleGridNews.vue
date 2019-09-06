@@ -1,39 +1,44 @@
-<template lang="html">
-    <div class="grid-news">
-        <ui-image
-            :src="content.thumb"
-            :alt="content.title"/>
-        <!-- <div class="grid-news__image">
+<template>
+<div class="grid-news">
+    <ui-image
+        :src="content.thumb"
+        :alt="content.title"
+    />
+    <!-- <div class="grid-news__image">
             <img
                 class="grid-news__figure"
                 :src="content.thumb"
                 :alt="content.title" />
         </div> -->
-        <div class="grid-news__details">
-            <div class="grid-news__category">
-                <span
-                    v-if="content.hasOwnProperty('category') && content.category.hasOwnProperty('title')"
-                    class="badge badge-light grid-news__badge"
-                    @click="filterCategory">
-                    {{ content.category.title }}
-                </span>
-            </div>
-            <div class="grid-news__title" @click="goToNews">
-                {{ content.title }}
-            </div>
-            <div class="grid-news__author">
-                {{ content.author }}
-            </div>
-            <div class="grid-news__date">
-                <!-- {{ content.created_at }} -->
-                26.05.19
-            </div>
-            <div class="grid-news__description">
-                <!-- {{ content.created_at }} -->
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud...
-            </div>
+    <div class="grid-news__details">
+        <div class="grid-news__category">
+            <span
+                v-if="content.hasOwnProperty('category') && content.category.hasOwnProperty('title')"
+                class="badge badge-light grid-news__badge"
+                @click="filterCategory"
+            >
+                {{ content.category.title }}
+            </span>
+        </div>
+        <div
+            class="grid-news__title"
+            @click="goToNews"
+        >
+            {{ content.title }}
+        </div>
+        <div class="grid-news__author">
+            {{ content.author }}
+        </div>
+        <div class="grid-news__date">
+            <!-- {{ content.created_at }} -->
+            26.05.19
+        </div>
+        <div class="grid-news__description">
+            <!-- {{ content.created_at }} -->
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud...
         </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -50,6 +55,12 @@ export default {
         block: {
             type: Object,
             default: function () {},
+        },
+        options: {
+            type: Object,
+            default: function () {
+                return {}
+            },
         },
     },
     computed: {

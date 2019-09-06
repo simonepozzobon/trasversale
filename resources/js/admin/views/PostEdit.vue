@@ -11,6 +11,8 @@
     :is-post="true"
     :has-slot="true"
     @save-page="savePost"
+    @before-save="savePost"
+    @delete-all="deleteAll"
 >
     <div class="page-template__content">
         <ui-title
@@ -46,7 +48,7 @@ import {
 }
 from '../../Utilities'
 export default {
-    name: 'PostCreate',
+    name: 'PostEdit',
     components: {
         DynamicModule,
         NewPageTemplate,
@@ -90,7 +92,7 @@ export default {
             let url = '/api/admin/post-type/' + this.type.model + '/' + this.$route.params.id
             this.$http.get(url)
                 .then(response => {
-                    // console.log(response);
+                    // console.log('get post', response);
                     if (response.data.success) {
                         let post = Object.assign({}, response.data.post)
                         this.setInitialValues(post)
@@ -104,10 +106,36 @@ export default {
             this.values = {
                 title: post.title,
                 price: post.price,
-                slug: post.slug.slug,
+                slug: post.slug && post.slug.hasOwnProperty('slug') ? post.slug.slug : null,
                 preview: post.thumb,
-                category: post.category.id
+                category: post.category.id,
             }
+
+            if (post.hasOwnProperty('hours')) {
+                this.values = {
+                    ...this.values,
+                    hours: post.hours,
+                }
+            }
+            if (post.hasOwnProperty('start_at')) {
+                this.values = {
+                    ...this.values,
+                    start_at: post.start_at,
+                }
+            }
+            if (post.hasOwnProperty('end_at')) {
+                this.values = {
+                    ...this.values,
+                    end_at: post.end_at,
+                }
+            }
+            if (post.hasOwnProperty('address')) {
+                this.values = {
+                    ...this.values,
+                    address: post.address,
+                }
+            }
+
             this.$nextTick(() => {
                 this.initialised = true
             })
@@ -115,23 +143,24 @@ export default {
         setObj: function (obj) {
             this.postObj = obj
         },
-        savePost: function () {
+        savePost: function (ref) {
             let url = '/api/admin/post-type/save'
             this.postObj.model = this.type.model
             this.postObj.id = this.$route.params.id
 
+            // console.log('salva il post', this.postObj);
+            // console.log('before save', this.postObj);
             let data = this.formatRequest(this.postObj)
-
-            request = this.$http.post(url, data)
+            this.$http.post(url, data)
                 .then(response => {
-                    // console.log('response', response);
+                    // console.log('response', response.data);
                     if (response.data.success) {
                         this.modelIdx = Number(response.data.post.id)
-                        this.model = 'App\\' + this.type.model.charAt(0)
-                            .toUpperCase() + this.type.model.slice(1)
-
+                        this.model = 'App\\' + this.type.model.charAt(0).toUpperCase() + this.type.model.slice(1)
                         this.$nextTick(() => {
-                            this.$refs.page.savePage(false)
+                            let page = this.$refs.page
+                            // console.log(page.$refs[ref]);
+                            page.$refs[ref].savePage(null, true)
                         })
                     }
                 })
@@ -156,6 +185,9 @@ export default {
                 return true
             }
             return false
+        },
+        deleteAll: function () {
+            this.modules = []
         },
     },
     mounted: function () {

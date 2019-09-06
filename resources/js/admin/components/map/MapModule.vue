@@ -50,7 +50,7 @@
                 type="text"
                 name="centerlat"
                 class="form-control"
-                v-model="center.lat"
+                v-model="center.lng"
             >
         </div>
     </div>
@@ -199,8 +199,8 @@ export default {
             title: null,
             zoom: 13,
             center: {
-                lat: 45.461118675626096,
-                lng: 9.19131164549529,
+                lat: 41.890135383777334,
+                lng: 12.492507845163345,
             },
         }
     },

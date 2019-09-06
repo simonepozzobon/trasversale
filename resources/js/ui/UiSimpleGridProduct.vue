@@ -2,8 +2,9 @@
     <div class="grid-product">
         <div class="grid-product__image">
             <img
+                v-if="image"
                 class="grid-product__figure"
-                :src="content.thumb"
+                :src="image"
                 :alt="content.title" />
         </div>
         <div class="grid-product__details">
@@ -12,9 +13,6 @@
             </div>
             <div class="grid-product__reviews">
                 *****
-            </div>
-            <div class="grid-product__price">
-                {{ price }} €
             </div>
             <div class="grid-product__action">
                 <a
@@ -30,7 +28,7 @@
 import UiBlock from './UiBlock.vue'
 
 export default {
-    name: 'UiSimpleGrid',
+    name: 'UiSimpleGridProduct',
     components: {
         UiBlock,
     },
@@ -38,6 +36,12 @@ export default {
         block: {
             type: Object,
             default: function () {},
+        },
+        options: {
+            type: Object,
+            default: function () {
+                return {}
+            },
         },
     },
     computed: {
@@ -53,18 +57,26 @@ export default {
             }
             return this.block.content
         },
+        image: function () {
+            if (this.block.thumb && this.block.thumb != 'no-image') {
+                return this.block.thumb
+            }
+
+            return false
+        },
     },
     methods: {
         goToProduct: function () {
             // console.log(this.$route.params.page);
-            this.$root.goToWithParams('item', {
+            this.$root.goToWithParams('subpage', {
                 page: this.$route.params.page,
-                subpage: this.$route.params.subpage,
-                item: this.content.slug.slug
+                subpage: this.content.slug.slug,
             })
         },
     },
-    mounted: function () {},
+    mounted: function () {
+        // console.log('ora', this.block);
+    },
 }
 </script>
 

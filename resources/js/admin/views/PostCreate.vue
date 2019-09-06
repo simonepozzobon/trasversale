@@ -10,6 +10,7 @@
     :is-post="true"
     :has-slot="true"
     @before-save="savePost"
+    @delete-all="deleteAll"
 >
     <div class="page-template__content">
         <ui-title
@@ -87,11 +88,11 @@ export default {
             if (this.modelIdx) {
                 this.postObj.id = this.modelIdx
             }
-
+            // console.log('before save', this.postObj);
             let data = this.formatRequest(this.postObj)
             this.$http.post(url, data)
                 .then(response => {
-                    console.log('response', response);
+                    // console.log('response', response.data);
                     if (response.data.success) {
                         this.modelIdx = Number(response.data.post.id)
                         this.model = 'App\\' + this.type.model.charAt(0).toUpperCase() + this.type.model.slice(1)
@@ -122,6 +123,9 @@ export default {
                 return true
             }
             return false
+        },
+        deleteAll: function () {
+            this.modules = []
         },
     },
     mounted: function () {
