@@ -6,11 +6,16 @@
                     Date
                 </div>
                 <div class="ui-sidebar-content__paragraph">
-                    dal 28 ottobre ’18 al 31 marzo 2019<br>
-                    dalle ore 9:00 alle ore 13:00 del sabato<br>
-                    e dalle 18:00 alle 21:00 del venerdi<br>
+                    <span v-if="this.startDate && this.endDate">
+                        dal {{ startDate }} al {{ endDate }}<br>
+                    </span>
+                    <span v-else-if="this.startDate">
+                        dal {{ startDate }}
+                    </span>
+
+                    <!-- dalle ore 9:00 alle ore 13:00 del sabato<br>
+                    e dalle 18:00 alle 21:00 del venerdi<br> -->
                     <br>
-                    frequenza <b>bisettimanale</b><br>
                     totale ore <b>145</b> di formazione in aula<br>
                     <b>attestato</b> di frequenza<br>
                 </div>
@@ -46,6 +51,10 @@
                         <label class="custom-control-label" for="pay-transfer">Desidero iscrivermi e pagare con bonifico</label>
                     </div>
                     <div class="custom-control custom-radio">
+                        <input type="radio" id="teacher-card" name="teacher-card" value="teacher-card" class="custom-control-input" v-model="booking">
+                        <label class="custom-control-label" for="teacher-card">Desidero pagare con la teacher card</label>
+                    </div>
+                    <div class="custom-control custom-radio">
                         <input type="radio" id="only-info" name="only-info" value="only-info" class="custom-control-input" v-model="booking">
                         <label class="custom-control-label" for="only-info">Desidero ricevere informazioni</label>
                     </div>
@@ -55,6 +64,7 @@
                         Note:<br>
                         1) Il pagamento con Paypal o Carta di Credito consente l'iscrizione diretta al seminario<br>
                         2) Il Bonifico Bancario consente l'iscrizione solo dopo la ricezione del pagamento.<br>
+                        3) Il pagamento con la Teacher card consente l'iscrizione solo dopo la ricezione del pagamento.<br>
                     </p>
                 </div>
                 <div>
@@ -87,10 +97,12 @@ import {
     UiButton
 }
 from '../ui'
+
 import ModuleManager from '../containers/ModuleManager.vue'
+import moment from 'moment'
 
 export default {
-    name: 'Product',
+    name: 'ProductSubPage',
     components: {
         ModuleManager,
         UiButton,
@@ -118,7 +130,49 @@ export default {
         },
         title: function () {
 
-        }
+        },
+    },
+    computed: {
+        item: function () {
+            if (this.content && this.content.item) {
+                return this.content.item
+            }
+            else {
+                return {}
+            }
+        },
+        startDate: function () {
+            if (this.item.hasOwnProperty('start_at')) {
+                return moment(this.item.start_at).locale('it').format('DD MMMM YYYY')
+            }
+            else {
+                return null
+            }
+        },
+        endDate: function () {
+            if (this.item.hasOwnProperty('end_at')) {
+                return moment(this.item.end_at).locale('it').format('DD MMMM YYYY')
+            }
+            else {
+                return null
+            }
+        },
+        startHours: function () {
+            if (this.item.hasOwnProperty('start_at')) {
+                return moment(this.item.start_at).locale('it').format('hh:mm')
+            }
+            else {
+                return null
+            }
+        },
+        endHours: function () {
+            if (this.item.hasOwnProperty('end_at')) {
+                return moment(this.item.end_at).locale('it').format('hh:mm')
+            }
+            else {
+                return null
+            }
+        },
     },
     methods: {
         init: function () {
