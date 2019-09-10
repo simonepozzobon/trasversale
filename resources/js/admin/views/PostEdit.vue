@@ -141,9 +141,10 @@ export default {
             })
         },
         setObj: function (obj) {
-            this.postObj = obj
+            this.postObj = Object.assign({}, obj)
         },
         savePost: function (ref) {
+            console.log('saving post');
             let url = '/api/admin/post-type/save'
             this.postObj.model = this.type.model
             this.postObj.id = this.$route.params.id
