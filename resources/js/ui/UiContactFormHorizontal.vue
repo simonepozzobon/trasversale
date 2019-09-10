@@ -65,7 +65,10 @@
     </div>
     <div class="row">
         <div class="col">
-            <button class="btn btn-outline-primary">
+            <button
+                class="btn btn-outline-primary"
+                @click.prevent="sendMail"
+            >
                 Invia
             </button>
         </div>
@@ -76,7 +79,7 @@
 <script>
 import UiCheckbox from './UiCheckbox.vue'
 export default {
-    name: 'UiContactForm',
+    name: 'UiContactFormHorizontal',
     components: {
         UiCheckbox,
     },
@@ -91,6 +94,9 @@ export default {
     methods: {
         setPrivacy: function (value) {
             this.privacy = value
+        },
+        sendMail: function () {
+
         }
     },
 }

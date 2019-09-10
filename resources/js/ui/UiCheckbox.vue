@@ -17,7 +17,7 @@
                 hover-color="primary"
                 @click="clicked"/>
         </div>
-        <div class="ui-checkbox__text">
+        <div class="ui-checkbox__text" :class="textClass">
             <slot></slot>
         </div>
     </div>
@@ -40,6 +40,10 @@ export default {
         value: {
             type: Boolean,
             default: false,
+        },
+        textClass: {
+            type: String,
+            default: null,
         }
     },
     methods: {
