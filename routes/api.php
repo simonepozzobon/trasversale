@@ -25,6 +25,10 @@ Route::prefix('payment')->group(function() {
     Route::post('transaction', 'PaymentController@create_transaction');
 });
 
+Route::prefix('mail')->group(function() {
+    Route::post('send', 'MailController@send_mail_form');
+});
+
 Route::get('get-page/{page}/{subpage?}/{slug?}', 'MainController@get_dynamic_item');
 
 Route::prefix('admin')->group(
