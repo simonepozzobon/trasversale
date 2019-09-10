@@ -72,7 +72,7 @@
         </div>
     </div>
     <div
-        class="row form-messages"
+        class="row form-messages pt-5"
         ref="successMsg"
     >
         <div class="col">
@@ -82,7 +82,7 @@
         </div>
     </div>
     <div
-        class="row form-messages"
+        class="row form-messages pt-5"
         ref="errorMsg"
     >
         <div class="col">
