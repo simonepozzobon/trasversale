@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SimpleForm extends Mailable
+class SimpleFormAdmin extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,7 +19,8 @@ class SimpleForm extends Mailable
     public function __construct($data)
     {
         $this->data = $data;
-        $this->sender = env('ADMIN_EMAIL', 'demo@example.com');
+        $this->subject = 'Messaggio da ' . $data['name'];
+        $this->sender = $data['sender'];
     }
 
     /**
@@ -30,10 +31,10 @@ class SimpleForm extends Mailable
     public function build()
     {
         return $this->from($this->sender)
-            ->subject('Messaggio Inviato')
+            ->subject($this->subject)
             ->with([
-                'message' => $this->data['message'],
+                'message' => $this->data['message']
             ])
-            ->markdown('mails.simple');
+            ->markdown('mails.simpleAdmin');
     }
 }
