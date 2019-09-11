@@ -44,6 +44,9 @@ import {
     Uuid
 }
 from '../../Utilities'
+
+import moment from 'moment'
+
 export default {
     name: 'PostCreate',
     components: {
@@ -109,6 +112,10 @@ export default {
                 if (obj.hasOwnProperty(key)) {
                     if (key === 'thumb' && this.hasFile(obj[key])) {
                         form.append('file', obj[key])
+                    }
+                    else if (key === 'start_at' || key === 'end_at') {
+                        let data = moment(obj[key]).format('YYYY-MM-DD HH:mm:ss')
+                        form.append(key, data)
                     }
                     else {
                         form.append(key, obj[key])

@@ -146,19 +146,24 @@ class AdminController extends Controller
         }
 
         if (isset($request->start_at) && $request->start_at && $request->start_at != 'null') {
-            $string = strtotime($request->start_at);
-            $start_at = Carbon::parse($string)->format('Y-m-d H:i:s');
+            $string_start = strtotime($request->start_at);
+
+            $start_at = Carbon::parse($string_start)->format('Y-m-d H:i:s');
             $post->start_at = $start_at;
         }
 
         if (isset($request->end_at) && $request->end_at && $request->end_at != 'null') {
-            $string = strtotime($request->end_at);
-            $end_at = Carbon::parse($string)->format('Y-m-d H:i:s');
+            $string_end = strtotime($request->end_at);
+            $end_at = Carbon::parse($string_end)->format('Y-m-d H:i:s');
             $post->end_at = $end_at;
         }
 
         if (isset($request->hours)) {
             $post->hours = $request->hours;
+        }
+
+        if (isset($request->address)) {
+            $post->address = $request->address;
         }
 
         if (isset($request->options)) {
@@ -186,7 +191,13 @@ class AdminController extends Controller
 
         return [
             'success' => true,
-            'post' => $post
+            'post' => $post,
+            'debug' => [
+                'start_at' => $start_at,
+                'string' => $string_start,
+                'end_at' => $end_at,
+                'string_end' => $string_end,
+            ],
         ];
     }
 

@@ -47,6 +47,9 @@ import {
     Uuid
 }
 from '../../Utilities'
+
+import moment from 'moment'
+
 export default {
     name: 'PostEdit',
     components: {
@@ -141,9 +144,10 @@ export default {
             })
         },
         setObj: function (obj) {
-            this.postObj = obj
+            this.postObj = Object.assign({}, obj)
         },
         savePost: function (ref) {
+            console.log('saving post');
             let url = '/api/admin/post-type/save'
             this.postObj.model = this.type.model
             this.postObj.id = this.$route.params.id
@@ -151,9 +155,12 @@ export default {
             // console.log('salva il post', this.postObj);
             // console.log('before save', this.postObj);
             let data = this.formatRequest(this.postObj)
+            // for (let value of data) {
+            //     console.log(value[0], value[1]);
+            // }
             this.$http.post(url, data)
                 .then(response => {
-                    // console.log('response', response.data);
+                    // console.log('salva il post -> response', response.data);
                     if (response.data.success) {
                         this.modelIdx = Number(response.data.post.id)
                         this.model = 'App\\' + this.type.model.charAt(0).toUpperCase() + this.type.model.slice(1)
@@ -171,6 +178,10 @@ export default {
                 if (obj.hasOwnProperty(key)) {
                     if (key === 'thumb' && this.hasFile(obj[key])) {
                         form.append('file', obj[key])
+                    }
+                    else if (key === 'start_at' || key === 'end_at') {
+                        let data = moment(obj[key]).format('YYYY-MM-DD HH:mm:ss')
+                        form.append(key, data)
                     }
                     else {
                         form.append(key, obj[key])
