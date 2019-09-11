@@ -6,7 +6,9 @@
                     Date
                 </div>
                 <div class="ui-sidebar-content__paragraph">
-                    dal 28 ottobre ’18 al 31 marzo 2019<br>
+                    <span v-if="startDate && endDate">
+                        dal 31 ottobre ’18 al 31 marzo 2019<br>
+                    </span>
                     dalle ore 9:00 alle ore 13:00 del sabato<br>
                     e dalle 18:00 alle 21:00 del venerdi<br>
                     <br>
@@ -85,9 +87,10 @@ import {
 }
 from '../ui'
 import ModuleManager from '../containers/ModuleManager.vue'
+import moment from 'moment'
 
 export default {
-    name: 'Product',
+    name: 'ProductPage',
     components: {
         ModuleManager,
         UiButton,
@@ -107,6 +110,14 @@ export default {
         },
         title: function () {
 
+        }
+    },
+    computed: {
+        startDate: function () {
+            return null
+        },
+        endDate: function () {
+            return null
         }
     },
     methods: {

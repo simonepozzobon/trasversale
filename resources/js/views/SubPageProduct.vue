@@ -16,8 +16,16 @@
                     <!-- dalle ore 9:00 alle ore 13:00 del sabato<br>
                     e dalle 18:00 alle 21:00 del venerdi<br> -->
                     <br>
-                    totale ore <b>145</b> di formazione in aula<br>
-                    <b>attestato</b> di frequenza<br>
+                    totale ore <b>{{ this.item.hours }}</b> di formazione<br>
+                    <!-- <b>attestato</b> di frequenza<br> -->
+                </div>
+            </div>
+            <div class="ui-sidebar-content ui-sidebar-content-address">
+                <div class="ui-sidebar-content__title">
+                    Indirizzo
+                </div>
+                <div class="ui-sidebar-content__paragraph">
+                    {{ this.item.address }}
                 </div>
             </div>
             <div class="ui-sidebar-content">
@@ -33,7 +41,7 @@
                     Prezzo
                 </div>
                 <div class="ui-sidebar-content__price">
-                    350,00 € + IVA
+                    {{ item.price.toFixed(2) }} € + IVA
                 </div>
             </div>
             <div class="ui-sidebar-buy">
