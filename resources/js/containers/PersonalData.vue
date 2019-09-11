@@ -28,6 +28,42 @@
         >
             <div class="form-group row">
                 <label
+                    for="type"
+                    class="col-md-12 personal-data-form__label"
+                >
+                    Tipologia soggetto
+                    <select
+                        class="form-control personal-data-form__input"
+                        name="type"
+                        v-model="form.type"
+                    >
+                        <option value="professionista">Persona fisica con partita iva</option>
+                        <option value="azienda">Società</option>
+                        <option value="privato">Persona fisica senza partita iva</option>
+                    </select>
+                </label>
+            </div>
+            <div class="form-group row">
+                <label
+                    for="language"
+                    class="col-md-12 personal-data-form__label"
+                >
+                    Residenza
+                    <select
+                        class="form-control personal-data-form__input"
+                        name="language"
+                        v-model="form.language"
+                    >
+                        <option value="italia">Italia</option>
+                        <option value="estero">Estero</option>
+                    </select>
+                </label>
+            </div>
+            <div
+                class="form-group row"
+                v-if="form.type === 'privato'"
+            >
+                <label
                     for="name"
                     class="col-md-6 personal-data-form__label"
                     ref="name"
@@ -55,6 +91,72 @@
                     />
                 </label>
             </div>
+            <div
+                class="form-group row"
+                v-else
+            >
+                <label
+                    for="ragione_sociale"
+                    class="col-12 personal-data-form__label"
+                    ref="ragione_sociale"
+                >
+                    Ragione Sociale
+                    <input
+                        type="text"
+                        class="form-control personal-data-form__input"
+                        name="ragione_sociale"
+                        v-model="form.ragione_sociale"
+                    />
+                </label>
+            </div>
+            <div class="form-group row">
+                <label
+                    for="email"
+                    class="col-12 personal-data-form__label"
+                    ref="email"
+                >
+                    Email
+                    <input
+                        type="text"
+                        class="form-control personal-data-form__input"
+                        name="email"
+                        v-model="form.email"
+                    />
+                </label>
+            </div>
+            <div
+                class="form-group row"
+                v-if="form.type != 'privato'"
+            >
+                <label
+                    for="pec"
+                    class="col-12 personal-data-form__label"
+                    ref="pec"
+                >
+                    PEC
+                    <input
+                        type="text"
+                        class="form-control personal-data-form__input"
+                        name="pec"
+                        v-model="form.pec"
+                    />
+                </label>
+            </div>
+            <div class="form-group row">
+                <label
+                    for="phone"
+                    class="col-12 personal-data-form__label"
+                    ref="phone"
+                >
+                    Telefono
+                    <input
+                        type="text"
+                        class="form-control personal-data-form__input"
+                        name="phone"
+                        v-model="form.phone"
+                    />
+                </label>
+            </div>
             <div class="form-group row">
                 <label
                     for="address"
@@ -76,7 +178,7 @@
                     class="col-12 personal-data-form__label"
                     ref="city"
                 >
-                    Città
+                    Comune
                     <input
                         type="text"
                         class="form-control personal-data-form__input"
@@ -94,7 +196,7 @@
                     Provincia
                     <input
                         type="text"
-                        class="form-control personal-data-form_input"
+                        class="form-control personal-data-form__input"
                         name="province"
                         v-model="form.province"
                     />
@@ -110,6 +212,75 @@
                         class="form-control personal-data-form__input"
                         name="postal_code"
                         v-model="form.postal_code"
+                    />
+                </label>
+            </div>
+            <div class="form-group row">
+                <label
+                    for="country"
+                    class="col-12 personal-data-form__label"
+                    ref="country"
+                >
+                    Stato
+                    <input
+                        type="text"
+                        class="form-control personal-data-form__input"
+                        name="country"
+                        v-model="form.country"
+                    />
+                </label>
+            </div>
+            <div
+                class="form-group row"
+                v-if="form.type != 'privato'"
+            >
+                <label
+                    for="vat"
+                    class="col-12 personal-data-form__label"
+                    ref="vat"
+                >
+                    P.IVA
+                    <input
+                        type="text"
+                        class="form-control personal-data-form__input"
+                        name="vat"
+                        v-model="form.vat"
+                    />
+                </label>
+            </div>
+            <div
+                class="form-group row"
+                v-if="form.type != 'privato'"
+            >
+                <label
+                    for="cf"
+                    class="col-12 personal-data-form__label"
+                    ref="cf"
+                >
+                    Codice fiscale
+                    <input
+                        type="text"
+                        class="form-control personal-data-form__input"
+                        name="cf"
+                        v-model="form.cf"
+                    />
+                </label>
+            </div>
+            <div
+                class="form-group row"
+                v-if="form.type != 'privato'"
+            >
+                <label
+                    for="codice_destinatario"
+                    class="col-12 personal-data-form__label"
+                    ref="codice_destinatario"
+                >
+                    Codice destinatario
+                    <input
+                        type="text"
+                        class="form-control personal-data-form__input"
+                        name="codice_destinatario"
+                        v-model="form.codice_destinatario"
                     />
                 </label>
             </div>
@@ -160,12 +331,27 @@ export default {
         return {
             master: null,
             form: {
+                type: 'privato',
+                language: 'italia',
                 name: null,
                 surname: null,
+                ragione_sociale: null,
                 address: null,
                 city: null,
                 province: null,
                 postal_code: null,
+                country: 'Italia',
+                email: null,
+                phone: null,
+                pec: null,
+                vat: null,
+                codice_destinatario: null,
+                cf: null,
+            },
+            requiredFields: {
+                privato: ['language', 'name', 'surname', 'email', 'phone', 'address', 'city', 'province', 'postal_code', 'country'],
+                professionista: ['language', 'ragione_sociale', 'email', 'pec', 'phone', 'address', 'city', 'province', 'postal_code', 'country', 'vat', 'cf', 'codice_destinatario'],
+                azienda: ['language', 'ragione_sociale', 'email', 'pec', 'phone', 'address', 'city', 'province', 'postal_code', 'country', 'vat', 'cf', 'codice_destinatario'],
             },
             disableBtn: false,
         }
@@ -230,37 +416,74 @@ export default {
                 // this.debug()
             })
         },
-        submitOrder: function () {
-            this.disableBtn = true
+        checkFields: function () {
+            return new Promise((resolve, reject) => {
+                let requiredFields = this.requiredFields[this.form.type]
+                let check = true
 
-            this.$nextTick(() => {
-                let data = new FormData()
+                // reset classes
+                let container = this.$refs.form
+                let inputs = container.getElementsByClassName('personal-data-form__input')
+                for (let i = 0; i < inputs.length; i++) {
+                    let input = inputs[i]
+                    input.classList.remove('not-valid')
+                    input.classList.remove('valid')
+                }
 
-                for (let key in this.form) {
-                    if (this.form.hasOwnProperty(key)) {
-                        data.append(key, this.form[key])
+                for (let i = 0; i < requiredFields.length; i++) {
+                    let field = requiredFields[i]
+                    let input = document.getElementsByName(field)
+
+                    if (input.length > 0) {
+                        input = input[0]
+
+                        if (this.form[field]) {
+                            input.classList.add('valid')
+                        }
+                        else {
+                            input.classList.add('not-valid')
+                            check = false
+                        }
                     }
                 }
-                data.append('items', JSON.stringify(this.items))
 
-                this.master.reverse()
-
-                this.$http.post('/api/payment/order', data).then(response => {
-                    console.log(response.data);
-                    if (response.data.success) {
-                        setTimeout(() => {
-                            this.leavingAnim().then(() => {
-                                this.$emit('completed', response.data.order)
-                            })
-                        }, 1000)
-                    }
-                    else {
-                        this.disableBtn = false
-                    }
-
-                })
+                resolve(check)
             })
+        },
+        submitOrder: function () {
+            this.checkFields().then((response) => {
+                if (response) {
+                    this.disableBtn = true
 
+                    this.$nextTick(() => {
+                        let data = new FormData()
+
+                        for (let key in this.form) {
+                            if (this.form.hasOwnProperty(key)) {
+                                data.append(key, this.form[key])
+                            }
+                        }
+                        data.append('items', JSON.stringify(this.items))
+
+                        this.master.reverse()
+
+                        this.$http.post('/api/payment/order', data).then(response => {
+                            console.log(response.data);
+                            if (response.data.success) {
+                                setTimeout(() => {
+                                    this.leavingAnim().then(() => {
+                                        this.$emit('completed', response.data.order)
+                                    })
+                                }, 1000)
+                            }
+                            else {
+                                this.disableBtn = false
+                            }
+
+                        })
+                    })
+                }
+            })
         },
         leavingAnim: function () {
             return new Promise((resolve, reject) => {
@@ -342,6 +565,15 @@ export default {
         background-image: linear-gradient(-225deg, rgba(255, 255, 255, 1), rgba(242, 242, 242, .8));
         background-repeat: repeat-x;
         border: 0 solid transparent;
+        border-radius: 0 !important;
+
+        &.not-valid {
+            border: 2px solid $red;
+        }
+
+        &.valid {
+            border: 2px solid $green;
+        }
     }
 }
 </style>
