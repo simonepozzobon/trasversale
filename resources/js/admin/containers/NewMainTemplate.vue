@@ -101,6 +101,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import ComponentsList from '../components/ComponentsList.vue'
 import draggable from 'vuedraggable'
 import DynamicParams from '../DynamicParams'
@@ -329,147 +330,157 @@ export default {
             // console.log(idx, subModule.uuid);
         },
         savePage: function (event = null, modelSaved = false) {
-            // if (modelSaved) {
-            //     this.$emit('save-page')
-            // }
+            return new Promise((resolve, reject) => {
 
-            if (this.isPost && modelSaved == false) {
-                // console.log('before save main')
-                this.$emit('before-save', 'main')
-                return null
-            }
+                // if (modelSaved) {
+                //     this.$emit('save-page')
+                // }
 
-            // console.log('this.model', this.model);
-            if (this.model) {
-                this.$root.$emit('close-all-panels')
-                this.counter = this.cached.length
-                // console.log('cached', this.cached);
-                let cached = Object.assign([], this.cached)
-                // cached.push(cached[0])
-                let duplicates = checkDuplicateInObject('id', cached)
-                // console.log('cached', cached);
-                if (duplicates.check) {
-                    let duplicate = false
-                    cached = cached.map(cache => {
-                        if (cache.id == duplicates.prop) {
-                            if (duplicate == false) {
-                                duplicate = true
-                                return cache
-                            }
-                            else {
-                                return false
-                            }
-                        }
-                        else {
-                            return cache
-
-                        }
-                    }).filter(cache => cache != false)
+                if (this.isPost && modelSaved == false) {
+                    // console.log('before save main')
+                    this.$emit('before-save', 'main')
+                    resolve()
                 }
-                // console.log('cached', cached);
-                let promises = []
-                for (let i = 0; i < cached.length; i++) {
-                    // temps[i] = this.saveComponent(temps[i])
-                    switch (cached[i].type) {
-                    case 'row':
-                        let rowData = Object.assign({}, cached[i])
-                        delete rowData.content
-                        rowData.content = {
-                            columns: cached[i].content.length
-                        }
-
-                        rowData = this.formatRequest(rowData)
-
-                        let requestRow = this.$http.post('/api/admin/save-component', rowData)
-                            .then(rowResponse => {
-                                cached[i] = this.formatFromResponse(cached[i], rowResponse.data.module)
-                                let columns = cached[i].content
-                                for (let j = 0; j < columns.length; j++) {
-                                    let modules = columns[j].content.modules
-                                    let columnData = Object.assign({}, columns[j])
-                                    columnData.modulable_id = rowResponse.data.module.id
-                                    columnData.modulable_type = 'App\\Module'
-                                    delete columnData.content.modules
-
-                                    columnData = this.formatRequest(columnData)
-                                    let requestColumn = this.$http.post('/api/admin/save-component', columnData)
-                                        .then(columnResponse => {
-                                            cached[i].content[j] = this.formatFromResponse(cached[i].content[j], columnResponse.data.module)
-                                            if (modules) {
-                                                for (let k = 0; k < modules.length; k++) {
-                                                    let moduleData = Object.assign({}, modules[k])
-                                                    moduleData.modulable_id = columnResponse.data.module.id
-                                                    moduleData.modulable_type = 'App\\Module'
-                                                    moduleData = this.formatRequest(moduleData)
-                                                    let requestModule = this.$http.post('/api/admin/save-component', moduleData)
-                                                        .then(moduleResponse => {
-                                                            let newModule = this.formatFromResponse(modules[k], moduleResponse.data.module)
-                                                            cached[i].content[j].modules[k] = newModule
-                                                            if (!cached[i].content[j].content.hasOwnProperty('modules')) {
-                                                                cached[i].content[j].content.modules = []
-                                                                cached[i].content[j].content.modules[k] = newModule
-                                                            }
-                                                            else {
-                                                                cached[i].content[j].content.modules[k] = newModule
-                                                            }
-                                                        })
-                                                    promises.push(requestModule)
-                                                }
-                                            }
-                                        })
-                                    promises.push(requestColumn)
+                else {
+                    // console.log('this.model', this.model);
+                    console.log('checking kduplicates');
+                    if (this.model) {
+                        this.$root.$emit('close-all-panels')
+                        this.counter = this.cached.length
+                        // console.log('cached', this.cached);
+                        let cached = Object.assign([], this.cached)
+                        // cached.push(cached[0])
+                        let duplicates = checkDuplicateInObject('id', cached)
+                        // console.log('cached', cached);
+                        console.log(duplicates);
+                        if (duplicates.check) {
+                            let duplicate = false
+                            cached = cached.map(cache => {
+                                if (cache.id == duplicates.prop) {
+                                    if (duplicate == false) {
+                                        duplicate = true
+                                        return cache
+                                    }
+                                    else {
+                                        return false
+                                    }
                                 }
-                            })
-                        promises.push(requestRow)
-                        break;
-                    case 'team':
-                        // console.log(i);
-                        // wait uploads before run promises
-                        this.hasAwait = true
+                                else {
+                                    return cache
 
-                        let teamObj = cached[i]
-                        let content = teamObj.content.team
-                        let people = this.saveImage(content.people).then(people => {
-                            // console.log(teamObj);
-                            let teamData = this.formatRequest(teamObj)
-                            let teamRequest = this.$http.post('/api/admin/save-component', teamData)
-                                .then(response => {
-                                    let temp = this.formatFromResponse(cached[i], response.data.module)
-                                    cached[i] = temp
+                                }
+                            }).filter(cache => cache != false)
+                        }
+                        // console.log('cached', cached);
+                        let promises = []
+                        for (let i = 0; i < cached.length; i++) {
+                            // temps[i] = this.saveComponent(temps[i])
+                            switch (cached[i].type) {
+                            case 'row':
+                                let rowData = Object.assign({}, cached[i])
+                                delete rowData.content
+                                rowData.content = {
+                                    columns: cached[i].content.length
+                                }
+
+                                rowData = this.formatRequest(rowData)
+
+                                let requestRow = this.$http.post('/api/admin/save-component', rowData)
+                                    .then(rowResponse => {
+                                        cached[i] = this.formatFromResponse(cached[i], rowResponse.data.module)
+                                        let columns = cached[i].content
+                                        for (let j = 0; j < columns.length; j++) {
+                                            let modules = columns[j].content.modules
+                                            let columnData = Object.assign({}, columns[j])
+                                            columnData.modulable_id = rowResponse.data.module.id
+                                            columnData.modulable_type = 'App\\Module'
+                                            delete columnData.content.modules
+
+                                            columnData = this.formatRequest(columnData)
+                                            let requestColumn = this.$http.post('/api/admin/save-component', columnData)
+                                                .then(columnResponse => {
+                                                    cached[i].content[j] = this.formatFromResponse(cached[i].content[j], columnResponse.data.module)
+                                                    if (modules) {
+                                                        for (let k = 0; k < modules.length; k++) {
+                                                            let moduleData = Object.assign({}, modules[k])
+                                                            moduleData.modulable_id = columnResponse.data.module.id
+                                                            moduleData.modulable_type = 'App\\Module'
+                                                            moduleData = this.formatRequest(moduleData)
+                                                            let requestModule = this.$http.post('/api/admin/save-component', moduleData)
+                                                                .then(moduleResponse => {
+                                                                    let newModule = this.formatFromResponse(modules[k], moduleResponse.data.module)
+                                                                    cached[i].content[j].modules[k] = newModule
+                                                                    if (!cached[i].content[j].content.hasOwnProperty('modules')) {
+                                                                        cached[i].content[j].content.modules = []
+                                                                        cached[i].content[j].content.modules[k] = newModule
+                                                                    }
+                                                                    else {
+                                                                        cached[i].content[j].content.modules[k] = newModule
+                                                                    }
+                                                                })
+                                                            promises.push(requestModule)
+                                                        }
+                                                    }
+                                                })
+                                            promises.push(requestColumn)
+                                        }
+                                    })
+                                promises.push(requestRow)
+                                break;
+                            case 'team':
+                                // console.log(i);
+                                // wait uploads before run promises
+                                this.hasAwait = true
+
+                                let teamObj = cached[i]
+                                let content = teamObj.content.team
+                                let people = this.saveImage(content.people).then(people => {
+                                    // console.log(teamObj);
+                                    let teamData = this.formatRequest(teamObj)
+                                    let teamRequest = this.$http.post('/api/admin/save-component', teamData)
+                                        .then(response => {
+                                            let temp = this.formatFromResponse(cached[i], response.data.module)
+                                            cached[i] = temp
+                                        })
+                                    promises.push(teamRequest)
+                                    if (this.hasAwait) {
+                                        this.processAllPromises(promises).then(() => {
+                                            this.hasAwait = false
+                                        })
+                                        // console.log('dentro', promises);
+                                    }
                                 })
-                            promises.push(teamRequest)
-                            if (this.hasAwait) {
-                                this.processAllPromises(promises)
-                                this.hasAwait = false
-                                // console.log('dentro', promises);
+
+
+                                break;
+
+                            default:
+                                // console.log('default');
+                                let data = this.formatRequest(cached[i])
+                                let request = this.$http.post('/api/admin/save-component', data)
+                                    .then(response => {
+                                        let temp = this.formatFromResponse(cached[i], response.data.module)
+                                        cached[i] = temp
+                                    })
+                                promises.push(request)
                             }
-                        })
+
+                            // if (i === this.cached.length - 1 && this.hasAwait) {
+                            // console.log('fine', i, this.cached.length, this.hasAwait);
+                            // }
+                        }
 
 
-                        break;
-
-                    default:
-                        // console.log('default');
-                        let data = this.formatRequest(cached[i])
-                        let request = this.$http.post('/api/admin/save-component', data)
-                            .then(response => {
-                                let temp = this.formatFromResponse(cached[i], response.data.module)
-                                cached[i] = temp
+                        if (!this.hasAwait) {
+                            this.processAllPromises(promises).then(() => {
+                                console.log('process all promises completato');
+                                resolve()
                             })
-                        promises.push(request)
+                            // console.log('fuori');
+                        }
                     }
-
-                    // if (i === this.cached.length - 1 && this.hasAwait) {
-                    // console.log('fine', i, this.cached.length, this.hasAwait);
-                    // }
                 }
-
-
-                if (!this.hasAwait) {
-                    this.processAllPromises(promises)
-                    // console.log('fuori');
-                }
-            }
+            })
         },
         formatRequest: function (obj) {
             // console.log(obj);
@@ -504,26 +515,34 @@ export default {
             }
             return false
         },
-        processAllPromises: async function (promises) {
-            return await this.$http.all(promises)
-                .then(results => {
-                    // console.log('completato', results);
-                    // if (modelSaved) {
-                    this.$emit('notify', {
-                        uuid: Uuid.get(),
-                        title: 'Pagina Salvata',
-                        message: 'Salvataggio Completato'
+        processAllPromises: function (promises) {
+            return new Promise((resolve, reject) => {
+                this.$http.all(promises)
+                    .then(results => {
+                        console.log('completato', results);
+                        // set isNew to false after save
+                        for (let i = 0; i < this.cached.length; i++) {
+                            this.cached[i].isNew = false
+                        }
+
+                        this.$emit('notify', {
+                            uuid: Uuid.get(),
+                            title: 'Pagina Salvata',
+                            message: 'Salvataggio Completato'
+                        })
+                        resolve()
                     })
-                    // }
-                })
-                .catch(err => {
-                    // console.error(err);
-                    this.$emit('notify', {
-                        uuid: Uuid.get(),
-                        title: 'Errore',
-                        // message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
+                    .catch(err => {
+                        // console.error(err);
+                        this.$emit('notify', {
+                            uuid: Uuid.get(),
+                            title: 'Errore',
+                            // message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
+                        })
+
+                        resolve()
                     })
-                })
+            })
         },
         saveImage: async function (people) {
             // console.log('start loop');
