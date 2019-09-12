@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CartInfo;
 use App\Mail\SimpleForm;
 use App\Mail\SimpleFormAdmin;
 
@@ -25,6 +26,28 @@ class MailController extends Controller
 
         $admin_mail = Mail::to($admin_address)
             ->send(new SimpleFormAdmin($data));
+
+        return [
+            'success' => true,
+        ];
+    }
+
+    public function send_cart_info(Request $request)
+    {
+        $admin_address = env('ADMIN_EMAIL');
+
+        $data = [
+            'sender' => $request->email,
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'message' => $request->message,
+        ];
+
+        $client_mail = Mail::to($request->email)
+            ->send(new CartInfo($data));
+
+        // $admin_mail = Mail::to($admin_address)
+        //     ->send(new SimpleFormAdmin($data));
 
         return [
             'success' => true,
