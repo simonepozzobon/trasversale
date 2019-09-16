@@ -8,6 +8,8 @@ use App\Mail\CartInfo;
 use App\Mail\CartInfoAdmin;
 use App\Mail\SimpleForm;
 use App\Mail\SimpleFormAdmin;
+use App\Mail\PayTeacherCard;
+use App\Mail\PayTeacherCardAdmin;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -49,7 +51,6 @@ class MailController extends Controller
             'name' => $request->name,
             'surname' => $request->surname,
             'message' => $request->message,
-            'item' => $product
         ];
 
         $client_mail = Mail::to($request->email)
@@ -57,6 +58,33 @@ class MailController extends Controller
 
         $admin_mail = Mail::to($admin_address)
             ->send(new CartInfoAdmin($data, $product));
+
+        return [
+            'success' => true,
+        ];
+    }
+
+    public function teacher_card(Request $request)
+    {
+        $admin_address = env('ADMIN_EMAIL', 'demo@example.com');
+
+        $product = new Product();
+        if (isset($request->item_id) && $request->item_id) {
+            $product = Product::find($request->item_id);
+        }
+
+        $data = [
+            'sender' => $request->email,
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'code' => $request->code,
+        ];
+
+        $client_mail = Mail::to($request->email)
+            ->send(new PayTeacherCard($data, $product));
+
+        $admin_mail = Mail::to($admin_address)
+            ->send(new PayTeacherCardAdmin($data, $product));
 
         return [
             'success' => true,

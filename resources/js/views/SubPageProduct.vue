@@ -139,6 +139,14 @@
         ref="cartInfo"
         :item="item"
     />
+    <teacher-card
+        ref="teacherCard"
+        :item="item"
+    />
+    <bank-transfer
+        ref="bankTransfer"
+        :item="item"
+    />
 </div>
 </template>
 
@@ -155,15 +163,19 @@ import {
 from '../ui'
 
 
+import BankTransfer from '../containers/BankTransfer.vue'
 import CartInfo from '../containers/CartInfo.vue'
 import ModuleManager from '../containers/ModuleManager.vue'
 import moment from 'moment'
+import TeacherCard from '../containers/TeacherCard.vue'
 
 export default {
     name: 'ProductSubPage',
     components: {
+        BankTransfer,
         CartInfo,
         ModuleManager,
+        TeacherCard,
         UiButton,
     },
     props: {
@@ -178,8 +190,7 @@ export default {
         return {
             name: null,
             modules: null,
-            // payment: 'pay-direct',
-            payment: 'only-info',
+            payment: 'pay-direct',
             title: false,
             paddingTopTitle: 0,
         }
@@ -252,9 +263,11 @@ export default {
             }
             else if (this.payment === 'pay-transfer') {
                 // Pagamento con bonifico
+                this.$refs.bankTransfer.showCart(this.content.item)
             }
             else if (this.payment === 'teacher-card') {
                 // teacher card
+                this.$refs.teacherCard.showCart(this.content.item)
             }
             else if (this.payment === 'only-info') {
                 // contact form
@@ -281,6 +294,7 @@ export default {
         }, 50)
     },
     mounted: function () {
+        // Only for debug
         // this.$nextTick(() => {
         //     this.addToCart()
         // })
