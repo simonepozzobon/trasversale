@@ -222,7 +222,7 @@ export default {
         debug: function () {
             // if (this.modelIdx !== 0) {
             this.$nextTick(() => {
-                this.$refs.main.newComponent('grid')
+                this.$refs.main.newComponent('uploadpdf')
             })
             // }
         },

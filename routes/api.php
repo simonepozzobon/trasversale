@@ -66,7 +66,9 @@ Route::prefix('admin')->group(
         Route::prefix('utilities')->group(
             function() {
                 Route::post('/save-image', 'AdminController@save_image');
+                Route::post('upload-pdf', 'AdminController@upload_pdf');
             }
         );
+
     }
 );

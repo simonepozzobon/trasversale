@@ -253,6 +253,13 @@
         @update="setValue"
     />
 
+    <upload-pdf
+        v-else-if="option.type === 'uploadpdf'"
+        :label="option.label"
+        :initial="initial"
+        @update="setValue"
+    />
+
     <!-- <div v-else>
         {{ option }}
     </div> -->
@@ -318,6 +325,7 @@ import PostFields from './grid/PostFields'
 import Swatches from 'vue-swatches'
 import TeamModule from './team/TeamModule.vue'
 import TextEditor from './TextEditor.vue'
+import UploadPdf from './uploadpdf/UploadPdf.vue'
 import {
     UiCheckbox,
     UiSwitch,
@@ -339,6 +347,7 @@ export default {
         Swatches,
         TeamModule,
         TextEditor,
+        UploadPdf,
         UiCheckbox,
         UiSwitch,
     },

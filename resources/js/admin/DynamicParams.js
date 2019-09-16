@@ -13,8 +13,10 @@ import {
     Spacer,
     Team,
     Title,
+    UploadPdf,
     Video,
-} from './modulesopts/index.js'
+}
+from './modulesopts/index.js'
 
 const DynamicParams = [
     Calendar,
@@ -31,6 +33,7 @@ const DynamicParams = [
     Spacer,
     Team,
     Title,
+    UploadPdf,
     Video,
 ]
 

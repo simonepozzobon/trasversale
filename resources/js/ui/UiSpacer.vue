@@ -15,9 +15,13 @@ export default {
     },
     methods: {
         setHeight: function () {
-            console.log(this.height);
-            this.$refs.spacer.style.height = this.height + 'px'
+            if (this.height) {
+                this.$refs.spacer.style.height = this.height + 'px'
+            }
         }
+    },
+    mounted: function () {
+        this.setHeight()
     },
 }
 </script>

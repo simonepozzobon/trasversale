@@ -26,7 +26,10 @@ mix
         }
     })
     .browserSync({
-        proxy: 'http://trasversale.test',
+        proxy: {
+            target: 'http://trasversale.test',
+            ws: true,
+        },
         browser: 'google chrome',
         port: 3016,
         files: [

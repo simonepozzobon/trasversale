@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Pdf;
 use App\Post;
 use App\News;
 use App\Grid;
@@ -16,6 +17,7 @@ use App\Category;
 use App\StaticPage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -429,6 +431,27 @@ class AdminController extends Controller
 
         return [
             'file' => $media
+        ];
+    }
+
+    public function upload_pdf(Request $request)
+    {
+        $file = $request->file('pdf');
+
+        $original_filename = $file->getClientOriginalName();
+        $filename = uniqid().'.'.$file->getClientOriginalExtension();
+
+        $src = $file->storeAs('public/pdf', $filename);
+        $src_formatted = Storage::disk('local')->url($src);
+
+        $pdf = new Pdf();
+        $pdf->original_name = $original_filename;
+        $pdf->src = $src_formatted;
+        $pdf->save();
+
+        return [
+            'success' => true,
+            'pdf' => $pdf
         ];
     }
 }

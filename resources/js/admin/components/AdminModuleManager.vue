@@ -92,6 +92,13 @@
         :center="content.map.center"
     />
 
+    <ui-uploaded-pdf
+        v-else-if="module.type === 'uploadpdf' && content.hasOwnProperty('uploadpdf')"
+        :src="content.hasOwnProperty('uploadpdf') && content.uploadpdf ? content.uploadpdf.src : null"
+        :name="content.hasOwnProperty('uploadpdf') && content.uploadpdf ? content.uploadpdf.original_name : 'filename.pdf'"
+        :color="content.hasOwnProperty('color') && content.color ? content.color : null"
+    />
+
     <div v-else>
         {{ module }}
     </div>
@@ -250,6 +257,7 @@ export default {
         this.$options.components.UiSpacer = require('../../ui/UiSpacer.vue').default
         this.$options.components.UiTeam = require('../../ui/UiTeam.vue').default
         this.$options.components.UiTitle = require('../../ui/UiTitle.vue').default
+        this.$options.components.UiUploadedPdf = require('../../ui/UiUploadedPdf.vue').default
         this.$options.components.UiVideo = require('../../ui/UiVideo.vue').default
     },
     created: function () {

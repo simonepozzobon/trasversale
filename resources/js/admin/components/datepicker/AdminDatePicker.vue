@@ -45,7 +45,7 @@ export default {
         value: function (value) {
             // console.log(value);
             this.$emit('update', value)
-            console.log(value);
+            // console.log(value);
         },
         initial: function () {
             this.setInitial()

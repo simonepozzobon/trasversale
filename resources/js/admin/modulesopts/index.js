@@ -12,6 +12,7 @@ import Row from './Row.js'
 import Spacer from './Spacer.js'
 import Team from './Team.js' // fatto
 import Title from './Title.js' // fatto
+import UploadPdf from './UploadPdf.js' //
 import Video from './Video.js' // fatto
 
 export {
@@ -29,5 +30,6 @@ export {
     Spacer,
     Team,
     Title,
+    UploadPdf,
     Video,
 }
