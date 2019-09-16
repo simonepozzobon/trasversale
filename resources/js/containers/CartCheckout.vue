@@ -300,7 +300,6 @@ export default {
             master.progress(1).progress(0)
 
             this.$nextTick(() => {
-                console.log('ciao');
                 master.play()
             })
         },

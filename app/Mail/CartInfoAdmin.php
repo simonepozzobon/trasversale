@@ -2,6 +2,8 @@
 
 namespace App\Mail;
 
+use App\Product;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -16,11 +18,12 @@ class CartInfoAdmin extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data, Product $product)
     {
         $this->data = $data;
-        $this->subject = 'Richiesta di informazioni da ' . $data['name'] . ' ' . $data['surname'];
+        $this->subject = 'Richiesta informazioni da ' . $data['name'];
         $this->sender = $data['sender'];
+        $this->product = $product;
     }
 
     /**
@@ -34,7 +37,9 @@ class CartInfoAdmin extends Mailable
             ->subject($this->subject)
             ->with([
                 'message' => $this->data['message'],
-                'item' => $this->data['item']
+                'product' => $this->product,
+                'name' => $this->data['name'],
+                'surname' => $this->data['surname']
             ])
             ->markdown('mails.cartinfoAdmin');
     }

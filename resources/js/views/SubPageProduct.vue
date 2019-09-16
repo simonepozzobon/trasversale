@@ -135,7 +135,10 @@
             @title="changeTitle"
         />
     </div>
-    <cart-info />
+    <cart-info
+        ref="cartInfo"
+        :item="item"
+    />
 </div>
 </template>
 
@@ -175,7 +178,8 @@ export default {
         return {
             name: null,
             modules: null,
-            payment: 'pay-direct',
+            // payment: 'pay-direct',
+            payment: 'only-info',
             title: false,
             paddingTopTitle: 0,
         }
@@ -254,6 +258,8 @@ export default {
             }
             else if (this.payment === 'only-info') {
                 // contact form
+                // console.log(this.content);
+                this.$refs.cartInfo.showCart(this.content.item)
             }
         },
         debug: function () {
@@ -276,7 +282,7 @@ export default {
     },
     mounted: function () {
         // this.$nextTick(() => {
-        //     this.debug()
+        //     this.addToCart()
         // })
     }
 }

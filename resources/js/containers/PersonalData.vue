@@ -468,7 +468,7 @@ export default {
                         this.master.reverse()
 
                         this.$http.post('/api/payment/order', data).then(response => {
-                            console.log(response.data);
+                            // console.log(response.data);
                             if (response.data.success) {
                                 setTimeout(() => {
                                     this.leavingAnim().then(() => {

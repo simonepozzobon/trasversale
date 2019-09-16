@@ -1,6 +1,6 @@
 <template>
 <div
-    class="cart-info__short"
+    class="cart-info__form"
     ref="container"
 >
     <ui-title
@@ -105,7 +105,7 @@
     >
         <ui-title
             ref="successTitle"
-            title="Pagamento riuscito"
+            title="Richiesta Inviata"
             color="white"
             :is-column="true"
             align="center"
@@ -147,10 +147,10 @@ export default {
         UiTitle,
     },
     props: {
-        items: {
-            type: Array,
+        item: {
+            type: Object,
             default: function () {
-                return []
+                return {}
             },
         },
     },
@@ -167,8 +167,16 @@ export default {
         }
     },
     methods: {
+        debug: function () {
+            this.form = {
+                name: 'gianni',
+                surname: 'palermo',
+                email: 'example@email.com',
+                message: 'Vorrei avere maggiori dettagli'
+            }
+        },
         initAnim: function () {
-            let container = this.$refs.container
+            let container = this.$refs.form
             let loader = this.$refs.loader
             let fields = container.getElementsByClassName('personal-data-form__label')
 
@@ -258,16 +266,16 @@ export default {
                             }
                         }
 
-                        data.append('items', JSON.stringify(this.items))
+                        if (this.item.hasOwnProperty('id')) {
+                            data.append('item_id', this.item.id)
+                        }
+
                         this.master.reverse()
 
-                        this.$http.post('/api/payment/order', data).then(response => {
-                            console.log(response.data);
+                        this.$http.post('/api/mail/cart-info', data).then(response => {
                             if (response.data.success) {
                                 setTimeout(() => {
-                                    this.leavingAnim().then(() => {
-                                        this.$emit('completed', response.data.order)
-                                    })
+                                    this.showSuccess()
                                 }, 1000)
                             }
                             else {
@@ -281,10 +289,68 @@ export default {
                 }
             })
         },
+        showSuccess: function () {
+            let success = this.$refs.success
+
+            TweenMax.set(success, {
+                display: 'flex'
+            })
+
+            let loader = this.$refs.loader
+            let title = this.$refs.title.$el
+            let form = this.$refs.form
+            let btn = this.$refs.btn.$el
+
+            let successTitle = this.$refs.successTitle.$el
+            let successMessage = this.$refs.successMessage.$el
+            let successBtn = this.$refs.successBtn.$el
+
+            let master = new TimelineMax({
+                paused: true,
+                yoyo: true,
+            })
+
+            master.staggerFromTo([loader, title, form, btn], .6, {
+                autoAlpha: 1,
+            }, {
+                autoAlpha: 0,
+            }, .1)
+
+            master.addLabel('size', '+=0')
+
+            master.fromTo(form, .1, {
+                className: '-=personal-data-form--hidden'
+            }, {
+                className: '+=personal-data-form--hidden'
+            }, 'size')
+
+            master.addLabel('success-panel', '+=0')
+
+            master.fromTo(success, .2, {
+                autoAlpha: 0,
+            }, {
+                autoAlpha: 1,
+            }, 'success-panel')
+
+            master.addLabel('show-message', '+=0')
+
+            master.staggerFromTo([successTitle, successMessage, successBtn], .6, {
+                autoAlpha: 0,
+            }, {
+                autoAlpha: 1,
+            }, .3, 'show-message')
+
+            master.progress(1).progress(0)
+
+            this.$nextTick(() => {
+                master.play()
+            })
+        },
     },
     mounted: function () {
         this.$nextTick(() => {
             this.initAnim()
+            // this.debug()
         })
     },
 }
@@ -326,6 +392,10 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    &--hidden {
+        display: none;
     }
 }
 </style>

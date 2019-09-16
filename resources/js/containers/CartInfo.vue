@@ -10,11 +10,17 @@
         content-class="cart-info__modal"
     >
         <div class="cart-info__container">
-            <div class="cart-info__row">
-                <cart-info-data
-                    :items="this.$root.cart"
-                    @hide-cart="hideCart"
-                />
+            <div
+                class="cart-info__row"
+                ref="container"
+            >
+                <div class="cart-info__short">
+                    <cart-info-data
+                        ref="panel"
+                        :item="item"
+                        @hide-cart="hideCart"
+                    />
+                </div>
             </div>
             <div class="cart-actions">
                 <ui-button
@@ -35,6 +41,8 @@
 <script>
 import {
     UiButton,
+    UiParagraph,
+    UiTitle,
 }
 from '../ui'
 
@@ -45,20 +53,31 @@ export default {
     components: {
         CartInfoData,
         UiButton,
+        UiParagraph,
+        UiTitle,
     },
-
+    data: function () {
+        return {
+            item: null,
+        }
+    },
     methods: {
-        showCart: function () {
-            this.$refs.modal.show()
+        showCart: function (item = null) {
+            if (item != null) {
+                this.item = item
+                this.$nextTick(() => {
+                    this.$refs.modal.show()
+                })
+            }
         },
         hideCart: function () {
             this.$refs.modal.hide()
         },
     },
     mounted: function () {
-        this.$nextTick(() => {
-            this.showCart()
-        })
+        // this.$nextTick(() => {
+        //     this.showCart()
+        // })
     },
 }
 </script>
@@ -115,6 +134,20 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    &__success {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        display: none;
+
+        &__btn {
+            margin-top: $spacer * 2;
+        }
     }
 }
 
