@@ -31,7 +31,10 @@
                 {{ this.item.address }}
             </div>
         </div>
-        <div class="ui-sidebar-content">
+        <div
+            class="ui-sidebar-content"
+            v-if="this.item.forwho && this.item.forwho != 'null'"
+        >
             <div class="ui-sidebar-content__title">
                 Destinatari
             </div>
