@@ -43,6 +43,7 @@ export default {
         }
     },
     created: function () {
+        this.pageContent = null
         this.init()
     },
     mounted: function () {}
