@@ -69,7 +69,7 @@ class MainController extends Controller
         }
 
         if ($item) {
-            if ($item->sluggable->modules->count() > 0) {
+            if ($item->sluggable->modules && $item->sluggable->modules->count() > 0) {
                 $modules = $item->sluggable->modules->sortBy('order')->values();
                 $item->sluggable->modules = Utility::format_complex_modules($modules, true);
 
