@@ -31,10 +31,12 @@ export default {
             this.getData(url)
         },
         getData: function (url) {
+            this.pageContent = null
             if (url) {
                 this.$http.get(url).then(response => {
                     if (response.data.success) {
                         this.pageContent = response.data
+                        // console.log('contyainer', this.pageContent);
                     }
                 })
             }

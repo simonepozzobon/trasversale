@@ -40,7 +40,7 @@ export default {
         subClicked: function () {
             this.$root.goToWithParams('subpage', {
                 page: this.pageSlug,
-                subpage: this.slug
+                subpage: this.slug,
             })
         },
         setActive: function () {
