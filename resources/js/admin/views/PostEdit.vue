@@ -152,7 +152,7 @@ export default {
         },
         setObj: function (obj) {
             this.postObj = Object.assign({}, obj)
-            console.log('cambiato');
+            // console.log('cambiato');
         },
         savePost: function (ref) {
             // console.log('saving post');
