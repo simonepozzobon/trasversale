@@ -8,7 +8,7 @@
     </div>
     <div class="form-group row">
         <label
-            for="type"
+            for="grid_type"
             class="col-md-3"
         >
             Tipologia
@@ -16,7 +16,7 @@
         <div class="col-md-9">
             <select
                 type="text"
-                name="type"
+                name="grid_type"
                 class="form-control"
                 v-model="obj.type"
             >
@@ -27,7 +27,7 @@
     </div>
     <div class="form-group row">
         <label
-            for="type"
+            for="mode"
             class="col-md-3"
         >
             Modalità post
@@ -35,7 +35,7 @@
         <div class="col-md-9">
             <select
                 type="text"
-                name="type"
+                name="mode"
                 class="form-control"
                 v-model="obj.mode"
             >
@@ -56,7 +56,8 @@
         </label>
         <div class="col-md-9">
             <div class="posts-type row">
-                <div class="col-md-6">
+                diocane
+                <!-- <div class="col-md-6">
                     <checkbox-module
                         :val.sync="obj.models[0].products"
                         name="prodotti"
@@ -69,7 +70,7 @@
                         name="notizie"
                         label="Notizie"
                     />
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -196,13 +197,14 @@ export default {
         },
         obj: {
             handler: function (obj) {
+                console.log(obj);
                 this.updateParent()
             },
             deep: true
         },
         'obj.models': {
             handler: function (models) {
-                console.log('models');
+                // console.log('models');
                 this.updatePosts()
                 // this.resetPostsPool(models).then(() => {
                 //     console.log('handlerrrr');
@@ -210,13 +212,16 @@ export default {
             },
             deep: true,
         },
-        'obj.type': {
-            handler: function (type) {
-                if (type === 'simple') {
-                    this.elements = []
-                }
-            },
-            deep: true,
+        'obj.type': function (type) {
+            console.log(type);
+            this.updatePosts()
+            // if (type === 'simple') {
+            //     this.elements = []
+            // }
+            // else {
+            //     this.elements = []
+            //     console.log('mosaic');
+            // }
         },
         'obj.post_count': function (count) {
             if (this.obj.mode == 'last') {
@@ -231,13 +236,13 @@ export default {
             },
             deep: true
         },
-        elements: {
-            handler: function (elements) {
-                // this.$emit('update', elements)
-                this.updateParent()
-            },
-            deep: true,
-        }
+        // elements: {
+        //     handler: function (elements) {
+        //         // this.$emit('update', elements)
+        //         this.updateParent()
+        //     },
+        //     deep: true,
+        // }
     },
     methods: {
         updatePosts: function () {
@@ -257,7 +262,8 @@ export default {
                 ...this.obj,
                 elements: this.elements
             }
-            // console.log('update', obj);
+
+            console.log('update', obj);
             this.$emit('update', obj)
         },
         debug: function () {

@@ -699,7 +699,7 @@ export default {
             // }
         },
         setInitial: function () {
-            console.log('imposta', this.initial, this.values);
+            // console.log('imposta', this.initial, this.values);
             if (this.initial && this.option.type != 'post-select') {
                 this.value = this.initial
                 // console.log(clone(this.value));
