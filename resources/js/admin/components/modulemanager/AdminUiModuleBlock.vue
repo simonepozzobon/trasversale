@@ -157,8 +157,8 @@ export default {
             this.$emit('save-column', this.column)
         },
         changed: function (subModule) {
-            let uuid = subModule.uuid
-            let idx = this.cached.findIndex(cache => cache.uuid === uuid)
+            // let uuid = subModule.uuid
+            let idx = this.cached.findIndex(cache => cache.uuid === subModule.uuid)
             if (idx > -1) {
                 this.cached.splice(idx, 1, subModule)
             }

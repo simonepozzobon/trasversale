@@ -67,6 +67,7 @@
                 @save="saveComponent"
                 @delete="deleteComponent"
                 @save-sub-module="saveSubModule"
+                @changed="changed"
             />
         </draggable>
     </div>
@@ -192,7 +193,13 @@ export default {
         },
         contentHeight: function (height) {
             this.$refs.content.style.minHeight = height + 'px'
-        }
+        },
+        // cached: {
+        //     handler: function (cached) {
+        //         console.log('cambiati');
+        //     },
+        //     deep: true,
+        // }
     },
     computed: {
         activeClass: function () {
@@ -203,6 +210,16 @@ export default {
         }
     },
     methods: {
+        changed: function (subModule) {
+            let uuid = subModule.uuid
+            let idx = this.cached.findIndex(cache => cache.uuid === uuid)
+            if (idx > -1) {
+                this.cached.splice(idx, 1, subModule)
+            }
+            // console.log(subModule.uuid);
+            // console.log('saviiin', idx);
+
+        },
         editMain: function () {
             this.$emit('edit-main')
         },
@@ -328,6 +345,7 @@ export default {
             return objs
         },
         saveSubModule: function (subModule) {
+            console.log('saving sub module');
             let idx = this.cached.findIndex(cache => cache.uuid === subModule.uuid)
             if (idx > -1) {
                 this.cached.splice(idx, 1, subModule)
@@ -343,22 +361,26 @@ export default {
                 // }
 
                 if (this.isPost && modelSaved == false) {
-                    // console.log('before save main')
+                    console.log('before save main')
                     this.$emit('before-save', 'main')
                     resolve()
                 }
                 else {
                     // console.log('this.model', this.model);
-                    // console.log('checking kduplicates');
+                    console.log('checking kduplicates');
                     if (this.model) {
                         this.$root.$emit('close-all-panels')
                         this.counter = this.cached.length
-                        // console.log('cached', this.cached);
+                        // console.log('cached', this.cached, this.counter);
                         let cached = Object.assign([], this.cached)
                         // cached.push(cached[0])
+
+                        // forza dupplicati
+                        // cached[1].id = 26
+
                         let duplicates = checkDuplicateInObject('id', cached)
                         // console.log('cached', cached);
-                        // console.log(duplicates);
+                        // console.log('duplicati', duplicates);
                         if (duplicates.check) {
                             let duplicate = false
                             cached = cached.map(cache => {
@@ -391,8 +413,12 @@ export default {
 
                                 rowData = this.formatRequest(rowData)
 
-                                let requestRow = this.$http.post('/api/admin/save-component', rowData)
-                                    .then(rowResponse => {
+                                promises.push({
+                                    promise: this.$http.post('/api/admin/save-component', rowData),
+                                    key: 'riga',
+                                    hasChild: true,
+                                    childs: [],
+                                    callback: (rowResponse, childs) => {
                                         cached[i] = this.formatFromResponse(cached[i], rowResponse.data.module)
                                         let columns = cached[i].content
                                         for (let j = 0; j < columns.length; j++) {
@@ -403,8 +429,15 @@ export default {
                                             delete columnData.content.modules
 
                                             columnData = this.formatRequest(columnData)
-                                            let requestColumn = this.$http.post('/api/admin/save-component', columnData)
-                                                .then(columnResponse => {
+
+
+                                            childs.push({
+                                                promise: this.$http.post('/api/admin/save-component', columnData),
+                                                key: 'colonna',
+                                                hasChild: true,
+                                                childs: [],
+                                                callback: (columnResponse, childs) => {
+
                                                     cached[i].content[j] = this.formatFromResponse(cached[i].content[j], columnResponse.data.module)
                                                     if (modules) {
                                                         for (let k = 0; k < modules.length; k++) {
@@ -412,8 +445,11 @@ export default {
                                                             moduleData.modulable_id = columnResponse.data.module.id
                                                             moduleData.modulable_type = 'App\\Module'
                                                             moduleData = this.formatRequest(moduleData)
-                                                            let requestModule = this.$http.post('/api/admin/save-component', moduleData)
-                                                                .then(moduleResponse => {
+
+                                                            childs.push({
+                                                                promise: this.$http.post('/api/admin/save-component', moduleData),
+                                                                key: 'modulo colonna',
+                                                                callback: moduleResponse => {
                                                                     let newModule = this.formatFromResponse(modules[k], moduleResponse.data.module)
                                                                     cached[i].content[j].modules[k] = newModule
                                                                     if (!cached[i].content[j].content.hasOwnProperty('modules')) {
@@ -423,15 +459,16 @@ export default {
                                                                     else {
                                                                         cached[i].content[j].content.modules[k] = newModule
                                                                     }
-                                                                })
-                                                            promises.push(requestModule)
+                                                                },
+                                                            })
                                                         }
                                                     }
-                                                })
-                                            promises.push(requestColumn)
+                                                }
+                                            })
                                         }
-                                    })
-                                promises.push(requestRow)
+                                        this.processAllPromises(childs, true)
+                                    }
+                                })
                                 break;
                             case 'team':
                                 // console.log(i);
@@ -443,12 +480,16 @@ export default {
                                 let people = this.saveImage(content.people).then(people => {
                                     // console.log(teamObj);
                                     let teamData = this.formatRequest(teamObj)
-                                    let teamRequest = this.$http.post('/api/admin/save-component', teamData)
-                                        .then(response => {
+                                    promises.push({
+                                        promise: this.$http.post('/api/admin/save-component', teamData),
+                                        key: 'teamRequest',
+                                        hasChild: false,
+                                        callback: response => {
                                             let temp = this.formatFromResponse(cached[i], response.data.module)
                                             cached[i] = temp
-                                        })
-                                    promises.push(teamRequest)
+                                        }
+                                    })
+
                                     if (this.hasAwait) {
                                         this.processAllPromises(promises).then(() => {
                                             this.hasAwait = false
@@ -461,14 +502,17 @@ export default {
                                 break;
 
                             default:
-                                // console.log('default');
                                 let data = this.formatRequest(cached[i])
-                                let request = this.$http.post('/api/admin/save-component', data)
-                                    .then(response => {
+                                promises.push({
+                                    promise: this.$http.post('/api/admin/save-component', data),
+                                    key: cached[i],
+                                    hasChild: false,
+                                    callback: (response) => {
                                         let temp = this.formatFromResponse(cached[i], response.data.module)
                                         cached[i] = temp
-                                    })
-                                promises.push(request)
+                                        console.log('runningnnng');
+                                    }
+                                })
                             }
 
                             // if (i === this.cached.length - 1 && this.hasAwait) {
@@ -478,11 +522,8 @@ export default {
 
 
                         if (!this.hasAwait) {
-                            this.processAllPromises(promises).then(() => {
-                                console.log('process all promises completato');
-                                resolve()
-                            })
-                            // console.log('fuori');
+                            console.log(promises);
+                            this.processAllPromises(promises)
                         }
                     }
                 }
@@ -521,34 +562,75 @@ export default {
             }
             return false
         },
-        processAllPromises: function (promises) {
-            return new Promise((resolve, reject) => {
-                this.$http.all(promises)
-                    .then(results => {
-                        console.log('completato', results);
-                        // set isNew to false after save
-                        for (let i = 0; i < this.cached.length; i++) {
-                            this.cached[i].isNew = false
+        processAllPromises: function (promises, isChild = false) {
+            for (let i = 0; i < promises.length; i++) {
+                let promise = promises[i]
+
+                // console.log(i < promises.length - 1, i, promises.length - 1);
+                if (i < promises.length - 1) {
+                    this.processPromise(promises[i], i)
+                }
+                else {
+                    // ultima
+                    this.processPromise(promises[i], i).then(() => {
+                        if (!isChild) {
+                            // console.log('completato')
+                            this.$emit('notify', {
+                                uuid: Uuid.get(),
+                                title: 'Pagina Salvata',
+                                message: 'Salvataggio Completato'
+                            })
                         }
-
-                        this.$emit('notify', {
-                            uuid: Uuid.get(),
-                            title: 'Pagina Salvata',
-                            message: 'Salvataggio Completato'
-                        })
-                        resolve()
+                        else {
+                            console.log('child completato');
+                        }
                     })
-                    .catch(err => {
-                        // console.error(err);
-                        this.$emit('notify', {
-                            uuid: Uuid.get(),
-                            title: 'Errore',
-                            // message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
-                        })
-
-                        resolve()
-                    })
-            })
+                }
+            }
+            // return this.$http.all(promises.map(promise => {
+            //         return promise.promise
+            //     }))
+            //     .then((data) => {
+            //         console.log('completato', data);
+            //         debugger;
+            //         // set isNew to false after save
+            //         for (let i = 0; i < this.cached.length; i++) {
+            //             this.cached[i].isNew = false
+            //         }
+            //
+            //         this.$emit('notify', {
+            //             uuid: Uuid.get(),
+            //             title: 'Pagina Salvata',
+            //             message: 'Salvataggio Completato'
+            //         })
+            //         // resolve()
+            //     })
+            //     .catch(err => {
+            //         console.error(err);
+            //         this.$emit('notify', {
+            //             uuid: Uuid.get(),
+            //             title: 'Errore',
+            //             // message: 'Errore nel salvataggio, guarda la console per maggiori dettagli'
+            //         })
+            //
+            //         // resolve()
+            //     })
+            // })
+        },
+        processPromise: function (obj, counter = 0) {
+            let promise = obj.promise
+            if (obj.hasChild) {
+                // console.log('childdd', obj);
+                return Promise.resolve(promise).then(response => {
+                    obj.callback(response, obj.childs)
+                    // console.log(obj.childs);
+                })
+            }
+            else {
+                return Promise.resolve(promise).then(response => {
+                    obj.callback(response)
+                })
+            }
         },
         saveImage: async function (people) {
             // console.log('start loop');

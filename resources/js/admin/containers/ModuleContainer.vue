@@ -127,8 +127,8 @@ export default {
                 this.$emit('changed', updatedComponent)
             }
             else {
+                // console.log('non è una colonna');
                 this.$emit('changed', updatedComponent)
-                // console.log(this.component.type);
             }
 
             this.component = updatedComponent
