@@ -198,12 +198,12 @@ class AdminController extends Controller
         return [
             'success' => true,
             'post' => $post,
-            'debug' => [
-                'start_at' => $start_at,
-                'string' => $string_start,
-                'end_at' => $end_at,
-                'string_end' => $string_end,
-            ],
+            // 'debug' => [
+            //     'start_at' => $start_at,
+            //     'string' => $string_start,
+            //     'end_at' => $end_at,
+            //     'string_end' => $string_end,
+            // ],
         ];
     }
 
