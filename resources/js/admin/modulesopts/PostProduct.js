@@ -1,7 +1,6 @@
 const PostProduct = {
     name: 'post-products',
-    options: [
-        {
+    options: [{
             key: 'title',
             label: 'Titolo',
             required: true,
@@ -66,7 +65,7 @@ const PostProduct = {
             key: 'hours',
             label: 'Durata del corso',
             info: 'La durate è espressa in ore',
-            type: 'counter',
+            type: 'text',
             default: 0,
             required: true,
         },
@@ -74,6 +73,18 @@ const PostProduct = {
             key: 'address',
             label: 'Indirizzo',
             type: 'text',
+            required: true,
+        },
+        {
+            key: 'forwho',
+            label: 'Destinatari',
+            info: 'Inserire solo testo, non supporta nuove linee a capo o html',
+            type: 'wysiwyg',
+            options: {
+                menubar: false,
+                bubble: false,
+                html: false,
+            },
             required: true,
         },
     ],

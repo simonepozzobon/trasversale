@@ -95,7 +95,7 @@ export default {
             let url = '/api/admin/post-type/' + this.type.model + '/' + this.$route.params.id
             this.$http.get(url)
                 .then(response => {
-                    // console.log('get post', response);
+                    console.log('get post', response);
                     if (response.data.success) {
                         let post = Object.assign({}, response.data.post)
                         this.setInitialValues(post)
@@ -112,6 +112,7 @@ export default {
                 slug: post.slug && post.slug.hasOwnProperty('slug') ? post.slug.slug : null,
                 preview: post.thumb,
                 category: post.category.id,
+                forwho: post.forwho
             }
 
             if (post.hasOwnProperty('hours')) {

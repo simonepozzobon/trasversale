@@ -100,8 +100,15 @@
             <text-editor
                 ref="textEditor"
                 :initial="this.value"
+                :options="this.option.hasOwnProperty('options') ? this.option.options : {}"
                 @update="updateEditor"
             />
+            <small
+                class="text-muted"
+                v-if="option.hasOwnProperty('info')"
+            >
+                {{ option.info }}
+            </small>
         </div>
     </div>
 

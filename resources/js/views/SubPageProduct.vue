@@ -36,7 +36,7 @@
                 Destinatari
             </div>
             <div class="ui-sidebar-content__paragraph">
-                Persone motivate a lavorare con bambini/ragazzi con disturbi specifici dell’apprendimento
+                {{ this.item.forwho }}
             </div>
         </div>
         <div class="ui-sidebar-content ui-sidebar-content--price">

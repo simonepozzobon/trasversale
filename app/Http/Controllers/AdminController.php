@@ -172,6 +172,10 @@ class AdminController extends Controller
             $post->options = $request->options;
         }
 
+        if (isset($request->forwho)) {
+            $post->forwho = $request->forwho;
+        }
+
         $post->save();
 
         // salva slug
