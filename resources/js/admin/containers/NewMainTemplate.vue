@@ -221,6 +221,7 @@ export default {
                         let sortedColumns = orderBy(sorted[i].content, ['order', 'created_at'], ['asc', 'asc'])
                         sortedColumns = sortedColumns.map(column => {
                             let sortedModules = orderBy(column.content.modules, ['order', 'created_at'], ['asc', 'asc'])
+                            // console.log('colonnne', column, sortedColumns);
                             column.content.modules = sortedModules
                             return column
                         })
@@ -233,6 +234,7 @@ export default {
                     }
 
                     if (cache.type === 'row') {
+                        // console.log('cache.type == row', cache.content);
                         cache.content = this.setInitials(cache.content)
                     }
 
@@ -250,10 +252,14 @@ export default {
         },
         setInitials: function (objs) {
             for (let i = 0; i < objs.length; i++) {
+                // if (i == 1) {
+                //     console.log('seconda colonna');
+                // }
                 objs[i].uuid = Uuid.get()
                 objs[i].isNew = false
 
-                if (objs[i].content.hasOwnProperty('modules')) {
+                if (objs[i].content.hasOwnProperty('modules') && objs[i].content.modules.length > 0) {
+                    // console.log('ha moduli', objs[i].content.modules.length);
                     objs[i].content.modules = this.setInitials(objs[i].content.modules)
                 }
             }
@@ -343,7 +349,7 @@ export default {
                 }
                 else {
                     // console.log('this.model', this.model);
-                    console.log('checking kduplicates');
+                    // console.log('checking kduplicates');
                     if (this.model) {
                         this.$root.$emit('close-all-panels')
                         this.counter = this.cached.length
@@ -352,7 +358,7 @@ export default {
                         // cached.push(cached[0])
                         let duplicates = checkDuplicateInObject('id', cached)
                         // console.log('cached', cached);
-                        console.log(duplicates);
+                        // console.log(duplicates);
                         if (duplicates.check) {
                             let duplicate = false
                             cached = cached.map(cache => {

@@ -165,6 +165,7 @@ export default {
         },
         modules: function (modules) {
             // this.debug()
+            // console.log('moduli', modules);
         }
     },
     methods: {
@@ -271,7 +272,9 @@ export default {
         },
         addListenerResize: function () {
             // console.log('resize');
-            this.initAnim()
+            this.$nextTick(() => {
+                this.initAnim()
+            })
             // let sidebarContainer = this.$refs.sidebar
             // let mainContainer = this.$refs.main
             //
