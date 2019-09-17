@@ -87,6 +87,7 @@ class Utility extends Model
     {
         if ($module->type == 'grid') {
             $content = json_decode($module->content);
+            $grid_options = json_encode($content->options);
             $grid_id = $content->id;
 
             $grid = Grid::with('elements.elementable')->find($grid_id);
@@ -151,7 +152,7 @@ class Utility extends Model
             $data = [
                     'blocks' => $blocks,
                     'type' => $grid->type,
-                    'options' => $grid->options,
+                    'options' => $grid_options,
                     'title' => $grid->title,
                 ];
 

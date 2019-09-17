@@ -128,7 +128,6 @@ export default {
         },
         setObj: function (obj) {
             this.obj = obj
-            // console.log(obj);
             this.$emit('changed', obj, this.uuid)
         },
         saveComponent: function () {

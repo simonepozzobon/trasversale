@@ -219,7 +219,7 @@ export default {
         //     deep: true,
         // }
         processes: function (value) {
-            console.log(value);
+            // console.log(value);
             if (value <= 0) {
                 this.$emit('notify', {
                     uuid: Uuid.get(),
@@ -374,7 +374,7 @@ export default {
             return objs
         },
         saveSubModule: function (subModule) {
-            console.log('saving sub module');
+            // console.log('saving sub module');
             let idx = this.cached.findIndex(cache => cache.uuid === subModule.uuid)
             if (idx > -1) {
                 this.cached.splice(idx, 1, subModule)
@@ -533,7 +533,7 @@ export default {
                                         })
 
                                         if (this.hasAwait) {
-                                            console.log('has await');
+                                            // console.log('has await');
                                             this.processAllPromises(promises).then(() => {
                                                 this.hasAwait = false
                                             })
@@ -553,6 +553,7 @@ export default {
                                         hasChild: false,
                                         callback: (response) => {
                                             let temp = this.formatFromResponse(cached[i], response.data.module)
+                                            console.log('ciiiaoo', cached[i], temp);
                                             cached[i] = temp
                                         }
                                     })
@@ -565,9 +566,9 @@ export default {
 
 
                             if (!this.hasAwait) {
-                                console.log('non aspetta');
+                                // console.log('non aspetta');
                                 this.processAllPromises(promises).then(response => {
-                                    console.log('completo', response);
+                                    // console.log('completo', response);
                                     resolve()
                                 })
                             }

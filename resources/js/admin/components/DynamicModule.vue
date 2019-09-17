@@ -71,26 +71,32 @@ export default {
             // set initial with default value if there is one
             let initial = option.hasOwnProperty('default') ? option.default : null
             let values = this.values
-            if (values) {
 
-                if (typeof values == 'string') {
-                    values = JSON.parse(values)
-                }
+            if (option.type == 'grid') {
+                return values
+            }
+            else {
+                if (values) {
 
-                let key = option.key
-                if (option.hasOwnProperty('childrens') && option.childrens.length > 0) {
-                    // console.log('children', key, values);
-                    return values
-                }
-                // console.log('not-children', key,  values[key] ? values[key] : null);
-                if (values.hasOwnProperty(key)) {
-                    initial = values[key]
+                    if (typeof values == 'string') {
+                        values = JSON.parse(values)
+                    }
+
+                    let key = option.key
+                    if (option.hasOwnProperty('childrens') && option.childrens.length > 0) {
+                        // console.log('children', key, values);
+                        return values
+                    }
+                    // console.log('not-children', key,  values[key] ? values[key] : null);
+                    if (values.hasOwnProperty(key)) {
+                        initial = values[key]
+                    }
+
+                    return initial
                 }
 
                 return initial
             }
-
-            return initial
         },
         emitChanged: function (key, value) {
             this.dataObj[key] = value

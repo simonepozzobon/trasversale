@@ -157,7 +157,7 @@ export default {
                 type: 'simple',
                 mode: 'last',
                 models: [{
-                        products: false,
+                        products: true,
                     },
                     {
                         news: false,
@@ -169,13 +169,16 @@ export default {
             name: 'grid',
             elements: [],
             posts: [],
-            postType: null,
+            postType: 'products',
         }
     },
     watch: {
-        initial: function () {
-            this.setInitial()
-        },
+        // initial: {
+        //     handler: function (values) {
+        //         this.setInitial()
+        //     },
+        //     deep: true,
+        // },
         postType: function (type) {
             this.elements = []
             for (let i = 0; i < this.obj.models.length; i++) {
@@ -187,7 +190,8 @@ export default {
                     this.obj.models[i][key] = false
                 }
             }
-            this.addElements()
+            // this.addElements()
+            this.updatePosts()
 
         },
         obj: {
@@ -198,7 +202,11 @@ export default {
         },
         'obj.models': {
             handler: function (models) {
-                this.resetPostsPool(models)
+                console.log('models');
+                this.updatePosts()
+                // this.resetPostsPool(models).then(() => {
+                //     console.log('handlerrrr');
+                // })
             },
             deep: true,
         },
@@ -213,12 +221,12 @@ export default {
         'obj.post_count': function (count) {
             if (this.obj.mode == 'last') {
                 // limita i post
-                this.addElements()
+                // this.addElements()
+                this.updatePosts()
             }
         },
         'obj.post_per_row': {
             handler: function (count) {
-
                 // console.log('post_per_row');
             },
             deep: true
@@ -232,6 +240,18 @@ export default {
         }
     },
     methods: {
+        updatePosts: function () {
+            this.posts = []
+            console.log(this.obj.models);
+            this.resetPostsPool(this.obj.models).then(posts => {
+                // console.log('updated');
+                this.elements = []
+                posts.forEach((element, i) => {
+                    let newElement = formatEl(element, i, this.elements)
+                    this.elements.push(newElement)
+                })
+            })
+        },
         updateParent: function () {
             let obj = {
                 ...this.obj,
@@ -290,19 +310,26 @@ export default {
 
         },
         updateCounter: function (value) {
-            this.obj['post_count'] = value
+            this.obj = {
+                ...this.obj,
+                post_count: value
+            }
         },
         updateRowCounter: function (value) {
-            this.obj['post_per_row'] = value
+            this.obj = {
+                ...this.obj,
+                post_per_row: value
+            }
         },
         addElementToGrid: function (element) {
             this.elements.push(element)
         },
         addElements: function () {
             this.resetPostsPool(this.obj.models).then(posts => {
-                // console.log('qui', posts);
+                // console.log('qui', posts, this.obj);
                 let length = this.elements.length
                 let count = this.obj.post_count
+
                 // console.log('prima', this.elements.length, length, count);
                 if (length == 0) {
                     // console.log('da zero');
@@ -344,14 +371,44 @@ export default {
 
         },
         setInitial: function () {
-            // console.log(this.initial);
+            // console.log('initial', this.initial);
+            if (this.initial) {
+                let options
+
+                if (this.initial.options) {
+                    options = JSON.parse(this.initial.options)
+                }
+
+                let newObj = {
+                    type: this.initial.type ? this.initial.type : 'simple',
+                    mode: options.mode ? options.mode : 'last',
+                    models: options.models ? options.models : [{
+                            products: true,
+                        },
+                        {
+                            news: false,
+                        }
+                    ],
+                    post_count: options.post_count ? options.post_count : 2,
+                    post_per_row: options.post_per_row ? options.post_per_row : 2,
+                }
+                // console.log('initial', newObj);
+
+                this.obj = newObj
+                // this.obj = this.initial
+            }
+            else {
+                console.log('no initial');
+            }
         }
     },
     mounted: function () {
-        this.setInitial()
         this.$nextTick(() => {
-            this.debug()
+            this.setInitial()
         })
+        // this.$nextTick(() => {
+        //     this.debug()
+        // })
     },
 }
 </script>

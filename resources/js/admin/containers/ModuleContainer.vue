@@ -114,7 +114,7 @@ export default {
             // console.log(columns, this.component);
         },
         formatTempData: function (obj) {
-            // console.log('formatTempData');
+            // console.log('formatTempData', obj);
             let content = this.setPreview(obj)
             let updatedComponent = {
                 ...this.component,
@@ -235,10 +235,16 @@ export default {
                 // console.log('\preview', obj)
                 let grid = obj.grid
                 let blocks = grid.elements
+
+                if (!blocks) {
+                    blocks = grid.blocks ? grid.blocks : []
+                }
+
                 let options = JSON.stringify({
                     mode: grid.mode,
                     models: grid.models,
                     post_per_row: grid.post_per_row,
+                    post_count: grid.post_count,
                 })
 
                 let newGrid = {

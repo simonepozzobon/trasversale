@@ -82,10 +82,11 @@ export default {
     },
     watch: {
         value: function (value) {
-            this.$emit('changed', value)
+
+            this.$emit('changed', Number(value))
         },
         initial: function (value) {
-            this.value = value
+            this.value = Number(value)
         }
     },
     methods: {
