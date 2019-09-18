@@ -781,10 +781,12 @@ export default {
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        transition: $transition-base;
     }
 
     &__title {
         text-transform: capitalize;
+        transition: $transition-base;
     }
 
     &__action {
@@ -805,6 +807,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+        transition: $transition-base;
     }
 
     &--no-title &__head {

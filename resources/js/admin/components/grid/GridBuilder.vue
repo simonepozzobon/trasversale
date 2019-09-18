@@ -85,7 +85,7 @@ export default {
         items: {
             handler: function (items) {
                 // console.log('items cambiati', items);
-                this.debouncedUpdate(items)
+                // this.debouncedUpdate(items)
             },
             deep: true,
         }
@@ -99,10 +99,10 @@ export default {
         },
     },
     beforeCreate: function () {
-        this.debouncedUpdate = debounce((items) => {
-            console.log('debounced');
-            // this.$emit('update:elements', items)
-        }, 150)
+        // this.debouncedUpdate = debounce((items) => {
+        //     console.log('debounced');
+        //     // this.$emit('update:elements', items)
+        // }, 150)
     },
     mounted: function () {
         this.getContainerWidth()

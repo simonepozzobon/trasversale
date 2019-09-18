@@ -12,7 +12,7 @@
             :use-css-transforms="true"
         >
             <grid-item
-                v-for="item in items"
+                v-for="item in formatted"
                 ref="item"
                 :key="item.uuid"
                 :x="item.x"
@@ -35,6 +35,8 @@ import {
 }
 from '../admin/components/grid/GridUtilities'
 
+const debounce = require('lodash.debounce')
+
 export default {
     name: 'UiPackeryGrid',
     components: {
@@ -43,7 +45,7 @@ export default {
         UiGridSingleItem,
     },
     props: {
-        items: {
+        blocks: {
             type: Array,
             default: function () {
                 return []
@@ -58,6 +60,15 @@ export default {
         return {
             unitSize: 0,
             gutter: 10,
+            items: [],
+        }
+    },
+    watch: {
+        blocks: {
+            handler: function (blocks) {
+                this.debouncedUpdate(blocks)
+            },
+            deep: true,
         }
     },
     computed: {
@@ -77,6 +88,14 @@ export default {
         setDimension: function (d) {
             return Number(d)
         }
+    },
+    beforeCreate: function () {
+        this.debouncedUpdate = debounce((blocks) => {
+            this.items = blocks
+        }, 150)
+    },
+    created: function () {
+        this.items = this.blocks
     },
     mounted: function () {
         this.getContainerWidth()

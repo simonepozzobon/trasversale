@@ -48,7 +48,7 @@
 
     <ui-packery-grid
         v-else-if="module && module.type === 'grid' && content.type === 'packery'"
-        :items="content.blocks"
+        :blocks="content.blocks"
         :is-admin="true"
     />
 

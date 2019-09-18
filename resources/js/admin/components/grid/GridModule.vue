@@ -244,7 +244,6 @@ export default {
             },
             deep: true,
         },
-
         // Deprecate
         // initial: {
         //     handler: function (values) {

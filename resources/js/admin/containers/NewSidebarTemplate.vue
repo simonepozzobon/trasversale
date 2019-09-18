@@ -116,7 +116,7 @@ from '../../Utilities'
 const orderBy = require('lodash.orderby')
 
 export default {
-    name: 'NewPageTemplate',
+    name: 'NewSidebarTemplate',
     components: {
         ComponentsList,
         draggable,
@@ -575,6 +575,7 @@ $opacity-test: 0.6 !default;
         flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
+        transition: $transition-base;
     }
 
     &__footer {
