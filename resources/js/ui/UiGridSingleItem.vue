@@ -134,7 +134,7 @@ export default {
 
             this.counter++
             this.$nextTick(() => {
-                if (checkOverflow(el)) {
+                if (el && checkOverflow(el)) {
                     this.smallerText(el)
                 }
             })
