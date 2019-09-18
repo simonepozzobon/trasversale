@@ -130,6 +130,7 @@ const checkOverflow = function (el) {
     // either vertically or horizontally.
     // Will temporarily modify the "overflow" style to detect this
     // if necessary.
+
     let curOverflow = el.style.overflow
 
     if (!curOverflow || curOverflow === "visible") {

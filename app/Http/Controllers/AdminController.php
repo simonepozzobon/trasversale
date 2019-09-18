@@ -68,6 +68,12 @@ class AdminController extends Controller
             $elements = $this->uniform_and_merge($news, $products);
             break;
 
+        case 'pages':
+            $pages = StaticPage::with('slug')->get();
+            $sub_pages = SubPage::with('slug')->get();
+            $elements = $this->uniform_and_merge($pages, $sub_pages);
+            break;
+
         default:
             $posts = Post::with('slug')->get();
             $news = News::with('slug', 'category')->get();

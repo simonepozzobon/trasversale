@@ -56,21 +56,27 @@
         </label>
         <div class="col-md-9">
             <div class="posts-type row">
-                diocane
-                <!-- <div class="col-md-6">
+                <div class="col-md-4">
                     <checkbox-module
                         :val.sync="obj.models[0].products"
                         name="prodotti"
                         label="Prodotti"
                     />
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <checkbox-module
                         :val.sync="obj.models[1].news"
                         name="notizie"
                         label="Notizie"
                     />
-                </div> -->
+                </div>
+                <div class="col-md-4">
+                    <checkbox-module
+                        :val.sync="obj.models[2].pages"
+                        name="pages"
+                        label="Pagine"
+                    />
+                </div>
             </div>
         </div>
     </div>
@@ -163,6 +169,9 @@ export default {
                     {
                         news: false,
                     },
+                    {
+                        pages: false,
+                    },
                 ],
                 post_count: 0,
                 post_per_row: 0,
@@ -174,12 +183,6 @@ export default {
         }
     },
     watch: {
-        // initial: {
-        //     handler: function (values) {
-        //         this.setInitial()
-        //     },
-        //     deep: true,
-        // },
         postType: function (type) {
             this.elements = []
             for (let i = 0; i < this.obj.models.length; i++) {
@@ -197,7 +200,7 @@ export default {
         },
         obj: {
             handler: function (obj) {
-                console.log(obj);
+                // console.log(obj);
                 this.updateParent()
             },
             deep: true
@@ -213,7 +216,6 @@ export default {
             deep: true,
         },
         'obj.type': function (type) {
-            console.log(type);
             this.updatePosts()
             // if (type === 'simple') {
             //     this.elements = []
@@ -225,8 +227,6 @@ export default {
         },
         'obj.post_count': function (count) {
             if (this.obj.mode == 'last') {
-                // limita i post
-                // this.addElements()
                 this.updatePosts()
             }
         },
@@ -236,25 +236,48 @@ export default {
             },
             deep: true
         },
-        // elements: {
-        //     handler: function (elements) {
-        //         // this.$emit('update', elements)
-        //         this.updateParent()
+        elements: {
+            handler: function (elements) {
+                // console.log('CIAO');
+                // this.$emit('update', elements)
+                this.updateParent()
+            },
+            deep: true,
+        },
+
+        // Deprecate
+        // initial: {
+        //     handler: function (values) {
+        //         this.setInitial()
         //     },
         //     deep: true,
-        // }
+        // },
     },
     methods: {
-        updatePosts: function () {
-            this.posts = []
-            console.log(this.obj.models);
+        updatePosts: function (resetPost = true) {
+            // console.log(this.obj.models);
+            if (resetPost) {
+                this.posts = []
+            }
+
             this.resetPostsPool(this.obj.models).then(posts => {
                 // console.log('updated');
-                this.elements = []
-                posts.forEach((element, i) => {
-                    let newElement = formatEl(element, i, this.elements)
-                    this.elements.push(newElement)
-                })
+                if (resetPost) {
+                    this.elements = []
+                }
+
+
+                if (this.obj.mode == 'last') {
+                    posts.forEach((element, i) => {
+
+                        if (i < this.obj.post_count) {
+                            let newElement = formatEl(element, i, this.elements)
+                            this.elements.push(newElement)
+                        }
+                    })
+                }
+
+                this.updateParent()
             })
         },
         updateParent: function () {
@@ -262,8 +285,7 @@ export default {
                 ...this.obj,
                 elements: this.elements
             }
-
-            console.log('update', obj);
+            // console.log('update', obj);
             this.$emit('update', obj)
         },
         debug: function () {
@@ -393,6 +415,9 @@ export default {
                         },
                         {
                             news: false,
+                        },
+                        {
+                            pages: false,
                         }
                     ],
                     post_count: options.post_count ? options.post_count : 2,
@@ -402,6 +427,13 @@ export default {
 
                 this.obj = newObj
                 // this.obj = this.initial
+
+                if (newObj.mode == 'last') {
+                    this.updatePosts()
+                }
+                else {
+                    this.updatePosts(false)
+                }
             }
             else {
                 console.log('no initial');
