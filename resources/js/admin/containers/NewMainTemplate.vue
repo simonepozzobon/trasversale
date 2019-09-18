@@ -24,6 +24,10 @@
                     Modifica Contenuto Principale
                 </button>
             </div>
+        </div>
+    </div>
+    <div class="new-main-template__header">
+        <div class="new-main-template__head">
             <div
                 class="new-main-template__action"
                 v-if="active"
@@ -57,6 +61,7 @@
             </div>
         </div>
     </div>
+
     <div
         ref="content"
         class="new-main-template__content"
@@ -774,8 +779,12 @@ export default {
         width: 100%;
         flex-wrap: wrap;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
+    }
+
+    &__title {
+        text-transform: capitalize;
     }
 
     &__action {
