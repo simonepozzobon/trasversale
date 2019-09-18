@@ -33,10 +33,7 @@ export default {
             type: String,
             default: null,
         },
-        initial: {
-            type: Boolean,
-            default: false,
-        },
+        initial: [String, Number, Boolean],
     },
     data: function () {
         return {
@@ -55,7 +52,7 @@ export default {
     },
     mounted: function () {
         if (this.initial) {
-            this.value = this.initial
+            this.value = Boolean(this.initial)
         }
     },
 }

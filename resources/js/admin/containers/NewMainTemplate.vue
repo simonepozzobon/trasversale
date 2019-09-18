@@ -405,7 +405,12 @@ export default {
 
                     if (this.isPost && modelSaved == false) {
                         // console.log('before save main')
-                        this.$emit('before-save', 'main')
+                        let subModules = this.cached.length
+                        let sideSubmodules = this.cachedSides.length
+
+                        let cachedModules = subModules + sideSubmodules
+
+                        this.$emit('before-save', 'main', cachedModules)
                         resolve()
                     }
                     else {
