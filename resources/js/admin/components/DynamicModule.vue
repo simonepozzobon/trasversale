@@ -4,9 +4,9 @@
         ref="module"
         v-for="(option, i) in options"
         :key="i"
-        :initial="setInitial(option)"
+        :initial="option | setInitial(values)"
         :option="option"
-        :data-obj="dataObj"
+        :data-obj="dataObj | setModule(options)"
         :edit="isEdit"
         @changed="changed"
     />
@@ -48,30 +48,13 @@ export default {
     },
     data: function () {
         return {
-            dataObj: null,
+            dataObj: {},
+            initialized: false,
         }
     },
-    methods: {
-        setModule: function () {
-            let fields = this.options
-            let dataObj = {}
-            for (let i = 0; i < fields.length; i++) {
-                let field = fields[i]
-                dataObj[field.key] = field.hasOwnProperty('default') ? field.default : null
-            }
-            this.dataObj = dataObj
-
-            // for (let key in this.dataObj) {
-            //     if (this.dataObj.hasOwnProperty(key)) {
-            //         this.emitChanged(key, this.dataObj[key])
-            //     }
-            // }
-        },
-        setInitial: function (option) {
-            // set initial with default value if there is one
+    filters: {
+        setInitial: function (option, values) {
             let initial = option.hasOwnProperty('default') ? option.default : null
-            let values = this.values
-
             if (option.type == 'grid') {
                 return values
             }
@@ -98,6 +81,21 @@ export default {
                 return initial
             }
         },
+        setModule: function (fields) {
+            if (!fields) {
+                fields = []
+            }
+
+            let dataObj = {}
+
+            for (let i = 0; i < fields.length; i++) {
+                let field = fields[i]
+                dataObj[field.key] = field.hasOwnProperty('default') ? field.default : null
+            }
+            return dataObj
+        }
+    },
+    methods: {
         emitChanged: function (key, value) {
             this.dataObj[key] = value
             this.$emit('changed', this.dataObj)
@@ -158,9 +156,6 @@ export default {
 
             // console.log('emit', key, value, type);
         }
-    },
-    created: function () {
-        this.setModule()
     },
     mounted: function () {}
 }

@@ -672,7 +672,7 @@ export default {
             return newEl
         },
         layoutUpdated: function (newLayout) {
-            // console.log('layout aggiornato', newLayout);
+            console.log('layout aggiornato', newLayout);
             // console.log('prima', newLayout.map(o => o.x + ' ' + o.y));
 
             // https://coderwall.com/p/ebqhca/javascript-sort-by-two-fields
@@ -699,9 +699,14 @@ export default {
             // }
         },
         setInitial: function () {
-            // console.log('imposta', this.initial, this.values);
+            // console.log('imposta', Object.assign({}, this.initial), Object.assign({}, this.values));
+            //
+            // if (this.option.type == 'grid') {
+            //     this.values = this.
+            // }
+
             if (this.initial && this.option.type != 'post-select') {
-                this.value = this.initial
+                this.values = this.initial
                 // console.log(clone(this.value));
                 // console.log('qui', this.option.key, this.option.type);
             }

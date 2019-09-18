@@ -558,7 +558,7 @@ export default {
                                         hasChild: false,
                                         callback: (response) => {
                                             let temp = this.formatFromResponse(cached[i], response.data.module)
-                                            console.log('ciiiaoo', cached[i], temp);
+                                            // console.log('ciiiaoo', cached[i], temp);
                                             cached[i] = temp
                                         }
                                     })
@@ -590,7 +590,7 @@ export default {
                 if (obj.hasOwnProperty(key)) {
                     if (key === 'content') {
                         let content = obj[key]
-
+                        console.log('contenuto', JSON.stringify(content));
                         form.append(key, JSON.stringify(content))
                     }
                     else if (key === 'uuid') {

@@ -180,6 +180,7 @@ export default {
             elements: [],
             posts: [],
             postType: 'products',
+            initialized: false,
         }
     },
     watch: {
@@ -200,7 +201,7 @@ export default {
         },
         obj: {
             handler: function (obj) {
-                // console.log(obj);
+                // console.log(obj.post_count);
                 this.updateParent()
             },
             deep: true
@@ -232,7 +233,7 @@ export default {
         },
         'obj.post_per_row': {
             handler: function (count) {
-                // console.log('post_per_row');
+                // console.log('post_per_row', count);
             },
             deep: true
         },
@@ -245,16 +246,18 @@ export default {
             deep: true,
         },
         // Deprecate
-        // initial: {
-        //     handler: function (values) {
-        //         this.setInitial()
-        //     },
-        //     deep: true,
-        // },
+        initial: {
+            handler: function (obj) {
+                // console.log('initial', obj.post_count);
+                // this.setInitial()
+            },
+            deep: true,
+        },
     },
     methods: {
         updatePosts: function (resetPost = true) {
             // console.log(this.obj.models);
+            // console.log('update posts', this.obj.post_count);
             if (resetPost) {
                 this.posts = []
             }
@@ -264,7 +267,6 @@ export default {
                 if (resetPost) {
                     this.elements = []
                 }
-
 
                 if (this.obj.mode == 'last') {
                     posts.forEach((element, i) => {
@@ -400,11 +402,14 @@ export default {
         setInitial: function () {
             // console.log('initial', this.initial);
             if (this.initial) {
+                this.initialized = true
                 let options
 
                 if (this.initial.options) {
                     options = JSON.parse(this.initial.options)
                 }
+
+                // console.log('opzioni', options);
 
                 let newObj = {
                     type: this.initial.type ? this.initial.type : 'simple',
@@ -427,12 +432,12 @@ export default {
                 this.obj = newObj
                 // this.obj = this.initial
 
-                if (newObj.mode == 'last') {
-                    this.updatePosts()
-                }
-                else {
-                    this.updatePosts(false)
-                }
+                // if (newObj.mode == 'last') {
+                //     this.updatePosts()
+                // }
+                // else {
+                //     this.updatePosts(false)
+                // }
             }
             else {
                 console.log('no initial');

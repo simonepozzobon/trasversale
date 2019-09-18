@@ -398,6 +398,7 @@ class AdminController extends Controller
                 $options = [
                     'x' => $block->x,
                     'y' => $block->y,
+                    'order' => $block->order,
                     'width' => $block->w,
                     'height' => $block->h,
                     'color' => 'primary',
