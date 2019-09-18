@@ -5,10 +5,24 @@ const Corsi = {
     slug: 'corsi',
     create: 'Crea Corso',
     single: 'Corso',
-    fields: [
-        {
+    fields: [{
             key: 'id',
             label: 'ID',
+            sortable: true,
+        },
+        {
+            key: 'subcribers_count',
+            label: 'Iscritti',
+            sortable: true,
+        },
+        {
+            key: 'subcribers_confirmed',
+            label: 'Confermati',
+            sortable: true,
+        },
+        {
+            key: 'subscribers_tools',
+            label: 'Gestisci iscrizioni',
             sortable: true,
         },
         {

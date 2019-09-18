@@ -83,8 +83,6 @@ export default {
             this.postObj = obj
         },
         savePost: function (ref) {
-            console.log(ref);
-
             let url = '/api/admin/post-type/save'
             this.postObj.model = this.type.model
 

@@ -37,6 +37,7 @@
             >
                 Elimina
             </button>
+            <button class="btn btn-outline-yellow">Iscritti</button>
         </template>
     </b-table>
     <div class="controls d-flex justify-content-center">
