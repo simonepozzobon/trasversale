@@ -86,7 +86,7 @@ class MainController extends Controller
 
             return [
                 'success' => true,
-                'debug' => $this->stringify_class($item->sluggable),
+                // 'debug' => $this->stringify_class($item->sluggable),
                 'item' => $item->sluggable,
             ];
         }

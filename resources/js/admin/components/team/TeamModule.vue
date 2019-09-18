@@ -95,9 +95,9 @@ export default {
     methods: {
         debug: function () {},
         updateNumCol: function (cols) {
-            let colSize = 12 / cols
+            let colSize = 12 / Number(cols)
             this.obj['gridCol'] = colSize
-            this.colSize = cols
+            this.colSize = Number(cols)
 
         },
         addMember: function (member) {

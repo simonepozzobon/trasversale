@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div
                 ref="packery"
-                v-if="items.lenght > 0"
+                v-if="this.items.length > 0"
             >
                 <grid-layout
                     :layout.sync="items"
@@ -29,8 +29,8 @@
                         :key="item.uuid"
                         :x="item.x"
                         :y="item.y"
-                        :w="item.w"
-                        :h="item.h"
+                        :w="Number(item.w)"
+                        :h="Number(item.h)"
                         :i="item.i"
                     >
                         <grid-single-item :item="item" />
@@ -49,9 +49,10 @@ import {
 from '../../../Utilities'
 import VueGridLayout from 'vue-grid-layout'
 import GridSingleItem from './GridSingleItem.vue'
+const debounce = require('lodash.debounce')
 
 export default {
-    name: 'GridModule',
+    name: 'GridBuilder',
     components: {
         GridLayout: VueGridLayout.GridLayout,
         GridItem: VueGridLayout.GridItem,
@@ -77,10 +78,16 @@ export default {
     },
     watch: {
         elements: function (els) {
-            this.items = els
+            // console.log('grid builder elements changed', els);
+            this.items = Object.assign([], els)
+            // this.getContainerWidth()
         },
-        items: function (items) {
-            this.$emit('update:elements', items)
+        items: {
+            handler: function (items) {
+                // console.log('items cambiati', items);
+                this.debouncedUpdate(items)
+            },
+            deep: true,
         }
     },
     methods: {
@@ -90,6 +97,12 @@ export default {
                 this.unitSize = Math.round(container / 12) - (this.gutter)
             }
         },
+    },
+    beforeCreate: function () {
+        this.debouncedUpdate = debounce((items) => {
+            console.log('debounced');
+            // this.$emit('update:elements', items)
+        }, 150)
     },
     mounted: function () {
         this.getContainerWidth()

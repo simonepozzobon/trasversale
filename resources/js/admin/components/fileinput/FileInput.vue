@@ -19,7 +19,7 @@
                         :for="name"
                         aria-describedby="inputGroupFileAddon02"
                     >
-                        Seleziona File
+                        <span>{{ filename }}</span>
                     </label>
                 </div>
             </div>
@@ -94,13 +94,18 @@ export default {
         ratio: {
             type: Number,
             default: 16 / 9
-        }
+        },
+        placeholder: {
+            type: String,
+            default: 'Seleziona un file',
+        },
     },
     data: function () {
         return {
             file: null,
             src: null,
             showCrop: false,
+            filename: null,
         }
     },
     watch: {
@@ -119,7 +124,10 @@ export default {
         },
         previewFile: function () {
             this.file = this.$refs.file.files[0]
+
             if (this.file) {
+                this.$emit('is-loading-preview')
+                this.filename = this.file.name
                 let reader = new FileReader()
                 // console.log('preview');
                 reader.addEventListener('load', () => {
@@ -135,6 +143,9 @@ export default {
 
                 })
                 reader.readAsDataURL(this.file)
+            }
+            else {
+                this.filename = this.placeholder
             }
         },
         crop: function () {
@@ -170,6 +181,9 @@ export default {
                 this.toggleCrop()
             }
         }
+    },
+    created: function () {
+        this.filename = this.placeholder
     },
 }
 </script>

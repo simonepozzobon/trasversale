@@ -1,7 +1,7 @@
-<template lang="html">
-    <div
-        class="ui-block"
-        :class="[
+<template>
+<div
+    class="ui-block"
+    :class="[
                 sizeClass,
                 alignClass, justifyClass,
                 directionClass,
@@ -9,41 +9,46 @@
                 transparentClass,
                 fullHeightClass,
             ]"
-        ref="block"
-        v-if="hasContainer">
-
-        <div
-            class="ui-block__container"
-            :class="colorClass"
-            ref="container">
-            <module-manager
-                v-for="module in this.modules"
-                :key="module.id"
-                :module="module"/>
-
-            <div class="ui-block__action">
-                <button class="btn btn-outline-primary">
-                    Aggiungi
-                </button>
-            </div>
-        </div>
-    </div>
+    ref="block"
+    v-if="hasContainer"
+>
 
     <div
-        class="ui-block"
-        :class="[sizeClass, colorClass, alignClass, justifyClass, directionClass, radiusClass, transparentClass]"
-        ref="block"
-        v-else>
+        class="ui-block__container"
+        :class="colorClass"
+        ref="container"
+    >
         <module-manager
             v-for="module in this.modules"
             :key="module.id"
-            :module="module"/>
+            :module="module"
+        />
+
         <div class="ui-block__action">
             <button class="btn btn-outline-primary">
                 Aggiungi
             </button>
         </div>
     </div>
+</div>
+
+<div
+    class="ui-block"
+    :class="[sizeClass, colorClass, alignClass, justifyClass, directionClass, radiusClass, transparentClass]"
+    ref="block"
+    v-else
+>
+    <module-manager
+        v-for="module in this.modules"
+        :key="module.id"
+        :module="module"
+    />
+    <div class="ui-block__action">
+        <button class="btn btn-outline-primary">
+            Aggiungi
+        </button>
+    </div>
+</div>
 </template>
 
 <script>
@@ -88,92 +93,98 @@ export default {
         },
         column: {
             type: Object,
-            default: function() {},
+            default: function () {},
         },
         isOpen: {
             type: Boolean,
             default: false,
         }
     },
-    data: function() {
+    data: function () {
         return {
             size: null,
             align: null,
         }
     },
     computed: {
-        content: function() {
+        content: function () {
+            console.log('contgenuttooooo', this.column.content);
             return JSON.parse(this.column.content)
         },
-        sizeClass: function() {
+        sizeClass: function () {
             if (this.size == 'auto') {
                 return 'col'
             }
             return 'col-md-' + this.size
         },
-        colorClass: function() {
+        colorClass: function () {
             if (this.color && this.transparent) {
-                return 'ui-block--transparent-'+this.color
-            } else if (this.color) {
+                return 'ui-block--transparent-' + this.color
+            }
+            else if (this.color) {
                 return 'bg-' + this.color
             }
         },
-        alignClass: function() {
+        alignClass: function () {
             if (this.align == 'start') {
                 return 'ui-block--align-start'
-            } else if (this.align == 'between') {
+            }
+            else if (this.align == 'between') {
                 return 'ui-block--align-between'
-            } else if (this.align == 'end') {
+            }
+            else if (this.align == 'end') {
                 return 'ui-block--align-end'
             }
         },
-        justifyClass: function() {
+        justifyClass: function () {
             if (this.justify == 'start') {
                 return 'ui-block--justify-start'
-            } else if (this.justify == 'between') {
+            }
+            else if (this.justify == 'between') {
                 return 'ui-block--justify-between'
-            } else if (this.justify == 'center') {
+            }
+            else if (this.justify == 'center') {
                 return 'ui-block--justify-center'
-            } else if (this.justify == 'end') {
+            }
+            else if (this.justify == 'end') {
                 return 'ui-block--justify-end'
             }
         },
-        directionClass: function() {
+        directionClass: function () {
             if (this.direction == 'row') {
                 return 'ui-block--flex-row'
             }
         },
-        radiusClass: function() {
+        radiusClass: function () {
             if (this.radius && !this.radiusSize) {
                 return 'ui-block--radius'
-            } else if (this.radius && this.radiusSize) {
-                return 'ui-block--radius-'+this.radiusSize
+            }
+            else if (this.radius && this.radiusSize) {
+                return 'ui-block--radius-' + this.radiusSize
             }
         },
-        radiusSizeClass: function() {
-            if (this.radiusSize) {
-            }
+        radiusSizeClass: function () {
+            if (this.radiusSize) {}
         },
-        transparentClass: function() {
+        transparentClass: function () {
             if (this.transparent) {
                 return 'ui-block--transparent'
             }
         },
-        fullHeightClass: function() {
+        fullHeightClass: function () {
             if (this.fullHeight) {
                 return 'ui-block--full-height'
             }
         },
-        modules: function() {
+        modules: function () {
             return this.column.modules
         }
     },
-    created: function() {
+    created: function () {
         this.size = this.content.size
         this.align = this.content.hasOwnProperty('align') ? this.content.align : null
     },
-    mounted: function() {
-    },
+    mounted: function () {},
 }
 </script>
 
@@ -230,10 +241,9 @@ export default {
         align-items: flex-end;
     }
 
-
     &--flex-row &__container {
         flex-direction: row;
-        align-items: center
+        align-items: center;
     }
 
     &--flex-row#{&}--align-start &__container {
@@ -269,5 +279,4 @@ export default {
         justify-content: flex-start;
     }
 }
-
 </style>

@@ -98,56 +98,64 @@ export default {
                     // console.log('get post', response);
                     if (response.data.success) {
                         let post = Object.assign({}, response.data.post)
-                        this.setInitialValues(post)
-                        this.modules = response.data.post.modules
-                        this.sidebarIdx = response.data.sidebar ? response.data.sidebar.id : 0
-                        this.sidebarModules = response.data.sidebar ? response.data.sidebar.modules : []
+                        this.setInitialValues(post).then(() => {
+                            this.modules = response.data.post.modules
+                            this.sidebarIdx = response.data.sidebar ? response.data.sidebar.id : 0
+                            this.sidebarModules = response.data.sidebar ? response.data.sidebar.modules : []
+
+                            this.$nextTick(() => {
+                                this.initialised = true
+                            })
+                        })
                     }
                 })
         },
         setInitialValues: function (post) {
-            this.values = {
-                title: post.title,
-                price: post.price,
-                slug: post.slug && post.slug.hasOwnProperty('slug') ? post.slug.slug : null,
-                preview: post.thumb,
-                category: post.category.id,
-            }
+            return new Promise((resolve, reject) => {
+                this.values = {
+                    title: post.title,
+                    price: post.price,
+                    slug: post.slug && post.slug.hasOwnProperty('slug') ? post.slug.slug : null,
+                    preview: post.thumb,
+                    category: post.category.id,
+                    forwho: post.forwho
+                }
 
-            if (post.hasOwnProperty('hours')) {
-                this.values = {
-                    ...this.values,
-                    hours: post.hours,
+                if (post.hasOwnProperty('hours')) {
+                    this.values = {
+                        ...this.values,
+                        hours: post.hours,
+                    }
                 }
-            }
-            if (post.hasOwnProperty('start_at')) {
-                this.values = {
-                    ...this.values,
-                    start_at: post.start_at,
+                if (post.hasOwnProperty('start_at')) {
+                    this.values = {
+                        ...this.values,
+                        start_at: post.start_at,
+                    }
                 }
-            }
-            if (post.hasOwnProperty('end_at')) {
-                this.values = {
-                    ...this.values,
-                    end_at: post.end_at,
+                if (post.hasOwnProperty('end_at')) {
+                    this.values = {
+                        ...this.values,
+                        end_at: post.end_at,
+                    }
                 }
-            }
-            if (post.hasOwnProperty('address')) {
-                this.values = {
-                    ...this.values,
-                    address: post.address,
+                if (post.hasOwnProperty('address')) {
+                    this.values = {
+                        ...this.values,
+                        address: post.address,
+                    }
                 }
-            }
 
-            this.$nextTick(() => {
-                this.initialised = true
+                resolve()
             })
+
         },
         setObj: function (obj) {
             this.postObj = Object.assign({}, obj)
+            // console.log('cambiato');
         },
         savePost: function (ref) {
-            console.log('saving post');
+            // console.log('saving post');
             let url = '/api/admin/post-type/save'
             this.postObj.model = this.type.model
             this.postObj.id = this.$route.params.id

@@ -3,6 +3,7 @@
     class="grid-single-item"
     ref="el"
 >
+    {{ text }}
 </div>
 </template>
 
@@ -18,9 +19,19 @@ export default {
             },
         },
     },
+    data: function () {
+        return {
+            text: null,
+        }
+    },
     methods: {
         setImage: function () {
-            this.$refs.el.style.backgroundImage = 'url(' + this.item.thumb + ')'
+            if (this.item.thumb) {
+                this.$refs.el.style.backgroundImage = 'url(' + this.item.thumb + ')'
+            }
+            else {
+                this.text = 'No-Image'
+            }
         }
     },
     mounted: function () {
@@ -38,5 +49,9 @@ export default {
     background-repeat: no-repeat;
     width: 100%;
     height: 100%;
+
+    &--no-image {
+        background-color: rgba($primary, .3);
+    }
 }
 </style>

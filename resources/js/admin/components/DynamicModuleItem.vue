@@ -100,8 +100,15 @@
             <text-editor
                 ref="textEditor"
                 :initial="this.value"
+                :options="this.option.hasOwnProperty('options') ? this.option.options : {}"
                 @update="updateEditor"
             />
+            <small
+                class="text-muted"
+                v-if="option.hasOwnProperty('info')"
+            >
+                {{ option.info }}
+            </small>
         </div>
     </div>
 
@@ -253,6 +260,13 @@
         @update="setValue"
     />
 
+    <upload-pdf
+        v-else-if="option.type === 'uploadpdf'"
+        :label="option.label"
+        :initial="initial"
+        @update="setValue"
+    />
+
     <!-- <div v-else>
         {{ option }}
     </div> -->
@@ -318,6 +332,7 @@ import PostFields from './grid/PostFields'
 import Swatches from 'vue-swatches'
 import TeamModule from './team/TeamModule.vue'
 import TextEditor from './TextEditor.vue'
+import UploadPdf from './uploadpdf/UploadPdf.vue'
 import {
     UiCheckbox,
     UiSwitch,
@@ -339,6 +354,7 @@ export default {
         Swatches,
         TeamModule,
         TextEditor,
+        UploadPdf,
         UiCheckbox,
         UiSwitch,
     },
@@ -461,6 +477,7 @@ export default {
             if (!isEqual(this.value, subModuleObj)) {
                 // console.log('dentro', subModuleObj);
                 this.value = clone(subModuleObj)
+                // this.value = Object.assign({}, subModuleObj)
             }
         },
         teamChanged: function (teamModule) {

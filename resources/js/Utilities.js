@@ -1,5 +1,5 @@
 const SizeUtil = {
-    get: function(el) {
+    get: function (el) {
         let rect = el.getBoundingClientRect()
         let computedStyle = getComputedStyle(el)
         let height = rect.height
@@ -34,36 +34,38 @@ const SizeUtil = {
 }
 
 const Uuid = {
-    get: function() {
+    get: function () {
         // https://gist.github.com/6174/6062387
-        return [...Array(10)].map(i=>(~~(Math.random()*36)).toString(36)).join('')
+        return [...Array(10)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
     }
 }
 
 // https://helloacm.com/how-to-clone-variables-the-clone-function-in-javascript/
-const clone = function(Obj) {
+const clone = function (Obj) {
     let buf;
     if (Obj instanceof Array) {
         buf = []; // create an empty array
         let i = Obj.length;
-        while (i --) {
+        while (i--) {
             buf[i] = clone(Obj[i]); // recursively clone the elements
         }
         return buf;
-    } else if (Obj instanceof Object) {
+    }
+    else if (Obj instanceof Object) {
         buf = {}; // create an empty object
         for (let k in Obj) {
             buf[k] = clone(Obj[k]); // recursively clone the value
         }
         return buf;
-    } else {
+    }
+    else {
         return Obj;
     }
 }
 
 const isEqual = require('lodash.isequal')
 
-const isFile = function(obj) {
+const isFile = function (obj) {
     if (obj instanceof File) {
         return true
     }
@@ -73,7 +75,7 @@ const isFile = function(obj) {
 const orderBy = require('lodash.orderby')
 const debounce = require('lodash.debounce')
 
-const sortModules = function(modules) {
+const sortModules = function (modules) {
     let sorted = orderBy(modules, ['order', 'created_at'], ['asc', 'asc'])
 
     let formattedContents = sorted.map(module => {
@@ -87,29 +89,29 @@ const sortModules = function(modules) {
             let sortedColumns = orderBy(rowContent, ['order', 'created_at'], ['asc', 'asc'])
             let formattedColumns = sortedColumns.map(column => {
 
-                    let columnContent = column.content
-                    if (typeof columnContent == 'string') {
-                        columnContent = JSON.parse(columnContent)
-                    }
-                    // console.log(columnContent);
+                let columnContent = column.content
+                if (typeof columnContent == 'string') {
+                    columnContent = JSON.parse(columnContent)
+                }
+                // console.log(columnContent);
 
 
-                    let sortedModules = []
-                    let modulesArr = []
+                let sortedModules = []
+                let modulesArr = []
 
-                    if (columnContent.hasOwnProperty('modules')) {
-                        modulesArr = Array.from(columnContent.modules)
+                if (columnContent.hasOwnProperty('modules')) {
+                    modulesArr = Array.from(columnContent.modules)
 
-                        sortedModules = orderBy(modulesArr, ['order', 'created_at'], ['asc', 'asc'])
+                    sortedModules = orderBy(modulesArr, ['order', 'created_at'], ['asc', 'asc'])
 
-                    }
+                }
 
-                    let formattedColumn = {
-                        size: columnContent.size,
-                        modules: JSON.stringify(sortedModules)
-                    }
+                let formattedColumn = {
+                    size: columnContent.size,
+                    modules: JSON.stringify(sortedModules)
+                }
 
-                    column.content = JSON.stringify(formattedColumn)
+                column.content = JSON.stringify(formattedColumn)
 
                 return column
             })
@@ -128,9 +130,10 @@ const checkOverflow = function (el) {
     // either vertically or horizontally.
     // Will temporarily modify the "overflow" style to detect this
     // if necessary.
+
     let curOverflow = el.style.overflow
 
-    if ( !curOverflow || curOverflow === "visible" ) {
+    if (!curOverflow || curOverflow === "visible") {
         el.style.overflow = "hidden"
     }
 
@@ -144,22 +147,32 @@ const checkOverflow = function (el) {
 
 const checkDuplicateInObject = function (propertyName, inputArray) {
     let seenDuplicate = false,
-    itemProp = null,
-    testObject = {}
+        itemProp = null,
+        testObject = {}
 
-    inputArray.map(function(item) {
-        let itemPropertyName = item[propertyName]
+    let formattedArray = inputArray.map(item => {
+        // console.log('oggetto', item, propertyName);
 
-        if (itemPropertyName in testObject) {
-            testObject[itemPropertyName].duplicate = true
-            item.duplicate = true
-            seenDuplicate = true
-            itemProp = item[propertyName]
+        if (item.hasOwnProperty(propertyName)) {
+            let itemPropertyValue = item[propertyName]
+            // console.log('propertyName', itemPropertyValue);
+
+            if (itemPropertyValue in testObject) {
+                testObject[itemPropertyValue].duplicate = true
+                item.duplicate = true
+                seenDuplicate = true
+                itemProp = item[propertyName]
+            }
+            else {
+                testObject[itemPropertyValue] = item
+                delete item.duplicate
+            }
         }
         else {
-            testObject[itemPropertyName] = item
             delete item.duplicate
         }
+
+        return item
     })
 
     return {

@@ -100,6 +100,10 @@ export default {
                     label: 'Modulo Contatti',
                 },
                 {
+                    value: 'uploadpdf',
+                    label: 'File Pdf',
+                },
+                {
                     value: 'spacer',
                     label: 'Spaziatore',
                 },

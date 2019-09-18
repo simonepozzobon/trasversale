@@ -2,7 +2,8 @@
 <div
     class="grid-single-item"
     :class="[
-        titleSize
+        titleSize,
+        noImageClass,
     ]"
     ref="el"
 >
@@ -97,10 +98,20 @@ export default {
 
             return null
         },
+        noImageClass: function () {
+            if (this.item.thumb) {
+                return null
+            }
+            else {
+                return 'grid-single-item--no-image'
+            }
+        }
     },
     methods: {
         setImage: function () {
-            this.$refs.el.style.backgroundImage = 'url(' + this.item.thumb + ')'
+            if (this.item.thumb) {
+                this.$refs.el.style.backgroundImage = 'url(' + this.item.thumb + ')'
+            }
         },
         smallerText: function (el) {
             if (el) {
@@ -141,11 +152,26 @@ export default {
                         subpage: slug,
                     })
                     break;
-                case 'App\Product':
+
+                case 'App\\Product':
                     this.$root.goToWithParams('subpage', {
                         page: 'corsi',
                         subpage: slug,
                     })
+                    break;
+
+                case 'App\\StaticPage':
+                    this.$root.goToWithParams('page', {
+                        page: slug,
+                    })
+                    break;
+
+                case 'App\\SubPage':
+                    alert('error')
+                    // this.$root.goToWithParams('subpage', {
+                    //     page: 'corsi',
+                    //     subpage: slug,
+                    // })
                     break;
                 default:
                     alert('no route')
@@ -213,5 +239,14 @@ $paddingWidth: $padding * 2 !default;
         opacity: 1;
         transition: $transition-base;
     }
+
+    &--no-image {
+        background-color: rgba($black, .1);
+    }
+
+    &--no-image &__overlay {
+        opacity: 1;
+    }
+
 }
 </style>

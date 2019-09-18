@@ -27,6 +27,8 @@ Route::prefix('payment')->group(function() {
 
 Route::prefix('mail')->group(function() {
     Route::post('send', 'MailController@send_mail_form');
+    Route::post('cart-info', 'MailController@send_cart_info');
+    Route::post('teacher-card', 'MailController@teacher_card');
 });
 
 Route::get('get-page/{page}/{subpage?}/{slug?}', 'MainController@get_dynamic_item');
@@ -64,7 +66,9 @@ Route::prefix('admin')->group(
         Route::prefix('utilities')->group(
             function() {
                 Route::post('/save-image', 'AdminController@save_image');
+                Route::post('upload-pdf', 'AdminController@upload_pdf');
             }
         );
+
     }
 );

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Pdf;
 use App\Post;
 use App\News;
 use App\Grid;
@@ -16,6 +17,7 @@ use App\Category;
 use App\StaticPage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -64,6 +66,12 @@ class AdminController extends Controller
             $products = Product::with('slug', 'category')->get();
             $news = News::with('slug', 'category')->get();
             $elements = $this->uniform_and_merge($news, $products);
+            break;
+
+        case 'pages':
+            $pages = StaticPage::with('slug')->get();
+            $sub_pages = SubPage::with('slug')->get();
+            $elements = $this->uniform_and_merge($pages, $sub_pages);
             break;
 
         default:
@@ -170,6 +178,10 @@ class AdminController extends Controller
             $post->options = $request->options;
         }
 
+        if (isset($request->forwho)) {
+            $post->forwho = $request->forwho;
+        }
+
         $post->save();
 
         // salva slug
@@ -192,12 +204,12 @@ class AdminController extends Controller
         return [
             'success' => true,
             'post' => $post,
-            'debug' => [
-                'start_at' => $start_at,
-                'string' => $string_start,
-                'end_at' => $end_at,
-                'string_end' => $string_end,
-            ],
+            // 'debug' => [
+            //     'start_at' => $start_at,
+            //     'string' => $string_start,
+            //     'end_at' => $end_at,
+            //     'string_end' => $string_end,
+            // ],
         ];
     }
 
@@ -358,13 +370,27 @@ class AdminController extends Controller
         $content = $request->content;
         if ($request->type == 'grid') {
             $content = json_decode($content);
+            $grid_options = json_decode($content->options);
             $grid_content = json_decode($module->content);
 
-            $grid = isset($content->id) ? Grid::find($content->id) : new Grid();
+            if (isset($grid_content->id)) {
+                $grid_id = $grid_content->id;
+                $grid = Grid::find($grid_id);
+                if (!$grid) {
+                    $grid = new Grid();
+                } else {
+                    $grid->elements()->delete();
+                }
+            } else {
+                $grid = new Grid();
+            }
+
 
             // $grid->title = $content->title;
             $grid->type = $content->type;
             $grid->save();
+
+
 
             foreach ($content->blocks as $key => $block) {
                 $model = 'App\\'.ucfirst($block->type);
@@ -384,10 +410,8 @@ class AdminController extends Controller
                 if ($has_block) {
                     $element = Element::find($block->id);
                     $element->delete();
-                    $element = new Element();
-                } else {
-                    $element = new Element();
                 }
+                $element = new Element();
 
                 $element->grid_id = $grid->id;
                 $element->elementable_type = $model;
@@ -398,7 +422,8 @@ class AdminController extends Controller
 
             $content = json_encode(
                 [
-                    'id' => $grid->id
+                    'id' => $grid->id,
+                    'options' => $grid_options,
                 ]
             );
 
@@ -429,6 +454,27 @@ class AdminController extends Controller
 
         return [
             'file' => $media
+        ];
+    }
+
+    public function upload_pdf(Request $request)
+    {
+        $file = $request->file('pdf');
+
+        $original_filename = $file->getClientOriginalName();
+        $filename = uniqid().'.'.$file->getClientOriginalExtension();
+
+        $src = $file->storeAs('public/pdf', $filename);
+        $src_formatted = Storage::disk('local')->url($src);
+
+        $pdf = new Pdf();
+        $pdf->original_name = $original_filename;
+        $pdf->src = $src_formatted;
+        $pdf->save();
+
+        return [
+            'success' => true,
+            'pdf' => $pdf
         ];
     }
 }

@@ -18,6 +18,7 @@
                 @save="saveSubComponent"
                 @delete="deleteComponent"
                 @deleted="deletedComponent"
+                @changed="changed"
             />
         </draggable>
         <components-list
@@ -88,6 +89,7 @@ export default {
     watch: {
         column: {
             handler: function (col) {
+                // console.log('updating', col);
                 this.setColumn(col)
                 // console.log('colonne cambiate', col);
             },
@@ -95,7 +97,7 @@ export default {
         },
         // cached: {
         //     handler: function (cached) {
-        //         console.log('cambiati');
+        //         // console.log('cambiati');
         //     },
         //     deep: true
         // }
@@ -154,6 +156,16 @@ export default {
             // console.log('salvo subcomponent', this.column);
             this.$emit('save-column', this.column)
         },
+        changed: function (subModule) {
+            // let uuid = subModule.uuid
+            let idx = this.cached.findIndex(cache => cache.uuid === subModule.uuid)
+            if (idx > -1) {
+                this.cached.splice(idx, 1, subModule)
+            }
+            // console.log(subModule.uuid);
+            // console.log('saviiin', this.column, subModule, this.cached);
+
+        },
         deleteComponent: function (id, isNew, uuid) {
             this.$emit('delete-sub-component', id, isNew, uuid)
         },
@@ -166,14 +178,16 @@ export default {
         }
     },
     beforeCreate: function () {
-        this.$options.components.ModuleContainer = require('../../containers/ModuleContainer.vue')
-            .default
+        this.$options.components.ModuleContainer = require('../../containers/ModuleContainer.vue').default
     },
     created: function () {
         this.setColumn(this.column)
         this.size = this.content.size
         this.align = this.content.hasOwnProperty('align') ? this.content.align : null
-    }
+    },
+    mounted: function () {
+        // console.log('contenuto colonna', this.column);
+    },
 }
 </script>
 

@@ -106,7 +106,7 @@ export default {
             // console.log('dopo', this.component);
         },
         saveSubModule: function (columns) {
-            // console.log('save sub module', this.item);
+            console.log('save sub module', this.item);
             // this.saveComponent(null)
             this.component.content = columns
 
@@ -114,8 +114,24 @@ export default {
             // console.log(columns, this.component);
         },
         formatTempData: function (obj) {
-            // console.log('formatTempData');
-            this.component.content = this.setPreview(obj)
+            // console.log('formatTempData', obj);
+            let content = this.setPreview(obj)
+            let updatedComponent = {
+                ...this.component,
+                content: content
+            }
+
+            if (Array.isArray(updatedComponent.content)) {
+                // è una colonna
+                // console.log('righe', updatedComponent.content[1].modules);
+                this.$emit('changed', updatedComponent)
+            }
+            else {
+                // console.log('non è una colonna');
+                this.$emit('changed', updatedComponent)
+            }
+
+            this.component = updatedComponent
             // console.log('ciao', this.component.content);
         },
         deleteComponent: function (id, isNew, uuid = false) {
@@ -131,7 +147,7 @@ export default {
             this.$emit('deleted', this.item)
         },
         saveComponent: function (obj) {
-            // console.log('module container save', this.component);
+            console.log('module container save', this.component, obj);
             this.$emit('save', this.component)
         },
         savedComponent: function (component) {
@@ -153,20 +169,31 @@ export default {
                 let newCols = []
                 let content = this.component.content
 
+                // console.log('row content', content);
+                // console.log(obj.columns);
+
                 let length = content.length ? content.length : 0
                 let colsToGenerate = obj.columns - length
+                // console.log('colsToGenerate', colsToGenerate);
 
                 if (colsToGenerate > 0) {
+                    // console.log('genera colonne', colsToGenerate);
                     newCols = this.generateColumns(colsToGenerate)
                     cols = Object.assign([], content)
                         .concat(newCols)
                 }
                 else if (colsToGenerate < 0) {
+                    // console.log('nessuna colonna da generare', content);
                     content.pop()
                     cols = newCols.concat(content)
                 }
+                else {
+                    cols = Object.assign([], content)
+                    // console.log('ci sono già colonne', cols);
+                }
 
                 return cols
+                break
 
             case 'image':
                 // Immagine
@@ -176,7 +203,7 @@ export default {
                     src = window.URL.createObjectURL(obj.src)
                 }
                 else if (obj.src) {
-                    // console.log('non è un file');
+                    // console.log('non è un file')
                     src = obj.src
                 }
 
@@ -184,13 +211,13 @@ export default {
                     src: src,
                         alt: obj.alt,
                 }
-                break;
+                break
 
             case 'video':
                 // Video
                 let url = obj.url
                 if (url) {
-                    url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
+                    url.match(/(http:|https:|)\/\/(player.|www.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com))\/(video\/|embed\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/)
                     if (RegExp.$3.indexOf('youtu') > -1) {
                         url = 'https://www.youtube.com/embed/' + RegExp.$6
                     }
@@ -202,16 +229,22 @@ export default {
                     ...obj,
                     url: url,
                 }
-                break;
+                break
 
             case 'grid':
-                // console.log('\preview', obj);
+                // console.log('\preview', obj)
                 let grid = obj.grid
                 let blocks = grid.elements
+
+                if (!blocks) {
+                    blocks = grid.blocks ? grid.blocks : []
+                }
+
                 let options = JSON.stringify({
                     mode: grid.mode,
                     models: grid.models,
                     post_per_row: grid.post_per_row,
+                    post_count: grid.post_count,
                 })
 
                 let newGrid = {
@@ -232,7 +265,7 @@ export default {
                     })
                 }
                 return newGrid
-                break;
+                break
 
             default:
                 // DEfault
@@ -243,7 +276,7 @@ export default {
 
         },
         changed: function (obj) {
-            // console.log('changed', obj);
+            // console.log('changed', obj)
             this.cache = obj
         },
         selected: function (obj = null) {

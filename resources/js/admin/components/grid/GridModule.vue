@@ -8,7 +8,7 @@
     </div>
     <div class="form-group row">
         <label
-            for="type"
+            for="grid_type"
             class="col-md-3"
         >
             Tipologia
@@ -16,7 +16,7 @@
         <div class="col-md-9">
             <select
                 type="text"
-                name="type"
+                name="grid_type"
                 class="form-control"
                 v-model="obj.type"
             >
@@ -27,7 +27,7 @@
     </div>
     <div class="form-group row">
         <label
-            for="type"
+            for="mode"
             class="col-md-3"
         >
             Modalità post
@@ -35,7 +35,7 @@
         <div class="col-md-9">
             <select
                 type="text"
-                name="type"
+                name="mode"
                 class="form-control"
                 v-model="obj.mode"
             >
@@ -56,18 +56,25 @@
         </label>
         <div class="col-md-9">
             <div class="posts-type row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <checkbox-module
                         :val.sync="obj.models[0].products"
                         name="prodotti"
                         label="Prodotti"
                     />
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <checkbox-module
                         :val.sync="obj.models[1].news"
                         name="notizie"
                         label="Notizie"
+                    />
+                </div>
+                <div class="col-md-4">
+                    <checkbox-module
+                        :val.sync="obj.models[2].pages"
+                        name="pages"
+                        label="Pagine"
                     />
                 </div>
             </div>
@@ -157,10 +164,13 @@ export default {
                 type: 'simple',
                 mode: 'last',
                 models: [{
-                        products: false,
+                        products: true,
                     },
                     {
                         news: false,
+                    },
+                    {
+                        pages: false,
                     },
                 ],
                 post_count: 0,
@@ -169,13 +179,10 @@ export default {
             name: 'grid',
             elements: [],
             posts: [],
-            postType: null,
+            postType: 'products',
         }
     },
     watch: {
-        initial: function () {
-            this.setInitial()
-        },
         postType: function (type) {
             this.elements = []
             for (let i = 0; i < this.obj.models.length; i++) {
@@ -187,51 +194,92 @@ export default {
                     this.obj.models[i][key] = false
                 }
             }
-            this.addElements()
+            // this.addElements()
+            this.updatePosts()
 
         },
         obj: {
             handler: function (obj) {
+                // console.log(obj);
                 this.updateParent()
             },
             deep: true
         },
         'obj.models': {
             handler: function (models) {
-                this.resetPostsPool(models)
+                // console.log('models');
+                this.updatePosts()
+                // this.resetPostsPool(models).then(() => {
+                //     console.log('handlerrrr');
+                // })
             },
             deep: true,
         },
-        'obj.type': {
-            handler: function (type) {
-                if (type === 'simple') {
-                    this.elements = []
-                }
-            },
-            deep: true,
+        'obj.type': function (type) {
+            this.updatePosts()
+            // if (type === 'simple') {
+            //     this.elements = []
+            // }
+            // else {
+            //     this.elements = []
+            //     console.log('mosaic');
+            // }
         },
         'obj.post_count': function (count) {
             if (this.obj.mode == 'last') {
-                // limita i post
-                this.addElements()
+                this.updatePosts()
             }
         },
         'obj.post_per_row': {
             handler: function (count) {
-
                 // console.log('post_per_row');
             },
             deep: true
         },
         elements: {
             handler: function (elements) {
+                // console.log('CIAO');
                 // this.$emit('update', elements)
                 this.updateParent()
             },
             deep: true,
-        }
+        },
+
+        // Deprecate
+        // initial: {
+        //     handler: function (values) {
+        //         this.setInitial()
+        //     },
+        //     deep: true,
+        // },
     },
     methods: {
+        updatePosts: function (resetPost = true) {
+            // console.log(this.obj.models);
+            if (resetPost) {
+                this.posts = []
+            }
+
+            this.resetPostsPool(this.obj.models).then(posts => {
+                // console.log('updated');
+                if (resetPost) {
+                    this.elements = []
+                }
+
+
+                if (this.obj.mode == 'last') {
+                    posts.forEach((element, i) => {
+
+                        if (i < this.obj.post_count) {
+                            let newElement = formatEl(element, i, this.elements)
+                            this.elements.push(newElement)
+                        }
+                    })
+                }
+
+                this.updateParent()
+            })
+        },
         updateParent: function () {
             let obj = {
                 ...this.obj,
@@ -290,19 +338,26 @@ export default {
 
         },
         updateCounter: function (value) {
-            this.obj['post_count'] = value
+            this.obj = {
+                ...this.obj,
+                post_count: value
+            }
         },
         updateRowCounter: function (value) {
-            this.obj['post_per_row'] = value
+            this.obj = {
+                ...this.obj,
+                post_per_row: value
+            }
         },
         addElementToGrid: function (element) {
             this.elements.push(element)
         },
         addElements: function () {
             this.resetPostsPool(this.obj.models).then(posts => {
-                // console.log('qui', posts);
+                // console.log('qui', posts, this.obj);
                 let length = this.elements.length
                 let count = this.obj.post_count
+
                 // console.log('prima', this.elements.length, length, count);
                 if (length == 0) {
                     // console.log('da zero');
@@ -344,14 +399,54 @@ export default {
 
         },
         setInitial: function () {
-            // console.log(this.initial);
+            // console.log('initial', this.initial);
+            if (this.initial) {
+                let options
+
+                if (this.initial.options) {
+                    options = JSON.parse(this.initial.options)
+                }
+
+                let newObj = {
+                    type: this.initial.type ? this.initial.type : 'simple',
+                    mode: options.mode ? options.mode : 'last',
+                    models: options.models ? options.models : [{
+                            products: true,
+                        },
+                        {
+                            news: false,
+                        },
+                        {
+                            pages: false,
+                        }
+                    ],
+                    post_count: options.post_count ? options.post_count : 2,
+                    post_per_row: options.post_per_row ? options.post_per_row : 2,
+                }
+                // console.log('initial', newObj);
+
+                this.obj = newObj
+                // this.obj = this.initial
+
+                if (newObj.mode == 'last') {
+                    this.updatePosts()
+                }
+                else {
+                    this.updatePosts(false)
+                }
+            }
+            else {
+                console.log('no initial');
+            }
         }
     },
     mounted: function () {
-        this.setInitial()
         this.$nextTick(() => {
-            this.debug()
+            this.setInitial()
         })
+        // this.$nextTick(() => {
+        //     this.debug()
+        // })
     },
 }
 </script>

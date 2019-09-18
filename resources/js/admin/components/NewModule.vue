@@ -93,26 +93,27 @@ export default {
     methods: {
         init: function () {
             let el = this.$refs.container
-            let size = SizeUtil.get(el)
+            if (el) {
+                let size = SizeUtil.get(el)
+                this.master = new TimelineMax({
+                    paused: true,
+                    yoyo: true
+                })
+
+                this.master.fromTo(el, .5, {
+                    className: '-=new-module--open',
+                    autoAlpha: 0,
+                    ease: Power4.easeInOut,
+                }, {
+                    className: '+=new-module--open',
+                    autoAlpha: 1,
+                    ease: Back.easeOut.config(1.2),
+                }, 0)
+
+                this.master.progress(1).progress(0)
+            }
+            // console.log('el', el);
             // console.log(size);
-            this.master = new TimelineMax({
-                paused: true,
-                yoyo: true
-            })
-
-            this.master.fromTo(el, .5, {
-                className: '-=new-module--open',
-                autoAlpha: 0,
-                ease: Power4.easeInOut,
-            }, {
-                className: '+=new-module--open',
-                autoAlpha: 1,
-                ease: Back.easeOut.config(1.2),
-            }, 0)
-
-            this.master.progress(1)
-                .progress(0)
-
         },
         show: function () {
             // console.log('show values', this.values);
@@ -127,8 +128,7 @@ export default {
         },
         setObj: function (obj) {
             this.obj = obj
-            // console.log(obj);
-            this.$emit('changed', obj)
+            this.$emit('changed', obj, this.uuid)
         },
         saveComponent: function () {
             console.log('deprecata');

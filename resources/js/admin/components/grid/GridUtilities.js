@@ -1,6 +1,9 @@
-import {Uuid} from '../../../Utilities'
+import {
+    Uuid
+}
+from '../../../Utilities'
 
-const formatEl = function (post, i = 0, elements = [] ) {
+const formatEl = function (post, i = 0, elements = []) {
     let colN = 12
     let w = post.hasOwnProperty('width') ? post.width : 2
     let h = post.hasOwnProperty('height') ? post.height : 2
@@ -14,10 +17,10 @@ const formatEl = function (post, i = 0, elements = [] ) {
 
     const newEl = {
         i: i,
-        x: x,
-        y: y,
-        w: w,
-        h: h,
+        x: Number(x),
+        y: Number(y),
+        w: Number(w),
+        h: Number(h),
         idx: elements.length,
         uuid: Uuid.get(),
         order: i,

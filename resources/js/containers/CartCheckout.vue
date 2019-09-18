@@ -152,7 +152,7 @@ export default {
         init: function () {},
         debug: function () {
             setTimeout(() => {
-                this.showSuccess()
+                this.showCart()
             }, 1000)
         },
         calculateTotal: function () {
@@ -300,7 +300,6 @@ export default {
             master.progress(1).progress(0)
 
             this.$nextTick(() => {
-                console.log('ciao');
                 master.play()
             })
         },
