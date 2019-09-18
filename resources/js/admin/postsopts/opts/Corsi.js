@@ -11,12 +11,12 @@ const Corsi = {
             sortable: true,
         },
         {
-            key: 'subcribers_count',
+            key: 'guests_total',
             label: 'Iscritti',
             sortable: true,
         },
         {
-            key: 'subcribers_confirmed',
+            key: 'guests_confirmed',
             label: 'Confermati',
             sortable: true,
         },

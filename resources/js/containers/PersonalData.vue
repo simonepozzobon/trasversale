@@ -463,6 +463,13 @@ export default {
                         let data = new FormData()
 
                         for (let key in this.form) {
+                            // if (this.form.hasOwnProperty(key) && this.form.type != 'privato') {
+                            //     data.append(key, this.form[key])
+                            // }
+                            // else if (this.form.hasOwnProperty(key) && key == 'ragione_sociale') {
+                            //     data.append(key, this.form[key])
+                            //     data.append('name', this.form[key])
+                            // }
                             if (this.form.hasOwnProperty(key)) {
                                 data.append(key, this.form[key])
                             }

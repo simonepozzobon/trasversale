@@ -115,9 +115,41 @@ class PaymentController extends Controller
         $order->payment_status_id = 1;
         $order->save();
 
+
+
+        foreach ($items as $key => $item) {
+            $product = $item->product;
+                if ($product->has_limited_guests == 1) {
+                    $product = $this->set_available($product);
+                    $product->guests_available = $product->guests_available - $item->quantity;
+                    $product->guests_confirmed = $product->guests_confirmed + $item->quantity;
+                    $product->save();
+                }
+        }
+
         return [
             'success' => true,
             'results' => $results,
+            'items' => $items,
         ];
+    }
+
+    public function set_available($product)
+    {
+        $total = $product->guests_total;
+        $items = $product->order_items;
+
+        $confirmed = 0;
+
+        foreach ($items as $key => $item) {
+            $order = $item->order;
+            if ($order->payment_status_id == 1) {
+                $confirmed = $confirmed + $item->quantity;
+            }
+        }
+
+        $product->guests_available = $total - $confirmed;
+        $product->guests_confirmed = $confirmed;
+        return $product;
     }
 }

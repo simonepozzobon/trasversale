@@ -6,8 +6,14 @@
             <div class="page-template__title">
                 <h1 class="pt-3">{{ title }}</h1>
             </div>
-            <div class="page-template__action">
-            </div>
+        </div>
+    </div>
+    <div
+        class="page-template__container container"
+        v-if="hasSubHeader"
+    >
+        <div class="page-template__head">
+            <slot name="sub-header"></slot>
         </div>
     </div>
     <div class="page-template__container container">
@@ -54,6 +60,10 @@ export default {
                 return []
             },
         },
+        hasSubHeader: {
+            type: Boolean,
+            default: false,
+        }
     },
     data: function () {
         return {
