@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use App\OrderItem;
+use App\Subscriber;
 use App\Transaction;
 
 use Braintree\ClientToken;
@@ -35,9 +36,11 @@ class PaymentController extends Controller
     {
         $order = new Order();
         $order->code = uniqid();
+        $order->subscriber_id = 0;
         $order->name = $request->name;
         $order->surname = $request->surname;
         $order->address = $request->address;
+        $order->email = $request->email;
         $order->city = $request->city;
         $order->province = $request->province;
         $order->postal_code = $request->postal_code;
@@ -54,11 +57,22 @@ class PaymentController extends Controller
 
         }
 
+        $subscriber = new Subscriber();
+        $subscriber->name = $request->name;
+        $subscriber->surname = $request->surname;
+        $subscriber->email = $request->email;
+        $subscriber->payment_type_id = 1;
+        $subscriber->save();
+
+        $order->subscriber_id = $subscriber->id;
+        $order->save();
+
         $order->refresh();
 
         return [
             'success' => true,
-            'order' => $order
+            'order' => $order,
+            'subscriber' => $subscriber,
         ];
     }
 
@@ -97,6 +111,9 @@ class PaymentController extends Controller
         $transaction->amount = $amount;
         $transaction->status = $results->success;
         $transaction->save();
+
+        $order->payment_status_id = 1;
+        $order->save();
 
         return [
             'success' => true,

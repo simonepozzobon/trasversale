@@ -78,7 +78,7 @@
                 </label>
 
                 <label
-                    for="surname"
+                    for="family-name"
                     class="col-md-6 personal-data-form__label"
                     ref="surname"
                 >
@@ -86,7 +86,7 @@
                     <input
                         type="text"
                         class="form-control personal-data-form__input"
-                        name="surname"
+                        name="family-name"
                         v-model="form.surname"
                     />
                 </label>
@@ -349,7 +349,7 @@ export default {
                 cf: null,
             },
             requiredFields: {
-                privato: ['language', 'name', 'surname', 'email', 'phone', 'address', 'city', 'province', 'postal_code', 'country'],
+                privato: ['language', 'name', 'family-name', 'email', 'phone', 'address', 'city', 'province', 'postal_code', 'country'],
                 professionista: ['language', 'ragione_sociale', 'email', 'pec', 'phone', 'address', 'city', 'province', 'postal_code', 'country', 'vat', 'cf', 'codice_destinatario'],
                 azienda: ['language', 'ragione_sociale', 'email', 'pec', 'phone', 'address', 'city', 'province', 'postal_code', 'country', 'vat', 'cf', 'codice_destinatario'],
             },
@@ -436,6 +436,10 @@ export default {
 
                     if (input.length > 0) {
                         input = input[0]
+
+                        if (field == 'family-name') {
+                            field = 'surname'
+                        }
 
                         if (this.form[field]) {
                             input.classList.add('valid')

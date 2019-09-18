@@ -705,30 +705,26 @@ export default {
             //     this.values = this.
             // }
 
-            if (this.initial && this.option.type != 'post-select') {
-                this.values = this.initial
-                // console.log(clone(this.value));
-                // console.log('qui', this.option.key, this.option.type);
-            }
-
-            // se ha sottomoduli
-            if (this.option.hasOwnProperty('childrens') && this.option.childrens.length > 0) {
-                // console.log('children', this.option.key, this.option.type, clone(this.initial));
-                // console.log('childres ', this.initial);
-                this.values = this.initial
-            }
-
-            // se è post-select
-            if (this.option.type === 'post-select' && this.initial) {
-                // console.log('post-select', this.option.key, this.option.type);
-                // console.log('initila', this.initial);
+            if (this.initial && this.option.type === 'post-select') {
+                // se è post-select
                 for (let i = 0; i < this.initial.length; i++) {
                     let formatted = this.formatElementForGrid(this.initial[i], i)
                     // console.log(formatted);
                     this.elements.push(formatted)
                 }
-                // console.log('griglia', this.initial[0]);
             }
+            else if (this.initial && this.option.hasOwnProperty('childrens') && this.option.childrens.length > 0) {
+                // se ha sottomoduli
+                this.values = this.initial
+            }
+            else if (this.initial && this.option.type != 'post-select') {
+                console.log(this.initial);
+                // this.values = this.initial
+                this.value = this.initial
+                // console.log(clone(this.value));
+                // console.log('qui', this.option.key, this.option.type);
+            }
+
         },
     },
     beforeCreate: function () {

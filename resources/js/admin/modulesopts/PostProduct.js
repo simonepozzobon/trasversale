@@ -13,6 +13,19 @@ const PostProduct = {
             type: 'text',
         },
         {
+            key: 'has_limited_guests',
+            label: 'Ha posti limitati',
+            required: false,
+            default: false,
+            type: 'switch',
+        },
+        {
+            key: 'guests_total',
+            type: 'counter',
+            label: 'Posti totali',
+            required: true,
+        },
+        {
             key: 'slug',
             label: 'Slug',
             info: 'sarà l\'indirizzo del post',

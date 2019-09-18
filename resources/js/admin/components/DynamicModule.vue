@@ -6,7 +6,7 @@
         :key="i"
         :initial="option | setInitial(values)"
         :option="option"
-        :data-obj="dataObj | setModule(options)"
+        :data-obj="dataObj"
         :edit="isEdit"
         @changed="changed"
     />
@@ -81,21 +81,39 @@ export default {
                 return initial
             }
         },
-        setModule: function (fields) {
-            if (!fields) {
-                fields = []
-            }
-
+        // setModule: function (fields) {
+        //     console.log(fields);
+        //     if (!fields) {
+        //         fields = []
+        //     }
+        //
+        //     let dataObj = {}
+        //
+        //     for (let i = 0; i < fields.length; i++) {
+        //         let field = fields[i]
+        //         dataObj[field.key] = field.hasOwnProperty('default') ? field.default : null
+        //     }
+        //
+        //     return dataObj
+        // }
+    },
+    methods: {
+        setModule: function () {
+            let fields = this.options
             let dataObj = {}
-
             for (let i = 0; i < fields.length; i++) {
                 let field = fields[i]
                 dataObj[field.key] = field.hasOwnProperty('default') ? field.default : null
             }
-            return dataObj
-        }
-    },
-    methods: {
+            this.dataObj = dataObj
+
+            // console.log(Object.assign({}, dataObj));
+            // for (let key in this.dataObj) {
+            //     if (this.dataObj.hasOwnProperty(key)) {
+            //         this.emitChanged(key, this.dataObj[key])
+            //     }
+            // }
+        },
         emitChanged: function (key, value) {
             this.dataObj[key] = value
             this.$emit('changed', this.dataObj)
@@ -156,6 +174,9 @@ export default {
 
             // console.log('emit', key, value, type);
         }
+    },
+    created: function () {
+        this.setModule()
     },
     mounted: function () {}
 }
