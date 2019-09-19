@@ -42,7 +42,7 @@
 
     <ui-simple-grid
         v-else-if="module && module.type === 'grid' && content.type === 'simple'"
-        :blocks="content.blocks"
+        :blocks="content.blocks | formatblocks"
     />
 
     <ui-packery-grid
@@ -101,6 +101,11 @@
 </template>
 
 <script>
+import {
+    Uuid
+}
+from '../Utilities'
+
 export default {
     name: 'ModuleManager',
     components: {},
@@ -138,6 +143,16 @@ export default {
                 console.log(this.content);
             }
         },
+    },
+    filters: {
+        formatblocks: function (blocks) {
+            return blocks.map(block => {
+                return {
+                    ...block,
+                    uuid: Uuid.get(),
+                }
+            })
+        }
     },
     beforeCreate: function () {
         this.$options.components.UiButton = require('../ui/UiButton.vue').default

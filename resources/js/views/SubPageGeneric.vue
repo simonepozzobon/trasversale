@@ -1,12 +1,15 @@
-<template lang="html">
-    <div>
+<template>
+<div class="row">
+    <div class="col-12">
         <module-manager
             v-for="module in this.modules"
             :key="module.id"
-            :module="module"/>
+            :module="module"
+        />
 
-        <ui-sharing v-if="isNews"/>
+        <ui-sharing v-if="isNews" />
     </div>
+</div>
 </template>
 
 <script>
