@@ -1,53 +1,79 @@
-<template lang="html">
-    <div>
-        <div class="b-calendar">
-            <div class="b-calendar__header">
-                <span>{{ month }} {{ year }}</span>
+<template>
+<div>
+    <div class="b-calendar">
+        <div class="b-calendar__header">
+            <span>{{ month }} {{ year }}</span>
+        </div>
+        <div class="b-calendar__weekdays">
+            <div
+                class="weekday"
+                v-for="(day, index) in days"
+                :key="index"
+            >
+                <span>{{day}}</span>
             </div>
-            <div class="b-calendar__weekdays">
-                <div class="weekday" v-for="(day, index) in days" :key="index">
-                    <span>{{day}}</span>
-                </div>
-            </div>
-            <div class="b-calendar__calendar">
-                <div class="b-calendar__dates">
-                    <div class="date text-right"
-                        v-for="date in dateList"
-                        :key="date.key"
-                        :data-date="date.date"
-                        :class="{
+        </div>
+        <div class="b-calendar__calendar">
+            <div class="b-calendar__dates">
+                <div
+                    class="date text-right"
+                    v-for="date in dateList"
+                    :key="date.key"
+                    :data-date="date.date"
+                    :class="{
                                 'selected': dateIsEqualSelectDate(date),
                             }"
-                        @click="setSelectedDate(date.moment)">
-                        <div
-                            class="date__information"
-                            :class="{
+                    @click="setSelectedDate(date.moment)"
+                >
+                    <div
+                        class="date__information"
+                        :class="{
                                     'today': date.today,
                                     'blank': date.blank,
                                     'no-border-right': date.key % 7 === 0
-                                }">
-                            <span class="day">{{date.dayNumber}}</span>
-                            <span class="weekday">{{date.weekDay}}</span>
-                            <div class="additional" v-show="date.additional">
-                                <span class="year" v-show="date.additional.year">{{date.additional.year}}</span>
-                                <span class="month" v-show="date.additional.month">{{date.additional.month}}</span>
-                            </div>
+                                }"
+                    >
+                        <span class="day">{{date.dayNumber}}</span>
+                        <span class="weekday">{{date.weekDay}}</span>
+                        <div
+                            class="additional"
+                            v-show="date.additional"
+                        >
+                            <span
+                                class="year"
+                                v-show="date.additional.year"
+                            >{{date.additional.year}}</span>
+                            <span
+                                class="month"
+                                v-show="date.additional.month"
+                            >{{date.additional.month}}</span>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="b-calendar__swipemonths">
             <div class="b-calendar__previous">
-                <button id="subtractMonthBtn" class="btn btn-link arrow arrow-left" @click="subtractMonth">
+                <button
+                    id="subtractMonthBtn"
+                    class="btn btn-link arrow arrow-left"
+                    @click="subtractMonth"
+                >
                     « {{ previousMonthAsString | capitalize }}
                 </button>
             </div>
             <div class="b-calendar__next">
-                <button id="addMonthBtn" class="btn btn-link arrow arrow-right" @click="addMonth">
+                <button
+                    id="addMonthBtn"
+                    class="btn btn-link arrow arrow-right"
+                    @click="addMonth"
+                >
                     {{ nextMonthAsString | capitalize }} »
                 </button>
             </div>
         </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -434,9 +460,15 @@ export default {
             }
         }
     }
-
-    &__previous {
+    &__swipemonths {
         width: 100%;
+        display: flex;
+        justify-content: space-between;
     }
+    //
+    //
+    // &__previous {
+    //     width: 100%;
+    // }
 }
 </style>
