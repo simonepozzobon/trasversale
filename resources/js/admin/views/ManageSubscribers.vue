@@ -263,7 +263,7 @@ export default {
                     if (response.data.success) {
                         let product = response.data.product
                         this.formatSubscribers(product)
-                        this.debug()
+                        // this.debug()
                     }
                 })
         },
