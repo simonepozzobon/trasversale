@@ -12,9 +12,7 @@
         class="page-template__container container"
         v-if="hasSubHeader"
     >
-        <div class="page-template__head">
-            <slot name="sub-header"></slot>
-        </div>
+        <slot name="sub-header"></slot>
     </div>
     <div class="page-template__container container">
         <slot></slot>

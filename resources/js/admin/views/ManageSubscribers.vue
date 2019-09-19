@@ -5,28 +5,49 @@
     :has-sub-header="true"
 >
     <template slot="sub-header">
-        <ui-row min-width="100%">
+        <ui-row
+            min-width="100%"
+            v-if="product"
+        >
+            <div class="col-md-3">
+                <h5>Corso:</h5>
+                {{ product.title }}
+            </div>
+            <div class="col-md-3">
+                <h5>Durata del corso in ore</h5>
+                {{ product.hours }}
+            </div>
+            <div class="col-md-3">
+                <h5>Data di inizio</h5>
+                {{ startDate }}
+            </div>
+            <div class="col-md-3">
+                <h5>Data di fine</h5>
+                {{ endDate }}
+            </div>
+        </ui-row>
+        <hr class="my-4">
+        <ui-row
+            min-width="100%"
+            v-if="product"
+        >
             <div class="col-md-3">
                 <h5>Posti Disponibili</h5>
-                <span v-if="product">{{ product.guests_available }}</span>
+                {{ product.guests_available }}
             </div>
             <div class="col-md-3">
                 <h5>Da verificare</h5>
-                <span v-if="product">{{ toBeConfirmed }}</span>
+                {{ toBeConfirmed }}
             </div>
             <div class="col-md-3">
                 <h5>Importo incassato</h5>
-                <span v-if="product">{{ amountConfirmed.toFixed(2) }}</span>
+                {{ amountConfirmed.toFixed(2) }}
             </div>
             <div class="col-md-3">
                 <h5>Giorni all'inizio</h5>
-                <span
-                    v-if="product"
-                    :class="daysColors"
-                >{{ daysFromStart }}</span>
+                <span :class="daysColors">{{ daysFromStart }}</span>
             </div>
         </ui-row>
-
     </template>
     <b-table
         ref="table"
@@ -217,7 +238,13 @@ export default {
             else {
                 return 'text-danger'
             }
-        }
+        },
+        startDate: function () {
+            return moment(this.product.start_at).format('DD-MM-YYYY')
+        },
+        endDate: function () {
+            return moment(this.product.end_at).format('DD-MM-YYYY')
+        },
     },
     methods: {
         getSubscribers: function () {

@@ -15,7 +15,7 @@ class CreateSubscribersTable extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->bigInteger('subscriber_id')->after('id')->unsigned();
-            $table->integer('payment_status_id')->after('subscriber_id')->default(0);
+            $table->integer('payment_status_id')->after('subscriber_id')->default(4);
             $table->string('email')->after('surname');
         });
 
