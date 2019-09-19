@@ -44,6 +44,7 @@ Route::prefix('admin')->group(
 
         Route::prefix('subscribers')->group(function() {
             Route::get('{id}', 'SubscribersController@get_subscribers');
+            Route::post('save', 'SubscribersController@save_subscriber');
         });
 
         Route::prefix('post-type')->group(

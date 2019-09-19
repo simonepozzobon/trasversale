@@ -59,6 +59,14 @@ class MailController extends Controller
             $order->province = 'non fornito';
             $order->postal_code = 'non fornito';
             $order->payment_status_id = 3;
+            $order->ragione_sociale = 'non fornito';
+            $order->cf = 'non fornito';
+            $order->codice_destinatario = 'non fornito';
+            $order->language = 'non fornito';
+            $order->pec = 'non fornito';
+            $order->phone = 'non fornito';
+            $order->type = 'non fornito';
+            $order->vat = 'non fornito';
             $order->save();
 
             $order_item = new OrderItem();
@@ -116,6 +124,14 @@ class MailController extends Controller
             $order->province = 'non fornito';
             $order->postal_code = 'non fornito';
             $order->payment_status_id = 2;
+            $order->ragione_sociale = 'non fornito';
+            $order->cf = 'non fornito';
+            $order->codice_destinatario = 'non fornito';
+            $order->language = 'non fornito';
+            $order->pec = 'non fornito';
+            $order->phone = 'non fornito';
+            $order->type = 'non fornito';
+            $order->vat = 'non fornito';
             $order->save();
 
             $order_item = new OrderItem();

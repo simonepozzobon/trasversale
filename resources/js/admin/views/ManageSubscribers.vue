@@ -18,12 +18,12 @@
                 {{ product.hours }}
             </div>
             <div class="col-md-3">
-                <h5>Data di inizio</h5>
-                {{ startDate }}
+                <h5>Posti Disponibili</h5>
+                {{ product.guests_available }}
             </div>
             <div class="col-md-3">
-                <h5>Data di fine</h5>
-                {{ endDate }}
+                <h5>Da verificare</h5>
+                {{ toBeConfirmed }}
             </div>
         </ui-row>
         <hr class="my-4">
@@ -32,12 +32,12 @@
             v-if="product"
         >
             <div class="col-md-3">
-                <h5>Posti Disponibili</h5>
-                {{ product.guests_available }}
+                <h5>Data di inizio</h5>
+                {{ startDate }}
             </div>
             <div class="col-md-3">
-                <h5>Da verificare</h5>
-                {{ toBeConfirmed }}
+                <h5>Data di fine</h5>
+                {{ endDate }}
             </div>
             <div class="col-md-3">
                 <h5>Importo incassato</h5>
@@ -122,16 +122,18 @@
         >
             <button
                 class="btn btn-outline-primary"
-                @click="editPost(data.item)"
+                @click="data.toggleDetails"
             >
                 Modifica
             </button>
-            <button
-                class="btn btn-outline-danger"
-                @click="deletePost(data.item)"
-            >
-                Elimina
-            </button>
+        </template>
+
+        <template v-slot:row-details="row">
+            <subscriber-edit
+                :subscriber="row.item"
+                :product="product"
+                @update="update"
+            />
         </template>
     </b-table>
     <div class="controls d-flex justify-content-center">
@@ -147,6 +149,8 @@
 
 <script>
 import PageTemplate from '../containers/PageTemplate.vue'
+import SubscriberEdit from '../containers/SubscriberEdit.vue'
+
 import {
     checkDuplicateInObject,
     Uuid
@@ -166,6 +170,7 @@ export default {
     name: 'ManageSubscribers',
     components: {
         PageTemplate,
+        SubscriberEdit,
         UiRow,
         UiBlock,
     },
@@ -257,50 +262,61 @@ export default {
                 .then(response => {
                     if (response.data.success) {
                         let product = response.data.product
-                        let subscribers = []
-                        let toBeConfirmed = 0
-                        let codes = []
-                        let amountConfirmed = 0
-
-                        if (product) {
-                            let order_items = product.hasOwnProperty('order_items') ? product.order_items : []
-
-                            order_items.forEach(order_item => {
-                                let subscriber = order_item.order.subscriber
-
-                                let order = order_item.order
-                                delete order.subscriber
-
-                                subscriber['order'] = order
-
-                                let code = order.code
-                                let check = codes.includes(code)
-                                amountConfirmed = amountConfirmed + (Number(order_item.price) * order_item.quantity)
-
-                                if (check == false) {
-                                    codes.push(code)
-                                    subscriber['guests'] = order_item.quantity
-                                    subscribers.push(subscriber)
-                                }
-                                else {
-                                    let idx = subscribers.findIndex(obj => obj.order.code == order.code)
-                                    if (idx > -1) {
-                                        subscribers[idx].guests = subscribers[idx].guests + order_item.quantity
-                                    }
-                                }
-
-                                if (Number(order.payment_status_id) != 1) {
-                                    toBeConfirmed = toBeConfirmed + 1
-                                }
-                            })
-
-                        }
-                        this.product = product
-                        this.subscribers = subscribers
-                        this.toBeConfirmed = toBeConfirmed
-                        this.amountConfirmed = amountConfirmed
+                        this.formatSubscribers(product)
+                        this.debug()
                     }
                 })
+        },
+        update: function (product) {
+            this.formatSubscribers(product)
+        },
+        formatSubscribers: function (product) {
+            let subscribers = []
+            let toBeConfirmed = 0
+            let codes = []
+            let amountConfirmed = 0
+
+            if (product) {
+                let order_items = product.hasOwnProperty('order_items') ? product.order_items : []
+
+                order_items.forEach(order_item => {
+                    let subscriber = order_item.order.subscriber
+
+                    let order = order_item.order
+                    delete order.subscriber
+
+                    subscriber['order'] = order
+
+                    let code = order.code
+                    let check = codes.includes(code)
+                    amountConfirmed = amountConfirmed + (Number(order_item.price) * order_item.quantity)
+
+                    if (check == false) {
+                        codes.push(code)
+                        subscriber['guests'] = order_item.quantity
+                        subscribers.push(subscriber)
+                    }
+                    else {
+                        let idx = subscribers.findIndex(obj => obj.order.code == order.code)
+                        if (idx > -1) {
+                            subscribers[idx].guests = subscribers[idx].guests + order_item.quantity
+                        }
+                    }
+
+                    if (Number(order.payment_status_id) != 1) {
+                        toBeConfirmed = toBeConfirmed + 1
+                    }
+                })
+
+            }
+            this.product = product
+            this.subscribers = subscribers
+            this.toBeConfirmed = toBeConfirmed
+            this.amountConfirmed = amountConfirmed
+
+        },
+        debug: function () {
+            this.subscribers[5]['_showDetails'] = true
         },
         deletePost: function (item) {
             let url = '/api/admin/post-type/' + this.opts.table + '/delete/' + item.id

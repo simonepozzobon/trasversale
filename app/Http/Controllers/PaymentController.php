@@ -44,6 +44,14 @@ class PaymentController extends Controller
         $order->city = $request->city;
         $order->province = $request->province;
         $order->postal_code = $request->postal_code;
+        $order->ragione_sociale = $request->ragione_sociale;
+        $order->cf = $request->cf;
+        $order->codice_destinatario = $request->codice_destinatario;
+        $order->language = $request->language;
+        $order->pec = $request->pec;
+        $order->phone = $request->phone;
+        $order->type = $request->type;
+        $order->vat = $request->vat;
         $order->save();
 
         $items = json_decode($request->items);

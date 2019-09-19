@@ -26,6 +26,18 @@
         </div>
     </div>
 
+    <div
+        v-if="option.type === 'section-head'"
+        :class="sectionHeadPaddingTop"
+    >
+        <div class="form-group row">
+            <div class="col-12">
+                <h5>{{ option.label }}</h5>
+                <hr />
+            </div>
+        </div>
+    </div>
+
     <ui-switch
         v-else-if="option.type === 'switch'"
         :label="option.label"
@@ -449,7 +461,15 @@ export default {
                 }
             }
             return false
-        }
+        },
+        sectionHeadPaddingTop: function () {
+            if (this.option.type == 'section-head' && this.option.hasOwnProperty('options') && this.option.options.hasOwnProperty('paddingTop') && this.option.options.paddingTop == false) {
+                return null
+            }
+            else {
+                return 'pt-4'
+            }
+        },
     },
     methods: {
         setValue: function (value) {
