@@ -10,6 +10,7 @@ import PostProduct from './PostProduct.js'
 import Quote from './Quote.js'
 import Row from './Row.js'
 import Spacer from './Spacer.js'
+import SubscriberEdit from './SubscriberEdit.js'
 import Team from './Team.js' // fatto
 import Title from './Title.js' // fatto
 import UploadPdf from './UploadPdf.js' //
@@ -28,6 +29,7 @@ export {
     Quote,
     Row,
     Spacer,
+    SubscriberEdit,
     Team,
     Title,
     UploadPdf,

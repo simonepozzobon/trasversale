@@ -27,4 +27,9 @@ class Product extends Model
     public function sidebar() {
         return $this->morphOne(Sidebar::class, 'sidebarable');
     }
+
+    public function order_items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }

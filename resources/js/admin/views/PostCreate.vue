@@ -82,9 +82,7 @@ export default {
         setObj: function (obj) {
             this.postObj = obj
         },
-        savePost: function (ref) {
-            console.log(ref);
-
+        savePost: function (ref, modules = 0) {
             let url = '/api/admin/post-type/save'
             this.postObj.model = this.type.model
 
@@ -101,7 +99,18 @@ export default {
                         this.model = 'App\\' + this.type.model.charAt(0).toUpperCase() + this.type.model.slice(1)
                         this.$nextTick(() => {
                             let page = this.$refs.page
-                            page.$refs[ref].savePage(null, true)
+
+                            if (modules <= 0) {
+                                page.$refs[ref].$emit('notify', {
+                                    uuid: Uuid.get(),
+                                    title: 'Pagina Salvata',
+                                    message: 'Salvataggio Completato'
+                                })
+                                page.$refs[ref].saveDisabled = false
+                            }
+                            else {
+                                page.$refs[ref].savePage(null, true)
+                            }
                         })
                     }
                 })

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use App\OrderItem;
+use App\Subscriber;
 use App\Transaction;
 
 use Braintree\ClientToken;
@@ -35,12 +36,22 @@ class PaymentController extends Controller
     {
         $order = new Order();
         $order->code = uniqid();
+        $order->subscriber_id = 0;
         $order->name = $request->name;
         $order->surname = $request->surname;
         $order->address = $request->address;
+        $order->email = $request->email;
         $order->city = $request->city;
         $order->province = $request->province;
         $order->postal_code = $request->postal_code;
+        $order->ragione_sociale = $request->ragione_sociale;
+        $order->cf = $request->cf;
+        $order->codice_destinatario = $request->codice_destinatario;
+        $order->language = $request->language;
+        $order->pec = $request->pec;
+        $order->phone = $request->phone;
+        $order->type = $request->type;
+        $order->vat = $request->vat;
         $order->save();
 
         $items = json_decode($request->items);
@@ -54,11 +65,22 @@ class PaymentController extends Controller
 
         }
 
+        $subscriber = new Subscriber();
+        $subscriber->name = $request->name;
+        $subscriber->surname = $request->surname;
+        $subscriber->email = $request->email;
+        $subscriber->payment_type_id = 1;
+        $subscriber->save();
+
+        $order->subscriber_id = $subscriber->id;
+        $order->save();
+
         $order->refresh();
 
         return [
             'success' => true,
-            'order' => $order
+            'order' => $order,
+            'subscriber' => $subscriber,
         ];
     }
 
@@ -98,9 +120,44 @@ class PaymentController extends Controller
         $transaction->status = $results->success;
         $transaction->save();
 
+        $order->payment_status_id = 1;
+        $order->save();
+
+
+
+        foreach ($items as $key => $item) {
+            $product = $item->product;
+                if ($product->has_limited_guests == 1) {
+                    $product = $this->set_available($product);
+                    $product->guests_available = $product->guests_available - $item->quantity;
+                    $product->guests_confirmed = $product->guests_confirmed + $item->quantity;
+                    $product->save();
+                }
+        }
+
         return [
             'success' => true,
             'results' => $results,
+            'items' => $items,
         ];
+    }
+
+    public function set_available($product)
+    {
+        $total = $product->guests_total;
+        $items = $product->order_items;
+
+        $confirmed = 0;
+
+        foreach ($items as $key => $item) {
+            $order = $item->order;
+            if ($order->payment_status_id == 1) {
+                $confirmed = $confirmed + $item->quantity;
+            }
+        }
+
+        $product->guests_available = $total - $confirmed;
+        $product->guests_confirmed = $confirmed;
+        return $product;
     }
 }

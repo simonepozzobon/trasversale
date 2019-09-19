@@ -5,7 +5,10 @@
     :class="activeClass"
 >
     <slot></slot>
-    <div class="new-main-template__header">
+    <div
+        class="new-main-template__header"
+        v-if="hasTitle"
+    >
         <div class="new-main-template__head">
             <div
                 class="new-main-template__title"
@@ -24,6 +27,10 @@
                     Modifica Contenuto Principale
                 </button>
             </div>
+        </div>
+    </div>
+    <div class="new-main-template__header">
+        <div class="new-main-template__head">
             <div
                 class="new-main-template__action"
                 v-if="active"
@@ -57,6 +64,7 @@
             </div>
         </div>
     </div>
+
     <div
         ref="content"
         class="new-main-template__content"
@@ -397,7 +405,12 @@ export default {
 
                     if (this.isPost && modelSaved == false) {
                         // console.log('before save main')
-                        this.$emit('before-save', 'main')
+                        let subModules = this.cached.length
+                        let sideSubmodules = this.cachedSides.length
+
+                        let cachedModules = subModules + sideSubmodules
+
+                        this.$emit('before-save', 'main', cachedModules)
                         resolve()
                     }
                     else {
@@ -553,7 +566,7 @@ export default {
                                         hasChild: false,
                                         callback: (response) => {
                                             let temp = this.formatFromResponse(cached[i], response.data.module)
-                                            console.log('ciiiaoo', cached[i], temp);
+                                            // console.log('ciiiaoo', cached[i], temp);
                                             cached[i] = temp
                                         }
                                     })
@@ -585,7 +598,7 @@ export default {
                 if (obj.hasOwnProperty(key)) {
                     if (key === 'content') {
                         let content = obj[key]
-
+                        console.log('contenuto', JSON.stringify(content));
                         form.append(key, JSON.stringify(content))
                     }
                     else if (key === 'uuid') {
@@ -774,8 +787,14 @@ export default {
         width: 100%;
         flex-wrap: wrap;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
+        transition: $transition-base;
+    }
+
+    &__title {
+        text-transform: capitalize;
+        transition: $transition-base;
     }
 
     &__action {
@@ -787,7 +806,7 @@ export default {
 
     &__footer {
         width: 100%;
-        margin-top: $spacer * 4;
+        // margin-top: $spacer * 4;
         margin-bottom: $spacer * 4;
         padding: $spacer * 2;
         // @include gradient-directional(rgba($gray-300, 0), rgba($light, 0), 135deg);
@@ -796,6 +815,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+        transition: $transition-base;
     }
 
     &--no-title &__head {

@@ -47,7 +47,7 @@
         "string-strip-html": "^4.2.2",
         "tiptap": "^1.19.3",
         "tiptap-extensions": "^1.19.4",
-        "vue-grid-layout": "^2.3.4",
+        "vue-grid-layout": "^2.3.6",
         "vue-packery-draggabilly-plugin": "^1.0.3",
         "vue-packery-plugin": "^1.4.8",
         "vue-swatches": "^1.0.3",
