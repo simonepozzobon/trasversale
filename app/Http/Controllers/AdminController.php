@@ -182,6 +182,18 @@ class AdminController extends Controller
             $post->forwho = $request->forwho;
         }
 
+        if (isset($request->has_limited_guests)) {
+            if ($request->has_limited_guests) {
+                $post->has_limited_guests = 1;
+            } else {
+                $post->has_limited_guests = 0;
+            }
+        }
+
+        if (isset($request->guests_total) && (int) $request->guests_total > 0) {
+            $post->guests_total = (int) $request->guests_total;
+        }
+
         $post->save();
 
         // salva slug
@@ -398,6 +410,7 @@ class AdminController extends Controller
                 $options = [
                     'x' => $block->x,
                     'y' => $block->y,
+                    'order' => $block->order,
                     'width' => $block->w,
                     'height' => $block->h,
                     'color' => 'primary',

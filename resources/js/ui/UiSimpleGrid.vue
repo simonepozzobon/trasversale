@@ -23,7 +23,7 @@
     <ui-row>
         <ui-simple-grid-loop
             v-for="(block, i) in filtered"
-            :key="i"
+            :key="block.uuid"
             :block="block"
             :options="options"
             @category="addCategory"

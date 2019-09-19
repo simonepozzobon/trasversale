@@ -26,6 +26,18 @@
         </div>
     </div>
 
+    <div
+        v-if="option.type === 'section-head'"
+        :class="sectionHeadPaddingTop"
+    >
+        <div class="form-group row">
+            <div class="col-12">
+                <h5>{{ option.label }}</h5>
+                <hr />
+            </div>
+        </div>
+    </div>
+
     <ui-switch
         v-else-if="option.type === 'switch'"
         :label="option.label"
@@ -449,7 +461,15 @@ export default {
                 }
             }
             return false
-        }
+        },
+        sectionHeadPaddingTop: function () {
+            if (this.option.type == 'section-head' && this.option.hasOwnProperty('options') && this.option.options.hasOwnProperty('paddingTop') && this.option.options.paddingTop == false) {
+                return null
+            }
+            else {
+                return 'pt-4'
+            }
+        },
     },
     methods: {
         setValue: function (value) {
@@ -672,7 +692,7 @@ export default {
             return newEl
         },
         layoutUpdated: function (newLayout) {
-            // console.log('layout aggiornato', newLayout);
+            console.log('layout aggiornato', newLayout);
             // console.log('prima', newLayout.map(o => o.x + ' ' + o.y));
 
             // https://coderwall.com/p/ebqhca/javascript-sort-by-two-fields
@@ -699,9 +719,20 @@ export default {
             // }
         },
         setInitial: function () {
-            // console.log('imposta', this.initial, this.values);
+            // console.log('imposta', Object.assign({}, this.initial), Object.assign({}, this.values));
+            //
+            // if (this.option.type == 'grid') {
+            //     this.values = this.
+            // }
+
             if (this.initial && this.option.type != 'post-select') {
-                this.value = this.initial
+                this.values = this.initial
+
+                // se non è una griglia imposta i valori
+                if (this.option.type != 'grid') {
+                    this.value = this.initial
+
+                }
                 // console.log(clone(this.value));
                 // console.log('qui', this.option.key, this.option.type);
             }
@@ -724,6 +755,7 @@ export default {
                 }
                 // console.log('griglia', this.initial[0]);
             }
+
         },
     },
     beforeCreate: function () {

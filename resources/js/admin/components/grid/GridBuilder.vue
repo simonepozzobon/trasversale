@@ -80,29 +80,19 @@ export default {
         elements: function (els) {
             // console.log('grid builder elements changed', els);
             this.items = Object.assign([], els)
-            // this.getContainerWidth()
+            this.getContainerWidth()
         },
-        items: {
-            handler: function (items) {
-                // console.log('items cambiati', items);
-                this.debouncedUpdate(items)
-            },
-            deep: true,
-        }
+        items: function (items) {
+            // this.$emit('update:elements', items)
+        },
     },
     methods: {
         getContainerWidth: function () {
-            if (this.$refs.packerytho) {
+            if (this.$refs.packery) {
                 let container = this.$refs.packery.getBoundingClientRect().width
                 this.unitSize = Math.round(container / 12) - (this.gutter)
             }
         },
-    },
-    beforeCreate: function () {
-        this.debouncedUpdate = debounce((items) => {
-            console.log('debounced');
-            // this.$emit('update:elements', items)
-        }, 150)
     },
     mounted: function () {
         this.getContainerWidth()

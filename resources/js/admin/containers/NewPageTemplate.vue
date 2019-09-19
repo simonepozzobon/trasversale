@@ -184,6 +184,8 @@ export default {
                     yoyo: true
                 })
 
+                this.anim.addLabel('start', '+=0')
+
                 this.anim.fromTo(side, .6, {
                     css: {
                         flex: '0 0 ' + col3,
@@ -195,7 +197,7 @@ export default {
                         maxWidth: col8,
                     },
                     ease: Power4.easeInOut
-                }, 0)
+                }, 'start')
 
 
                 this.anim.fromTo(main, .6, {
@@ -209,7 +211,7 @@ export default {
                         maxWidth: col4,
                     },
                     ease: Power4.easeInOut
-                }, 0)
+                }, 'start')
 
                 this.anim.progress(1).progress(0)
             }
@@ -308,8 +310,8 @@ export default {
             //     }
             // }
         },
-        beforeSave: function (ref) {
-            this.$emit('before-save', ref)
+        beforeSave: function (ref, modules = 0) {
+            this.$emit('before-save', ref, modules)
         },
         deleteAll: function () {
             this.$emit('delete-all')

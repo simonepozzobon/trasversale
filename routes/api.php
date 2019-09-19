@@ -42,6 +42,11 @@ Route::prefix('admin')->group(
         Route::get('get-categories', 'AdminController@get_categories');
         // Route::post('update-component', 'AdminController@update_component');
 
+        Route::prefix('subscribers')->group(function() {
+            Route::get('{id}', 'SubscribersController@get_subscribers');
+            Route::post('save', 'SubscribersController@save_subscriber');
+        });
+
         Route::prefix('post-type')->group(
             function () {
                 Route::post('save', 'AdminController@save_post_type');

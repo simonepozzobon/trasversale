@@ -95,7 +95,7 @@ export default {
             let url = '/api/admin/post-type/' + this.type.model + '/' + this.$route.params.id
             this.$http.get(url)
                 .then(response => {
-                    // console.log('get post', response);
+                    console.log('get post', response.data);
                     if (response.data.success) {
                         let post = Object.assign({}, response.data.post)
                         this.setInitialValues(post).then(() => {
@@ -118,7 +118,9 @@ export default {
                     slug: post.slug && post.slug.hasOwnProperty('slug') ? post.slug.slug : null,
                     preview: post.thumb,
                     category: post.category.id,
-                    forwho: post.forwho
+                    forwho: post.forwho,
+                    has_limited_guests: post.has_limited_guests,
+                    guests_total: post.has_limited_guests,
                 }
 
                 if (post.hasOwnProperty('hours')) {
@@ -145,6 +147,18 @@ export default {
                         address: post.address,
                     }
                 }
+                if (post.hasOwnProperty('has_limited_guests')) {
+                    this.values = {
+                        ...this.values,
+                        has_limited_guests: post.has_limited_guests,
+                    }
+                }
+                if (post.hasOwnProperty('guests_total')) {
+                    this.values = {
+                        ...this.values,
+                        guests_total: post.guests_total,
+                    }
+                }
 
                 resolve()
             })
@@ -154,14 +168,14 @@ export default {
             this.postObj = Object.assign({}, obj)
             // console.log('cambiato');
         },
-        savePost: function (ref) {
+        savePost: function (ref, modules = 0) {
             // console.log('saving post');
             let url = '/api/admin/post-type/save'
             this.postObj.model = this.type.model
             this.postObj.id = this.$route.params.id
 
             // console.log('salva il post', this.postObj);
-            // console.log('before save', this.postObj);
+            console.log('before save', this.postObj);
             let data = this.formatRequest(this.postObj)
             // for (let value of data) {
             //     console.log(value[0], value[1]);
@@ -175,7 +189,18 @@ export default {
                         this.$nextTick(() => {
                             let page = this.$refs.page
                             // console.log(page.$refs[ref]);
-                            page.$refs[ref].savePage(null, true)
+
+                            if (modules <= 0) {
+                                page.$refs[ref].$emit('notify', {
+                                    uuid: Uuid.get(),
+                                    title: 'Pagina Salvata',
+                                    message: 'Salvataggio Completato'
+                                })
+                                page.$refs[ref].saveDisabled = false
+                            }
+                            else {
+                                page.$refs[ref].savePage(null, true)
+                            }
                         })
                     }
                 })
