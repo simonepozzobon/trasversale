@@ -598,7 +598,7 @@ export default {
                 if (obj.hasOwnProperty(key)) {
                     if (key === 'content') {
                         let content = obj[key]
-                        console.log('contenuto', JSON.stringify(content));
+                        // console.log('contenuto', JSON.stringify(content));
                         form.append(key, JSON.stringify(content))
                     }
                     else if (key === 'uuid') {

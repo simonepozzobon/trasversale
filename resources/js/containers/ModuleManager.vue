@@ -43,6 +43,7 @@
     <ui-simple-grid
         v-else-if="module && module.type === 'grid' && content.type === 'simple'"
         :blocks="content.blocks | formatblocks"
+        :options="options"
     />
 
     <ui-packery-grid
