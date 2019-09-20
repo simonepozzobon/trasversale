@@ -27,6 +27,7 @@ class SubscribersController extends Controller
         $subscriber->surname = $request->surname;
         $subscriber->email = $request->email;
         $subscriber->payment_type_id = $request->payment_type_id;
+        $subscriber->payment_status_id = $request->payment_status_id;
         $subscriber->save();
 
         $order = Order::find($request->order_id);
@@ -60,6 +61,10 @@ class SubscribersController extends Controller
 
     public function cancel_subrscriber_order (Request $request)
     {
+        $subscriber = Subscriber::find($request->subscriber_id);
+        $subscriber->payment_status_id = $request->payment_status_id;
+        $subscriber->save();
+
         $order = Order::find($request->order_id);
         $order->payment_status_id = 5;
         $order->save();
