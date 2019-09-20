@@ -23,7 +23,7 @@ import {
 }
 from '../ui'
 export default {
-    name: 'SubpageGeneric',
+    name: 'SubPageGeneric',
     components: {
         ModuleManager,
         UiSharing,

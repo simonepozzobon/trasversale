@@ -10,7 +10,7 @@ import SubPageGeneric from './SubPageGeneric.vue'
 import SubPageProduct from './SubPageProduct.vue'
 
 export default {
-    name: 'Subpage',
+    name: 'SubPage',
     components: {
         SubPageGeneric,
         SubPageProduct,
