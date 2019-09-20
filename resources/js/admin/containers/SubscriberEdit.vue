@@ -24,14 +24,14 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-md-3">Elimina</label>
+                <label class="col-md-3">Annulla Iscrizione</label>
                 <div class="col-md-9">
                     <button
                         class="btn mb-2 btn-outline-danger"
                         align="center"
                         @click="deleteSubscriber"
                     >
-                        Elimina definitivamente
+                        Annulla Iscrizione
                     </button>
                 </div>
             </div>
@@ -131,13 +131,25 @@ export default {
             data.append('order_id', this.subscriber.order.id)
             data.append('product_id', this.product.id)
 
-            let url = '/api/admin/subscribers/save'
-            this.$http.post(url, data).then(response => {
-                console.log(response);
-                this.$emit('update', response.data.product)
+            this.$http.post('/api/admin/subscribers/save', data).then(response => {
+                if (response.data.success) {
+                    this.$emit('update', response.data.product)
+                }
             })
         },
         deleteSubscriber: function () {
+            let data = new FormData()
+
+            data.append('subscriber_id', this.subscriber.id)
+            data.append('order_id', this.subscriber.order.id)
+            data.append('product_id', this.product.id)
+
+            this.$http.post('/api/admin/subscribers/cancel', data).then(response => {
+                console.log(response.data);
+                if (response.data.success) {
+                    this.$emit('update', response.data.product)
+                }
+            })
 
         },
     },

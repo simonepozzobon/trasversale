@@ -58,6 +58,22 @@ class SubscribersController extends Controller
         ];
     }
 
+    public function cancel_subrscriber_order (Request $request)
+    {
+        $order = Order::find($request->order_id);
+        $order->payment_status_id = 5;
+        $order->save();
+
+        $product = Product::where('id', $request->product_id)->with('order_items.order.subscriber')->first();
+        $product = $this->set_available($product);
+        $product->save();
+
+        return [
+            'success' => true,
+            'product' => $product,
+        ];
+    }
+
     public function set_available($product)
     {
         $total = $product->guests_total;

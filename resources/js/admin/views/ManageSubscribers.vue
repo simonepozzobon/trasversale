@@ -1,6 +1,6 @@
 <template>
 <page-template
-    title="Gestisci gli iscritti"
+    :title="mainTitle"
     :notifications="notifications"
     :has-sub-header="true"
 >
@@ -10,20 +10,20 @@
             v-if="product"
         >
             <div class="col-md-3">
-                <h5>Corso:</h5>
-                {{ product.title }}
-            </div>
-            <div class="col-md-3">
-                <h5>Durata del corso in ore</h5>
-                {{ product.hours }}
-            </div>
-            <div class="col-md-3">
                 <h5>Posti Disponibili</h5>
                 {{ product.guests_available }}
             </div>
             <div class="col-md-3">
-                <h5>Da verificare</h5>
+                <h5>Iscritti Da verificare</h5>
                 {{ toBeConfirmed }}
+            </div>
+            <div class="col-md-3">
+                <h5>Iscritti confermati</h5>
+                {{ product.guests_confirmed }}
+            </div>
+            <div class="col-md-3">
+                <h5>Durata del corso in ore</h5>
+                {{ product.hours }}
             </div>
         </ui-row>
         <hr class="my-4">
@@ -100,6 +100,12 @@
                 class="text-danger"
             >
                 Non Pagato
+            </span>
+            <span
+                v-else-if="data.item.order.payment_status_id == 5"
+                class="text-danger"
+            >
+                Ordine Cancellato
             </span>
             <span
                 v-else
@@ -219,6 +225,14 @@ export default {
         }
     },
     computed: {
+        mainTitle: function () {
+            if (this.product && this.product.title) {
+                return 'Gestione iscrizioni: ' + this.product.title
+            }
+            else {
+                return 'Gestisci iscrizioni'
+            }
+        },
         opts: function () {
             // return PostsOpts.find(opt => opt.slug === this.$route.params.type)
             return []
@@ -291,6 +305,7 @@ export default {
                     let check = codes.includes(code)
                     amountConfirmed = amountConfirmed + (Number(order_item.price) * order_item.quantity)
 
+
                     if (check == false) {
                         codes.push(code)
                         subscriber['guests'] = order_item.quantity
@@ -302,6 +317,7 @@ export default {
                             subscribers[idx].guests = subscribers[idx].guests + order_item.quantity
                         }
                     }
+
 
                     if (Number(order.payment_status_id) != 1) {
                         toBeConfirmed = toBeConfirmed + 1
