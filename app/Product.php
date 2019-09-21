@@ -2,11 +2,21 @@
 
 namespace App;
 
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Product extends Model implements Searchable
 {
     protected $table = 'products';
+
+    public function getSearchResult(): SearchResult {
+
+        return new \Spatie\Searchable\SearchResult(
+            $this,
+            $this->title
+        );
+    }
 
     public function modules() {
         return $this->morphMany(Module::class, 'modulable');

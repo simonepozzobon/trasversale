@@ -33,6 +33,8 @@ Route::prefix('mail')->group(function() {
 
 Route::get('get-page/{page}/{subpage?}/{slug?}', 'MainController@get_dynamic_item');
 
+Route::post('search', 'SearchController@simple_search');
+
 Route::prefix('admin')->group(
     function () {
         Route::post('create-sidebar', 'AdminController@create_sidebar');

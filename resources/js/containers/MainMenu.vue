@@ -88,14 +88,7 @@
                     <!-- <a class="nav-link" href="#">Ln</a> -->
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input
-                    class="form-control mr-sm-2"
-                    type="search"
-                    placeholder="Search"
-                    aria-label="Search"
-                >
-            </form>
+            <simple-search></simple-search>
         </div>
         <div class="navbar-main__menubar">
             <ul class="navbar-nav mr-auto">
@@ -150,6 +143,8 @@ import {
 }
 from '../icons'
 
+import SimpleSearch from '../components/SimpleSearch.vue'
+
 export default {
     name: 'MainMenu',
     components: {
@@ -157,6 +152,7 @@ export default {
         Linkedin,
         MainMenuSubitem,
         MenuItem,
+        SimpleSearch,
         Twitter,
         UiLink,
         Youtube
