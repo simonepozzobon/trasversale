@@ -140,7 +140,7 @@ export default {
             })
         },
         openItem: function () {
-            if (!this.isAdmin) {
+            if (this.isAdmin == false) {
                 let slugObj = this.content.slug
                 let type = slugObj.sluggable_type
                 let slug = slugObj.slug

@@ -74,9 +74,15 @@ export default {
     },
     computed: {
         formatted: function () {
+            // if (this.isAdmin) {
+            //     return this.items
+            // }
+            // else {
+            // console.log(Object.assign([], this.items));
             return this.items.map((item, i) => {
                 return formatEl(item, i, this.items)
             })
+            // }
         },
     },
     methods: {

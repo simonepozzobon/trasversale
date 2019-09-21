@@ -99,9 +99,9 @@
         :color="content.hasOwnProperty('color') && content.color ? content.color : null"
     />
 
-    <div v-else>
+    <!-- <div v-else>
         {{ module }}
-    </div>
+    </div> -->
 </div>
 </template>
 
@@ -132,15 +132,15 @@ export default {
             blocks: [],
         }
     },
-    watch: {
-        // module: {
-        //     handler: function (module) {
-        //         // console.log('moduliooo', module);
-        //         this.listener()
-        //     },
-        //     deep: true,
-        // },
-    },
+    // watch: {
+    //     module: {
+    //         handler: function (module) {
+    //             console.log('moduliooo', Object.assign({}, module));
+    //             // this.listener()
+    //         },
+    //         deep: true,
+    //     },
+    // },
     computed: {
         options: function () {
             if (this.module.content && this.module.content.options) {

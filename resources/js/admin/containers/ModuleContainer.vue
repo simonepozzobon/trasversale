@@ -115,11 +115,11 @@ export default {
         },
         formatTempData: function (obj) {
             // console.log('formatTempData', obj);
+            // console.log('prima', Object.assign({}, this.component.content.blocks));
             let content = this.setPreview(obj)
-            let updatedComponent = {
-                ...this.component,
-                content: content
-            }
+            // console.log('dopo', Object.assign([], content.blocks));
+            let updatedComponent = Object.assign({}, this.component)
+            updatedComponent['content'] = content
 
             // console.log(updatedComponent);
             if (Array.isArray(updatedComponent.content)) {
@@ -134,7 +134,8 @@ export default {
 
 
             this.$nextTick(() => {
-                this.component = Object.assign({}, updatedComponent)
+                // this.component = Object.assign({}, updatedComponent)
+                this.component = updatedComponent
             })
 
             // this.component = updatedComponent
@@ -185,8 +186,7 @@ export default {
                 if (colsToGenerate > 0) {
                     // console.log('genera colonne', colsToGenerate);
                     newCols = this.generateColumns(colsToGenerate)
-                    cols = Object.assign([], content)
-                        .concat(newCols)
+                    cols = Object.assign([], content).concat(newCols)
                 }
                 else if (colsToGenerate < 0) {
                     // console.log('nessuna colonna da generare', content);
@@ -258,16 +258,15 @@ export default {
                     title: grid.title,
                     type: grid.type,
                     blocks: blocks.map((block, i) => {
-                        return {
-                            ...block,
-                            height: block.h,
-                            width: block.w,
-                            content: {
-                                id: block.id,
-                                slug: block.slug,
-                                title: block.title,
-                            }
+                        let newObj = Object.assign({}, block)
+                        newObj['height'] = block.h
+                        newObj['width'] = block.w
+                        newObj['content'] = {
+                            id: block.id,
+                            slug: block.slug,
+                            title: block.title,
                         }
+                        return newObj
                     })
                 }
                 return newGrid

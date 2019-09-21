@@ -199,11 +199,18 @@ export default {
                 //update
                 if (type == 'products') {
                     this.products = true
-                    this.news == false
+                    this.news = false
+                    this.pages = false
                 }
                 else if (type == 'news') {
                     this.news = true
                     this.products = false
+                    this.pages = false
+                }
+                else {
+                    this.news = false
+                    this.products = false
+                    this.pages = false
                 }
             }
         },
@@ -234,6 +241,10 @@ export default {
                 //update
                 this.counter = this.counter + 1
                 // console.log('gridType', type);
+                if (type == 'simple') {
+                    this.pages = false
+                }
+
                 this.updatePosts().then(() => {
                     this.obj.type = type
                 })
@@ -278,6 +289,7 @@ export default {
         pages: function (state, prev) {
             if (prev != state) {
                 //update
+                console.log('pages', state);
                 this.counter = this.counter + 1
                 this.updatePosts().then(() => {
                     this.obj.models[2].pages = state
@@ -292,11 +304,14 @@ export default {
         initialized: function (value) {
             // console.log('initialized', value, this.initial);
             if (this.initial && this.initial.blocks && this.initial.blocks.length > 0) {
-                if (this.mode == 'manual') {
-                    let elements = this.initial.blocks.map((block, i) => {
-                        return formatEl(block, i, this.initial.blocks)
-                    })
+                let elements = this.initial.blocks.map((block, i) => {
+                    // console.log(block.height);
+                    block.h = block.height
+                    block.w = block.width
+                    return formatEl(block, i, this.initial.blocks)
+                })
 
+                if (this.mode == 'manual') {
                     let posts = Object.assign([], this.posts)
                     let idxs = []
 
@@ -308,10 +323,18 @@ export default {
                     })
 
                     this.posts = Object.assign([], posts)
+
+                    // console.log('manuale', elements);
                     this.updateElements(elements)
 
                     // this.elements = this.initial.blocks
                 }
+                else if (this.gridType == 'packery') {
+                    // console.log('packery');
+                    // console.log('dentro', elements);
+                    this.updateElements(elements)
+                }
+
             }
         },
     },
@@ -325,6 +348,7 @@ export default {
             }
         },
         updatePackeryGrid: function (elements) {
+            // console.log('elellelel');
             this.obj = {
                 ...this.obj,
                 elements: elements
@@ -354,7 +378,8 @@ export default {
                 this.resetPostsPool(models, resetPost).then(posts => {
                     // console.log('updated', posts, resetPost, this.posts);
 
-                    if (resetPost) {
+                    if (resetPost && this.initialized == true) {
+                        console.log('resetting', this.initialized);
                         this.elements = []
                         this.posts = []
                         this.posts = posts
@@ -366,6 +391,7 @@ export default {
 
                     if (this.mode == 'last') {
 
+                        console.log('elements', this.initialized);
                         let elements = []
 
                         posts.forEach((element, i) => {
@@ -375,7 +401,9 @@ export default {
                             }
                         })
 
-                        this.elements = elements
+                        if (this.initialized == true) {
+                            this.elements = elements
+                        }
                         // console.log('updated elemets');
                     }
 
@@ -521,7 +549,7 @@ export default {
 
                 this.gridType = this.initial.type ? this.initial.type : 'simple'
                 this.mode = options.mode ? options.mode : 'last'
-                this.products = options.models ? options.models[0].products : false
+                this.products = options.models ? options.models[0].products : true
                 this.news = options.models ? options.models[1].news : false
                 this.pages = options.models ? options.models[2].pages : false
                 this.post_count = options.post_count ? options.post_count : 2
@@ -543,10 +571,14 @@ export default {
             }
         }
     },
+    created: function () {
+        this.setInitial()
+
+    },
     mounted: function () {
-        this.$nextTick(() => {
-            this.setInitial()
-        })
+        // this.$nextTick(() => {
+        //     this.setInitial()
+        // })
         // this.$nextTick(() => {
         //     this.debug()
         // })
