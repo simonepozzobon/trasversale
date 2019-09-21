@@ -68,7 +68,7 @@ export default {
         },
     },
     mounted: function () {
-        this.$nextTick(() => this.debug())
+        // this.$nextTick(() => this.debug())
     },
 }
 </script>
