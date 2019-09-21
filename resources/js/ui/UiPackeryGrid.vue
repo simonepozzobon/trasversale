@@ -66,6 +66,7 @@ export default {
     watch: {
         blocks: {
             handler: function (blocks) {
+                // console.log('change');
                 this.debouncedUpdate(blocks)
             },
             deep: true,
@@ -73,8 +74,8 @@ export default {
     },
     computed: {
         formatted: function () {
-            return this.items.map(item => {
-                return formatEl(item)
+            return this.items.map((item, i) => {
+                return formatEl(item, i, this.items)
             })
         },
     },
@@ -96,6 +97,8 @@ export default {
     },
     created: function () {
         this.items = this.blocks
+        // console.log(Object.assign([], this.blocks));
+        // this.debouncedUpdate(blocks)
     },
     mounted: function () {
         this.getContainerWidth()

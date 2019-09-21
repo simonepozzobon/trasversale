@@ -185,7 +185,7 @@ export default {
             this.$emit('title', height)
         }
         else if (this.module.type === 'grid') {
-            console.log(this.module);
+            // console.log(this.module);
         }
         // this.$nextTick(() => {
         //     this.debug()

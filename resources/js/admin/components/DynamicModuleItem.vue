@@ -491,6 +491,10 @@ export default {
                 this.value--
             }
         },
+        gridChanged: function (subModuleObj) {
+            // console.log('qui', subModuleObj);
+            this.value = subModuleObj
+        },
         subChanged: function (subModuleObj) {
             // console.log('fuori', subModuleObj);
             // bisogna risettare l'oggetto altrimenti non aggiorna l'evento

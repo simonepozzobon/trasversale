@@ -47,8 +47,8 @@
     />
 
     <ui-packery-grid
-        v-else-if="module && module.type === 'grid' && content.type === 'packery'"
-        :blocks="content.blocks"
+        v-else-if="showPackery"
+        :blocks="this.module.content.blocks"
         :is-admin="true"
     />
 
@@ -133,13 +133,13 @@ export default {
         }
     },
     watch: {
-        module: {
-            handler: function (module) {
-                // console.log('moduliooo', module);
-                this.listener()
-            },
-            deep: true,
-        },
+        // module: {
+        //     handler: function (module) {
+        //         // console.log('moduliooo', module);
+        //         this.listener()
+        //     },
+        //     deep: true,
+        // },
     },
     computed: {
         options: function () {
@@ -149,11 +149,12 @@ export default {
             return {}
         },
         content: function () {
-            // console.log('contenuto', this.module.content);
             if (this.module && this.module.hasOwnProperty('content')) {
                 return this.module.content
             }
-            return {}
+            else {
+                return {}
+            }
         },
         isAdminClass: function () {
             if (this.isAdmin) {
@@ -165,11 +166,12 @@ export default {
             if (this.module.type == 'grid') {
                 if (this.content.hasOwnProperty('type') && this.content.hasOwnProperty('blocks')) {
                     if (this.content.type == 'packery' && this.content.blocks.length > 0) {
-                        console.log('packery');
+                        // console.log('packery');
                         return true
                     }
                 }
             }
+            // console.log('packery ou');
             return false
         },
         showSimpleGrid: function () {

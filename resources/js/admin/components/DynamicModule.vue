@@ -116,12 +116,14 @@ export default {
         },
         emitChanged: function (key, value) {
             this.dataObj[key] = value
+            // console.log(this.dataObj);
             this.$emit('changed', this.dataObj)
         },
         changed: function (key, value, type) {
             let prev = clone(this.dataObj[key])
             // console.log('Dynamic module è diverso', !isEqual(prev, value), key);
             if (!isEqual(prev, value) && type != 'file-input') {
+                // console.log('file-input');
                 this.emitChanged(key, value)
             }
             else if (key == 'columns') {

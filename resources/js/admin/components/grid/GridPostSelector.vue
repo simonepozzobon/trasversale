@@ -116,7 +116,8 @@ export default {
                     }
                 }
 
-                this.$emit('update:elements', cacheElements)
+                // this.$emit('update:elements', cacheElements)
+                this.$emit('update-elements', cacheElements)
             }
         },
 
