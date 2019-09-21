@@ -37,13 +37,13 @@ export default {
             this.search = 'storie'
         },
         startSearch: function () {
-            console.log('start', this.search);
+            // console.log('start', this.search);
             if (this.search && this.search.length > 1) {
                 let data = {
                     string: this.search
                 }
                 this.$http.post('/api/search', data).then(response => {
-                    console.log(response.data);
+                    // console.log(response.data);
                     this.formatResults(response.data)
                 })
             }

@@ -30,18 +30,18 @@ export default {
     computed: {
         title: function () {
             if (this.$root.search) {
-                return 'Risultati di ricerca per: ' + this.$root.search
+                return 'Risultati di ricerca per: "' + this.$root.search + '"'
             }
         },
         results: function () {
             return this.$root.searchResults
         }
     },
-    watch: {
-        results: function (results) {
-            console.log(this.results[0]);
-        }
-    },
+    // watch: {
+    //     results: function (results) {
+    //         // console.log(this.results[0]);
+    //     }
+    // },
     methods: {
 
     },
