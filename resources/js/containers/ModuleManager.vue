@@ -43,7 +43,7 @@
     <ui-simple-grid
         v-else-if="module && module.type === 'grid' && content.type === 'simple'"
         :blocks="content.blocks | formatblocks"
-        :options="options"
+        :options="this.options"
     />
 
     <ui-packery-grid
@@ -124,6 +124,12 @@ export default {
         return {}
     },
     computed: {
+        options: function () {
+            if (this.content && this.content.options) {
+                return JSON.parse(this.content.options)
+            }
+            return {}
+        },
         content: function () {
             return JSON.parse(this.module.content)
         },
@@ -184,6 +190,7 @@ export default {
         // this.$nextTick(() => {
         //     this.debug()
         // })
+
     },
     beforeDestroy: function () {
         if (this.module.type == 'title') {
