@@ -1,3 +1,4 @@
+import CreateSubscriber from './views/CreateSubscriber.vue'
 import HomeContainer from './views/HomeContainer.vue'
 import Home from './views/Home.vue'
 import ManageSubscribers from './views/ManageSubscribers.vue'
@@ -57,7 +58,12 @@ const routes = [{
             path: 'subscribers/:id',
             name: 'manage-subscribers',
             component: ManageSubscribers,
-        }
+        },
+        {
+            path: 'create-subscriber/:product_id',
+            name: 'create-subscriber',
+            component: CreateSubscriber,
+        },
     ],
 }]
 

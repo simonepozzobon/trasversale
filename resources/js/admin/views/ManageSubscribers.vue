@@ -62,19 +62,25 @@
         >
             <span
                 v-if="data.item.payment_type_id == 1"
-                class="text-success"
+                :class="data.item.payment_status_id | statusClass"
             >
                 Carta
             </span>
             <span
+                v-else-if="data.item.payment_type_id == 2"
+                :class="data.item.payment_status_id | statusClass"
+            >
+                Bonifico
+            </span>
+            <span
                 v-else-if="data.item.payment_type_id == 3"
-                class="text-warning"
+                :class="data.item.payment_status_id | statusClass"
             >
                 Carta Docente
             </span>
             <span
                 v-else-if="data.item.payment_type_id == 4"
-                class="text-danger"
+                :class="data.item.payment_status_id | statusClass"
             >
                 Richiesta di informazioni
             </span>
@@ -85,25 +91,25 @@
         >
             <span
                 v-if="data.item.order.payment_status_id == 1"
-                class="text-success"
+                :class="data.item.payment_status_id | statusClass"
             >
                 Pagato
             </span>
             <span
                 v-else-if="data.item.order.payment_status_id == 2"
-                class="text-warning"
+                :class="data.item.payment_status_id | statusClass"
             >
                 Da verificare
             </span>
             <span
                 v-else-if="data.item.order.payment_status_id == 3"
-                class="text-danger"
+                :class="data.item.payment_status_id | statusClass"
             >
                 Non Pagato
             </span>
             <span
                 v-else-if="data.item.order.payment_status_id == 5"
-                class="text-danger"
+                :class="data.item.payment_status_id | statusClass"
             >
                 Ordine Cancellato
             </span>
@@ -137,6 +143,7 @@
         <template v-slot:row-details="row">
             <subscriber-edit
                 :subscriber="row.item"
+                :is-new="false"
                 :product="product"
                 @update="update"
             />
@@ -185,10 +192,6 @@ export default {
             subscribers: [],
             product: null,
             fields: [{
-                    key: 'order.code',
-                    label: 'Numero Ordine',
-                    sortable: true
-                }, {
                     key: 'payment_type_id',
                     label: 'Modalità',
                     sortable: true
@@ -197,10 +200,6 @@ export default {
                     label: 'Stato',
                     sortable: true
                 }, {
-                    key: 'guests',
-                    label: 'Iscritti',
-                    sortable: true,
-                }, {
                     key: 'name',
                     label: 'Nome',
                     sortable: true
@@ -208,6 +207,16 @@ export default {
                     key: 'email',
                     label: 'Email',
                     sortable: true
+                },
+                {
+                    key: 'order.code',
+                    label: 'Numero Ordine',
+                    sortable: true
+                },
+                {
+                    key: 'guests',
+                    label: 'Iscritti',
+                    sortable: true,
                 },
                 {
                     key: 'tools',
@@ -230,7 +239,7 @@ export default {
                 return 'Gestione iscrizioni: ' + this.product.title
             }
             else {
-                return 'Gestisci iscrizioni'
+                return 'Gestione iscrizioni'
             }
         },
         opts: function () {
@@ -357,8 +366,23 @@ export default {
             })
         },
         addSubs: function () {
-
+            this.$root.goToWithParams('create-subscriber', {
+                product_id: this.product.id
+            })
         },
+    },
+    filters: {
+        statusClass: function (status) {
+            if (status == 1) {
+                return 'text-success'
+            }
+            else if (status == 2) {
+                return 'text-warning'
+            }
+            else {
+                return 'text-danger'
+            }
+        }
     },
     mounted: function () {
         this.getSubscribers()
