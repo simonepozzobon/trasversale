@@ -38,6 +38,9 @@ import UiSimpleGridLoop from './UiSimpleGridLoop.vue'
 import UiBlock from './UiBlock.vue'
 import UiButton from './UiButton.vue'
 import UiRow from './UiRow.vue'
+
+const orderBy = require('lodash.orderby')
+
 export default {
     name: 'UiSimpleGrid',
     components: {
@@ -67,7 +70,7 @@ export default {
     },
     watch: {
         blocks: function (blocks) {
-            this.filtered = blocks
+            this.sortBlocks(blocks)
         },
     },
     methods: {
@@ -75,6 +78,15 @@ export default {
             // if (id) {
             //     this.filtered = this.blocks.filter(block => block.id == id)
             // }
+        },
+        sortBlocks: function (blocks) {
+            if (this.options.mode == 'last') {
+                this.filtered = orderBy(blocks, ['created_at'], ['desc'])
+            }
+            else {
+                this.filtered = blocks
+            }
+
         },
         addCategory: function (category, blockID) {
             if (category && category.hasOwnProperty('id')) {
@@ -106,20 +118,22 @@ export default {
                     // https://stackoverflow.com/questions/4607991/javascript-transform-object-into-array
                     let ids = Object.keys(category.blockIds).map(key => category.blockIds[key])
                     this.currentId = category.id
-                    this.filtered = this.blocks.filter(function (e) {
+                    let blocks = this.blocks.filter(function (e) {
                         return this.indexOf(e.id) > -1
                     }, ids)
+
+                    this.sortBlocks(blocks)
                 }
 
                 else {
-                    this.filtered = this.blocks
+                    this.sortBlocks(this.blocks)
                     this.currentId = null
                 }
             }
         },
     },
     created: function () {
-        this.filtered = this.blocks
+        this.sortBlocks(this.blocks)
     },
     mounted: function () {},
 }

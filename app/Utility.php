@@ -87,6 +87,7 @@ class Utility extends Model
     {
         if ($module->type == 'grid') {
             $content = json_decode($module->content);
+            $grid_options_json = isset($content->options) ? $content->options : '';
             $grid_options = isset($content->options) ? json_encode($content->options) : '';
             $grid_id = $content->id;
 
@@ -147,6 +148,11 @@ class Utility extends Model
                     break;
                 }
                 array_push($blocks, $grid_block);
+            }
+
+
+            if ($grid_options_json != '' && $grid_options_json->mode == 'last' && $grid->type == 'simple') {
+                $blocks = collect($blocks)->sortByDesc('created_at')->values()->all();
             }
 
             $data = [
