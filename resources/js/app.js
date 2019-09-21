@@ -38,7 +38,9 @@ const app = new Vue({
                 sidebar: {
                     modules: []
                 },
-                cart: []
+                cart: [],
+                search: null,
+                searchResults: [],
             }
         },
         methods: {
@@ -54,7 +56,7 @@ const app = new Vue({
                     params: params
                 })
             },
-            addToCart: function(content) {
+            addToCart: function (content) {
                 // console.log('add');
                 let itemID = content.item.id
                 let idx = this.cart.findIndex(item => item.item.id == itemID)
@@ -63,7 +65,8 @@ const app = new Vue({
                     item.item.quantity = item.item.quantity + 1
 
                     this.cart.splice(idx, 1, item)
-                } else {
+                }
+                else {
                     let item = Object.assign({}, content)
                     item.item.quantity = 1
 
@@ -71,7 +74,7 @@ const app = new Vue({
 
                 }
             },
-            showCart: function() {
+            showCart: function () {
 
             }
 

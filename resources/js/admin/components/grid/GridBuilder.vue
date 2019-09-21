@@ -8,10 +8,7 @@
     </div>
     <div class="form-group row">
         <div class="col-md-12">
-            <div
-                ref="packery"
-                v-if="this.items.length > 0"
-            >
+            <div ref="packery">
                 <grid-layout
                     :layout.sync="items"
                     :col-num="colsNum"
@@ -51,6 +48,10 @@ import VueGridLayout from 'vue-grid-layout'
 import GridSingleItem from './GridSingleItem.vue'
 const debounce = require('lodash.debounce')
 
+import {
+    formatEl
+}
+from './GridUtilities'
 export default {
     name: 'GridBuilder',
     components: {
@@ -82,15 +83,25 @@ export default {
             this.items = Object.assign([], els)
             this.getContainerWidth()
         },
-        items: function (items) {
-            // this.$emit('update:elements', items)
+        items: {
+            handler: function (items) {
+                this.$emit('update', items)
+                // this.$emit('update:elements', items)
+            },
+            deep: true,
         },
     },
     methods: {
         getContainerWidth: function () {
             if (this.$refs.packery) {
                 let container = this.$refs.packery.getBoundingClientRect().width
-                this.unitSize = Math.round(container / 12) - (this.gutter)
+                let unitSize = Math.round(container / 12) - (this.gutter)
+                if (unitSize > 0) {
+                    this.unitSize = unitSize
+                }
+                else {
+                    this.unitSize = 12
+                }
             }
         },
     },

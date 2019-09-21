@@ -2,10 +2,20 @@
 
 namespace App;
 
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 use Illuminate\Database\Eloquent\Model;
 
-class StaticPage extends Model
+class StaticPage extends Model implements Searchable
 {
+    public function getSearchResult(): SearchResult {
+
+        return new \Spatie\Searchable\SearchResult(
+            $this,
+            $this->title
+        );
+    }
+
     public function sub_pages() {
         return $this->hasMany(SubPage::class);
     }

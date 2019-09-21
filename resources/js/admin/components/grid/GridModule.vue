@@ -18,7 +18,7 @@
                 type="text"
                 name="grid_type"
                 class="form-control"
-                v-model="obj.type"
+                v-model="gridType"
             >
                 <option value="packery">Mosaico</option>
                 <option value="simple">Classica</option>
@@ -37,7 +37,7 @@
                 type="text"
                 name="mode"
                 class="form-control"
-                v-model="obj.mode"
+                v-model="mode"
             >
                 <option value="last">Ultimi Post</option>
                 <option value="manual">Selezione Manuale</option>
@@ -46,7 +46,7 @@
     </div>
     <div
         class="form-group row"
-        v-if="obj.type === 'packery'"
+        v-if="gridType === 'packery'"
     >
         <label
             for="type"
@@ -58,21 +58,21 @@
             <div class="posts-type row">
                 <div class="col-md-4">
                     <checkbox-module
-                        :val.sync="obj.models[0].products"
+                        :val.sync="products"
                         name="prodotti"
                         label="Prodotti"
                     />
                 </div>
                 <div class="col-md-4">
                     <checkbox-module
-                        :val.sync="obj.models[1].news"
+                        :val.sync="news"
                         name="notizie"
                         label="Notizie"
                     />
                 </div>
                 <div class="col-md-4">
                     <checkbox-module
-                        :val.sync="obj.models[2].pages"
+                        :val.sync="pages"
                         name="pages"
                         label="Pagine"
                     />
@@ -103,31 +103,32 @@
     </div>
 
     <counter-module
-        v-if="obj.type === 'simple'"
+        v-if="gridType === 'simple'"
         label="Post per riga"
         name="post_per_row"
         :min="0"
         :max="6"
-        :initial="obj.post_per_row"
+        :initial="post_per_row"
         @changed="updateRowCounter"
     />
     <counter-module
-        v-if="obj.mode === 'last'"
+        v-if="mode === 'last'"
         label="Numero di post"
         name="post_count"
         :min="0"
-        :initial="obj.post_count"
+        :initial="post_count"
         @changed="updateCounter"
     />
     <grid-builder
-        v-if="obj.type === 'packery'"
-        :elements.sync="elements"
+        v-if="gridType === 'packery'"
+        :elements="elements"
+        @update="updatePackeryGrid"
     />
     <grid-post-selector
-        v-if="obj.mode === 'manual'"
+        v-if="mode === 'manual'"
         :posts.sync="posts"
-        :elements.sync="elements"
-        @add-element="addElementToGrid"
+        :elements="elements"
+        @update-elements="updateElements"
     />
 </div>
 </template>
@@ -173,121 +174,254 @@ export default {
                         pages: false,
                     },
                 ],
-                post_count: 0,
-                post_per_row: 0,
+                post_count: 2,
+                post_per_row: 2,
             },
             name: 'grid',
             elements: [],
             posts: [],
             postType: 'products',
             initialized: false,
+
+            gridType: 'simple',
+            mode: 'last',
+            products: true,
+            news: false,
+            pages: false,
+            post_count: 2,
+            post_per_row: 2,
+            counter: 0,
         }
     },
     watch: {
-        postType: function (type) {
-            this.elements = []
-            for (let i = 0; i < this.obj.models.length; i++) {
-                let key = Object.keys(this.obj.models[i])[0]
-                if (key == type) {
-                    this.obj.models[i][key] = true
+        postType: function (type, prev) {
+            if (prev != type) {
+                //update
+                if (type == 'products') {
+                    this.products = true
+                    this.news = false
+                    this.pages = false
+                }
+                else if (type == 'news') {
+                    this.news = true
+                    this.products = false
+                    this.pages = false
                 }
                 else {
-                    this.obj.models[i][key] = false
+                    this.news = false
+                    this.products = false
+                    this.pages = false
                 }
             }
-            // this.addElements()
-            this.updatePosts()
-
         },
         obj: {
-            handler: function (obj) {
-                // console.log(obj.post_count);
-                this.updateParent()
+            handler: function (obj, prev) {
+                // console.log('handlerrr', this.initialized);
+                // console.log('handlerrr', Object.assign([], this.elements));
+                if (this.initialized == true) {
+                    let newObj = Object.assign({}, obj)
+                    newObj['elements'] = Object.assign([], this.elements)
+                    // console.log(obj.elements, newObj['elements']);
+                    this.$emit('update', newObj)
+                }
             },
             deep: true
         },
-        'obj.models': {
-            handler: function (models) {
-                // console.log('models');
-                this.updatePosts()
-                // this.resetPostsPool(models).then(() => {
-                //     console.log('handlerrrr');
-                // })
-            },
-            deep: true,
-        },
-        'obj.type': function (type) {
-            this.updatePosts()
-            // if (type === 'simple') {
-            //     this.elements = []
-            // }
-            // else {
-            //     this.elements = []
-            //     console.log('mosaic');
-            // }
-        },
-        'obj.post_count': function (count) {
-            if (this.obj.mode == 'last') {
-                this.updatePosts()
+        mode: function (mode, prev) {
+            if (mode != prev) {
+                // update
+                this.counter = this.counter + 1
+                this.updatePosts().then(() => {
+                    this.obj.mode = mode
+                })
             }
         },
-        'obj.post_per_row': {
-            handler: function (count) {
-                // console.log('post_per_row', count);
-            },
-            deep: true
+        gridType: function (type, prev) {
+            if (prev != type) {
+                //update
+                this.counter = this.counter + 1
+                // console.log('gridType', type);
+                if (type == 'simple') {
+                    this.pages = false
+                }
+
+                this.updatePosts().then(() => {
+                    this.obj.type = type
+                })
+            }
         },
-        elements: {
-            handler: function (elements) {
-                // console.log('CIAO');
-                // this.$emit('update', elements)
-                this.updateParent()
-            },
-            deep: true,
+        post_count: function (count, prev) {
+            if (prev != count) {
+                //update
+                this.counter = this.counter + 1
+                this.updatePosts(false).then(() => {
+                    this.obj.post_count = count
+                })
+            }
         },
-        // Deprecate
-        initial: {
-            handler: function (obj) {
-                // console.log('initial', obj.post_count);
-                // this.setInitial()
-            },
-            deep: true,
+        post_per_row: function (count, prev) {
+            if (prev != count) {
+                //update
+                this.counter = this.counter + 1
+                this.updatePosts(false).then(() => {
+                    this.obj.post_per_row = count
+                })
+            }
+        },
+        products: function (state, prev) {
+            if (prev != state) {
+                //update
+                this.counter = this.counter + 1
+                this.updatePosts().then(() => {
+                    this.obj.models[0].products = state
+                })
+            }
+        },
+        news: function (state, prev) {
+            if (prev != state) {
+                //update
+                this.counter = this.counter + 1
+                this.updatePosts().then(() => {
+                    this.obj.models[1].news = state
+                })
+            }
+        },
+        pages: function (state, prev) {
+            if (prev != state) {
+                //update
+                console.log('pages', state);
+                this.counter = this.counter + 1
+                this.updatePosts().then(() => {
+                    this.obj.models[2].pages = state
+                })
+            }
+        },
+        counter: function (value) {
+            if (value <= 0) {
+                this.initialized = true
+            }
+        },
+        initialized: function (value) {
+            // console.log('initialized', value, this.initial);
+            if (this.initial && this.initial.blocks && this.initial.blocks.length > 0) {
+                let elements = this.initial.blocks.map((block, i) => {
+                    // console.log(block.height);
+                    block.h = block.height
+                    block.w = block.width
+                    return formatEl(block, i, this.initial.blocks)
+                })
+
+                if (this.mode == 'manual') {
+                    let posts = Object.assign([], this.posts)
+                    let idxs = []
+
+                    elements.forEach(element => {
+                        let idx = posts.findIndex(post => post.id == element.type_id && post.type == element.type)
+                        if (idx > -1) {
+                            posts[idx].selected = 1
+                        }
+                    })
+
+                    this.posts = Object.assign([], posts)
+
+                    // console.log('manuale', elements);
+                    this.updateElements(elements)
+
+                    // this.elements = this.initial.blocks
+                }
+                else if (this.gridType == 'packery') {
+                    // console.log('packery');
+                    // console.log('dentro', elements);
+                    this.updateElements(elements)
+                }
+
+            }
         },
     },
     methods: {
-        updatePosts: function (resetPost = true) {
-            // console.log(this.obj.models);
-            // console.log('update posts', this.obj.post_count);
-            if (resetPost) {
-                this.posts = []
+        updateElements: function (elements) {
+            // console.log('quii', elements);
+            this.elements = elements
+            this.obj = {
+                ...this.obj,
+                elements: elements
             }
-
-            this.resetPostsPool(this.obj.models).then(posts => {
-                // console.log('updated');
+        },
+        updatePackeryGrid: function (elements) {
+            // console.log('elellelel');
+            this.obj = {
+                ...this.obj,
+                elements: elements
+            }
+        },
+        updatePosts: function (resetPost = true) {
+            return new Promise((resolve, reject) => {
+                // console.log('updating');
+                // console.log(this.obj.models);
+                // console.log('update posts', this.obj.post_count);
+                // console.log(this.initialized);
                 if (resetPost) {
-                    this.elements = []
+                    this.posts = []
                 }
 
-                if (this.obj.mode == 'last') {
-                    posts.forEach((element, i) => {
+                let models = [{
+                        products: this.products,
+                    },
+                    {
+                        news: this.news,
+                    },
+                    {
+                        pages: this.pages,
+                    }
+                ]
 
-                        if (i < this.obj.post_count) {
-                            let newElement = formatEl(element, i, this.elements)
-                            this.elements.push(newElement)
+                this.resetPostsPool(models, resetPost).then(posts => {
+                    // console.log('updated', posts, resetPost, this.posts);
+
+                    if (resetPost && this.initialized == true) {
+                        console.log('resetting', this.initialized);
+                        this.elements = []
+                        this.posts = []
+                        this.posts = posts
+                    }
+                    // else {
+                    //     let selected = this.posts.filter(post => post.selected == 1)
+                    //     console.log(selected);
+                    // }
+
+                    if (this.mode == 'last') {
+
+                        console.log('elements', this.initialized);
+                        let elements = []
+
+                        posts.forEach((element, i) => {
+                            if (i < this.post_count) {
+                                let newElement = formatEl(element, i, elements)
+                                elements.push(newElement)
+                            }
+                        })
+
+                        if (this.initialized == true) {
+                            this.elements = elements
                         }
-                    })
-                }
+                        // console.log('updated elemets');
+                    }
 
-                this.updateParent()
-            })
+                    this.$nextTick(() => {
+                        this.counter = this.counter - 1
+                        resolve()
+                    })
+                    // this.updateParent()
+                })
+            });
         },
         updateParent: function () {
-            let obj = {
-                ...this.obj,
-                elements: this.elements
-            }
-            // console.log('update', obj);
-            this.$emit('update', obj)
+            // let obj = {
+            //     ...this.obj,
+            //     elements: this.elements
+            // }
+            // // console.log('update', obj);
+            // this.$emit('update', obj)
         },
         debug: function () {
             this.obj = {
@@ -304,10 +438,9 @@ export default {
                 post_per_row: 0,
             }
         },
-        resetPostsPool: function (models) {
+        resetPostsPool: function (models, resetPost = true) {
             return new Promise(resolve => {
                 let posts = []
-                this.posts = []
                 let promises = []
 
                 for (let i = 0; i < models.length; i++) {
@@ -329,7 +462,6 @@ export default {
                             posts = posts.concat(response.data.elements)
                             // console.log(this.posts);
                             if (i === promises.length - 1) {
-                                this.posts = posts
                                 resolve(posts)
                             }
                         }
@@ -339,19 +471,23 @@ export default {
 
         },
         updateCounter: function (value) {
-            this.obj = {
-                ...this.obj,
-                post_count: value
-            }
+            this.post_count = value
+            // this.obj = {
+            //     ...this.obj,
+            //     post_count: value
+            // }
         },
         updateRowCounter: function (value) {
-            this.obj = {
-                ...this.obj,
-                post_per_row: value
-            }
+            this.post_per_row = value
+            // this.obj = {
+            //     ...this.obj,
+            //     post_per_row: value
+            // }
         },
         addElementToGrid: function (element) {
+            // console.log('aggiungo alla griglia');
             this.elements.push(element)
+            this.obj.elements = this.elements
         },
         addElements: function () {
             this.resetPostsPool(this.obj.models).then(posts => {
@@ -402,34 +538,25 @@ export default {
         setInitial: function () {
             // console.log('initial', this.initial);
             if (this.initial) {
-                this.initialized = true
                 let options
 
                 if (this.initial.options) {
                     options = JSON.parse(this.initial.options)
+                    // console.log('abbiamo opzioni');
                 }
 
                 // console.log('opzioni', options);
 
-                let newObj = {
-                    type: this.initial.type ? this.initial.type : 'simple',
-                    mode: options.mode ? options.mode : 'last',
-                    models: options.models ? options.models : [{
-                            products: true,
-                        },
-                        {
-                            news: false,
-                        },
-                        {
-                            pages: false,
-                        }
-                    ],
-                    post_count: options.post_count ? options.post_count : 2,
-                    post_per_row: options.post_per_row ? options.post_per_row : 2,
-                }
+                this.gridType = this.initial.type ? this.initial.type : 'simple'
+                this.mode = options.mode ? options.mode : 'last'
+                this.products = options.models ? options.models[0].products : true
+                this.news = options.models ? options.models[1].news : false
+                this.pages = options.models ? options.models[2].pages : false
+                this.post_count = options.post_count ? options.post_count : 2
+                this.post_per_row = options.post_per_row ? options.post_per_row : 2
+
                 // console.log('initial', newObj);
 
-                this.obj = newObj
                 // this.obj = this.initial
 
                 // if (newObj.mode == 'last') {
@@ -444,10 +571,14 @@ export default {
             }
         }
     },
+    created: function () {
+        this.setInitial()
+
+    },
     mounted: function () {
-        this.$nextTick(() => {
-            this.setInitial()
-        })
+        // this.$nextTick(() => {
+        //     this.setInitial()
+        // })
         // this.$nextTick(() => {
         //     this.debug()
         // })

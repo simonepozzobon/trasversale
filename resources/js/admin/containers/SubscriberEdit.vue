@@ -1,5 +1,8 @@
 <template>
-<div class="subscriber-edit">
+<div
+    class="subscriber-edit"
+    :class="isNewClass"
+>
     <div class="container">
         <dynamic-module
             v-if="this.module && this.initialized"
@@ -23,15 +26,18 @@
                     </button>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-md-3">Elimina</label>
+            <div
+                class="form-group row"
+                v-if="!isNew"
+            >
+                <label class="col-md-3">Annulla Iscrizione</label>
                 <div class="col-md-9">
                     <button
                         class="btn mb-2 btn-outline-danger"
                         align="center"
                         @click="deleteSubscriber"
                     >
-                        Elimina definitivamente
+                        Annulla Iscrizione
                     </button>
                 </div>
             </div>
@@ -59,6 +65,10 @@ export default {
         UiTitle,
     },
     props: {
+        isNew: {
+            type: Boolean,
+            default: false,
+        },
         subscriber: {
             type: Object,
             default: function () {
@@ -75,7 +85,25 @@ export default {
     data: function () {
         return {
             initialized: false,
-            values: null,
+            values: {
+                name: null,
+                surname: null,
+                email: null,
+                payment_type_id: null,
+                payment_status_id: null,
+                address: null,
+                city: null,
+                province: null,
+                postal_code: null,
+                ragione_sociale: null,
+                cf: null,
+                codice_destinatario: null,
+                language: null,
+                pec: null,
+                phone: null,
+                type: null,
+                vat: null,
+            },
             form: null
         }
     },
@@ -88,30 +116,40 @@ export default {
             let options = DynamicParams.find(params => params.name === name)
             return options
         },
+        isNewClass: function () {
+            if (this.isNew == true) {
+                return 'subscriber-edit--new'
+            }
+            else {
+                return null
+            }
+        },
     },
     methods: {
         setObj: function (obj) {
             this.form = obj
         },
         setInitial: function () {
-            this.values = {
-                name: this.subscriber.name,
-                surname: this.subscriber.surname,
-                email: this.subscriber.email,
-                payment_type_id: this.subscriber.payment_type_id,
-                payment_status_id: this.subscriber.order.payment_status_id,
-                address: this.subscriber.order.address,
-                city: this.subscriber.order.city,
-                province: this.subscriber.order.province,
-                postal_code: this.subscriber.order.postal_code,
-                ragione_sociale: this.subscriber.order.ragione_sociale,
-                cf: this.subscriber.order.cf,
-                codice_destinatario: this.subscriber.order.codice_destinatario,
-                language: this.subscriber.order.language,
-                pec: this.subscriber.order.pec,
-                phone: this.subscriber.order.phone,
-                type: this.subscriber.order.type,
-                vat: this.subscriber.order.vat,
+            if (this.isNew == false) {
+                this.values = {
+                    name: this.subscriber.name,
+                    surname: this.subscriber.surname,
+                    email: this.subscriber.email,
+                    payment_type_id: this.subscriber.payment_type_id,
+                    payment_status_id: this.subscriber.order.payment_status_id,
+                    address: this.subscriber.order.address,
+                    city: this.subscriber.order.city,
+                    province: this.subscriber.order.province,
+                    postal_code: this.subscriber.order.postal_code,
+                    ragione_sociale: this.subscriber.order.ragione_sociale,
+                    cf: this.subscriber.order.cf,
+                    codice_destinatario: this.subscriber.order.codice_destinatario,
+                    language: this.subscriber.order.language,
+                    pec: this.subscriber.order.pec,
+                    phone: this.subscriber.order.phone,
+                    type: this.subscriber.order.type,
+                    vat: this.subscriber.order.vat,
+                }
             }
 
             this.$nextTick(() => {
@@ -122,22 +160,51 @@ export default {
             let data = new FormData()
 
             for (let key in this.form) {
-                if (this.form.hasOwnProperty(key)) {
+                if (this.form.hasOwnProperty(key) && key != 'undefined') {
                     data.append(key, this.form[key])
                 }
             }
+
+            data.append('product_id', this.product.id)
+
+            if (this.isNew == true) {
+                console.log('è nuovo');
+                data.append('is_new', 1)
+            }
+            else {
+                data.append('is_new', 0)
+                data.append('subscriber_id', this.subscriber.id)
+                data.append('order_id', this.subscriber.order.id)
+            }
+
+            for (let value of data) {
+                console.log(value[0], value[1]);
+            }
+
+            this.$http.post('/api/admin/subscribers/save', data).then(response => {
+                console.log(response.data);
+                if (response.data.success) {
+                    this.$nextTick(() => {
+                        this.$emit('update', response.data.product)
+                    })
+                }
+            })
+        },
+        deleteSubscriber: function () {
+            let data = new FormData()
 
             data.append('subscriber_id', this.subscriber.id)
             data.append('order_id', this.subscriber.order.id)
             data.append('product_id', this.product.id)
 
-            let url = '/api/admin/subscribers/save'
-            this.$http.post(url, data).then(response => {
-                console.log(response);
-                this.$emit('update', response.data.product)
+            this.$http.post('/api/admin/subscribers/cancel', data).then(response => {
+                console.log(response.data);
+                if (response.data.success) {
+                    this.$nextTick(() => {
+                        this.$emit('update', response.data.product)
+                    })
+                }
             })
-        },
-        deleteSubscriber: function () {
 
         },
     },
@@ -159,6 +226,13 @@ export default {
     @include gradient-directional(rgba($gray-300, .6), $light, 135deg);
     @include border-radius($spacer / 2);
     @include box-shadows($gray-500);
+
+    &--new {
+        padding: 0;
+        background-color: transparent !important;
+        box-shadow: 0 0 0 transparent;
+        @include border-radius(0);
+    }
 }
 </style>
 

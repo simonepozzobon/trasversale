@@ -33,6 +33,8 @@ Route::prefix('mail')->group(function() {
 
 Route::get('get-page/{page}/{subpage?}/{slug?}', 'MainController@get_dynamic_item');
 
+Route::post('search', 'SearchController@simple_search');
+
 Route::prefix('admin')->group(
     function () {
         Route::post('create-sidebar', 'AdminController@create_sidebar');
@@ -45,6 +47,7 @@ Route::prefix('admin')->group(
         Route::prefix('subscribers')->group(function() {
             Route::get('{id}', 'SubscribersController@get_subscribers');
             Route::post('save', 'SubscribersController@save_subscriber');
+            Route::post('cancel', 'SubscribersController@cancel_subrscriber_order');
         });
 
         Route::prefix('post-type')->group(

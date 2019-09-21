@@ -11,7 +11,7 @@
 |
 */
 // Route::get('test', 'MainController@test');
-Route::get('test', 'AdminController@test');
+Route::get('test', 'SearchController@test');
 
 Route::prefix('admin')->group(
     function () {

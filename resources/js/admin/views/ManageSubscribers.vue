@@ -1,6 +1,6 @@
 <template>
 <page-template
-    title="Gestisci gli iscritti"
+    :title="mainTitle"
     :notifications="notifications"
     :has-sub-header="true"
 >
@@ -10,20 +10,20 @@
             v-if="product"
         >
             <div class="col-md-3">
-                <h5>Corso:</h5>
-                {{ product.title }}
-            </div>
-            <div class="col-md-3">
-                <h5>Durata del corso in ore</h5>
-                {{ product.hours }}
-            </div>
-            <div class="col-md-3">
                 <h5>Posti Disponibili</h5>
                 {{ product.guests_available }}
             </div>
             <div class="col-md-3">
-                <h5>Da verificare</h5>
+                <h5>Iscritti Da verificare</h5>
                 {{ toBeConfirmed }}
+            </div>
+            <div class="col-md-3">
+                <h5>Iscritti confermati</h5>
+                {{ product.guests_confirmed }}
+            </div>
+            <div class="col-md-3">
+                <h5>Durata del corso in ore</h5>
+                {{ product.hours }}
             </div>
         </ui-row>
         <hr class="my-4">
@@ -62,19 +62,25 @@
         >
             <span
                 v-if="data.item.payment_type_id == 1"
-                class="text-success"
+                :class="data.item.payment_status_id | statusClass"
             >
                 Carta
             </span>
             <span
+                v-else-if="data.item.payment_type_id == 2"
+                :class="data.item.payment_status_id | statusClass"
+            >
+                Bonifico
+            </span>
+            <span
                 v-else-if="data.item.payment_type_id == 3"
-                class="text-warning"
+                :class="data.item.payment_status_id | statusClass"
             >
                 Carta Docente
             </span>
             <span
                 v-else-if="data.item.payment_type_id == 4"
-                class="text-danger"
+                :class="data.item.payment_status_id | statusClass"
             >
                 Richiesta di informazioni
             </span>
@@ -85,21 +91,27 @@
         >
             <span
                 v-if="data.item.order.payment_status_id == 1"
-                class="text-success"
+                :class="data.item.payment_status_id | statusClass"
             >
                 Pagato
             </span>
             <span
                 v-else-if="data.item.order.payment_status_id == 2"
-                class="text-warning"
+                :class="data.item.payment_status_id | statusClass"
             >
                 Da verificare
             </span>
             <span
                 v-else-if="data.item.order.payment_status_id == 3"
-                class="text-danger"
+                :class="data.item.payment_status_id | statusClass"
             >
                 Non Pagato
+            </span>
+            <span
+                v-else-if="data.item.order.payment_status_id == 5"
+                :class="data.item.payment_status_id | statusClass"
+            >
+                Ordine Cancellato
             </span>
             <span
                 v-else
@@ -131,6 +143,7 @@
         <template v-slot:row-details="row">
             <subscriber-edit
                 :subscriber="row.item"
+                :is-new="false"
                 :product="product"
                 @update="update"
             />
@@ -179,10 +192,6 @@ export default {
             subscribers: [],
             product: null,
             fields: [{
-                    key: 'order.code',
-                    label: 'Numero Ordine',
-                    sortable: true
-                }, {
                     key: 'payment_type_id',
                     label: 'Modalità',
                     sortable: true
@@ -191,10 +200,6 @@ export default {
                     label: 'Stato',
                     sortable: true
                 }, {
-                    key: 'guests',
-                    label: 'Iscritti',
-                    sortable: true,
-                }, {
                     key: 'name',
                     label: 'Nome',
                     sortable: true
@@ -202,6 +207,16 @@ export default {
                     key: 'email',
                     label: 'Email',
                     sortable: true
+                },
+                {
+                    key: 'order.code',
+                    label: 'Numero Ordine',
+                    sortable: true
+                },
+                {
+                    key: 'guests',
+                    label: 'Iscritti',
+                    sortable: true,
                 },
                 {
                     key: 'tools',
@@ -219,6 +234,14 @@ export default {
         }
     },
     computed: {
+        mainTitle: function () {
+            if (this.product && this.product.title) {
+                return 'Gestione iscrizioni: ' + this.product.title
+            }
+            else {
+                return 'Gestione iscrizioni'
+            }
+        },
         opts: function () {
             // return PostsOpts.find(opt => opt.slug === this.$route.params.type)
             return []
@@ -291,6 +314,7 @@ export default {
                     let check = codes.includes(code)
                     amountConfirmed = amountConfirmed + (Number(order_item.price) * order_item.quantity)
 
+
                     if (check == false) {
                         codes.push(code)
                         subscriber['guests'] = order_item.quantity
@@ -302,6 +326,7 @@ export default {
                             subscribers[idx].guests = subscribers[idx].guests + order_item.quantity
                         }
                     }
+
 
                     if (Number(order.payment_status_id) != 1) {
                         toBeConfirmed = toBeConfirmed + 1
@@ -341,8 +366,23 @@ export default {
             })
         },
         addSubs: function () {
-
+            this.$root.goToWithParams('create-subscriber', {
+                product_id: this.product.id
+            })
         },
+    },
+    filters: {
+        statusClass: function (status) {
+            if (status == 1) {
+                return 'text-success'
+            }
+            else if (status == 2) {
+                return 'text-warning'
+            }
+            else {
+                return 'text-danger'
+            }
+        }
     },
     mounted: function () {
         this.getSubscribers()
