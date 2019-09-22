@@ -310,8 +310,8 @@ export default {
             //     }
             // }
         },
-        beforeSave: function (ref) {
-            this.$emit('before-save', ref)
+        beforeSave: function (ref, modules = 0) {
+            this.$emit('before-save', ref, modules)
         },
         deleteAll: function () {
             this.$emit('delete-all')

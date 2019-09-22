@@ -66,6 +66,7 @@ export default {
     watch: {
         blocks: {
             handler: function (blocks) {
+                // console.log('change');
                 this.debouncedUpdate(blocks)
             },
             deep: true,
@@ -73,9 +74,15 @@ export default {
     },
     computed: {
         formatted: function () {
-            return this.items.map(item => {
-                return formatEl(item)
+            // if (this.isAdmin) {
+            //     return this.items
+            // }
+            // else {
+            // console.log(Object.assign([], this.items));
+            return this.items.map((item, i) => {
+                return formatEl(item, i, this.items)
             })
+            // }
         },
     },
     methods: {
@@ -96,6 +103,8 @@ export default {
     },
     created: function () {
         this.items = this.blocks
+        // console.log(Object.assign([], this.blocks));
+        // this.debouncedUpdate(blocks)
     },
     mounted: function () {
         this.getContainerWidth()

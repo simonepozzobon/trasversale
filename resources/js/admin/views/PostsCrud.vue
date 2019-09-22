@@ -22,6 +22,17 @@
             />
         </template>
         <template
+            slot="subscribers_tools"
+            slot-scope="data"
+        >
+            <button
+                class="btn btn-outline-green"
+                @click="manageSubscribers(data.item)"
+            >
+                Iscritti
+            </button>
+        </template>
+        <template
             slot="tools"
             slot-scope="data"
         >
@@ -124,7 +135,12 @@ export default {
                 type: this.$route.params.type,
                 id: item.id
             })
-        }
+        },
+        manageSubscribers: function (item) {
+            this.$root.goToWithParams('manage-subscribers', {
+                id: item.id
+            })
+        },
     },
     mounted: function () {
         this.getPosts()

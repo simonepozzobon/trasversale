@@ -1,48 +1,79 @@
-<template lang="html">
-    <div>
-        <div class="b-calendar">
-            <div class="b-calendar__header">
-                <span>{{ month }} {{ year }}</span>
+<template>
+<div>
+    <div class="b-calendar">
+        <div class="b-calendar__header">
+            <span>{{ month }} {{ year }}</span>
+        </div>
+        <div class="b-calendar__weekdays">
+            <div
+                class="weekday"
+                v-for="(day, index) in days"
+                :key="index"
+            >
+                <span>{{day}}</span>
             </div>
-            <div class="b-calendar__weekdays">
-                <div class="weekday" v-for="(day, index) in days" :key="index">
-                    <span>{{day}}</span>
-                </div>
-            </div>
-            <div class="b-calendar__calendar">
-                <div class="b-calendar__dates">
-                    <div class="date text-right"
-                        v-for="date in dateList"
-                        :key="date.key"
-                        :data-date="date.date"
-                        :class="{
+        </div>
+        <div class="b-calendar__calendar">
+            <div class="b-calendar__dates">
+                <div
+                    class="date text-right"
+                    v-for="date in dateList"
+                    :key="date.key"
+                    :data-date="date.date"
+                    :class="{
                                 'selected': dateIsEqualSelectDate(date),
                             }"
-                        @click="setSelectedDate(date.moment)">
-                        <div
-                            class="date__information"
-                            :class="{
+                    @click="setSelectedDate(date.moment)"
+                >
+                    <div
+                        class="date__information"
+                        :class="{
                                     'today': date.today,
                                     'blank': date.blank,
                                     'no-border-right': date.key % 7 === 0
-                                }">
-                            <span class="day">{{date.dayNumber}}</span>
-                            <span class="weekday">{{date.weekDay}}</span>
-                            <div class="additional" v-show="date.additional">
-                                <span class="year" v-show="date.additional.year">{{date.additional.year}}</span>
-                                <span class="month" v-show="date.additional.month">{{date.additional.month}}</span>
-                            </div>
+                                }"
+                    >
+                        <span class="day">{{date.dayNumber}}</span>
+                        <span class="weekday">{{date.weekDay}}</span>
+                        <div
+                            class="additional"
+                            v-show="date.additional"
+                        >
+                            <span
+                                class="year"
+                                v-show="date.additional.year"
+                            >{{date.additional.year}}</span>
+                            <span
+                                class="month"
+                                v-show="date.additional.month"
+                            >{{date.additional.month}}</span>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="b-calendar__swipemonths">
             <div class="b-calendar__previous">
-                <button id="subtractMonthBtn" class="btn btn-link arrow arrow-left" @click="subtractMonth">
+                <button
+                    id="subtractMonthBtn"
+                    class="btn btn-link arrow arrow-left"
+                    @click="subtractMonth"
+                >
                     « {{ previousMonthAsString | capitalize }}
+                </button>
+            </div>
+            <div class="b-calendar__next">
+                <button
+                    id="addMonthBtn"
+                    class="btn btn-link arrow arrow-right"
+                    @click="addMonth"
+                >
+                    {{ nextMonthAsString | capitalize }} »
                 </button>
             </div>
         </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -52,7 +83,7 @@ import moment from 'moment'
 
 export default {
     name: 'UiCalendar',
-    data: function() {
+    data: function () {
         return {
             today: moment(),
             dateContext: moment(),
@@ -61,44 +92,44 @@ export default {
         }
     },
     computed: {
-        year: function() {
+        year: function () {
             return this.dateContext.format("Y");
         },
 
-        month: function() {
+        month: function () {
             return this.dateContext.format("MMMM");
         },
 
-        daysInMonth: function() {
+        daysInMonth: function () {
             return this.dateContext.daysInMonth();
         },
 
-        currentDate: function() {
+        currentDate: function () {
             return this.dateContext.get("date");
         },
 
-        firstDayOfMonth: function() {
+        firstDayOfMonth: function () {
             let firstDay = moment(this.dateContext).subtract(this.currentDate, "days");
             return firstDay.weekday();
         },
 
-        previousMonth: function() {
+        previousMonth: function () {
             return moment(this.dateContext).subtract(1, "month");
         },
-        previousMonthAsString: function() {
+        previousMonthAsString: function () {
             return this.previousMonth.format("MMMM");
         },
-        nextMonth: function() {
+        nextMonth: function () {
             return moment(this.dateContext).add(1, "month");
         },
-        nextMonthAsString: function() {
+        nextMonthAsString: function () {
             return this.nextMonth.format("MMMM");
         },
 
-        daysInPreviousMonth: function() {
+        daysInPreviousMonth: function () {
             return this.previousMonth.daysInMonth();
         },
-        daysFromPreviousMonth: function() {
+        daysFromPreviousMonth: function () {
             let daysList = [];
             let count = this.daysInPreviousMonth - this.firstDayOfMonth;
             while (count < this.daysInPreviousMonth) {
@@ -106,11 +137,11 @@ export default {
                 daysList[count] = count;
             }
 
-            return daysList.filter(function() {
+            return daysList.filter(function () {
                 return true;
             });
         },
-        dateList: function() {
+        dateList: function () {
             let $this = this;
 
             let dateList = [];
@@ -131,7 +162,7 @@ export default {
             let countDayInPreviousMonth = 0;
 
             //filling in dates from the previous month
-            this.daysFromPreviousMonth.forEach(function(dayFromPreviousMonth) {
+            this.daysFromPreviousMonth.forEach(function (dayFromPreviousMonth) {
                 countDayInCurrentMonth++;
                 countDayInPreviousMonth++;
 
@@ -254,26 +285,26 @@ export default {
                 }
             }
 
-            return dateList.filter(function() {
+            return dateList.filter(function () {
                 return true;
             });
         },
-        initialDate: function() {
+        initialDate: function () {
             return this.formattingDay(this.today.get("date"));
         },
-        initialMonth: function() {
+        initialMonth: function () {
             return this.today.format("MMMM");
         },
-        initialYear: function() {
+        initialYear: function () {
             return this.today.format("Y");
         },
-        todayInCurrentMonthAndYear: function() {
+        todayInCurrentMonthAndYear: function () {
             return (
                 this.month === this.initialMonth &&
                 this.year === this.initialYear
             );
         },
-        selectedDayAndMonth: function() {
+        selectedDayAndMonth: function () {
             let dayAndMonth = this.selectedDate.format("D MMMM");
             dayAndMonth = dayAndMonth.split(" ");
             dayAndMonth = {
@@ -283,10 +314,10 @@ export default {
 
             return dayAndMonth;
         },
-        selectedWeekDay: function() {
+        selectedWeekDay: function () {
             return this.selectedDate.format("dddd");
         },
-        todayIsEqualSelectDate: function() {
+        todayIsEqualSelectDate: function () {
             return (
                 this.selectedDate.format("YYYYMMDD") ===
                 this.today.format("YYYYMMDD")
@@ -294,16 +325,16 @@ export default {
         }
     },
     methods: {
-        addMonth: function() {
+        addMonth: function () {
             this.dateContext = this.nextMonth;
         },
-        subtractMonth: function() {
+        subtractMonth: function () {
             this.dateContext = this.previousMonth;
         },
-        setSelectedDate: function(moment) {
+        setSelectedDate: function (moment) {
             this.selectedDate = moment;
         },
-        goToday: function() {
+        goToday: function () {
             this.selectedDate = this.today;
             this.dateContext = this.today;
         },
@@ -318,7 +349,7 @@ export default {
             index = index === 0 ? 6 : index - 1;
             return this.days[index];
         },
-        dateIsEqualSelectDate: function(date) {
+        dateIsEqualSelectDate: function (date) {
             return (
                 this.selectedDate.format("YYYYMMDD") ===
                 date.moment.format("YYYYMMDD")
@@ -326,7 +357,7 @@ export default {
         },
     },
     filters: {
-        capitalize: function(value) {
+        capitalize: function (value) {
             if (!value) return "";
             value = value.toString();
             return value.charAt(0).toUpperCase() + value.slice(1);
@@ -367,7 +398,6 @@ export default {
             align-items: center;
         }
     }
-
 
     &__calendar {
         border-top: 1px solid $black;
@@ -430,10 +460,15 @@ export default {
             }
         }
     }
-
-    &__previous {
+    &__swipemonths {
         width: 100%;
+        display: flex;
+        justify-content: space-between;
     }
+    //
+    //
+    // &__previous {
+    //     width: 100%;
+    // }
 }
-
 </style>

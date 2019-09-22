@@ -6,10 +6,15 @@
             <div class="page-template__title">
                 <h1 class="pt-3">{{ title }}</h1>
             </div>
-            <div class="page-template__action">
-            </div>
         </div>
-        <hr>
+    </div>
+    <div
+        class="page-template__container container"
+        v-if="hasSubHeader"
+    >
+        <slot name="sub-header"></slot>
+    </div>
+    <div class="page-template__container container">
         <slot></slot>
     </div>
 </div>
@@ -53,6 +58,10 @@ export default {
                 return []
             },
         },
+        hasSubHeader: {
+            type: Boolean,
+            default: false,
+        }
     },
     data: function () {
         return {
@@ -160,7 +169,9 @@ $opacity-test: 0.6 !default;
     animation: Gradient 360s ease infinite;
 
     &__container {
-        margin: $spacer * 4;
+        margin-top: $spacer * 4;
+        margin-left: $spacer * 4;
+        margin-right: $spacer * 4;
         padding: $spacer * 2;
         @include gradient-directional($gray-300, $light, 135deg);
         @include border-radius($spacer / 2);

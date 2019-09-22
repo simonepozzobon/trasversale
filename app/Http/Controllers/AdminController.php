@@ -113,6 +113,12 @@ class AdminController extends Controller
     public function get_post_type($type, $id)
     {
         $model = 'App\\'.ucfirst($type);
+        if ($model == 'App\\Staticpage') {
+            $model = 'App\\StaticPage';
+        } else if ($model == 'App\\Subpage') {
+            $model = 'App\\SubPage';
+        }
+
         $post = $model::with('slug', 'category', 'modules', 'sidebar.modules')->where('id', $id)->first();
 
         if ($post->modules) {
@@ -133,6 +139,12 @@ class AdminController extends Controller
     public function save_post_type(Request $request)
     {
         $model = 'App\\'.ucfirst($request->model);
+
+        if ($model == 'App\\Staticpage') {
+            $model = 'App\\StaticPage';
+        } else if ($model == 'App\\Subpage') {
+            $model = 'App\\SubPage';
+        }
 
         $post = isset($request->id) ? $model::find($request->id) : new $model();
 
@@ -180,6 +192,18 @@ class AdminController extends Controller
 
         if (isset($request->forwho)) {
             $post->forwho = $request->forwho;
+        }
+
+        if (isset($request->has_limited_guests)) {
+            if ($request->has_limited_guests) {
+                $post->has_limited_guests = 1;
+            } else {
+                $post->has_limited_guests = 0;
+            }
+        }
+
+        if (isset($request->guests_total) && (int) $request->guests_total > 0) {
+            $post->guests_total = (int) $request->guests_total;
         }
 
         $post->save();
@@ -394,6 +418,13 @@ class AdminController extends Controller
 
             foreach ($content->blocks as $key => $block) {
                 $model = 'App\\'.ucfirst($block->type);
+
+                if ($model == 'App\\Staticpage') {
+                    $model = 'App\\StaticPage';
+                } else if ($model == 'App\\Subpage') {
+                    $model = 'App\\SubPage';
+                }
+
 
                 $options = [
                     'x' => $block->x,

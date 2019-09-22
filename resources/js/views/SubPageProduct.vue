@@ -42,6 +42,17 @@
                 {{ this.item.forwho }}
             </div>
         </div>
+        <div
+            class="ui-sidebar-content"
+            v-if="Number(this.item.has_limited_guests) == 1"
+        >
+            <div class="ui-sidebar-content__title">
+                Posti disponibili
+            </div>
+            <div class="ui-sidebar-content__paragraph">
+                {{ this.item.guests_available }} di {{ this.item.guests_total }}
+            </div>
+        </div>
         <div class="ui-sidebar-content ui-sidebar-content--price">
             <div class="ui-sidebar-content__price-label">
                 Prezzo

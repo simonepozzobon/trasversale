@@ -42,7 +42,8 @@
 
     <ui-simple-grid
         v-else-if="module && module.type === 'grid' && content.type === 'simple'"
-        :blocks="content.blocks"
+        :blocks="content.blocks | formatblocks"
+        :options="this.options"
     />
 
     <ui-packery-grid
@@ -101,6 +102,11 @@
 </template>
 
 <script>
+import {
+    Uuid
+}
+from '../Utilities'
+
 export default {
     name: 'ModuleManager',
     components: {},
@@ -118,6 +124,12 @@ export default {
         return {}
     },
     computed: {
+        options: function () {
+            if (this.content && this.content.options) {
+                return JSON.parse(this.content.options)
+            }
+            return {}
+        },
         content: function () {
             return JSON.parse(this.module.content)
         },
@@ -138,6 +150,16 @@ export default {
                 console.log(this.content);
             }
         },
+    },
+    filters: {
+        formatblocks: function (blocks) {
+            return blocks.map(block => {
+                return {
+                    ...block,
+                    uuid: Uuid.get(),
+                }
+            })
+        }
     },
     beforeCreate: function () {
         this.$options.components.UiButton = require('../ui/UiButton.vue').default
@@ -163,11 +185,12 @@ export default {
             this.$emit('title', height)
         }
         else if (this.module.type === 'grid') {
-            console.log(this.module);
+            // console.log(this.module);
         }
         // this.$nextTick(() => {
         //     this.debug()
         // })
+
     },
     beforeDestroy: function () {
         if (this.module.type == 'title') {

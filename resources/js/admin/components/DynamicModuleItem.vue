@@ -26,6 +26,18 @@
         </div>
     </div>
 
+    <div
+        v-if="option.type === 'section-head'"
+        :class="sectionHeadPaddingTop"
+    >
+        <div class="form-group row">
+            <div class="col-12">
+                <h5>{{ option.label }}</h5>
+                <hr />
+            </div>
+        </div>
+    </div>
+
     <ui-switch
         v-else-if="option.type === 'switch'"
         :label="option.label"
@@ -449,7 +461,15 @@ export default {
                 }
             }
             return false
-        }
+        },
+        sectionHeadPaddingTop: function () {
+            if (this.option.type == 'section-head' && this.option.hasOwnProperty('options') && this.option.options.hasOwnProperty('paddingTop') && this.option.options.paddingTop == false) {
+                return null
+            }
+            else {
+                return 'pt-4'
+            }
+        },
     },
     methods: {
         setValue: function (value) {
@@ -470,6 +490,10 @@ export default {
             if (this.options && this.options.hasOwnProperty('min') && this.value > this.options.min) {
                 this.value--
             }
+        },
+        gridChanged: function (subModuleObj) {
+            // console.log('qui', subModuleObj);
+            this.value = subModuleObj
         },
         subChanged: function (subModuleObj) {
             // console.log('fuori', subModuleObj);
@@ -707,6 +731,12 @@ export default {
 
             if (this.initial && this.option.type != 'post-select') {
                 this.values = this.initial
+
+                // se non è una griglia imposta i valori
+                if (this.option.type != 'grid') {
+                    this.value = this.initial
+
+                }
                 // console.log(clone(this.value));
                 // console.log('qui', this.option.key, this.option.type);
             }
@@ -729,6 +759,7 @@ export default {
                 }
                 // console.log('griglia', this.initial[0]);
             }
+
         },
     },
     beforeCreate: function () {

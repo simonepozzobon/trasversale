@@ -12,7 +12,7 @@
             :use-css-transforms="true"
         >
             <grid-item
-                v-for="item in items"
+                v-for="item in formatted"
                 ref="item"
                 :key="item.uuid"
                 :x="item.x"
@@ -30,6 +30,10 @@
 <script>
 import VueGridLayout from 'vue-grid-layout'
 import UiGridSingleItem from './UiGridSingleItem.vue'
+import {
+    formatEl
+}
+from '../admin/components/grid/GridUtilities'
 
 export default {
     name: 'UiPackeryGrid',
@@ -51,6 +55,13 @@ export default {
             unitSize: 0,
             gutter: 10,
         }
+    },
+    computed: {
+        formatted: function () {
+            return this.items.map(item => {
+                return formatEl(item)
+            })
+        },
     },
     methods: {
         getContainerWidth: function () {
