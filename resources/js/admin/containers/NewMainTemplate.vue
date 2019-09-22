@@ -421,7 +421,7 @@ export default {
                             this.counter = this.cached.length
 
                             // c'è un problema qui che assegnando i moduli ad un nouvo oggetto li considera sempre nuovi
-                            console.log('cached', this.cached, this.counter);
+                            // console.log('cached', this.cached, this.counter);
                             // let cached = Object.assign([], this.cached)
                             let cached = this.cached
 
