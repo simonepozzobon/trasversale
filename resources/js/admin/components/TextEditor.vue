@@ -67,7 +67,7 @@
             <form
                 class="menububble__form"
                 v-if="linkMenuIsActive"
-                @submit.prevent="setLinkUrl(commands.link, linkUrl)"
+                @submit.prevent="setLinkUrl(commands.link, linkUrl, linkTarget)"
             >
                 <input
                     class="menububble__input"
@@ -77,6 +77,17 @@
                     ref="linkInput"
                     @keydown.esc="hideLinkMenu"
                 />
+
+                <span class="text-white m-2">Esterno?</span>
+                <span class="switch">
+                    <input
+                        type="checkbox"
+                        class="switch"
+                        id="link-target"
+                        v-model="linkTarget"
+                    />
+                    <label for="link-target"></label>
+                </span>
                 <button
                     class="menububble__button"
                     @click="setLinkUrl(commands.link, null)"
@@ -133,15 +144,16 @@ import {
     Bold,
     Code,
     Italic,
-    Link,
+    // Link,
     Strike,
     Underline,
     History,
 }
 from 'tiptap-extensions'
 
-import stripHtml from "string-strip-html"
+import Link from './editor/Link'
 
+import stripHtml from "string-strip-html"
 
 export default {
     name: 'TextEditor',
@@ -168,6 +180,7 @@ export default {
             html: null,
             json: null,
             linkUrl: null,
+            linkTarget: null,
             linkMenuIsActive: false,
         }
     },
@@ -243,6 +256,7 @@ export default {
         },
         showLinkMenu: function (attrs) {
             this.linkUrl = attrs.href
+            this.linkTarget = attrs.href
             this.linkMenuIsActive = true
             this.$nextTick(() => {
                 this.$refs.linkInput.focus()
@@ -250,11 +264,18 @@ export default {
         },
         hideLinkMenu: function () {
             this.linkUrl = null
+            this.linkTarget = null
             this.linkMenuIsActive = false
         },
-        setLinkUrl: function (command, url) {
+        setLinkUrl: function (command, url, target) {
+            let formattedTarget = '_self'
+            if (target) {
+                formattedTarget = '_blank'
+            }
+
             command({
-                href: url
+                href: url,
+                target: formattedTarget
             })
             this.hideLinkMenu()
             this.editor.focus()
