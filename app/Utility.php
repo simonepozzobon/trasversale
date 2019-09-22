@@ -141,6 +141,17 @@ class Utility extends Model
                     $grid_block['content'] = $has_json ? json_encode($block) : $block;
                     break;
 
+                case 'subpage':
+                    $block->slug = $block->slug;
+
+                    // Prendo Il link della pagina madre
+                    $parent = $block->page;
+                    $parent->slug = $parent->slug;
+                    $block->parent = $parent;
+
+                    $grid_block['content'] = $has_json ? json_encode($block) : $block;
+                    break;
+
                 default:
                     $block->slug = $block->slug;
                     $grid_block['content'] = $has_json ? json_encode($block) : $block;

@@ -419,12 +419,11 @@ export default {
                         if (this.model) {
                             this.$root.$emit('close-all-panels')
                             this.counter = this.cached.length
-                            // console.log('cached', this.cached, this.counter);
-                            let cached = Object.assign([], this.cached)
-                            // cached.push(cached[0])
 
-                            // forza dupplicati
-                            // cached[1].id = 26
+                            // c'è un problema qui che assegnando i moduli ad un nouvo oggetto li considera sempre nuovi
+                            // console.log('cached', this.cached, this.counter);
+                            // let cached = Object.assign([], this.cached)
+                            let cached = this.cached
 
                             let duplicates = checkDuplicateInObject('id', cached)
                             // console.log('cached', cached);
@@ -492,12 +491,14 @@ export default {
                                                         if (modules) {
                                                             for (let k = 0; k < modules.length; k++) {
                                                                 let moduleData = Object.assign({}, modules[k])
+                                                                let uuid = moduleData.uuid
                                                                 moduleData.modulable_id = columnResponse.data.module.id
                                                                 moduleData.modulable_type = 'App\\Module'
                                                                 moduleData = this.formatRequest(moduleData)
 
+
                                                                 childs.push({
-                                                                    uuid: k,
+                                                                    uuid: uuid,
                                                                     promise: this.$http.post('/api/admin/save-component', moduleData),
                                                                     key: 'modulo colonna',
                                                                     hasChild: false,
@@ -631,7 +632,9 @@ export default {
                     // console.log(this.processes);
                     // console.log(i < promises.length - 1, i, promises.length - 1);
                     if (i < promises.length - 1) {
-                        this.processPromise(promises[i], i)
+                        this.processPromise(promises[i], i).then(() => {
+                            console.log('processo completato ' + promises[i].uuid);
+                        })
                     }
                     else {
                         // ultima
@@ -639,12 +642,14 @@ export default {
                             // console.log('completato')
                             this.processPromise(promises[i], i).then(() => {
                                 // console.log('ultimo processo parent', promises[i].hasChild, promises[i].uuid);
+                                console.log('processo completato ' + promises[i].uuid);
                                 resolve(promises[i])
                             })
                         }
                         else {
                             this.processPromise(promises[i], i).then(() => {
                                 // console.log('ultimo processo child', promises[i].hasChild, promises[i].uuid);
+                                // console.log('processi completati');
                                 resolve('salvataggio moduli child completo')
                             })
                         }
@@ -658,6 +663,7 @@ export default {
             // if (obj.hasChild) {
             // console.log('childdd', obj);
             return Promise.resolve(obj.promise).then(response => {
+                console.log(obj.uuid);
                 this.processes = this.processes - 1
                 obj.callback(response, obj.childs)
             })
@@ -667,6 +673,11 @@ export default {
             //         obj.callback(response)
             //     })
             // }
+        },
+        removeNewProperty: function (uuid) {
+            this.cached = this.cached.map(module => {
+                console.log(module);
+            })
         },
         saveImage: async function (people) {
             // console.log('start loop');
@@ -693,17 +704,13 @@ export default {
             temp.isNew = false
             temp.order = Number(temp.order)
             temp.content = obj.content
-            // console.log('temp', temp, obj, newObj);
             return temp
         },
         sortModules: function (modules) {
             let sorted = this.cached.map((cache, i) => {
-                // let newModule = Object.assign({}, cache)
-                // newModule['order'] = i
-                return {
-                    ...cache,
-                    order: i,
-                }
+                let newModule = Object.assign({}, cache)
+                newModule['order'] = i
+                return newModule
             })
 
 
