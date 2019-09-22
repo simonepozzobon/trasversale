@@ -167,14 +167,14 @@ export default {
                     break;
 
                 case 'App\\SubPage':
-                    alert('error')
-                    // this.$root.goToWithParams('subpage', {
-                    //     page: 'corsi',
-                    //     subpage: slug,
-                    // })
+                    // alert('error')
+                    this.$root.goToWithParams('subpage', {
+                        page: this.content.parent.slug.slug,
+                        subpage: slug,
+                    })
                     break;
                 default:
-                    alert('no route')
+                    alert('Errore, pagina non trovata')
                 }
             }
         },
