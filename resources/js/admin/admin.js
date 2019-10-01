@@ -35,7 +35,7 @@ const router = new VueRouter({
     mode: 'history',
     dir: __dirname,
     routes: routes,
-    base: '/admin'
+    base: '/!bi0id9B'
 })
 
 const admin = new Vue({
@@ -57,10 +57,10 @@ const admin = new Vue({
             // '$route': function(route) {
             //     // console.log(route.path);
             // },
-            sidebarEl: function() {
+            sidebarEl: function () {
                 this.init()
             },
-            mainEl: function() {
+            mainEl: function () {
                 this.init()
             }
         },
@@ -80,16 +80,17 @@ const admin = new Vue({
                     params: params
                 })
             },
-            toggleSide: function() {
+            toggleSide: function () {
                 if (this.sideIsOpen) {
                     this.hide()
                     this.sideIsOpen = false
-                } else {
+                }
+                else {
                     this.show()
                     this.sideIsOpen = true
                 }
             },
-            init: function() {
+            init: function () {
                 if (this.sidebarEl && this.mainEl) {
                     if (!this.anim) {
                         let side = this.sidebarEl
@@ -133,18 +134,18 @@ const admin = new Vue({
                     }
                 }
             },
-            show: function() {
+            show: function () {
                 if (this.anim) {
                     this.anim.play()
                 }
             },
-            hide: function() {
+            hide: function () {
                 if (this.anim) {
                     this.anim.reverse()
                 }
             }
         },
-        mounted: function() {
+        mounted: function () {
             this.init()
         }
     })
