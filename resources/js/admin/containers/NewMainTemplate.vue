@@ -305,9 +305,6 @@ export default {
         },
         setInitials: function (objs) {
             for (let i = 0; i < objs.length; i++) {
-                // if (i == 1) {
-                //     console.log('seconda colonna');
-                // }
                 objs[i].uuid = Uuid.get()
                 objs[i].isNew = false
 
@@ -406,6 +403,7 @@ export default {
                         // console.log('before save main')
                         let subModules = this.cached.length
                         let sideSubmodules = this.cachedSides.length
+                        console.log('test', sideSubmodules);
 
                         let cachedModules = subModules + sideSubmodules
 
@@ -477,7 +475,6 @@ export default {
 
                                                 columnData = this.formatRequest(columnData)
 
-
                                                 childs.push({
                                                     uuid: cached[i].content[j].uuid,
                                                     promise: this.$http.post('/api/admin/save-component', columnData),
@@ -515,7 +512,6 @@ export default {
                                                                 })
                                                             }
                                                             this.processAllPromises(childs, true)
-
                                                         }
                                                     }
                                                 })
@@ -525,7 +521,6 @@ export default {
                                     })
                                     break;
                                 case 'team':
-                                    // console.log(i);
                                     // wait uploads before run promises
                                     this.hasAwait = true
 
@@ -553,10 +548,7 @@ export default {
                                             // console.log('dentro', promises);
                                         }
                                     })
-
-
                                     break;
-
                                 default:
                                     let data = this.formatRequest(cached[i])
                                     promises.push({
@@ -659,19 +651,11 @@ export default {
         processPromise: function (obj, counter = 0) {
             this.processes = this.processes + 1
             let promise = obj.promise
-            // if (obj.hasChild) {
-            // console.log('childdd', obj);
             return Promise.resolve(obj.promise).then(response => {
                 console.log(obj.uuid);
                 this.processes = this.processes - 1
                 obj.callback(response, obj.childs)
             })
-            // }
-            // else {
-            //     return Promise.resolve(promise).then(response => {
-            //         obj.callback(response)
-            //     })
-            // }
         },
         removeNewProperty: function (uuid) {
             this.cached = this.cached.map(module => {
