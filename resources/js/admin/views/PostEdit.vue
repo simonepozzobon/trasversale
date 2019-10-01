@@ -141,6 +141,12 @@ export default {
                         end_at: post.end_at,
                     }
                 }
+                if (post.hasOwnProperty('published_at')) {
+                    this.values = {
+                        ...this.values,
+                        published_at: post.published_at,
+                    }
+                }
                 if (post.hasOwnProperty('address')) {
                     this.values = {
                         ...this.values,
@@ -214,7 +220,7 @@ export default {
                     if (key === 'thumb' && this.hasFile(obj[key])) {
                         form.append('file', obj[key])
                     }
-                    else if (key === 'start_at' || key === 'end_at') {
+                    else if (key === 'start_at' || key === 'end_at' || key === 'published_at') {
                         let data = moment(obj[key]).format('YYYY-MM-DD HH:mm:ss')
                         form.append(key, data)
                     }

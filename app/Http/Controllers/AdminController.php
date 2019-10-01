@@ -173,6 +173,13 @@ class AdminController extends Controller
             $post->price = $request->price;
         }
 
+        if (isset($request->published_at)) {
+            $string_published = strtotime($request->published_at);
+
+            $published_at = Carbon::parse($string_published)->format('Y-m-d H:i:s');
+            $post->published_at = $published_at;
+        }
+
         if (isset($request->start_at) && $request->start_at && $request->start_at != 'null') {
             $string_start = strtotime($request->start_at);
 
