@@ -63,6 +63,7 @@ export default {
     },
     data: function () {
         return {
+            cached: [],
             categories: [],
             filtered: [],
             currentId: null,
@@ -81,7 +82,14 @@ export default {
         },
         sortBlocks: function (blocks) {
             if (this.options.mode == 'last') {
-                this.filtered = orderBy(blocks, ['created_at'], ['desc'])
+                if (blocks[0].hasOwnProperty('published_at')) {
+                    console.log('cie');
+                    this.filtered = orderBy(blocks, ['published_at'], ['desc'])
+                }
+                else {
+                    console.log('sdfkdjgjkdg');
+                    this.filtered = orderBy(blocks, ['created_at'], ['desc'])
+                }
             }
             else {
                 this.filtered = blocks
@@ -118,7 +126,7 @@ export default {
                     // https://stackoverflow.com/questions/4607991/javascript-transform-object-into-array
                     let ids = Object.keys(category.blockIds).map(key => category.blockIds[key])
                     this.currentId = category.id
-                    let blocks = this.blocks.filter(function (e) {
+                    let blocks = this.cached.filter(function (e) {
                         return this.indexOf(e.id) > -1
                     }, ids)
 
@@ -126,14 +134,30 @@ export default {
                 }
 
                 else {
-                    this.sortBlocks(this.blocks)
+                    this.sortBlocks(this.cached)
                     this.currentId = null
                 }
             }
         },
     },
     created: function () {
-        this.sortBlocks(this.blocks)
+        if (this.options.mode == 'last') {
+            this.cached = this.blocks.map(block => {
+                let newBlock = Object.assign({}, block)
+                if (typeof newBlock.content === 'string') {
+                    newBlock.content = JSON.parse(block.content)
+                }
+
+                if (newBlock.content.hasOwnProperty('published_at')) {
+                    newBlock['published_at'] = newBlock.content.published_at
+                }
+
+                return newBlock
+            })
+        }
+
+
+        this.sortBlocks(this.cached)
     },
     mounted: function () {},
 }
