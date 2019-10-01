@@ -177,33 +177,35 @@ export default {
             // console.log('salva il post', this.postObj);
             console.log('before save', this.postObj);
             let data = this.formatRequest(this.postObj)
+            data.append('is_edit', true)
             // for (let value of data) {
             //     console.log(value[0], value[1]);
             // }
-            this.$http.post(url, data)
-                .then(response => {
-                    // console.log('salva il post -> response', response.data);
-                    if (response.data.success) {
-                        this.modelIdx = Number(response.data.post.id)
-                        this.model = 'App\\' + this.type.model.charAt(0).toUpperCase() + this.type.model.slice(1)
-                        this.$nextTick(() => {
-                            let page = this.$refs.page
-                            // console.log(page.$refs[ref]);
+            this.$http.post(url, data).then(response => {
 
-                            if (modules <= 0) {
-                                page.$refs[ref].$emit('notify', {
-                                    uuid: Uuid.get(),
-                                    title: 'Pagina Salvata',
-                                    message: 'Salvataggio Completato'
-                                })
-                                page.$refs[ref].saveDisabled = false
-                            }
-                            else {
-                                page.$refs[ref].savePage(null, true)
-                            }
-                        })
-                    }
-                })
+                console.log('salva il post -> response', response.data);
+
+                if (response.data.success) {
+                    this.modelIdx = Number(response.data.post.id)
+                    this.model = 'App\\' + this.type.model.charAt(0).toUpperCase() + this.type.model.slice(1)
+                    this.$nextTick(() => {
+                        let page = this.$refs.page
+                        // console.log(page.$refs[ref]);
+
+                        if (modules <= 0) {
+                            page.$refs[ref].$emit('notify', {
+                                uuid: Uuid.get(),
+                                title: 'Pagina Salvata',
+                                message: 'Salvataggio Completato'
+                            })
+                            page.$refs[ref].saveDisabled = false
+                        }
+                        else {
+                            page.$refs[ref].savePage(null, true)
+                        }
+                    })
+                }
+            })
         },
         formatRequest: function (obj) {
             let form = new FormData()

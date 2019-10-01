@@ -153,12 +153,20 @@ class AdminController extends Controller
             $post->title = $request->title;
         }
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $media = Utility::save_image($file);
-            $post->thumb = $media->landscape;
+        if (isset($request->is_edit)) {
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $media = Utility::save_image($file);
+                $post->thumb = $media->landscape;
+            }
         } else {
-            $post->thumb = 'no-image';
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $media = Utility::save_image($file);
+                $post->thumb = $media->landscape;
+            } else {
+                $post->thumb = 'no-image';
+            }
         }
 
         if (isset($request->price)) {
