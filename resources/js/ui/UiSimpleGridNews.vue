@@ -26,12 +26,14 @@
         >
             {{ content.title }}
         </div>
-        <div class="grid-news__author">
+        <!-- <div class="grid-news__author">
             {{ content.author }}
-        </div>
-        <div class="grid-news__date">
-            <!-- {{ content.created_at }} -->
-            26.05.19
+        </div> -->
+        <div
+            class="grid-news__date"
+            v-if="this.published"
+        >
+            {{ published }}
         </div>
         <div class="grid-news__description">
             <!-- {{ content.created_at }} -->
@@ -42,6 +44,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import UiBlock from './UiBlock.vue'
 import UiImage from './UiImage.vue'
 
@@ -70,6 +73,12 @@ export default {
             }
             return this.block.content
         },
+        published: function () {
+            if (this.content.published_at) {
+                return moment(this.content.published_at).format('DD.MM.YYYY')
+            }
+            return null
+        }
     },
     methods: {
         goToNews: function () {
