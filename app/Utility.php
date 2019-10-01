@@ -163,7 +163,8 @@ class Utility extends Model
 
 
             if ($grid_options_json != '' && $grid_options_json->mode == 'last' && $grid->type == 'simple') {
-                $blocks = collect($blocks)->sortByDesc('created_at')->values()->all();
+                // $blocks = collect($blocks)->sortByDesc('created_at')->values()->all();
+                $blocks = collect($blocks)->sortByDesc('published_at')->values()->all();
             }
 
             $data = [
