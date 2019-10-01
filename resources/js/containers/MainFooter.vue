@@ -23,33 +23,76 @@
                     CF.‎05721611001<br>
                     Partita IVA ‎‎IT05721611001<br>
                 </p>
+                <a
+                    href="#"
+                    class="text-white"
+                    @click.prevent="showPrivacy"
+                >
+                    Privacy
+                </a>
             </div>
             <div class="col-md-2 text-white">
                 <p class="pt-4">
-                    site map<br>
-                    formazione<br>
-                    educational<br>
-                    corsi<br>
+                    <a
+                        href="#"
+                        class="text-white"
+                        @click.prevent="goTo('formazione')"
+                    >
+                        formazione
+                    </a><br>
+                    <a
+                        href="#"
+                        class="text-white"
+                        @click.prevent="goTo('educational')"
+                    >
+                        educational
+                    </a><br>
+                    <a
+                        href="#"
+                        class="text-white"
+                        @click.prevent="goTo('corsi')"
+                    >
+                        corsi
+                    </a><br>
+                    <a
+                        href="#"
+                        class="text-white"
+                        @click.prevent="goTo('notizie')"
+                    >
+                        notizie
+                    </a><br>
+                    <a
+                        href="#"
+                        class="text-white"
+                        @click.prevent="goTo('contatti')"
+                    >
+                        contatti
+                    </a><br>
                 </p>
             </div>
             <div class="col-md-2 text-white">
                 <p class="pt-4">
-                    carta della qualità<br>
-                    accreditamenti<br>
-                    privacy policy<br>
-                    credits<br>
+                    <a
+                        href="#"
+                        class="text-white"
+                        @click.prevent="goToSub('chi-siamo', 'carta-della-qualità')"
+                    >
+                        carta della qualità
+                    </a><br>
+                    <a
+                        href="#"
+                        class="text-white"
+                        @click.prevent="goToSub('chi-siamo', 'accreditamenti')"
+                    >
+                        accreditamenti
+                    </a><br>
                 </p>
             </div>
         </div>
         <div class="row py-5">
-            <div class="col d-flex justify-content-center">
-                <button
-                    class="btn btn-link text-white"
-                    @click="showPrivacy"
-                >
-                    Privacy
-                </button>
-            </div>
+            <!-- <div class="col d-flex justify-content-center">
+
+            </div> -->
             <b-modal
                 ref="privacy"
                 title="Privacy Policy"
@@ -87,6 +130,23 @@ export default {
         },
         hidePrivacy: function () {
             this.$refs.privacy.hide()
+        },
+        goTo: function (page) {
+            this.$router.push({
+                name: 'page',
+                params: {
+                    page: page,
+                }
+            })
+        },
+        goToSub: function (page, subpage) {
+            this.$router.push({
+                name: 'subpage',
+                params: {
+                    page: page,
+                    subpage: subpage,
+                }
+            })
         }
     },
 }
