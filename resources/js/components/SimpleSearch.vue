@@ -6,6 +6,7 @@
         placeholder="Search"
         aria-label="Search"
         v-model="search"
+        @keyup.enter="checkSearch"
     >
 </div>
 </template>
@@ -23,18 +24,23 @@ export default {
             master: null,
         }
     },
-    watch: {
-        search: function (str) {
-            if (str != null) {
-                if (str.length > 1) {
-                    this.startSearch()
-                }
-            }
-        },
-    },
+    // watch: {
+    //     search: function (str) {
+    //         if (str != null) {
+    //             if (str.length > 1) {
+    //                 this.startSearch()
+    //             }
+    //         }
+    //     },
+    // },
     methods: {
         debug: function () {
             this.search = 'storie'
+        },
+        checkSearch: function () {
+            if (this.search != null && this.search.length > 1) {
+                this.startSearch()
+            }
         },
         startSearch: function () {
             // console.log('start', this.search);
@@ -50,7 +56,7 @@ export default {
         },
         formatResults: function (results) {
             this.$root.search = this.search
-            this.search = null
+            // this.search = null
             let formatted = []
             for (let i = 0; i < results.length; i++) {
                 let result = results[i]
