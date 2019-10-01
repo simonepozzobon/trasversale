@@ -219,12 +219,6 @@ export default {
         contentHeight: function (height) {
             this.$refs.content.style.minHeight = height + 'px'
         },
-        // cached: {
-        //     handler: function (cached) {
-        //         console.log('cambiati');
-        //     },
-        //     deep: true,
-        // }
         processes: function (value) {
             // console.log(value);
             if (value <= 0) {

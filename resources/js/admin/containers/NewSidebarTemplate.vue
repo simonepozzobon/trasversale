@@ -553,15 +553,6 @@ export default {
             // console.log(newModule);
             this.cached.push(newModule)
         },
-
-        // non presenti
-        setModule: function (module) {
-            console.log('deprecata');
-        },
-        deleted: function (module) {
-            this.moduleType = null
-            this.$emit('deleted', module)
-        },
         updateSidebar: function () {
             let cached = this.cached
             this.counter = cached.length
@@ -694,20 +685,19 @@ export default {
                     // resolve()
                 })
             }
-
-            //
-            // this.$http.all(promises)
-            //     .then(results => {
-            //         this.$emit('notify', {
-            //             uuid: Uuid.get(),
-            //             title: 'Sidebar Salvata',
-            //             message: 'Salvataggio Completato'
-            //         })
-            //     })
+        },
+        // non presenti
+        setModule: function (module) {
+            console.log('setModule deprecata');
+        },
+        deleted: function (module) {
+            console.log('deleted deprecata');
+            // this.moduleType = null
+            // this.$emit('deleted', module)
         },
         formatModuleData: function (source) {
-            let obj = Object.assign({}, source)
-
+            console.log('formatModuleData deprecata');
+            // let obj = Object.assign({}, source)
         },
 
     },
