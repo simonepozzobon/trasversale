@@ -126,7 +126,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import ComponentsList from '../components/ComponentsList.vue'
 import draggable from 'vuedraggable'
 import DynamicParams from '../DynamicParams'

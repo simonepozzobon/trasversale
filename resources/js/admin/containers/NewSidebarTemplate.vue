@@ -38,6 +38,13 @@
                     @click="savePage"
                 >
                     Salva Sidebar
+                    <div
+                        v-if="saveDisabled"
+                        class="spinner-border spinner-border-sm text-success"
+                        role="status"
+                    >
+                        <span class="sr-only">Loading...</span>
+                    </div>
                 </button>
                 <button
                     class="btn btn-outline-danger ml-auto"
@@ -66,14 +73,15 @@
                 @save="saveComponent"
                 @delete="deleteComponent"
                 @save-sub-module="saveSubModule"
+                @changed="changed"
             />
         </draggable>
     </div>
     <div class="new-sidebar-template__footer">
         <button
+            v-if="active"
             class="btn btn-outline-primary"
             @click="addComponent"
-            v-if="active"
         >
             Aggiungi Componente
         </button>
@@ -83,6 +91,13 @@
             v-if="active"
         >
             Salva Sidebar
+            <div
+                v-if="this.saveDisabled"
+                class="spinner-border spinner-border-sm text-success"
+                role="status"
+            >
+                <span class="sr-only">Loading...</span>
+            </div>
         </button>
         <button
             class="btn btn-outline-danger ml-auto"
@@ -106,9 +121,10 @@ import draggable from 'vuedraggable'
 import DynamicParams from '../DynamicParams'
 import EditPanel from '../components/EditPanel.vue'
 import ModuleContainer from './ModuleContainer.vue'
-import NotificationsContainer from './NotificationsContainer.vue'
 
 import {
+    checkDuplicateInObject,
+    SizeUtil,
     Uuid
 }
 from '../../Utilities'
@@ -122,7 +138,6 @@ export default {
         draggable,
         EditPanel,
         ModuleContainer,
-        NotificationsContainer,
     },
     props: {
         isPost: {
@@ -181,7 +196,28 @@ export default {
             notifications: [],
             loaded: 0,
             counter: 0,
+            hasAwait: false,
+            saveDisabled: false,
+            processes: 0,
             cacheIdx: 0,
+        }
+    },
+    watch: {
+        '$route.params': function (params) {
+            // console.log('params cambiato', params);
+        },
+        modules: function (modules) {
+            this.init()
+        },
+        model: function (model) {
+            this.setModelKey('modulable_type', model)
+        },
+        modelIdx: function (id) {
+            this.setModelKey('modulable_id', id)
+        },
+        contentHeight: function (height) {
+            // console.log(height);
+            this.$refs.content.style.minHeight = height + 'px'
         }
     },
     computed: {
@@ -192,21 +228,21 @@ export default {
             return null
         }
     },
-    watch: {
-        '$route.params': function (params) {
-            // console.log('params cambiato', params);
-        },
-        modules: function (modules) {
-            this.init()
-        },
-        contentHeight: function (height) {
-            // console.log(height);
-            this.$refs.content.style.minHeight = height + 'px'
-        }
-    },
     methods: {
+        changed: function (subModule) {
+            let uuid = subModule.uuid
+            let idx = this.cached.findIndex(cache => cache.uuid === uuid)
+            if (idx > -1) {
+                this.cached.splice(idx, 1, subModule)
+            }
+        },
         editSidebar: function () {
             this.$emit('edit-sidebar')
+        },
+        setModelKey: function (key, value) {
+            for (let i = 0; i < this.cached.length; i++) {
+                this.cached[i][key] = value
+            }
         },
         init: function () {
             // imposta una variabile intermedia per poter modificare i moduli
@@ -240,69 +276,36 @@ export default {
             // this.debug()
             // console.log(this.cached);
         },
+        debug: function () {
+            // if (this.cached.length === 0 && this.cacheIdx !== 0) {
+            //     this.$nextTick(() => {
+            //         this.newComponent('row')
+            //     })
+            // }
+        },
         setInitials: function (objs) {
             for (let i = 0; i < objs.length; i++) {
                 objs[i].uuid = Uuid.get()
                 objs[i].isNew = false
 
-                if (objs[i].content.hasOwnProperty('modules')) {
+                if (objs[i].content.hasOwnProperty('modules') && objs[i].content.modules.length > 0) {
+                    // console.log('ha moduli', objs[i].content.modules.length);
                     objs[i].content.modules = this.setInitials(objs[i].content.modules)
                 }
             }
             return objs
         },
-
-        debug: function () {
-            if (this.cached.length === 0 && this.cacheIdx !== 0) {
-                this.$nextTick(() => {
-                    this.newComponent('row')
-                })
-            }
-        },
         addComponent: function () {
             this.$refs.componentSelector.show()
         },
-        newComponent: function (type) {
-            this.moduleType = type
-            this.dismissModal()
-
-            this.isEdit = false
-            const newModule = {
-                uuid: Uuid.get(),
-                type: type,
-                isNew: true,
-                order: this.cached.length,
-                modulable_id: this.cacheIdx,
-                modulable_type: this.model,
-                content: {},
-            }
-
-            // console.log(newModule);
-            this.cached.push(newModule)
-        },
-        saveSubModule: function (subModule) {
-            let idx = this.cached.findIndex(cache => cache.uuid === subModule.uuid)
-            if (idx > -1) {
-                this.cached.splice(idx, 1, subModule)
-                this.savePage()
-            }
-            // console.log(idx, subModule.uuid);
+        dismissModal: function () {
+            this.$refs.componentSelector.hide()
         },
         deletedComponent: function (component) {
             let idx = this.cached.findIndex(cache => cache.uuid === component.uuid)
             if (idx > -1) {
                 this.cached.splice(idx, 1)
             }
-        },
-        dismissModal: function () {
-            this.$refs.componentSelector.hide()
-        },
-        setModule: function (module) {
-            console.log('deprecata');
-        },
-        deleted: function (module) {
-            this.moduleType = null
-            this.$emit('deleted', module)
         },
         deleteAll: function () {
             // this.$emit('delete-all')
@@ -312,6 +315,9 @@ export default {
                 // console.log(data);
                 this.deleteComponent(data.id, data.isNew, data.uuid)
             }
+        },
+        saveComponent: function (current) {
+
         },
         deleteComponent: function (id, isNew, uuid) {
             // console.log('elimina componente', id, isNew, uuid);
@@ -352,6 +358,14 @@ export default {
             }
             return objs
         },
+        saveSubModule: function (subModule) {
+            let idx = this.cached.findIndex(cache => cache.uuid === subModule.uuid)
+            if (idx > -1) {
+                this.cached.splice(idx, 1, subModule)
+                this.savePage()
+            }
+            // console.log(idx, subModule.uuid);
+        },
         savePage: function (modelSaved = false) {
             this.$root.$emit('close-all-panels')
 
@@ -381,6 +395,96 @@ export default {
             else {
                 this.updateSidebar()
             }
+        },
+        formatRequest: function (obj) {
+            let form = new FormData()
+            // inserisco i campi normali
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    if (key === 'content') {
+                        let content = obj[key]
+
+                        form.append(key, JSON.stringify(content))
+                    }
+                    else if (key === 'uuid') {
+                        let hasFile = this.hasFile(obj[key])
+                        // se nel contenuto del modulo c'è un file
+                        if (hasFile) {
+                            form.append('file', hasFile)
+                        }
+                    }
+                    else {
+                        form.append(key, obj[key])
+                    }
+                }
+            }
+            return form
+        },
+        hasFile: function (uuid) {
+            // console.log(uuid);
+            let idx = this.files.findIndex(file => file.uuid === uuid)
+            if (idx > -1) {
+                return this.files[idx].file
+            }
+            return false
+        },
+        processAllPromises: function () {
+
+        },
+        processPromise: function () {
+
+        },
+        removeNewProperty: function () {
+
+        },
+        saveImage: function () {
+
+        },
+        formatFromResponse: function (obj, newObj) {
+            let temp = Object.assign({}, obj, newObj)
+            temp.id = Number(temp.id)
+            temp.modulable_id = Number(temp.modulable_id)
+            temp.isNew = false
+            temp.order = Number(temp.order)
+            temp.content = obj.content
+
+            return temp
+        },
+        sortModules: function (modules) {
+            this.cached = this.cached.map((cache, i) => {
+                let newModule = Object.assign({}, cache)
+                newModule['order'] = i
+                return newModule
+            })
+
+            this.savePage()
+        },
+        newComponent: function (type) {
+            this.moduleType = type
+            this.dismissModal()
+
+            this.isEdit = false
+            const newModule = {
+                uuid: Uuid.get(),
+                type: type,
+                isNew: true,
+                order: this.cached.length,
+                modulable_id: this.cacheIdx,
+                modulable_type: this.model,
+                content: {},
+            }
+
+            // console.log(newModule);
+            this.cached.push(newModule)
+        },
+
+        // non presenti
+        setModule: function (module) {
+            console.log('deprecata');
+        },
+        deleted: function (module) {
+            this.moduleType = null
+            this.$emit('deleted', module)
         },
         updateSidebar: function () {
             let promises = []
@@ -458,64 +562,11 @@ export default {
                     })
                 })
         },
-        formatFromResponse: function (obj, newObj) {
-            let temp = Object.assign({}, obj, newObj)
-            temp.id = Number(temp.id)
-            temp.modulable_id = Number(temp.modulable_id)
-            temp.isNew = false
-            temp.order = Number(temp.order)
-            temp.content = obj.content
-
-            return temp
-        },
-        saveComponent: function (current) {
-
-        },
         formatModuleData: function (source) {
             let obj = Object.assign({}, source)
 
         },
-        formatRequest: function (obj) {
-            let form = new FormData()
-            // inserisco i campi normali
-            for (let key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    if (key === 'content') {
-                        let content = obj[key]
 
-                        form.append(key, JSON.stringify(content))
-                    }
-                    else if (key === 'uuid') {
-                        let hasFile = this.hasFile(obj[key])
-                        // se nel contenuto del modulo c'è un file
-                        if (hasFile) {
-                            form.append('file', hasFile)
-                        }
-                    }
-                    else {
-                        form.append(key, obj[key])
-                    }
-                }
-            }
-            return form
-        },
-        hasFile: function (uuid) {
-            // console.log(uuid);
-            let idx = this.files.findIndex(file => file.uuid === uuid)
-            if (idx > -1) {
-                return this.files[idx].file
-            }
-            return false
-        },
-        sortModules: function (modules) {
-            this.cached = this.cached.map((cache, i) => {
-                let newModule = Object.assign({}, cache)
-                newModule['order'] = i
-                return newModule
-            })
-
-            this.savePage()
-        }
     },
     mounted: function () {
         this.init()
