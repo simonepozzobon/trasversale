@@ -326,6 +326,8 @@ export default {
                 // console.log(data);
                 this.deleteComponent(data.id, data.isNew, data.uuid)
             }
+
+            this.cached = []
         },
         saveComponent: function (current) {
 

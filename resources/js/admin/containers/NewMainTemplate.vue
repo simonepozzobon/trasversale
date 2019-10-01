@@ -219,6 +219,12 @@ export default {
         contentHeight: function (height) {
             this.$refs.content.style.minHeight = height + 'px'
         },
+        // cached: {
+        //     handler: function (cached) {
+        //         console.log('cambiati');
+        //     },
+        //     deep: true,
+        // }
         processes: function (value) {
             // console.log(value);
             if (value <= 0) {
@@ -329,6 +335,8 @@ export default {
                 // console.log(data);
                 this.deleteComponent(data.id, data.isNew, data.uuid)
             }
+
+            this.cached = []
         },
         saveComponent: function (current) {
 
