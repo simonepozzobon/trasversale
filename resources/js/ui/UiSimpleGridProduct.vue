@@ -1,27 +1,29 @@
-<template lang="html">
-    <div class="grid-product">
-        <div class="grid-product__image">
-            <img
-                v-if="image"
-                class="grid-product__figure"
-                :src="image"
-                :alt="content.title" />
+<template>
+<div class="grid-product">
+    <div class="grid-product__image">
+        <img
+            v-if="image"
+            class="grid-product__figure"
+            :src="image"
+            :alt="content.title"
+            @click.prevent="goToProduct"
+        />
+    </div>
+    <div class="grid-product__details">
+        <div class="grid-product__title">
+            {{ content.title }}
         </div>
-        <div class="grid-product__details">
-            <div class="grid-product__title">
-                {{ content.title }}
-            </div>
-            <div class="grid-product__reviews">
-                *****
-            </div>
-            <div class="grid-product__action">
-                <a
-                    href=""
-                    class="grid-product__link"
-                    @click.prevent="goToProduct">Vedi il programma e iscriviti</a>
-            </div>
+        <div class="grid-product__action">
+            <a
+                href=""
+                class="grid-product__link"
+                @click.prevent="goToProduct"
+            >
+                Vedi il programma e iscriviti
+            </a>
         </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -92,6 +94,7 @@ export default {
         max-height: 100%;
         width: 100%;
         height: auto;
+        cursor: pointer;
     }
 
     &__details {
@@ -105,16 +108,23 @@ export default {
 
     &__action,
     &__price,
-    &__reviews,
-    &__title {
+    &__reviews {
         text-align: center;
     }
 
+    // &__title {
+    //     font-family: $font-family-sans-serif-var;
+    //     font-size: $font-size-base * 0.8;
+    //     letter-spacing: 0.05em;
+    //     text-transform: uppercase;
+    // }
+
     &__title {
-        font-family: $font-family-sans-serif-var;
-        font-size: $font-size-base * 0.8;
+        font-size: $font-size-lg * 0.8;
+        font-weight: $font-weight-bold;
         letter-spacing: 0.05em;
-        text-transform: uppercase;
+        margin-bottom: $spacer * $line-height-base / 2;
+        cursor: pointer;
     }
 
     &__price {
@@ -122,7 +132,7 @@ export default {
     }
 
     &__link {
-        color: $orange;
+        color: $primary;
         transition: $transition-base;
     }
 

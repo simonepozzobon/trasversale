@@ -126,6 +126,16 @@ export default {
                         let data = moment(obj[key]).format('YYYY-MM-DD HH:mm:ss')
                         form.append(key, data)
                     }
+                    else if (key === 'published_at') {
+                        if (obj[key]) {
+                            let data = moment(obj[key]).format('YYYY-MM-DD HH:mm:ss')
+                            form.append(key, data)
+                        }
+                        else {
+                            let data = moment(obj[key]).format('YYYY-MM-DD HH:mm:ss')
+                            form.append(key, data)
+                        }
+                    }
                     else {
                         form.append(key, obj[key])
                     }

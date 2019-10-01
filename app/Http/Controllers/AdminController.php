@@ -153,16 +153,31 @@ class AdminController extends Controller
             $post->title = $request->title;
         }
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $media = Utility::save_image($file);
-            $post->thumb = $media->landscape;
+        if (isset($request->is_edit)) {
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $media = Utility::save_image($file);
+                $post->thumb = $media->landscape;
+            }
         } else {
-            $post->thumb = 'no-image';
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $media = Utility::save_image($file);
+                $post->thumb = $media->landscape;
+            } else {
+                $post->thumb = 'no-image';
+            }
         }
 
         if (isset($request->price)) {
             $post->price = $request->price;
+        }
+
+        if (isset($request->published_at)) {
+            $string_published = strtotime($request->published_at);
+
+            $published_at = Carbon::parse($string_published)->format('Y-m-d H:i:s');
+            $post->published_at = $published_at;
         }
 
         if (isset($request->start_at) && $request->start_at && $request->start_at != 'null') {

@@ -1,7 +1,6 @@
 const PostNews = {
     name: 'post-news',
-    options: [
-        {
+    options: [{
             key: 'title',
             label: 'Titolo',
             required: true,
@@ -43,7 +42,13 @@ const PostNews = {
                     })
                 }
             },
-        }
+        },
+        {
+            key: 'published_at',
+            label: 'Data di pubblicazione',
+            type: 'date-picker',
+            required: true,
+        },
     ],
 }
 
