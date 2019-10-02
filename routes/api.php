@@ -19,19 +19,25 @@ Route::middleware('auth:api')->get(
     }
 );
 
-Route::prefix('payment')->group(function() {
-    Route::get('auth', 'PaymentController@generate_token');
-    Route::post('order', 'PaymentController@save_order');
-    Route::post('transaction', 'PaymentController@create_transaction');
-});
+Route::prefix('payment')->group(
+    function () {
+        Route::get('auth', 'PaymentController@generate_token');
+        Route::post('order', 'PaymentController@save_order');
+        Route::post('transaction', 'PaymentController@create_transaction');
+    }
+);
 
-Route::prefix('mail')->group(function() {
-    Route::post('send', 'MailController@send_mail_form');
-    Route::post('cart-info', 'MailController@send_cart_info');
-    Route::post('teacher-card', 'MailController@teacher_card');
-});
+Route::prefix('mail')->group(
+    function () {
+        Route::post('send', 'MailController@send_mail_form');
+        Route::post('cart-info', 'MailController@send_cart_info');
+        Route::post('teacher-card', 'MailController@teacher_card');
+    }
+);
 
 Route::get('get-page/{page}/{subpage?}/{slug?}', 'MainController@get_dynamic_item');
+
+Route::get('get-products', 'MainController@get_products');
 
 Route::post('search', 'SearchController@simple_search');
 
@@ -44,11 +50,13 @@ Route::prefix('admin')->group(
         Route::get('get-categories', 'AdminController@get_categories');
         // Route::post('update-component', 'AdminController@update_component');
 
-        Route::prefix('subscribers')->group(function() {
-            Route::get('{id}', 'SubscribersController@get_subscribers');
-            Route::post('save', 'SubscribersController@save_subscriber');
-            Route::post('cancel', 'SubscribersController@cancel_subrscriber_order');
-        });
+        Route::prefix('subscribers')->group(
+            function () {
+                Route::get('{id}', 'SubscribersController@get_subscribers');
+                Route::post('save', 'SubscribersController@save_subscriber');
+                Route::post('cancel', 'SubscribersController@cancel_subrscriber_order');
+            }
+        );
 
         Route::prefix('post-type')->group(
             function () {
@@ -72,7 +80,7 @@ Route::prefix('admin')->group(
         );
 
         Route::prefix('utilities')->group(
-            function() {
+            function () {
                 Route::post('/save-image', 'AdminController@save_image');
                 Route::post('upload-pdf', 'AdminController@upload_pdf');
             }
