@@ -84,11 +84,9 @@ export default {
             if (this.options.mode == 'last') {
                 if (blocks.length > 0) {
                     if (blocks[0].hasOwnProperty('published_at')) {
-                        console.log('cie');
                         this.filtered = orderBy(blocks, ['published_at'], ['desc'])
                     }
                     else {
-                        console.log('sdfkdjgjkdg');
                         this.filtered = orderBy(blocks, ['created_at'], ['desc'])
                     }
                 }
@@ -159,6 +157,9 @@ export default {
 
                 return newBlock
             })
+        }
+        else {
+            this.cached = this.blocks
         }
 
 
