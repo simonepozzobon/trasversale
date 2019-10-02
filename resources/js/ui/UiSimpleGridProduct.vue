@@ -108,7 +108,8 @@ export default {
 
     &__action,
     &__price,
-    &__reviews {
+    &__reviews,
+    &__title {
         text-align: center;
     }
 
