@@ -35,7 +35,7 @@ const router = new VueRouter({
     mode: 'history',
     dir: __dirname,
     routes: routes,
-    base: '/!bi0id9B'
+    base: '/bi0id9B'
 })
 
 const admin = new Vue({
