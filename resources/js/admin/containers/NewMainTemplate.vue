@@ -32,6 +32,17 @@
     <div class="new-main-template__header">
         <div class="new-main-template__head">
             <div
+                v-if="!active && isPost"
+                class="new-main-template__title"
+            >
+                <button
+                    class="btn btn-outline-dark"
+                    @click="editMain"
+                >
+                    Modifica Contenuto Principale
+                </button>
+            </div>
+            <div
                 class="new-main-template__action"
                 v-if="active"
             >
