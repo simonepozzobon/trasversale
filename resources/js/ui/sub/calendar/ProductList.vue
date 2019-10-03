@@ -30,5 +30,7 @@ export default {
 <style lang="scss" scoped>
 @import '~styles/shared';
 
-.prod-list {}
+.prod-list {
+    margin-bottom: $spacer;
+}
 </style>
