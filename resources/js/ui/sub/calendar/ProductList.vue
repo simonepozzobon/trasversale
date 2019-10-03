@@ -31,6 +31,6 @@ export default {
 @import '~styles/shared';
 
 .prod-list {
-    margin-bottom: $spacer * 1.618;
+    margin-bottom: $spacer * $line-height-base;
 }
 </style>

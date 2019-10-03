@@ -223,6 +223,10 @@ export default {
                 let formattedDataForProducts = formattedCurrentYear + '-' + formattedCurrentMonth + '-' + formattedDay
                 let productsForDay = this.getProductForDate(formattedDataForProducts)
 
+                // aggiunge i prodotti iniziali
+                if (formattedDay === this.initialDate && this.todayInCurrentMonthAndYear) {
+                    this.products = productsForDay
+                }
 
                 dateList[countDayInCurrentMonth] = {
                     key: countDayInCurrentMonth,
@@ -346,7 +350,6 @@ export default {
             this.dateContext = this.previousMonth;
         },
         setSelectedDate: function (date) {
-            console.log(date.products);
             this.selectedDate = date.moment;
             this.products = date.products
         },
@@ -402,7 +405,7 @@ export default {
     flex-direction: column;
     align-items: center;
     max-width: 70rem;
-    margin-bottom: $spacer * $line-height-base;
+    margin-bottom: $spacer / 2;
 
     &__header {
         width: 100%;
