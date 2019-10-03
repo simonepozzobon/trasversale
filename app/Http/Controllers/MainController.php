@@ -20,7 +20,7 @@ class MainController extends Controller
 
     public function get_products()
     {
-        $products = Product::all();
+        $products = Product::with('slug')->get();
         return [
             'products' => $products
         ];
