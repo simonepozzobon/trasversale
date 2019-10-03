@@ -1,7 +1,6 @@
 const Quote = {
     name: 'quote',
-    options: [
-        {
+    options: [{
             key: 'content',
             label: 'Citazione',
             required: true,
@@ -10,6 +9,12 @@ const Quote = {
         {
             key: 'source',
             label: 'Fonte',
+            required: false,
+            type: 'text',
+        },
+        {
+            key: 'source_link',
+            label: 'Link Fonte',
             required: false,
             type: 'text',
         },

@@ -76,6 +76,7 @@
         v-else-if="module.type === 'quote'"
         :quote="content.content"
         :source="content.source"
+        :source-link="content.hasOwnProperty('source_link') ? content.source_link : null"
     />
 
     <ui-calendar v-else-if="module.type === 'calendar'" />
