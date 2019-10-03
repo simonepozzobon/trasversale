@@ -10,9 +10,20 @@
 
         <footer
             class="blockquote-footer"
-            v-if="source"
+            v-if="source && sourceLink"
         >
-            {{source}}
+            <a
+                :href="sourceLink"
+                target="_blank"
+            >
+                {{ source }}
+            </a>
+        </footer>
+        <footer
+            class="blockquote-footer"
+            v-else-if="source"
+        >
+            {{ source }}
         </footer>
     </blockquote>
 </div>
@@ -30,6 +41,10 @@ export default {
             type: String,
             default: null,
         },
+        sourceLink: {
+            type: String,
+            default: null,
+        }
     },
 }
 </script>
