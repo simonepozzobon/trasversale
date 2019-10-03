@@ -18,7 +18,7 @@
             >
                 <button
                     class="btn btn-outline-dark"
-                    @click="editSidebar"
+                    @click.prevent="editSidebar"
                 >
                     Modifica Sidebar
                 </button>
@@ -29,13 +29,13 @@
             >
                 <button
                     class="btn btn-outline-primary"
-                    @click="addComponent"
+                    @click.prevent="addComponent"
                 >
                     Aggiungi Componente
                 </button>
                 <button
                     class="btn btn-outline-success ml-2"
-                    @click="savePage"
+                    @click.prevent="savePage"
                 >
                     Salva Sidebar
                     <div
@@ -48,7 +48,7 @@
                 </button>
                 <button
                     class="btn btn-outline-danger ml-auto"
-                    @click="deleteAll"
+                    @click.prevent="deleteAll"
                 >
                     Elimina tutto
                 </button>
@@ -81,13 +81,13 @@
         <button
             v-if="active"
             class="btn btn-outline-primary"
-            @click="addComponent"
+            @click.prevent="addComponent"
         >
             Aggiungi Componente
         </button>
         <button
             class="btn btn-outline-success ml-2"
-            @click="savePage"
+            @click.prevent="savePage"
             v-if="active"
         >
             Salva Sidebar
@@ -102,7 +102,7 @@
         <button
             class="btn btn-outline-danger ml-auto"
             v-if="active"
-            @click="deleteAll"
+            @click.prevent="deleteAll"
         >
             Elimina tutto
         </button>
@@ -379,7 +379,10 @@ export default {
             }
             // console.log(idx, subModule.uuid);
         },
-        savePage: function (modelSaved = false) {
+        savePage: function (event = null, modelSaved = false) {
+            if (typeof modelSaved != 'boolean') {
+                modelSaved = false
+            }
             return new Promise((resolve, reject) => {
                 this.$root.$emit('close-all-panels')
 
