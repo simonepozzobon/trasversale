@@ -375,16 +375,22 @@ export default {
             );
         },
         getProductForDate: function (date) {
-            let products = this.$root.products.filter(product => {
-                if (product.start_at) {
-                    let start = moment(product.start_at).format('YYYY-MM-DD')
-                    if (start == date) {
-                        return product
+            if (this.$root.products) {
+                let products = this.$root.products.filter(product => {
+                    if (product.start_at) {
+                        let start = moment(product.start_at).format('YYYY-MM-DD')
+                        if (start == date) {
+                            return product
+                        }
                     }
-                }
-            })
+                })
 
-            return products
+                return products
+            }
+            else {
+                return []
+            }
+
         },
     },
     filters: {
