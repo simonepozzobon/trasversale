@@ -528,6 +528,7 @@ export default {
             return temp
         },
         sortModules: function (modules) {
+            console.log('sortModules');
             let sorted = this.cached.map((cache, i) => {
                 let newModule = Object.assign({}, cache)
                 newModule['order'] = i
@@ -536,6 +537,8 @@ export default {
 
 
             this.cached = Object.assign([], sorted)
+            console.log(this.cached);
+
         },
         newComponent: function (type) {
             this.moduleType = type
