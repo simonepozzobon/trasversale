@@ -22,7 +22,7 @@
             >
                 <button
                     class="btn btn-outline-dark"
-                    @click="editMain"
+                    @click.prevent="editMain"
                 >
                     Modifica Contenuto Principale
                 </button>
@@ -37,7 +37,7 @@
             >
                 <button
                     class="btn btn-outline-dark"
-                    @click="editMain"
+                    @click.prevent="editMain"
                 >
                     Modifica Contenuto Principale
                 </button>
@@ -48,14 +48,14 @@
             >
                 <button
                     class="btn btn-outline-primary"
-                    @click="addComponent"
+                    @click.prevent="addComponent"
                 >
                     Aggiungi Componente
                 </button>
                 <button
                     class="btn btn-outline-success ml-2"
                     :disabled="saveDisabled"
-                    @click="savePage"
+                    @click.prevent="savePage"
                 >
                     {{ customSave }}
                     <div
@@ -68,7 +68,7 @@
                 </button>
                 <button
                     class="btn btn-outline-danger ml-auto"
-                    @click="deleteAll"
+                    @click.prevent="deleteAll"
                 >
                     Elimina tutto
                 </button>
@@ -102,7 +102,7 @@
         <button
             v-if="active"
             class="btn btn-outline-primary"
-            @click="addComponent"
+            @click.prevent="addComponent"
         >
             Aggiungi Componente
         </button>
@@ -110,7 +110,7 @@
             v-if="active"
             class="btn btn-outline-success ml-2"
             :disabled="saveDisabled"
-            @click="savePage"
+            @click.prevent="savePage"
         >
             {{ customSave }}
             <div
@@ -124,7 +124,7 @@
         <button
             class="btn btn-outline-danger ml-auto"
             v-if="active"
-            @click="deleteAll"
+            @click.prevent="deleteAll"
         >
             Elimina tutto
         </button>
@@ -400,6 +400,9 @@ export default {
             // console.log(idx, subModule.uuid);
         },
         savePage: function (event = null, modelSaved = false) {
+            if (typeof modelSaved != 'boolean') {
+                modelSaved = false
+            }
             return new Promise((resolve, reject) => {
 
                 // if (modelSaved) {
