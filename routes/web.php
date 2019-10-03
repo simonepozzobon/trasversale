@@ -13,7 +13,7 @@
 // Route::get('test', 'MainController@test');
 Route::get('test', 'SearchController@test');
 
-Route::prefix('!bi0id9B')->group(
+Route::prefix('bi0id9B')->group(
     function () {
         Route::get('/', 'AdminController@index');
         Route::get('/{slug}', 'AdminController@index')->where('slug', '.*');
