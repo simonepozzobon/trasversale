@@ -41,6 +41,7 @@ const app = new Vue({
                 cart: [],
                 search: null,
                 searchResults: [],
+                products: [],
             }
         },
         methods: {
@@ -78,6 +79,11 @@ const app = new Vue({
 
             }
 
+        },
+        created: function () {
+            this.$http.get('/api/get-products').then(response => {
+                this.products = response.data.products
+            })
         },
         mounted: function () {
             // console.log(this.$route.name);

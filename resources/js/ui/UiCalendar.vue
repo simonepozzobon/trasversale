@@ -215,6 +215,10 @@ export default {
                 let weekDay = this.getWeekDay(countDayInCurrentMonth);
                 let formattedDay = this.formattingDay(day);
 
+                let formattedDataForProducts = formattedCurrentYear + '-' + formattedCurrentMonth + '-' + formattedDay
+                console.log(formattedDataForProducts);
+
+
                 dateList[countDayInCurrentMonth] = {
                     key: countDayInCurrentMonth,
                     dayNumber: formattedDay,
@@ -338,10 +342,10 @@ export default {
             this.selectedDate = this.today;
             this.dateContext = this.today;
         },
-        formattingDay(day) {
+        formattingDay: function (day) {
             return ("0" + day).slice(-2);
         },
-        getWeekDay(day) {
+        getWeekDay: function (day) {
             let index = day;
             if (index > 7) {
                 index %= 7;

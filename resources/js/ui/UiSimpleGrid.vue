@@ -82,13 +82,13 @@ export default {
         },
         sortBlocks: function (blocks) {
             if (this.options.mode == 'last') {
-                if (blocks[0].hasOwnProperty('published_at')) {
-                    console.log('cie');
-                    this.filtered = orderBy(blocks, ['published_at'], ['desc'])
-                }
-                else {
-                    console.log('sdfkdjgjkdg');
-                    this.filtered = orderBy(blocks, ['created_at'], ['desc'])
+                if (blocks.length > 0) {
+                    if (blocks[0].hasOwnProperty('published_at')) {
+                        this.filtered = orderBy(blocks, ['published_at'], ['desc'])
+                    }
+                    else {
+                        this.filtered = orderBy(blocks, ['created_at'], ['desc'])
+                    }
                 }
             }
             else {
@@ -144,16 +144,22 @@ export default {
         if (this.options.mode == 'last') {
             this.cached = this.blocks.map(block => {
                 let newBlock = Object.assign({}, block)
-                if (typeof newBlock.content === 'string') {
-                    newBlock.content = JSON.parse(block.content)
-                }
+                if (newBlock) {
+                    if (typeof newBlock.content === 'string') {
+                        newBlock.content = JSON.parse(block.content)
+                    }
 
-                if (newBlock.content.hasOwnProperty('published_at')) {
-                    newBlock['published_at'] = newBlock.content.published_at
+                    if (newBlock.content.hasOwnProperty('published_at')) {
+                        newBlock['published_at'] = newBlock.content.published_at
+                    }
+
                 }
 
                 return newBlock
             })
+        }
+        else {
+            this.cached = this.blocks
         }
 
 

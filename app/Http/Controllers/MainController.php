@@ -8,6 +8,7 @@ use App\Module;
 use App\SubPage;
 use App\Utility;
 use App\StaticPage;
+use App\Product;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
@@ -15,6 +16,14 @@ class MainController extends Controller
     public function home()
     {
         return view('welcome');
+    }
+
+    public function get_products()
+    {
+        $products = Product::all();
+        return [
+            'products' => $products
+        ];
     }
 
     public function test()
