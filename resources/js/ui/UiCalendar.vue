@@ -23,14 +23,15 @@
                     :class="{
                                 'selected': dateIsEqualSelectDate(date),
                             }"
-                    @click="setSelectedDate(date.moment)"
+                    @click="setSelectedDate(date)"
                 >
                     <div
                         class="date__information"
                         :class="{
                                     'today': date.today,
                                     'blank': date.blank,
-                                    'no-border-right': date.key % 7 === 0
+                                    'no-border-right': date.key % 7 === 0,
+                                    'has-products': date.products.length > 0
                                 }"
                     >
                         <span class="day">{{date.dayNumber}}</span>
@@ -73,6 +74,7 @@
             </div>
         </div>
     </div>
+    <product-list :products="this.products" />
 </div>
 </template>
 
@@ -80,22 +82,26 @@
 // sorgente: https://codepen.io/sanya_misharin/pen/vQBeLV
 // sorgente eventi: https://codepen.io/sanya_misharin/pen/bQgjog
 import moment from 'moment'
+import ProductList from './sub/calendar/ProductList.vue'
 
 export default {
     name: 'UiCalendar',
+    components: {
+        ProductList,
+    },
     data: function () {
         return {
             today: moment(),
             dateContext: moment(),
             selectedDate: moment(),
             days: ["L", "M", "M", "G", "V", "S", "D"],
+            products: []
         }
     },
     computed: {
         year: function () {
             return this.dateContext.format("Y");
         },
-
         month: function () {
             return this.dateContext.format("MMMM");
         },
@@ -103,11 +109,9 @@ export default {
         daysInMonth: function () {
             return this.dateContext.daysInMonth();
         },
-
         currentDate: function () {
             return this.dateContext.get("date");
         },
-
         firstDayOfMonth: function () {
             let firstDay = moment(this.dateContext).subtract(this.currentDate, "days");
             return firstDay.weekday();
@@ -203,7 +207,8 @@ export default {
                         formattedPreviousYear +
                         formattedPreviousMonth +
                         formattedDay
-                    )
+                    ),
+                    products: [],
                 };
             });
 
@@ -216,7 +221,7 @@ export default {
                 let formattedDay = this.formattingDay(day);
 
                 let formattedDataForProducts = formattedCurrentYear + '-' + formattedCurrentMonth + '-' + formattedDay
-                console.log(formattedDataForProducts);
+                let productsForDay = this.getProductForDate(formattedDataForProducts)
 
 
                 dateList[countDayInCurrentMonth] = {
@@ -236,7 +241,8 @@ export default {
                         formattedCurrentYear +
                         formattedCurrentMonth +
                         formattedDay
-                    )
+                    ),
+                    products: productsForDay,
                 };
             }
 
@@ -268,6 +274,9 @@ export default {
                         additional = false;
                     }
 
+                    let formattedDataForProducts = formattedCurrentYear + '-' + formattedCurrentMonth + '-' + formattedDay
+                    let productsForDay = this.getProductForDate(formattedDataForProducts)
+
                     dateList[countDayInCurrentMonth] = {
                         key: countDayInCurrentMonth,
                         dayNumber: formattedDay,
@@ -284,7 +293,8 @@ export default {
                             formattedNextYear +
                             formattedNextMonth +
                             formattedDay
-                        )
+                        ),
+                        products: productsForDay,
                     };
                 }
             }
@@ -335,8 +345,10 @@ export default {
         subtractMonth: function () {
             this.dateContext = this.previousMonth;
         },
-        setSelectedDate: function (moment) {
-            this.selectedDate = moment;
+        setSelectedDate: function (date) {
+            console.log(date.products);
+            this.selectedDate = date.moment;
+            this.products = date.products
         },
         goToday: function () {
             this.selectedDate = this.today;
@@ -358,6 +370,18 @@ export default {
                 this.selectedDate.format("YYYYMMDD") ===
                 date.moment.format("YYYYMMDD")
             );
+        },
+        getProductForDate: function (date) {
+            let products = this.$root.products.filter(product => {
+                if (product.start_at) {
+                    let start = moment(product.start_at).format('YYYY-MM-DD')
+                    if (start == date) {
+                        return product
+                    }
+                }
+            })
+
+            return products
         },
     },
     filters: {
@@ -429,7 +453,7 @@ export default {
                     height: $spacer * 1.6;
                     position: absolute;
                     @include border-radius(50%);
-                    background-color: rgba($red, .8);
+                    background-color: rgba($red, .6);
                     top: 50%;
                     left: 50%;
                     transform: translate(-50%, -50%);
@@ -444,13 +468,14 @@ export default {
             &__information {
                 &.today {
                     position: relative;
+
                     &::before {
                         content: '';
-                        width: $spacer * 1.9;
-                        height: $spacer * 1.9;
+                        width: $spacer * 1.6;
+                        height: $spacer * 1.6;
                         position: absolute;
                         @include border-radius(50%);
-                        background-color: rgba($primary, .5);
+                        background-color: rgba($primary, .3);
                         top: 50%;
                         left: 50%;
                         transform: translate(-50%, -50%);
@@ -460,6 +485,23 @@ export default {
 
                 &.blank {
                     opacity: 0;
+                }
+
+                &.has-products {
+                    position: relative;
+
+                    &::before {
+                        content: '';
+                        width: $spacer * 1.6;
+                        height: $spacer * 1.6;
+                        position: absolute;
+                        @include border-radius(50%);
+                        background-color: rgba($yellow, .3);
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        z-index: -2;
+                    }
                 }
             }
         }
