@@ -76,7 +76,7 @@
                 class="col-12 personal-data-form__label"
                 ref="code"
             >
-                Numero della carta
+                Codice del buono
                 <input
                     type="code"
                     class="form-control personal-data-form__input"

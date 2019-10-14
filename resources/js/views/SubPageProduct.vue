@@ -106,7 +106,7 @@
                     <label
                         class="custom-control-label"
                         for="teacher-card"
-                    >Desidero pagare con la teacher card</label>
+                    >Desidero pagare con la carta del docente</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input
