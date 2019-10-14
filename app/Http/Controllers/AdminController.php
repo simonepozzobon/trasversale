@@ -193,6 +193,10 @@ class AdminController extends Controller
             $post->end_at = $end_at;
         }
 
+        if (isset($request->teacher_card_payment)) {
+            $post->teacher_card_payment = $request->teacher_card_payment;
+        }
+
         if (isset($request->hours)) {
             $post->hours = $request->hours;
         }

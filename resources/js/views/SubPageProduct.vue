@@ -94,7 +94,10 @@
                         for="pay-transfer"
                     >Desidero iscrivermi e pagare con bonifico</label>
                 </div>
-                <div class="custom-control custom-radio">
+                <div
+                    class="custom-control custom-radio"
+                    v-if="this.item.teacher_card_payment == true || this.item.teacher_card_payment == '1'"
+                >
                     <input
                         type="radio"
                         id="teacher-card"

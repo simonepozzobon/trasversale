@@ -13,6 +13,13 @@ const PostProduct = {
             type: 'text',
         },
         {
+            key: 'teacher_card_payment',
+            label: 'Pagamento con carta del docente',
+            required: false,
+            default: false,
+            type: 'switch',
+        },
+        {
             key: 'has_limited_guests',
             label: 'Ha posti limitati',
             required: false,
