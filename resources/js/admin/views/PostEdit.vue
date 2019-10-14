@@ -116,14 +116,14 @@ export default {
                     title: post.title,
                     price: post.price,
                     vat: post.vat,
-                    vat_included: post.vat_included,
+                    vat_included: post.vat_included == 1 ? true : false,
                     teacher_card_payment: post.teacher_card_payment,
                     slug: post.slug && post.slug.hasOwnProperty('slug') ? post.slug.slug : null,
                     preview: post.thumb,
                     category: post.category.id,
                     forwho: post.forwho,
-                    has_limited_guests: post.has_limited_guests,
-                    guests_total: post.has_limited_guests,
+                    has_limited_guests: post.has_limited_guests == 1 ? true : false,
+                    guests_total: post.guests_total,
                 }
 
                 if (post.hasOwnProperty('hours')) {
