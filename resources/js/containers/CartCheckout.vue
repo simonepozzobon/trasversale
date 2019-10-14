@@ -161,9 +161,18 @@ export default {
                 let totalQ = 0
 
                 let items = this.$root.cart.map(item => {
-                    total = total + (item.item.price * item.item.quantity)
-                    totalQ = totalQ + item.item.quantity
+                    console.log(item);
+                    // verifica iva
+                    if (item.item.vat_included == 1 || item.item.vat_included == true) {
+                        total = total + (item.item.price * item.item.quantity)
+                    }
+                    else {
+                        let vat = (item.item.price * Number(item.item.vat)) / 100
+                        let item_price = item.item.price + vat
+                        total = total + (item_price * item.item.quantity)
+                    }
 
+                    totalQ = totalQ + item.item.quantity
                 })
                 this.total = total
 

@@ -46,6 +46,10 @@
             <div class="cart-item__price cart-item__info">
                 {{ item.price.toFixed(2) }} €
             </div>
+            <div class="cart-item__price cart-item__info">
+                <span v-if="item.vat_included == 1">Iva Incl.</span>
+                <span v-else>iva al {{ item.vat }} %</span>
+            </div>
         </div>
     </div>
 </div>

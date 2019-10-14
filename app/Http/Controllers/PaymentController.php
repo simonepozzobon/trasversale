@@ -13,14 +13,16 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function __construct ()
+    public function __construct()
     {
-        $this->gateway = new Gateway([
+        $this->gateway = new Gateway(
+            [
             'environment' => env('BRAINTREE_ENV'),
             'merchantId' => env('BRAINTREE_MERCHANT_ID'),
             'publicKey' => env('BRAINTREE_PUBLIC_KEY'),
             'privateKey' => env('BRAINTREE_PRIVATE_KEY'),
-        ]);
+            ]
+        );
     }
 
 
@@ -93,18 +95,27 @@ class PaymentController extends Controller
 
         $amount = 0;
         foreach ($items as $key => $item) {
-            $subtotal = $item->price * $item->quantity;
+            if ($item->vat_included == 1) {
+                $subtotal = $item->price * $item->quantity;
+            } else {
+                $vat = $item->price * $item->vat;
+                $item_price = $item->price + $vat;
+                $subtotal = $item_price * $item->quantity;
+            }
+
             $amount = $amount + $subtotal;
         }
 
         try {
-            $results = $this->gateway->transaction()->sale([
-                'amount' => $amount,
-                'paymentMethodNonce' => $nonce,
-                'options' => [
-                    'submitForSettlement' => True
+            $results = $this->gateway->transaction()->sale(
+                [
+                    'amount' => $amount,
+                    'paymentMethodNonce' => $nonce,
+                    'options' => [
+                        'submitForSettlement' => true
+                    ]
                 ]
-            ]);
+            );
         } catch (\Exception $e) {
             return [
                 'success' => false,
@@ -127,16 +138,17 @@ class PaymentController extends Controller
 
         foreach ($items as $key => $item) {
             $product = $item->product;
-                if ($product->has_limited_guests == 1) {
-                    $product = $this->set_available($product);
-                    $product->guests_available = $product->guests_available - $item->quantity;
-                    $product->guests_confirmed = $product->guests_confirmed + $item->quantity;
-                    $product->save();
-                }
+            if ($product->has_limited_guests == 1) {
+                $product = $this->set_available($product);
+                $product->guests_available = $product->guests_available - $item->quantity;
+                $product->guests_confirmed = $product->guests_confirmed + $item->quantity;
+                $product->save();
+            }
         }
 
         return [
             'success' => true,
+            'amount' => $amount,
             'results' => $results,
             'items' => $items,
         ];
