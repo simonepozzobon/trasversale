@@ -194,7 +194,7 @@ class AdminController extends Controller
         }
 
         if (isset($request->teacher_card_payment)) {
-            $post->teacher_card_payment = $request->teacher_card_payment;
+            $post->teacher_card_payment = $request->teacher_card_payment == true ? 1 : 0;
         }
 
         if (isset($request->hours)) {
