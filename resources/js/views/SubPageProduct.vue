@@ -50,7 +50,7 @@
                 Posti disponibili
             </div>
             <div class="ui-sidebar-content__paragraph">
-                {{ this.item.guests_available }} di {{ this.item.guests_total }}
+                {{ this.item.guests_available }}
             </div>
         </div>
         <div class="ui-sidebar-content ui-sidebar-content--price">
