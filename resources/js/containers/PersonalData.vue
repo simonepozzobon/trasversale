@@ -248,10 +248,7 @@
                     />
                 </label>
             </div>
-            <div
-                class="form-group row"
-                v-if="form.type != 'privato'"
-            >
+            <div class="form-group row">
                 <label
                     for="cf"
                     class="col-12 personal-data-form__label"
@@ -349,7 +346,7 @@ export default {
                 cf: null,
             },
             requiredFields: {
-                privato: ['language', 'name', 'family-name', 'email', 'phone', 'address', 'city', 'province', 'postal_code', 'country'],
+                privato: ['language', 'name', 'family-name', 'email', 'phone', 'address', 'city', 'province', 'postal_code', 'country', 'cf'],
                 professionista: ['language', 'ragione_sociale', 'email', 'pec', 'phone', 'address', 'city', 'province', 'postal_code', 'country', 'vat', 'cf', 'codice_destinatario'],
                 azienda: ['language', 'ragione_sociale', 'email', 'pec', 'phone', 'address', 'city', 'province', 'postal_code', 'country', 'vat', 'cf', 'codice_destinatario'],
             },
