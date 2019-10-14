@@ -58,7 +58,8 @@
                 Prezzo
             </div>
             <div class="ui-sidebar-content__price">
-                {{ item.price.toFixed(2) }} € + IVA
+                {{ item.price.toFixed(2) }} €
+                <span v-if="this.item.vat_included == false || this.item.vat_included == '0'">+ IVA</span>
             </div>
         </div>
         <div class="ui-sidebar-buy">

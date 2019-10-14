@@ -13,6 +13,21 @@ const PostProduct = {
             type: 'text',
         },
         {
+            key: 'vat_included',
+            label: 'Prezzo iva inclusa',
+            required: false,
+            default: false,
+            type: 'switch',
+        },
+        {
+            key: 'vat',
+            label: 'Iva',
+            required: true,
+            type: 'text',
+            default: 0,
+            info: 'in percentuale, inserire 22 per 22%',
+        },
+        {
             key: 'teacher_card_payment',
             label: 'Pagamento con carta del docente',
             required: false,

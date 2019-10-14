@@ -173,6 +173,14 @@ class AdminController extends Controller
             $post->price = $request->price;
         }
 
+        if (isset($request->vat_included)) {
+            $post->vat_included = $request->vat_included == true ? 1 : 0;
+        }
+
+        if (isset($request->vat)) {
+            $post->vat = $request->vat;
+        }
+
         if (isset($request->published_at)) {
             $string_published = strtotime($request->published_at);
 

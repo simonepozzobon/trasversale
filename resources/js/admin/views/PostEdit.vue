@@ -115,6 +115,9 @@ export default {
                 this.values = {
                     title: post.title,
                     price: post.price,
+                    vat: post.vat,
+                    vat_included: post.vat_included,
+                    teacher_card_payment: post.teacher_card_payment,
                     slug: post.slug && post.slug.hasOwnProperty('slug') ? post.slug.slug : null,
                     preview: post.thumb,
                     category: post.category.id,
