@@ -13,7 +13,7 @@ class SubscribersController extends Controller
 {
     public function get_subscribers($id)
     {
-        $product = Product::where('id', $id)->with('order_items.order.subscriber')->first();
+        $product = Product::where('id', $id)->with('order_items.order.subscriber', 'order_items.product')->first();
 
         return [
             'success' => true,
@@ -86,7 +86,7 @@ class SubscribersController extends Controller
         ];
     }
 
-    public function cancel_subrscriber_order (Request $request)
+    public function cancel_subrscriber_order(Request $request)
     {
         $subscriber = Subscriber::find($request->subscriber_id);
         $subscriber->payment_status_id = $request->payment_status_id;

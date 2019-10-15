@@ -300,8 +300,16 @@ export default {
 
                     let code = order.code
                     let check = codes.includes(code)
-                    amountConfirmed = amountConfirmed + (Number(order_item.price) * order_item.quantity)
 
+                    if (order_item.product && order_item.product.vat_included == 1) {
+                        amountConfirmed = amountConfirmed + (Number(order_item.price) * order_item.quantity)
+                    }
+                    else {
+                        let vat = (Number(order_item.price) * Number(order_item.product.vat)) / 100
+                        let item_price = Number(order_item.price) + vat
+
+                        amountConfirmed = amountConfirmed + (item_price * order_item.quantity)
+                    }
 
                     if (check == false) {
                         codes.push(code)
@@ -314,8 +322,6 @@ export default {
                             subscribers[idx].guests = subscribers[idx].guests + order_item.quantity
                         }
                     }
-
-
                     if (Number(order.payment_status_id) != 1) {
                         toBeConfirmed = toBeConfirmed + 1
                     }
@@ -361,6 +367,7 @@ export default {
     },
     filters: {
         statusClass: function (status) {
+            console.log('stato', status);
             if (status == 1) {
                 return 'text-success'
             }
