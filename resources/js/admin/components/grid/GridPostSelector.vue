@@ -21,10 +21,7 @@
                 :items="posts"
                 :fields="fields"
             >
-                <template
-                    slot="thumb"
-                    slot-scope="data"
-                >
+                <template v-slot:cell(thumb)="data">
                     <img
                         v-if="data.item.thumb"
                         :src="data.item.thumb"
@@ -32,10 +29,7 @@
                         class="module-item__image-post"
                     />
                 </template>
-                <template
-                    slot="selected"
-                    slot-scope="data"
-                >
+                <template v-slot:cell(selected)="data">
                     <ui-checkbox
                         :value="Boolean(data.item.selected)"
                         @click="selectPost(data.item)"

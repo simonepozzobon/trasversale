@@ -56,10 +56,7 @@
         :items="subscribers"
         :fields="fields"
     >
-        <template
-            slot="payment_type_id"
-            slot-scope="data"
-        >
+        <template v-slot:cell(payment_type_id)="data">
             <span
                 v-if="data.item.payment_type_id == 1"
                 :class="data.item.payment_status_id | statusClass"
@@ -85,10 +82,7 @@
                 Richiesta di informazioni
             </span>
         </template>
-        <template
-            slot="order.payment_status_id"
-            slot-scope="data"
-        >
+        <template v-slot:cell(order.payment_status_id)="data">
             <span
                 v-if="data.item.order.payment_status_id == 1"
                 :class="data.item.payment_status_id | statusClass"
@@ -120,18 +114,12 @@
                 Ordine Non Completato
             </span>
         </template>
-        <template
-            slot="name"
-            slot-scope="data"
-        >
+        <template v-slot:cell(name)="data">
             <span>
                 {{ data.item.name }} {{ data.item.surname }}
             </span>
         </template>
-        <template
-            slot="tools"
-            slot-scope="data"
-        >
+        <template v-slot:cell(tools)="data">
             <button
                 class="btn btn-outline-primary"
                 @click="data.toggleDetails"

@@ -6,10 +6,7 @@
         :items="addresses"
         :fields="fields"
     >
-        <template
-            slot="tools"
-            slot-scope="data"
-        >
+        <template v-slot:cell(tools)="data">
             <button
                 class="btn btn-outline-danger"
                 @click="deleteAddress(data.item)"

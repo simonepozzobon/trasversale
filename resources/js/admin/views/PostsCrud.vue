@@ -3,7 +3,6 @@
     :title="opts.title"
     :notifications="notifications"
 >
-    ciao
     <b-table
         ref="table"
         striped

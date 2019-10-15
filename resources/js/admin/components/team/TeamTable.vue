@@ -6,19 +6,13 @@
         :items="members"
         :fields="fields"
     >
-        <template
-            slot="img"
-            slot-scope="data"
-        >
+        <template v-slot:cell(img)="data">
             <img
                 :src="data.item.img"
                 class="team-table__avatar"
             />
         </template>
-        <template
-            slot="social"
-            slot-scope="data"
-        >
+        <template v-slot:cell(social)="data">
             <div
                 class="team-table__social"
                 v-for="(social, i) in data.item.social"
@@ -32,10 +26,7 @@
                 </a>
             </div>
         </template>
-        <template
-            slot="tools"
-            slot-scope="data"
-        >
+        <template v-slot:cell(tools)="data">
             <button
                 class="btn btn-outline-primary"
                 @click="editMember(data.item)"
