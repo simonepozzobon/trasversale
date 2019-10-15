@@ -11,7 +11,7 @@
 |
 */
 // Route::get('test', 'MainController@test');
-Route::get('test', 'SearchController@test');
+Route::get('test', 'PaymentController@test');
 
 Route::prefix('bi0id9B')->group(
     function () {

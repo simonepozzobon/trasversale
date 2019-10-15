@@ -86,6 +86,19 @@ class PaymentController extends Controller
         ];
     }
 
+    public function test()
+    {
+        $request = new Request();
+        $request->replace(
+            [
+              'order_id' => 2,
+            ]
+        );
+
+        $this->create_transaction($request);
+
+    }
+
     public function create_transaction(Request $request)
     {
         $nonce = $request->nonce;
@@ -95,11 +108,12 @@ class PaymentController extends Controller
 
         $amount = 0;
         foreach ($items as $key => $item) {
-            if ($item->vat_included == 1) {
+            $product = $item->product;
+            if ($product->vat_included == 1) {
                 $subtotal = $item->price * $item->quantity;
             } else {
-                $vat = $item->price * $item->vat;
-                $item_price = $item->price + $vat;
+                $vat = ($product->price * $product->vat) / 100;
+                $item_price = $product->price + $vat;
                 $subtotal = $item_price * $item->quantity;
             }
 
@@ -133,7 +147,6 @@ class PaymentController extends Controller
 
         $order->payment_status_id = 1;
         $order->save();
-
 
 
         foreach ($items as $key => $item) {

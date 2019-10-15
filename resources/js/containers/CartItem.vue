@@ -47,8 +47,8 @@
                 {{ item.price.toFixed(2) }} €
             </div>
             <div class="cart-item__price cart-item__info">
-                <span v-if="item.vat_included == 1">Iva Incl.</span>
-                <span v-else>iva al {{ item.vat }} %</span>
+                <span v-if="item.vat_included == '0'">iva al {{ item.vat }} %</span>
+                <span v-else>Iva Incl.</span>
             </div>
         </div>
     </div>
@@ -81,6 +81,10 @@ export default {
             type: Boolean,
             default: true,
         },
+        isTotal: {
+            type: Boolean,
+            default: false,
+        }
     },
     data: function () {
         return {}
