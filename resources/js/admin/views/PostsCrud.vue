@@ -3,6 +3,7 @@
     :title="opts.title"
     :notifications="notifications"
 >
+    ciao
     <b-table
         ref="table"
         striped
@@ -10,10 +11,7 @@
         :items="posts"
         :fields="fields"
     >
-        <template
-            slot="thumb"
-            slot-scope="data"
-        >
+        <template v-slot:cell(thumb)="data">
             <img
                 v-if="data.item.thumb"
                 :src="data.item.thumb"
@@ -21,10 +19,7 @@
                 class="news-item__image"
             />
         </template>
-        <template
-            slot="subscribers_tools"
-            slot-scope="data"
-        >
+        <template v-slot:cell(subscribers_tools)="data">
             <button
                 class="btn btn-outline-green"
                 @click="manageSubscribers(data.item)"
@@ -32,10 +27,7 @@
                 Iscritti
             </button>
         </template>
-        <template
-            slot="tools"
-            slot-scope="data"
-        >
+        <template v-slot:cell(tools)="data">
             <button
                 class="btn btn-outline-primary"
                 @click="editPost(data.item)"
