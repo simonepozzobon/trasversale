@@ -11,7 +11,10 @@
 |
 */
 // Route::get('test', 'MainController@test');
-Route::get('test', 'PaymentController@test');
+Route::get('test', function () {
+    $exitCode = Artisan::call('storage:link');
+    echo 'storage linked';
+});
 
 Route::prefix('bi0id9B')->group(
     function () {
