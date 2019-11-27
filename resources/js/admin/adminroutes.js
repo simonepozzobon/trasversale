@@ -1,6 +1,7 @@
 import CreateSubscriber from './views/CreateSubscriber.vue'
 import HomeContainer from './views/HomeContainer.vue'
 import Home from './views/Home.vue'
+import Login from './views/Login.vue'
 import ManageSubscribers from './views/ManageSubscribers.vue'
 import PageContainer from './views/PageContainer.vue'
 import Page from './views/Page.vue'
@@ -18,21 +19,38 @@ const routes = [{
             path: '',
             name: 'home',
             component: Home,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: 'login',
+            name: 'login',
+            component: Login,
         },
         {
             path: 'posts/:type/create',
             name: 'post-create',
-            component: PostCreate
+            component: PostCreate,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: 'posts/:type/:id',
             name: 'post-edit',
-            component: PostEdit
+            component: PostEdit,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: 'posts/:type',
             name: 'posts',
             component: PostsCrud,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: 'page/:page',
@@ -41,6 +59,9 @@ const routes = [{
                     path: '',
                     name: 'page',
                     component: Page,
+                    meta: {
+                        requiresAuth: true
+                    }
                 },
                 {
                     path: ':sub',
@@ -49,6 +70,9 @@ const routes = [{
                         path: '',
                         name: 'sub',
                         component: SubPage,
+                        meta: {
+                            requiresAuth: true
+                        }
                     }]
                 },
 
@@ -58,11 +82,17 @@ const routes = [{
             path: 'subscribers/:id',
             name: 'manage-subscribers',
             component: ManageSubscribers,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: 'create-subscriber/:product_id',
             name: 'create-subscriber',
             component: CreateSubscriber,
+            meta: {
+                requiresAuth: true
+            }
         },
     ],
 }]

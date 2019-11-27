@@ -1,15 +1,23 @@
-<template lang="html">
-    <div class="admin-page">
-        <top-bar></top-bar>
-        <div class="container-fluid p-0">
-            <div class="row no-gutters">
-                <admin-sidebar :size="sidebar"></admin-sidebar>
-                <main ref="main" role="main" class="ml-sm-auto pr-0" :class="mainSizeClass">
-                    <router-view></router-view>
-                </main>
-            </div>
+<template>
+<div class="admin-page">
+    <top-bar v-if="this.$root.hasSidebar"></top-bar>
+    <div class="container-fluid p-0">
+        <div class="row no-gutters">
+            <admin-sidebar
+                :size="sidebar"
+                v-if="this.$root.hasSidebar"
+            ></admin-sidebar>
+            <main
+                ref="main"
+                role="main"
+                class="ml-sm-auto pr-0"
+                :class="mainSizeClass"
+            >
+                <router-view></router-view>
+            </main>
         </div>
     </div>
+</div>
 </template>
 
 <script>
