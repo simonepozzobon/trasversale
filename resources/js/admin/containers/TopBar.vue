@@ -20,6 +20,7 @@
             <a
                 class="nav-link"
                 href="#"
+                @click.prevent.stop="$root.logout"
             >
                 Sign out
             </a>
