@@ -538,7 +538,7 @@ export default {
         setInitial: function () {
             // console.log('initial', this.initial);
             if (this.initial) {
-                let options
+                let options = false
 
                 if (this.initial.options) {
                     options = JSON.parse(this.initial.options)
@@ -548,12 +548,12 @@ export default {
                 // console.log('opzioni', options);
 
                 this.gridType = this.initial.type ? this.initial.type : 'simple'
-                this.mode = options.mode ? options.mode : 'last'
-                this.products = options.models ? options.models[0].products : true
-                this.news = options.models ? options.models[1].news : false
-                this.pages = options.models ? options.models[2].pages : false
-                this.post_count = options.post_count ? options.post_count : 2
-                this.post_per_row = options.post_per_row ? options.post_per_row : 2
+                this.mode = options != false && options.mode ? options.mode : 'last'
+                this.products = options != false && options.models ? options.models[0].products : true
+                this.news = options != false && options.models ? options.models[1].news : false
+                this.pages = options != false && options.models ? options.models[2].pages : false
+                this.post_count = options != false && options.post_count ? options.post_count : 2
+                this.post_per_row = options != false && options.post_per_row ? options.post_per_row : 2
 
                 // console.log('initial', newObj);
 
