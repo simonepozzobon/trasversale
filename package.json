@@ -6,6 +6,7 @@
         "watch": "npm run development -- --watch",
         "watch-poll": "npm run watch -- --watch-poll",
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "hot-new": "cross-env NODE_ENV=development webpack-dev-server --inline --hot",
         "prod": "npm run production",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
@@ -40,6 +41,7 @@
         "isotope-packery": "^2.0.1",
         "jquery-ui": "^1.12.1",
         "laravel-mix": "^4.0.15",
+        "launch-editor-middleware": "^2.2.1",
         "lodash.debounce": "^4.0.8",
         "lodash.isequal": "^4.5.0",
         "lodash.orderby": "^4.6.0",

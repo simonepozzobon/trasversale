@@ -119,7 +119,7 @@ export default {
             // console.log(this.categories);
         },
         filterNews: function (id) {
-            console.log(id);
+            // console.log(id);
             let category = this.categories.filter(category => category.id == id)[0]
             if (category) {
                 if (category.id != this.currentId) {
