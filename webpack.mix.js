@@ -32,12 +32,12 @@ const launchMiddleware = require('launch-editor-middleware');
  |
  */
 
-mix.options({
-    hmrOptions: {
-        host: 'trasversale.test', // site's host name
-        port: 3016,
-    }
-});
+// mix.options({
+//     hmrOptions: {
+//         host: 'trasversale.test', // site's host name
+//         port: 3016,
+//     }
+// });
 
 mix
     .js('resources/js/admin/admin.js', 'public/js')
@@ -50,25 +50,25 @@ mix
                 'styles': path.resolve(__dirname, 'resources/sass'),
             }
         },
-        devtool: "source-map",
-        devServer: {
-            before(app) {
-                app.use('/__open-in-editor', launchMiddleware('atom'));
-            },
-            // index: '',
-            open: true,
-            // host: 'localhost',
-            proxy: {
-                '**': {
-                    target: 'http://trasversale.test', // host machine ip
-                }
-            },
-            watchOptions: {
-                aggregateTimeout: 200,
-                poll: 3000
-            },
-
-        },
+        // devtool: "source-map",
+        // devServer: {
+        //     before(app) {
+        //         app.use('/__open-in-editor', launchMiddleware('atom'));
+        //     },
+        //     // index: '',
+        //     open: true,
+        //     // host: 'localhost',
+        //     proxy: {
+        //         '**': {
+        //             target: 'http://trasversale.test', // host machine ip
+        //         }
+        //     },
+        //     watchOptions: {
+        //         aggregateTimeout: 200,
+        //         poll: 3000
+        //     },
+        //
+        // },
     })
     .browserSync({
         proxy: {

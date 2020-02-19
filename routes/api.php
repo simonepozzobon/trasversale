@@ -40,6 +40,13 @@ Route::prefix('mail')->group(
     }
 );
 
+Route::prefix('archive')->group(
+    function () {
+        Route::get('products', 'MainController@get_archive_products');
+        Route::get('news', 'MainController@get_archive_news');
+    }
+);
+
 Route::get('get-page/{page}/{subpage?}/{slug?}', 'MainController@get_dynamic_item');
 
 Route::get('get-products', 'MainController@get_products');

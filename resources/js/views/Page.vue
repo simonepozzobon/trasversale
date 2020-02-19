@@ -13,6 +13,7 @@
             title="Archivio corsi"
             color="primary"
             align="center"
+            @click="$root.goToWithParams('subpage', {page: 'corsi', subpage: 'archivio'})"
         />
     </div>
     <div v-else-if="name == 'notizie'">
@@ -20,6 +21,7 @@
             title="Archivio notizie"
             color="primary"
             align="center"
+            @click="$root.goToWithParams('subpage', {page: 'notizie', subpage: 'archivio'})"
         />
     </div>
 </div>
@@ -61,11 +63,12 @@ export default {
         getData: function (url) {
             if (url) {
                 this.$http.get(url).then(response => {
-                    // console.log(response.data);
+                    console.log(response.data);
                     if (response.data.success) {
                         this.$root.sidebar = response.data.item.sidebar
                         this.name = response.data.item.title
                         this.modules = sortModules(response.data.item.modules)
+                        // console.log(this.modules);
                     }
                 })
             }

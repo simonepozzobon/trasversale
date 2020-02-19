@@ -9,7 +9,10 @@ use App\SubPage;
 use App\Utility;
 use App\StaticPage;
 use App\Product;
+use App\News;
 use Illuminate\Http\Request;
+
+use Carbon\Carbon;
 
 class MainController extends Controller
 {
@@ -23,6 +26,58 @@ class MainController extends Controller
         $products = Product::with('slug')->get();
         return [
             'products' => $products
+        ];
+    }
+
+    public function get_archive_products()
+    {
+        $today = Carbon::now();
+
+        $products = Product::where('start_at', '<', $today)->with('slug', 'category')->orderBy('start_at', 'desc')->get();
+
+        $productsFormatted = $products->transform(function ($product, $key) {
+            return [
+            'id' => uniqid(),
+            'type' => 'product',
+            'width' => 2,
+            'height' => 2,
+            'bgColor' => 'primary',
+            'thumb' => $product->thumb,
+            'x' => 0,
+            'y' => 0,
+            'content' => json_encode($product)
+          ];
+        });
+
+        return [
+          'success' => true,
+          'items' => $productsFormatted,
+        ];
+    }
+
+    public function get_archive_news()
+    {
+        $today = Carbon::now();
+
+        $news = News::where('published_at', '<', $today)->with('slug', 'category')->orderBy('published_at', 'desc')->get();
+
+        $newsFormatted = $news->transform(function ($news, $key) {
+            return [
+            'id' => uniqid(),
+            'type' => 'product',
+            'width' => 2,
+            'height' => 2,
+            'bgColor' => 'primary',
+            'thumb' => $news->thumb,
+            'x' => 0,
+            'y' => 0,
+            'content' => json_encode($news)
+          ];
+        });
+
+        return [
+          'success' => true,
+          'items' => $newsFormatted,
         ];
     }
 
@@ -42,9 +97,7 @@ class MainController extends Controller
                     ['sluggable_type', '!=', 'App\\SubPage'],
                 ]
             )->with('sluggable.modules', 'sluggable.sidebar.modules')->first();
-        }
-
-        else if ($subpage) {
+        } elseif ($subpage) {
             $item = Slug::where(
                 [
                     ['slug', '=', $subpage],
@@ -66,9 +119,7 @@ class MainController extends Controller
                     ['sluggable_type', '=', 'App\\Product'],
                 ]
             )->with('sluggable.modules', 'sluggable.sidebar.modules')->first();
-        }
-
-        else {
+        } else {
             $item = Slug::where(
                 [
                     ['slug', '=', $page],
@@ -114,13 +165,11 @@ class MainController extends Controller
 
     public function get_sub_page($sub_page)
     {
-
         $slug = Slug::where('slug', $sub_page)->with('sluggable')->first();
         $sub = $slug->sluggable()->with('page.slug', 'modules')->first();
         $sub->page = $sub->page;
         $sub->modules = $sub->modules;
         return view('sub-page', compact('sub'));
-
     }
 
     public function dummy_page()
@@ -136,5 +185,4 @@ class MainController extends Controller
         $string = strtolower($string);
         return $string;
     }
-
 }

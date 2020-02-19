@@ -3,21 +3,35 @@
         <sub-page-product v-if="pageContent.item.model == 'product'" :content="pageContent"/>
         <sub-page-generic v-else :content="pageContent"/>
     </div>
+    <div v-else-if="isArchiveCorsi">
+      <ui-simple-grid :options="gridOptions" :blocks="gridBlocks"/>
+    </div>
+    <div v-else-if="isArchiveNews">
+      <ui-simple-grid :options="gridOptions" :blocks="gridBlocks"/>
+    </div>
 </template>
 
 <script>
 import SubPageGeneric from './SubPageGeneric.vue'
 import SubPageProduct from './SubPageProduct.vue'
 
+import {
+    UiSimpleGrid
+}
+from '../ui'
+
 export default {
     name: 'SubPage',
     components: {
         SubPageGeneric,
         SubPageProduct,
+        UiSimpleGrid,
     },
     data: function () {
         return {
             pageContent: null,
+            gridOptions: {},
+            gridBlocks: [],
         }
     },
     watch: {
@@ -25,18 +39,66 @@ export default {
             this.init()
         }
     },
+    computed: {
+        isArchive: function () {
+            if (this.$route.params && this.$route.params.hasOwnProperty('subpage') && this.$route.params.subpage == 'archivio') {
+                return true
+            }
+            return false
+        },
+        isArchiveCorsi: function () {
+            if (this.$route.params && this.$route.params.page == 'corsi' && this.isArchive) {
+                return true
+            }
+            return false
+        },
+        isArchiveNews: function () {
+            if (this.$route.params && this.$route.params.page == 'notizie' && this.isArchive) {
+                return true
+            }
+            return false
+        },
+    },
     methods: {
         init: function () {
             let url = '/api/get-page/' + this.$route.params.page + '/' + this.$route.params.subpage
+
+            if (this.isArchive) {
+                if (this.isArchiveCorsi) {
+                    url = '/api/archive/products'
+                }
+                else if (this.isArchiveNews) {
+                    url = '/api/archive/news'
+                }
+            }
+
             this.getData(url)
         },
         getData: function (url) {
             this.pageContent = null
             if (url) {
                 this.$http.get(url).then(response => {
-                    if (response.data.success) {
+                    if (response.data.success && !this.isArchive) {
                         this.pageContent = response.data
-                        // console.log('contyainer', this.pageContent);
+                    }
+                    else if (response.data.success && this.isArchive) {
+                        this.gridOptions = {
+                            mode: 'last',
+                            models: [{
+                                    products: this.isArchiveCorsi
+                                },
+                                {
+                                    news: this.isArchiveNews
+                                },
+                                {
+                                    pages: false
+                                }
+                            ],
+                            post_count: response.data.items.length,
+                            post_per_row: 2
+                        }
+
+                        this.gridBlocks = response.data.items
                     }
                 })
             }
