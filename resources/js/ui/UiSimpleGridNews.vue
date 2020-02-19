@@ -1,12 +1,16 @@
 <template>
 <div class="grid-news">
-    <ui-image
-        :src="content.thumb"
-        :alt="content.title"
-    />
+    <div class="grid-news__image">
+        <ui-image
+            v-if="image"
+            class="grid-news__figure"
+            :src="content.thumb"
+            :alt="content.title"
+            :is-clickable="true"
+        />
+    </div>
     <!-- <div class="grid-news__image">
             <img
-                class="grid-news__figure"
                 :src="content.thumb"
                 :alt="content.title" />
         </div> -->
@@ -73,6 +77,13 @@ export default {
             }
             return this.block.content
         },
+        image: function () {
+            if (this.block.thumb && this.block.thumb != 'no-image') {
+                return this.block.thumb
+            }
+
+            return false
+        },
         published: function () {
             if (this.content.published_at) {
                 return moment(this.content.published_at).format('DD.MM.YYYY')
@@ -114,6 +125,7 @@ export default {
         max-height: 100%;
         width: 100%;
         height: auto;
+        cursor: pointer;
     }
 
     &__details {

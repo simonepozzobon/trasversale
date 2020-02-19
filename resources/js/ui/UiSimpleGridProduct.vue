@@ -1,12 +1,13 @@
 <template>
 <div class="grid-product">
     <div class="grid-product__image">
-        <img
+        <ui-image
             v-if="image"
             class="grid-product__figure"
             :src="image"
             :alt="content.title"
-            @click.prevent="goToProduct"
+            :is-clickable="true"
+            @click="goToProduct"
         />
     </div>
     <div class="grid-product__details">
@@ -28,11 +29,13 @@
 
 <script>
 import UiBlock from './UiBlock.vue'
+import UiImage from './UiImage.vue'
 
 export default {
     name: 'UiSimpleGridProduct',
     components: {
         UiBlock,
+        UiImage,
     },
     props: {
         block: {

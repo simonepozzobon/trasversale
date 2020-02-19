@@ -1,14 +1,26 @@
-<template lang="html">
-    <div v-if="pageContent">
-        <sub-page-product v-if="pageContent.item.model == 'product'" :content="pageContent"/>
-        <sub-page-generic v-else :content="pageContent"/>
-    </div>
-    <div v-else-if="isArchiveCorsi">
-      <ui-simple-grid :options="gridOptions" :blocks="gridBlocks"/>
-    </div>
-    <div v-else-if="isArchiveNews">
-      <ui-simple-grid :options="gridOptions" :blocks="gridBlocks"/>
-    </div>
+<template>
+<div v-if="pageContent">
+    <sub-page-product
+        v-if="pageContent.item.model == 'product'"
+        :content="pageContent"
+    />
+    <sub-page-generic
+        v-else
+        :content="pageContent"
+    />
+</div>
+<div v-else-if="isArchive">
+    <ui-title
+        font-size="h2"
+        tag="h1"
+        :title="archiveTitle"
+    />
+    <ui-simple-grid
+        class="mt-4"
+        :options="gridOptions"
+        :blocks="gridBlocks"
+    />
+</div>
 </template>
 
 <script>
@@ -16,7 +28,8 @@ import SubPageGeneric from './SubPageGeneric.vue'
 import SubPageProduct from './SubPageProduct.vue'
 
 import {
-    UiSimpleGrid
+    UiSimpleGrid,
+    UiTitle,
 }
 from '../ui'
 
@@ -26,6 +39,7 @@ export default {
         SubPageGeneric,
         SubPageProduct,
         UiSimpleGrid,
+        UiTitle,
     },
     data: function () {
         return {
@@ -57,6 +71,13 @@ export default {
                 return true
             }
             return false
+        },
+        archiveTitle: function () {
+            if (this.isArchiveNews) {
+                return 'archivio notizie'
+            }
+
+            return 'archivio corsi'
         },
     },
     methods: {

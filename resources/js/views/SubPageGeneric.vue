@@ -50,7 +50,7 @@ export default {
     },
     methods: {
         init: function () {
-            console.log(this.content);
+            // console.log(this.content);
             this.name = this.content.item.title
             this.$root.sidebar = this.content.item.sidebar
             this.modules = sortModules(this.content.item.modules)

@@ -1,14 +1,19 @@
-<template lang="html">
-    <div class="ui-image" ref="container">
-        <div class="ui-image__placeholder" ref="holder">
-            <div class="spinner-border text-primary" ref="loader"></div>
-        </div>
-        <!-- <img
-            ref="image"
-            :src="source"
-            :alt="alt"
-            class="img-fluid ui-image__content" /> -->
+<template>
+<div
+    class="ui-image"
+    ref="container"
+    @click.prevent="clicked"
+>
+    <div
+        class="ui-image__placeholder"
+        ref="holder"
+    >
+        <div
+            class="spinner-border text-primary"
+            ref="loader"
+        ></div>
     </div>
+</div>
 </template>
 
 <script>
@@ -27,6 +32,10 @@ export default {
         alt: {
             type: String,
             default: 'Image',
+        },
+        isClickable: {
+            type: Boolean,
+            default: false,
         },
     },
     data: function () {
@@ -66,6 +75,11 @@ export default {
                 this.$nextTick(() => {
                     this.appendToDOM(img)
                 })
+            }
+        },
+        clicked: function () {
+            if (this.isClickable) {
+                this.$emit('click')
             }
         },
     },
