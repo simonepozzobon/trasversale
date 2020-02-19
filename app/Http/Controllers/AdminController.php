@@ -145,7 +145,7 @@ class AdminController extends Controller
             $model = 'App\\SubPage';
         }
 
-        $isNew = isset($request->id) ? true : false;
+        $isNew = isset($request->id) ? false : true;
 
         $post = isset($request->id) ? $model::find($request->id) : new $model();
 
@@ -234,6 +234,8 @@ class AdminController extends Controller
             $post->guests_total = (int) $request->guests_total;
 
             if ($isNew) {
+                $post->guests_available = (int) $request->guests_total;
+            } elseif ($post->guests_available == 0 && $post->guests_confirmed == 0) {
                 $post->guests_available = (int) $request->guests_total;
             }
         }
