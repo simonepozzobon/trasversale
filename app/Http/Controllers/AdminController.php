@@ -53,18 +53,18 @@ class AdminController extends Controller
 
         switch ($type) {
         case 'news':
-            $news = News::with('slug', 'category')->get();
+            $news = News::with('slug', 'category')->orderBy('created_at', 'desc')->get();
             $elements = $this->uniform_and_merge($news);
             break;
 
         case 'products':
-            $products = Product::with('slug', 'category')->get();
+            $products = Product::with('slug', 'category')->orderBy('created_at', 'desc')->get();
             $elements = $this->uniform_and_merge($products);
             break;
 
         case 'last-mix':
-            $products = Product::with('slug', 'category')->get();
-            $news = News::with('slug', 'category')->get();
+            $products = Product::with('slug', 'category')->orderBy('created_at', 'desc')->get();
+            $news = News::with('slug', 'category')->orderBy('created_at', 'desc')->get();
             $elements = $this->uniform_and_merge($news, $products);
             break;
 
@@ -75,9 +75,9 @@ class AdminController extends Controller
             break;
 
         default:
-            $posts = Post::with('slug')->get();
-            $news = News::with('slug', 'category')->get();
-            $products = Product::with('slug', 'category')->get();
+            $posts = Post::with('slug')->orderBy('created_at', 'desc')->get();
+            $news = News::with('slug', 'category')->orderBy('created_at', 'desc')->get();
+            $products = Product::with('slug', 'category')->orderBy('created_at', 'desc')->get();
             $elements = $this->uniform_and_merge($posts, $news, $products);
             break;
         }
@@ -144,6 +144,8 @@ class AdminController extends Controller
         } elseif ($model == 'App\\Subpage') {
             $model = 'App\\SubPage';
         }
+
+        $isNew = isset($request->id) ? true : false;
 
         $post = isset($request->id) ? $model::find($request->id) : new $model();
 
@@ -230,6 +232,10 @@ class AdminController extends Controller
 
         if (isset($request->guests_total) && (int) $request->guests_total > 0) {
             $post->guests_total = (int) $request->guests_total;
+
+            if ($isNew) {
+                $post->guests_available = (int) $request->guests_total;
+            }
         }
 
         $post->save();
@@ -396,7 +402,7 @@ class AdminController extends Controller
             $merged = $merged->concat($uniformed);
         }
 
-        $sorted = $merged->sortBy('updated_at')->values();
+        $sorted = $merged->sortByDesc('created_at')->values();
         return $sorted;
     }
 

@@ -64,7 +64,6 @@ class PaymentController extends Controller
             $order_item->quantity = $product->item->quantity;
             $order_item->price = $product->item->price;
             $order_item->save();
-
         }
 
         $subscriber = new Subscriber();
@@ -77,7 +76,7 @@ class PaymentController extends Controller
         $order->subscriber_id = $subscriber->id;
         $order->save();
 
-        $order->refresh();
+        $order = $order->refresh();
 
         return [
             'success' => true,
@@ -96,7 +95,6 @@ class PaymentController extends Controller
         );
 
         $this->create_transaction($request);
-
     }
 
     public function create_transaction(Request $request)
@@ -153,8 +151,8 @@ class PaymentController extends Controller
             $product = $item->product;
             if ($product->has_limited_guests == 1) {
                 $product = $this->set_available($product);
-                $product->guests_available = $product->guests_available - $item->quantity;
-                $product->guests_confirmed = $product->guests_confirmed + $item->quantity;
+                // $product->guests_available = $product->guests_available - $item->quantity;
+                // $product->guests_confirmed = $product->guests_confirmed + $item->quantity;
                 $product->save();
             }
         }
