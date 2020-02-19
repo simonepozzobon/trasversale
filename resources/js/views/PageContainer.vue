@@ -6,8 +6,8 @@
 
 <script>
 export default {
-    name: 'Home',
-    data: function() {
+    name: 'PageContainer',
+    data: function () {
         return {
             name: null,
             modules: null,
