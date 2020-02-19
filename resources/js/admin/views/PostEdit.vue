@@ -95,7 +95,7 @@ export default {
             let url = '/api/admin/post-type/' + this.type.model + '/' + this.$route.params.id
             this.$http.get(url)
                 .then(response => {
-                    console.log('get post', response.data);
+                    // console.log('get post', response.data);
                     if (response.data.success) {
                         let post = Object.assign({}, response.data.post)
                         this.setInitialValues(post).then(() => {
@@ -112,9 +112,10 @@ export default {
         },
         setInitialValues: function (post) {
             return new Promise((resolve, reject) => {
+                console.log('initial', post);
                 this.values = {
                     title: post.title,
-                    price: post.price,
+                    price: post.price ? post.price : '0',
                     vat: post.vat,
                     vat_included: post.vat_included == 1 ? true : false,
                     teacher_card_payment: post.teacher_card_payment,
