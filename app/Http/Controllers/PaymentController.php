@@ -118,34 +118,46 @@ class PaymentController extends Controller
             $amount = $amount + $subtotal;
         }
 
-        try {
-            $results = $this->gateway->transaction()->sale(
-                [
-                    'amount' => $amount,
-                    'paymentMethodNonce' => $nonce,
-                    'options' => [
-                        'submitForSettlement' => true
-                    ]
-                ]
-            );
-        } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'errors' => $e
-            ];
+        if ($amount > 0) {
+            try {
+                $results = $this->gateway->transaction()->sale(
+                    [
+                      'amount' => $amount,
+                      'paymentMethodNonce' => $nonce,
+                      'options' => [
+                          'submitForSettlement' => true
+                      ]
+                  ]
+                );
+            } catch (\Exception $e) {
+                return [
+                  'success' => false,
+                  'errors' => $e
+              ];
+            }
+
+            $transaction = new Transaction();
+            $transaction->order_id = $request->order_id;
+            $transaction->braintree_id = $results->transaction->id;
+            $transaction->nonce = $nonce;
+            $transaction->amount = $amount;
+            $transaction->status = $results->success;
+            $transaction->save();
+
+            $order->payment_status_id = 1;
+            $order->save();
+        } else {
+            $transaction = new Transaction();
+            $transaction->order_id = $request->order_id;
+            $transaction->braintree_id = uniqid();
+            $transaction->nonce = $nonce;
+            $transaction->amount = $amount;
+            $transaction->status = true;
+            $transaction->save();
+
+            $order->payment_status_id = 1;
+            $order->save();
         }
-
-        $transaction = new Transaction();
-        $transaction->order_id = $request->order_id;
-        $transaction->braintree_id = $results->transaction->id;
-        $transaction->nonce = $nonce;
-        $transaction->amount = $amount;
-        $transaction->status = $results->success;
-        $transaction->save();
-
-        $order->payment_status_id = 1;
-        $order->save();
-
 
         foreach ($items as $key => $item) {
             $product = $item->product;
@@ -160,7 +172,7 @@ class PaymentController extends Controller
         return [
             'success' => true,
             'amount' => $amount,
-            'results' => $results,
+            'results' => isset($results) ? $results : 'no-payment',
             'items' => $items,
         ];
     }

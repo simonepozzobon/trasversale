@@ -28,7 +28,6 @@ class SubscribersController extends Controller
             $order = new Order();
             $order->code = uniqid();
             $order->subscriber_id = 0;
-
         } else {
             $subscriber = Subscriber::find($request->subscriber_id);
             $order = Order::find($request->order_id);
@@ -89,7 +88,7 @@ class SubscribersController extends Controller
     public function cancel_subrscriber_order(Request $request)
     {
         $subscriber = Subscriber::find($request->subscriber_id);
-        $subscriber->payment_status_id = $request->payment_status_id;
+        $subscriber->payment_status_id = 5;
         $subscriber->save();
 
         $order = Order::find($request->order_id);

@@ -163,17 +163,17 @@ export default {
                     number: {
                         selector: '#number',
                         placeholder: '4111 1111 1111 1111',
-                        prefill: '4111111111111111'
+                        // prefill: '4111111111111111'
                     },
                     cvv: {
                         selector: '#cvv',
                         placeholder: '123',
-                        prefill: '400'
+                        // prefill: '400'
                     },
                     expirationDate: {
                         selector: '#expiration-date',
                         placeholder: '10/19',
-                        prefill: '09/20'
+                        // prefill: '09/20'
                     },
                 }
             }, (hostedFieldsErr, hfInstance) => {
@@ -254,6 +254,8 @@ export default {
                 else {
                     this.master.play()
                 }
+            }).catch(err => {
+                this.master.play()
             })
         }
     },
