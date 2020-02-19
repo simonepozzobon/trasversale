@@ -163,10 +163,11 @@ $opacity-test: 0.6 !default;
     display: flex;
     flex-direction: column;
     align-items: center;
+    @include gradient-directional($gray-300, $light, 135deg);
 
-    background: linear-gradient(45deg, rgba($green, $opacity-test), rgba($teal, $opacity-test), rgba($cyan, $opacity-test), rgba($blue, $opacity-test), rgba($indigo, $opacity-test), rgba($purple, $opacity-test), rgba($pink, $opacity-test), rgba($red, $opacity-test), rgba($orange, $opacity-test), rgba($yellow, $opacity-test),);
-    background-size: 800% 800%;
-    animation: Gradient 360s ease infinite;
+    // background: linear-gradient(45deg, rgba($green, $opacity-test), rgba($teal, $opacity-test), rgba($cyan, $opacity-test), rgba($blue, $opacity-test), rgba($indigo, $opacity-test), rgba($purple, $opacity-test), rgba($pink, $opacity-test), rgba($red, $opacity-test), rgba($orange, $opacity-test), rgba($yellow, $opacity-test),);
+    // background-size: 300% 300%;
+    // animation: Gradient 360s ease infinite;
 
     &__container {
         margin-top: $spacer * 4;

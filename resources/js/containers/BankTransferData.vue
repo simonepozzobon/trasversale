@@ -80,7 +80,10 @@ import {
     UiTitle
 }
 from '../ui'
-
+import {
+    gsap
+}
+from 'gsap'
 export default {
     name: 'TeacherCardData',
     components: {
@@ -107,7 +110,7 @@ export default {
             let loader = this.$refs.loader
             let fields = container.getElementsByClassName('personal-data-form__label')
 
-            this.master = new TimelineMax({
+            this.master = gsap.timeline({
                 paused: true,
                 yoyo: true,
             })

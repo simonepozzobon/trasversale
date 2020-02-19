@@ -92,11 +92,11 @@ class AdminController extends Controller
     {
         switch ($type) {
         case 'news':
-            $elements = News::with('slug', 'category')->get();
+            $elements = News::with('slug', 'category')->orderBy('created_at', 'desc')->get();
             break;
 
         case 'products':
-            $elements = Product::with('slug', 'category')->get();
+            $elements = Product::with('slug', 'category')->orderBy('created_at', 'desc')->get();
             break;
 
         default:
@@ -115,7 +115,7 @@ class AdminController extends Controller
         $model = 'App\\'.ucfirst($type);
         if ($model == 'App\\Staticpage') {
             $model = 'App\\StaticPage';
-        } else if ($model == 'App\\Subpage') {
+        } elseif ($model == 'App\\Subpage') {
             $model = 'App\\SubPage';
         }
 
@@ -127,7 +127,6 @@ class AdminController extends Controller
 
         if ($post->sidebar && $post->sidebar->modules) {
             $post->sidebar->modules = Utility::format_complex_modules($post->sidebar->modules, false);
-
         }
 
         return [
@@ -142,7 +141,7 @@ class AdminController extends Controller
 
         if ($model == 'App\\Staticpage') {
             $model = 'App\\StaticPage';
-        } else if ($model == 'App\\Subpage') {
+        } elseif ($model == 'App\\Subpage') {
             $model = 'App\\SubPage';
         }
 
@@ -448,7 +447,7 @@ class AdminController extends Controller
 
                 if ($model == 'App\\Staticpage') {
                     $model = 'App\\StaticPage';
-                } else if ($model == 'App\\Subpage') {
+                } elseif ($model == 'App\\Subpage') {
                     $model = 'App\\SubPage';
                 }
 
@@ -485,7 +484,6 @@ class AdminController extends Controller
                     'options' => $grid_options,
                 ]
             );
-
         } elseif ($request->type == 'image' && $request->hasFile('file')) {
             $file = $request->file('file');
             $media = Utility::save_image($file);
@@ -493,7 +491,6 @@ class AdminController extends Controller
             $content = json_decode($content);
             $content->src = $media->landscape;
             $content = json_encode($content);
-
         }
 
         $module->type = $request->type;

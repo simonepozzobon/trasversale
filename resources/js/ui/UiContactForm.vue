@@ -96,6 +96,10 @@
 
 <script>
 import UiCheckbox from './UiCheckbox.vue'
+import {
+    gsap
+}
+from 'gsap'
 export default {
     name: 'UiContactForm',
     components: {
@@ -235,7 +239,7 @@ export default {
             this.anim(error)
         },
         anim: function (el) {
-            let master = new TimelineMax({
+            let master = gsap.timeline({
                 paused: true,
                 yoyo: true,
             })

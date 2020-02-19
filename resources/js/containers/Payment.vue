@@ -46,6 +46,11 @@ import {
 }
 from '../ui'
 
+import {
+    gsap
+}
+from 'gsap'
+
 export default {
     name: 'Payment',
     components: {
@@ -75,7 +80,7 @@ export default {
             let btn = this.$refs.btn.$el
             let title = this.$refs.title.$el
 
-            let master = new TimelineMax({
+            let master = gsap.timeline({
                 paused: true
             })
 

@@ -139,6 +139,11 @@ import {
 }
 from '../ui'
 
+import {
+    gsap
+}
+from 'gsap'
+
 export default {
     name: 'CartInfoData',
     components: {
@@ -180,7 +185,7 @@ export default {
             let loader = this.$refs.loader
             let fields = container.getElementsByClassName('personal-data-form__label')
 
-            this.master = new TimelineMax({
+            this.master = gsap.timeline({
                 paused: true,
                 yoyo: true,
             })
@@ -292,7 +297,7 @@ export default {
         showSuccess: function () {
             let success = this.$refs.success
 
-            TweenMax.set(success, {
+            gsap.set(success, {
                 display: 'flex'
             })
 
@@ -305,7 +310,7 @@ export default {
             let successMessage = this.$refs.successMessage.$el
             let successBtn = this.$refs.successBtn.$el
 
-            let master = new TimelineMax({
+            let master = gsap.timeline({
                 paused: true,
                 yoyo: true,
             })
@@ -319,9 +324,9 @@ export default {
             master.addLabel('size', '+=0')
 
             master.fromTo(form, .1, {
-                className: '-=personal-data-form--hidden'
+                display: 'block',
             }, {
-                className: '+=personal-data-form--hidden'
+                display: 'none',
             }, 'size')
 
             master.addLabel('success-panel', '+=0')

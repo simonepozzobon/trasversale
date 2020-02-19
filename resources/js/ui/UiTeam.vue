@@ -20,7 +20,7 @@
 import UiTeamDetail from './UiTeamDetail.vue'
 import UiTeamSingle from './UiTeamSingle.vue'
 import {
-    TweenMax
+    gsap
 }
 from 'gsap'
 

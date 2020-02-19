@@ -10,6 +10,17 @@ import VuejsClipper from 'vuejs-clipper'
 import Cookie from './Cookies'
 
 import VueLayers from 'vuelayers'
+import {
+    gsap
+}
+from 'gsap'
+import {
+    CSSPlugin
+}
+from 'gsap/CSSPlugin'
+gsap.registerPlugin(CSSPlugin)
+
+console.log(gsap)
 // import * as Sentry from '@sentry/browser';
 // import * as Integrations from '@sentry/integrations';
 
@@ -198,7 +209,7 @@ const admin = new Vue({
                 }
             },
             login: function (redirectToHome = false) {
-                console.log(this.$cookie);
+                // console.log(this.$cookie);
                 this.$cookie.set('trasversale-logged', true)
                 this.$cookie.set('trasversale-user', JSON.stringify(this.user))
                 this.$cookie.set('trasversale-token', JSON.stringify(this.token))
@@ -225,36 +236,40 @@ const admin = new Vue({
                         let col10 = (10 * 100 / 12) + '%'
                         let col2 = (2 * 100 / 12) + '%'
 
-                        this.anim = new TimelineMax({
+                        this.anim = gsap.timeline({
                             paused: true,
                             yoyo: true
                         })
 
-                        this.anim.fromTo(side, .3, {
+                        this.anim.fromTo(side, {
+                            duration: .3,
                             css: {
                                 flex: '0 0 0',
                                 maxWidth: 0,
                             }
                         }, {
+                            duration: .3,
                             css: {
                                 flex: '0 0 ' + col2,
                                 maxWidth: col2,
                             },
-                            ease: Power4.easeInOut
+                            ease: 'power4.inOut',
                         }, 0)
 
 
-                        this.anim.fromTo(main, .3, {
+                        this.anim.fromTo(main, {
+                            duration: .3,
                             css: {
                                 flex: '0 0 100%',
                                 maxWidth: '100%',
                             }
                         }, {
+                            duration: .3,
                             css: {
                                 flex: '0 0 ' + col10,
                                 maxWidth: col10,
                             },
-                            ease: Power4.easeInOut
+                            ease: 'power4.inOut',
                         }, 0)
 
                         this.anim.progress(1).progress(0)

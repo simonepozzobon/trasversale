@@ -71,6 +71,16 @@ import {
 }
 from '../../Utilities'
 
+import {
+    gsap
+}
+from 'gsap'
+import {
+    CSSPlugin
+}
+from 'gsap/CSSPlugin'
+gsap.registerPlugin(CSSPlugin)
+
 const orderBy = require('lodash.orderby')
 const elementResizeDetectorMaker = require('element-resize-detector')
 const debounce = require('lodash.debounce')
@@ -179,38 +189,42 @@ export default {
                 let col8 = (8 * 100 / 12) + '%'
                 let col9 = (9 * 100 / 12) + '%'
 
-                this.anim = new TimelineMax({
+                this.anim = gsap.timeline({
                     paused: true,
                     yoyo: true
                 })
 
                 this.anim.addLabel('start', '+=0')
 
-                this.anim.fromTo(side, .6, {
+                this.anim.fromTo(side, {
+                    duration: .6,
                     css: {
                         flex: '0 0 ' + col3,
                         maxWidth: col3,
                     }
                 }, {
+                    duration: .6,
                     css: {
                         flex: '0 0 ' + col8,
                         maxWidth: col8,
                     },
-                    ease: Power4.easeInOut
+                    ease: 'power4.inOut',
                 }, 'start')
 
 
-                this.anim.fromTo(main, .6, {
+                this.anim.fromTo(main, {
+                    duration: .6,
                     css: {
                         flex: '0 0 ' + col9,
                         maxWidth: col9,
                     }
                 }, {
+                    duration: .6,
                     css: {
                         flex: '0 0 ' + col4,
                         maxWidth: col4,
                     },
-                    ease: Power4.easeInOut
+                    ease: 'power4.inOut',
                 }, 'start')
 
                 this.anim.progress(1).progress(0)

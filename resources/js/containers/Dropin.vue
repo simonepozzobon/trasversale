@@ -60,6 +60,11 @@
 </template>
 
 <script>
+import {
+    gsap
+}
+from 'gsap'
+
 const client = require('braintree-web/client')
 const hostedFields = require('braintree-web/hosted-fields')
 const vaultManager = require('braintree-web/vault-manager')
@@ -96,7 +101,7 @@ export default {
                 this.$refs.date
             ]
 
-            this.master = new TimelineMax({
+            this.master = gsap.timeline({
                 paused: true,
                 yoyo: true,
             })

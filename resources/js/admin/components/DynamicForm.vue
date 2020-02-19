@@ -10,7 +10,7 @@
         <div ref="message">
             <h1 class="text-success text-center">{{ successMessage }}</h1>
         </div>
-        
+
         <div ref="form" class="">
             <p class="mb-5">
                 <slot></slot>
@@ -72,8 +72,20 @@
 
 <script>
 import axios from 'axios'
-import { UiContainer, UiDynamicInput, UiFormCheckbox, UiFormGroupText, UiFormTitle, UiLoader, UiModal } from '../../ui'
-import { TweenMax } from 'gsap'
+import {
+    UiContainer,
+    UiDynamicInput,
+    UiFormCheckbox,
+    UiFormGroupText,
+    UiFormTitle,
+    UiLoader,
+    UiModal
+}
+from '../../ui'
+import {
+    gsap
+}
+from 'gsap'
 
 export default {
     name: 'DynamicForm',
@@ -93,11 +105,11 @@ export default {
         },
         fields: {
             type: Array,
-            default: function() {}
+            default: function () {}
         },
         initialObj: {
             type: Array,
-            default: function() {}
+            default: function () {}
         },
         api: {
             type: String,
@@ -108,7 +120,7 @@ export default {
             default: null,
         }
     },
-    data: function() {
+    data: function () {
         return {
             obj: {},
             hasError: null,
@@ -118,9 +130,9 @@ export default {
         }
     },
     watch: {
-        hasError: function(status) {
+        hasError: function (status) {
             let el = this.$refs.alert
-            let master = new TimelineMax({
+            let master = gsap.timeline({
                 paused: true
             })
 
@@ -136,7 +148,8 @@ export default {
                 }, {
                     autoAlpha: 1
                 })
-            } else {
+            }
+            else {
                 master.fromTo(el, .1, {
                     display: 'block'
                 }, {
@@ -154,29 +167,29 @@ export default {
         }
     },
     methods: {
-        setValue: function(value, field, idx) {
+        setValue: function (value, field, idx) {
             this.obj[field] = value // assegno il valore
             this.$refs.container[idx].emit('check', field) // lancio l'evento per verificare il campo
         },
-        setDynamicValue: function(value, field, idx) {
+        setDynamicValue: function (value, field, idx) {
             let json = JSON.stringify(value)
             this.obj[field] = json // assegno il valore
         },
-        setCheckbox: function(value, field, idx) {
+        setCheckbox: function (value, field, idx) {
             this.obj[field] = value
             this.$refs.container[idx].emit('check', field) // lancio l'evento per verificare il campo
         },
-        show: function() {
+        show: function () {
             if (this.obj && this.fields) {
                 this.$refs.modal.show()
             }
         },
-        upload: function() {
+        upload: function () {
             this.$nextTick(() => {
                 this.hasError = false
                 this.errorMsg = 'Please check '
                 this.cacheMsg = '<br>',
-                this.missingFields = 0
+                    this.missingFields = 0
 
                 let data = new FormData()
                 let inputs = this.$refs.input
@@ -206,7 +219,8 @@ export default {
                                 this.missingFields++
                             }
 
-                        } else {
+                        }
+                        else {
                             idx = dynamics.findIndex(item => item.name == key)
                             if (idx > -1) {
                                 let check = dynamics[idx].globalCheck()
@@ -214,14 +228,17 @@ export default {
                                     this.cacheMsg = this.cacheMsg + '<b>' + dynamics[idx].globalError + '</b>' + '<br>'
                                     this.hasError = true
                                     this.missingFields++
-                                } else if (!check){
+                                }
+                                else if (!check) {
                                     this.hasError = true
                                     this.missingFields++
-                                } else {
+                                }
+                                else {
                                     // must use this to set the value before watch function
                                     this.obj[key] = JSON.stringify(dynamics[idx].value)
                                 }
-                            } else {
+                            }
+                            else {
                                 idx = checkboxs.findIndex(item => item.name == key)
                                 if (idx > -1) {
                                     let check = checkboxs[idx].globalCheck()
@@ -243,18 +260,20 @@ export default {
             })
 
         },
-        sendRequest: function(data) {
+        sendRequest: function (data) {
             // close the error message
             if (this.hasError == true) {
                 if (this.missingFields > 1) {
                     this.errorMsg = this.errorMsg + ' these fields are mandatory!'
-                } else {
+                }
+                else {
                     this.errorMsg = this.errorMsg + 'this field is mandatory!'
                 }
                 if (this.cacheMsg) {
                     this.errorMsg = this.errorMsg + this.cacheMsg
                 }
-            } else {
+            }
+            else {
                 // send the request
                 this.hideForm()
                 this.showLoader()
@@ -268,20 +287,20 @@ export default {
             }
 
         },
-        setData: function(data, field, value) {
+        setData: function (data, field, value) {
             if (value) {
                 data.append(field, value)
                 return data
             }
             return data
         },
-        clearForm: function() {
+        clearForm: function () {
             let inputs = this.$refs.input
             for (let i = 0; i < inputs.length; i++) {
                 inputs[i].clear()
             }
         },
-        init: function() {
+        init: function () {
             let item = this.initialObj
             let obj = new Object()
 
@@ -290,8 +309,8 @@ export default {
             }
             this.obj = obj
         },
-        showSuccess: function() {
-            let master = new TimelineMax({
+        showSuccess: function () {
+            let master = gsap.timeline({
                 paused: true,
             })
 
@@ -316,20 +335,22 @@ export default {
 
             master.play()
         },
-        hideMessage: function() {
+        hideMessage: function () {
             this.$refs.message.style.display = 'none'
         },
-        showLoader: function() {
+        showLoader: function () {
             this.$refs.loader.show()
         },
-        hideLoader: function() {
+        hideLoader: function () {
             this.$refs.loader.hide()
         },
-        hideModal: function() {
+        hideModal: function () {
             this.$refs.modal.hide()
         },
-        showForm: function() {
-            let master = new TimelineMax({ paused: true, })
+        showForm: function () {
+            let master = gsap.timeline({
+                paused: true,
+            })
             master.fromTo(this.$refs.form, .3, {
                 autoAlpha: 0,
                 display: 'none',
@@ -339,8 +360,10 @@ export default {
             })
             master.play()
         },
-        hideForm: function() {
-            let master = new TimelineMax({ paused: true, })
+        hideForm: function () {
+            let master = gsap.timeline({
+                paused: true,
+            })
             master.fromTo(this.$refs.form, .3, {
                 autoAlpha: 1,
                 display: 'block',
@@ -351,7 +374,7 @@ export default {
             master.play()
         },
     },
-    mounted: function() {
+    mounted: function () {
         this.hideMessage()
         this.init()
         this.hideLoader()

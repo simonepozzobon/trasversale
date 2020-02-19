@@ -41,6 +41,16 @@ import BlockColumnsPreview from './rowcolumn/BlockColumnsPreview.vue'
 import DynamicModule from './DynamicModule.vue'
 import DynamicParams from '../DynamicParams'
 
+import {
+    gsap
+}
+from 'gsap'
+import {
+    CSSPlugin
+}
+from 'gsap/CSSPlugin'
+gsap.registerPlugin(CSSPlugin)
+
 export default {
     name: 'NewModule',
     components: {
@@ -95,19 +105,20 @@ export default {
             let el = this.$refs.container
             if (el) {
                 let size = SizeUtil.get(el)
-                this.master = new TimelineMax({
+                this.master = gsap.timeline({
                     paused: true,
                     yoyo: true
                 })
 
-                this.master.fromTo(el, .5, {
-                    className: '-=new-module--open',
+                this.master.fromTo(el, {
+                    height: 0,
                     autoAlpha: 0,
-                    ease: Power4.easeInOut,
+                    ease: 'power4.inOut'
                 }, {
-                    className: '+=new-module--open',
+                    duration: .5,
+                    height: 'auto',
                     autoAlpha: 1,
-                    ease: Back.easeOut.config(1.2),
+                    ease: 'back.out(1.2)',
                 }, 0)
 
                 this.master.progress(1).progress(0)

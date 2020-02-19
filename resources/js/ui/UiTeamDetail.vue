@@ -37,7 +37,7 @@
 
 <script>
 import {
-    TweenMax
+    gsap
 }
 from 'gsap'
 
@@ -81,11 +81,11 @@ export default {
             let description = this.$refs.description
             //
             if (reset === false) {
-                TweenMax.set([el, close, name, role, description], {
+                gsap.set([el, close, name, role, description], {
                     clearProps: 'all'
                 })
 
-                this.anim = new TimelineMax({
+                this.anim = gsap.timeline({
                     paused: true,
                     reversed: true,
                 })
@@ -104,14 +104,14 @@ export default {
                 }, {
                     display: 'block',
                     autoAlpha: 1,
-                    ease: Sine.easeInOut,
+                    ease: 'sine.inOut',
                 }, 0)
 
                 this.anim.fromTo(el, .6, {
                     height: 0,
                 }, {
                     height: this.height,
-                    ease: Power2.easeInOut,
+                    ease: 'power2.inOut',
                 }, .2)
 
                 this.anim.fromTo(el, .6, {
@@ -120,7 +120,7 @@ export default {
                 }, {
                     padding: '2rem',
                     width: this.width,
-                    ease: Power4.easeInOut,
+                    ease: 'power4.inOut',
                 }, .1)
 
                 this.anim.progress(1).progress(0)
@@ -134,7 +134,7 @@ export default {
             else {
 
                 this.anim.kill()
-                TweenMax.set([el, close, name, role, description], {
+                gsap.set([el, close, name, role, description], {
                     clearProps: 'all'
                 })
                 this.getHeight(false, playAsInit)

@@ -105,8 +105,20 @@ import CartResume from './CartResume.vue'
 import Payment from './Payment.vue'
 import PersonalData from './PersonalData.vue'
 
-require('gsap/CSSRulePlugin')
-require('gsap/CSSPlugin')
+import {
+    gsap
+}
+from 'gsap'
+import {
+    CSSRulePlugin
+}
+from 'gsap/CSSRulePlugin'
+import {
+    CSSPlugin
+}
+from 'gsap/CSSPlugin'
+
+gsap.registerPlugin(CSSRulePlugin, CSSPlugin)
 
 export default {
     name: 'CartCheckout',
@@ -227,7 +239,7 @@ export default {
             let success = this.$refs.success
             let payment = this.$refs.payment
 
-            TweenMax.set(success, {
+            gsap.set(success, {
                 display: 'flex'
             })
 
@@ -245,7 +257,7 @@ export default {
 
 
 
-            let master = new TimelineMax({
+            let master = gsap.timeline({
                 paused: true,
                 yoyo: true,
             })
@@ -268,7 +280,7 @@ export default {
                     overflow: 'hidden',
                     flexBasis: 0,
                 },
-                ease: Sine.easeIn,
+                ease: 'sine.in',
             }, 'size')
 
             master.fromTo(panel, .5, {
@@ -279,15 +291,15 @@ export default {
                 css: {
                     flexBasis: '100%',
                 },
-                ease: Sine.easeInOut,
+                ease: 'sine.inOut',
             }, 'size')
 
             master.addLabel('hide-payment', '+=0')
 
             master.fromTo(payment.$el, .1, {
-                className: '-=payment--hidden'
+                display: 'block',
             }, {
-                className: '+=payment--hidden'
+                display: 'none',
             }, 'hide-payment')
 
             master.addLabel('success-panel', '+=0')
