@@ -35,7 +35,7 @@ const launchMiddleware = require('launch-editor-middleware');
 mix.options({
     hmrOptions: {
         host: 'trasversale.test', // site's host name
-        port: 4000,
+        port: 3016,
     }
 });
 
@@ -65,22 +65,22 @@ mix
             },
             watchOptions: {
                 aggregateTimeout: 200,
-                poll: 5000
+                poll: 3000
             },
 
         },
     })
-// .browserSync({
-//     proxy: {
-//         target: 'http://trasversale.test',
-//         ws: true,
-//     },
-//     browser: 'google chrome',
-//     port: 3016,
-//     files: [
-//         'public/**/*',
-//         'resources/**/*',
-//         'app/**/*',
-//         'config/**/*'
-//     ]
-// })
+    .browserSync({
+        proxy: {
+            target: 'http://trasversale.test',
+            ws: true,
+        },
+        browser: 'google chrome',
+        port: 3016,
+        files: [
+            'public/**/*',
+            'resources/**/*',
+            'app/**/*',
+            'config/**/*'
+        ]
+    })

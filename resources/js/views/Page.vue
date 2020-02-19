@@ -1,10 +1,28 @@
-<template lang="html">
-    <div>
-        <module-manager
-            v-for="module in this.modules"
-            :key="module.id"
-            :module="module"/>
+<template>
+<div>
+    <module-manager
+        v-for="module in this.modules"
+        :key="module.id"
+        :module="module"
+    />
+    <div
+        v-if="name == 'corsi'"
+        class="archive-btn"
+    >
+        <ui-button
+            title="Archivio corsi"
+            color="primary"
+            align="center"
+        />
     </div>
+    <div v-else-if="name == 'notizie'">
+        <ui-button
+            title="Archivio notizie"
+            color="primary"
+            align="center"
+        />
+    </div>
+</div>
 </template>
 
 <script>
@@ -13,10 +31,16 @@ import {
     sortModules
 }
 from '../Utilities'
+import {
+    UiButton
+}
+from '../ui'
+
 export default {
     name: 'Page',
     components: {
         ModuleManager,
+        UiButton,
     },
     data: function () {
         return {
@@ -56,4 +80,8 @@ export default {
 
 <style lang="scss" scoped>
 @import '~styles/shared';
+
+.archive-btn {
+    width: 100%;
+}
 </style>
