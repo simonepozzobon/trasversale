@@ -52,34 +52,34 @@ class AdminController extends Controller
         $elements = array();
 
         switch ($type) {
-        case 'news':
-            $news = News::with('slug', 'category')->get();
-            $elements = $this->uniform_and_merge($news);
-            break;
+            case 'news':
+                $news = News::with('slug', 'category')->get();
+                $elements = $this->uniform_and_merge($news);
+                break;
 
-        case 'products':
-            $products = Product::with('slug', 'category')->get();
-            $elements = $this->uniform_and_merge($products);
-            break;
+            case 'products':
+                $products = Product::with('slug', 'category')->get();
+                $elements = $this->uniform_and_merge($products);
+                break;
 
-        case 'last-mix':
-            $products = Product::with('slug', 'category')->get();
-            $news = News::with('slug', 'category')->get();
-            $elements = $this->uniform_and_merge($news, $products);
-            break;
+            case 'last-mix':
+                $products = Product::with('slug', 'category')->get();
+                $news = News::with('slug', 'category')->get();
+                $elements = $this->uniform_and_merge($news, $products);
+                break;
 
-        case 'pages':
-            $pages = StaticPage::with('slug')->get();
-            $sub_pages = SubPage::with('slug')->get();
-            $elements = $this->uniform_and_merge($pages, $sub_pages);
-            break;
+            case 'pages':
+                $pages = StaticPage::with('slug')->get();
+                $sub_pages = SubPage::with('slug')->get();
+                $elements = $this->uniform_and_merge($pages, $sub_pages);
+                break;
 
-        default:
-            $posts = Post::with('slug')->get();
-            $news = News::with('slug', 'category')->get();
-            $products = Product::with('slug', 'category')->get();
-            $elements = $this->uniform_and_merge($posts, $news, $products);
-            break;
+            default:
+                $posts = Post::with('slug')->get();
+                $news = News::with('slug', 'category')->get();
+                $products = Product::with('slug', 'category')->get();
+                $elements = $this->uniform_and_merge($posts, $news, $products);
+                break;
         }
 
         return [
@@ -91,17 +91,17 @@ class AdminController extends Controller
     public function get_posts_type($type)
     {
         switch ($type) {
-        case 'news':
-            $elements = News::with('slug', 'category')->get();
-            break;
+            case 'news':
+                $elements = News::with('slug', 'category')->get();
+                break;
 
-        case 'products':
-            $elements = Product::with('slug', 'category')->get();
-            break;
+            case 'products':
+                $elements = Product::with('slug', 'category')->get();
+                break;
 
-        default:
-            // code...
-            break;
+            default:
+                // code...
+                break;
         }
 
         return [
@@ -112,7 +112,7 @@ class AdminController extends Controller
 
     public function get_post_type($type, $id)
     {
-        $model = 'App\\'.ucfirst($type);
+        $model = 'App\\' . ucfirst($type);
         if ($model == 'App\\Staticpage') {
             $model = 'App\\StaticPage';
         } else if ($model == 'App\\Subpage') {
@@ -127,7 +127,6 @@ class AdminController extends Controller
 
         if ($post->sidebar && $post->sidebar->modules) {
             $post->sidebar->modules = Utility::format_complex_modules($post->sidebar->modules, false);
-
         }
 
         return [
@@ -138,7 +137,7 @@ class AdminController extends Controller
 
     public function save_post_type(Request $request)
     {
-        $model = 'App\\'.ucfirst($request->model);
+        $model = 'App\\' . ucfirst($request->model);
 
         if ($model == 'App\\Staticpage') {
             $model = 'App\\StaticPage';
@@ -174,7 +173,9 @@ class AdminController extends Controller
         }
 
         if (isset($request->vat_included)) {
-            $post->vat_included = $request->vat_included == true ? 1 : 0;
+            $post->vat_included = $request->vat_included == "true" ? 1 : 0;
+        } else if ($model == 'App\\Product') {
+            $post->vat_included = 0;
         }
 
         if (isset($request->vat)) {
@@ -202,7 +203,7 @@ class AdminController extends Controller
         }
 
         if (isset($request->teacher_card_payment)) {
-            $post->teacher_card_payment = $request->teacher_card_payment == true ? 1 : 0;
+            $post->teacher_card_payment = $request->teacher_card_payment == "true" ? 1 : 0;
         }
 
         if (isset($request->hours)) {
@@ -222,7 +223,7 @@ class AdminController extends Controller
         }
 
         if (isset($request->has_limited_guests)) {
-            if ($request->has_limited_guests) {
+            if ($request->has_limited_guests == "true") {
                 $post->has_limited_guests = 1;
             } else {
                 $post->has_limited_guests = 0;
@@ -276,13 +277,13 @@ class AdminController extends Controller
     public function delete_post_type($type, $id)
     {
         switch ($type) {
-        case 'news':
-            $element = News::find($id);
-            break;
+            case 'news':
+                $element = News::find($id);
+                break;
 
-        case 'products':
-            $element = Product::find($id);
-            break;
+            case 'products':
+                $element = Product::find($id);
+                break;
         }
 
         $element->delete();
@@ -369,8 +370,8 @@ class AdminController extends Controller
     {
         $sidebar = Sidebar::where(
             [
-            ['sidebarable_id', '=', $request->sidebarable_id],
-            ['sidebarable_type', '=', $request->sidebarable_type]
+                ['sidebarable_id', '=', $request->sidebarable_id],
+                ['sidebarable_type', '=', $request->sidebarable_type]
             ]
         )->first();
 
@@ -444,7 +445,7 @@ class AdminController extends Controller
 
 
             foreach ($content->blocks as $key => $block) {
-                $model = 'App\\'.ucfirst($block->type);
+                $model = 'App\\' . ucfirst($block->type);
 
                 if ($model == 'App\\Staticpage') {
                     $model = 'App\\StaticPage';
@@ -485,7 +486,6 @@ class AdminController extends Controller
                     'options' => $grid_options,
                 ]
             );
-
         } elseif ($request->type == 'image' && $request->hasFile('file')) {
             $file = $request->file('file');
             $media = Utility::save_image($file);
@@ -493,7 +493,6 @@ class AdminController extends Controller
             $content = json_decode($content);
             $content->src = $media->landscape;
             $content = json_encode($content);
-
         }
 
         $module->type = $request->type;
@@ -521,7 +520,7 @@ class AdminController extends Controller
         $file = $request->file('pdf');
 
         $original_filename = $file->getClientOriginalName();
-        $filename = uniqid().'.'.$file->getClientOriginalExtension();
+        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
 
         $src = $file->storeAs('public/pdf', $filename);
         $src_formatted = Storage::disk('local')->url($src);
