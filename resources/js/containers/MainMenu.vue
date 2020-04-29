@@ -1,154 +1,161 @@
 <template>
-<nav class="navbar navbar-main navbar-expand-lg navbar-light bg-white">
-    <div class="navbar-main__head">
-        <a
-            class="navbar-brand"
-            href="/"
-            @click.prevent="$root.goTo('home')"
-        >
-            <img
-                src="/svg/logo.svg"
-                style="width: 250px"
+    <nav class="navbar navbar-main navbar-expand-lg navbar-light bg-white">
+        <div class="navbar-main__head">
+            <a
+                class="navbar-brand"
+                href="/"
+                @click.prevent="$root.goTo('home')"
             >
-        </a>
-    </div>
+                <img src="/svg/logo.svg" style="width: 250px" />
+            </a>
+        </div>
 
-    <div
-        class="navbar-collapse navbar-main__container"
-        id="navbarSupportedContent"
-    >
-        <div class="navbar-main__topbar">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <ui-link
-                        class="nav-link"
-                        :has-margin="false"
-                        :is-simple="true"
-                        url="https://www.facebook.com/Trasversale/"
-                        target="_blank"
-                    >
-                        <facebook
-                            width="32px"
-                            height="32px"
-                            :hoverable="true"
-                            hover-color="primary"
-                        />
-                    </ui-link>
-                    <!-- <a class="nav-link" href="#">F</a> -->
-                </li>
-                <li class="nav-item">
-                    <ui-link
-                        class="nav-link"
-                        :has-margin="false"
-                        :is-simple="true"
-                        url="https://twitter.com/Trasversale_srl "
-                        target="_blank"
-                    >
-                        <twitter
-                            width="32px"
-                            height="32px"
-                            :hoverable="true"
-                            hover-color="primary"
-                        />
-                    </ui-link>
-                    <!-- <a class="nav-link" href="#">T</a> -->
-                </li>
-                <li class="nav-item">
-                    <ui-link
-                        class="nav-link"
-                        :has-margin="false"
-                        :is-simple="true"
-                        url="https://www.linkedin.com/company/trasversale-srl"
-                        target="_blank"
-                    >
-                        <linkedin
-                            width="32px"
-                            height="32px"
-                            :hoverable="true"
-                            hover-color="primary"
-                        />
-                    </ui-link>
-                    <!-- <a class="nav-link" href="#">Ln</a> -->
-                </li>
-                <li class="nav-item">
-                    <ui-link
-                        class="nav-link"
-                        :has-margin="false"
-                        :is-simple="true"
-                        url="https://www.youtube.com/channel/UCFIPNXBLcaXO7JU9sUBebag"
-                        target="_blank"
-                    >
-                        <youtube
-                            width="32px"
-                            height="32px"
-                            :hoverable="true"
-                            hover-color="primary"
-                        />
-                    </ui-link>
-                    <!-- <a class="nav-link" href="#">Ln</a> -->
-                </li>
-            </ul>
-            <simple-search></simple-search>
-        </div>
-        <div class="navbar-main__menubar">
-            <ul class="navbar-nav mr-auto">
-                <menu-item
-                    v-for="(page, i) in pages"
-                    :key="i"
-                    :page="page"
-                />
-            </ul>
-        </div>
         <div
-            class="navbar-main__submenu main-submenu"
-            v-if="this.subpages && this.current"
+            class="navbar-collapse navbar-main__container"
+            id="navbarSupportedContent"
         >
-            <ul class="navbar-nav mr-auto main-submenu__navbar">
-                <li
-                    v-for="(subpage, j) in subpages"
-                    :key="j"
-                    class="nav-item main-submenu__item"
-                >
-                    <span
-                        v-if="subpage.hasOwnProperty('divider')"
-                        class="main-submenu__divider"
-                    >
-                        |
-                    </span>
-                    <main-menu-subitem
-                        v-else
-                        :title="subpage.title"
-                        :page-slug="current.slug.slug"
-                        :slug="subpage.slug.slug"
+            <div class="navbar-main__topbar">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <ui-link
+                            class="nav-link"
+                            :has-margin="false"
+                            :is-simple="true"
+                            url="https://www.facebook.com/Trasversale/"
+                            target="_blank"
+                        >
+                            <facebook
+                                width="32px"
+                                height="32px"
+                                :hoverable="true"
+                                hover-color="primary"
+                            />
+                        </ui-link>
+                        <!-- <a class="nav-link" href="#">F</a> -->
+                    </li>
+                    <li class="nav-item">
+                        <ui-link
+                            class="nav-link"
+                            :has-margin="false"
+                            :is-simple="true"
+                            url="https://twitter.com/Trasversale_srl "
+                            target="_blank"
+                        >
+                            <twitter
+                                width="32px"
+                                height="32px"
+                                :hoverable="true"
+                                hover-color="primary"
+                            />
+                        </ui-link>
+                        <!-- <a class="nav-link" href="#">T</a> -->
+                    </li>
+                    <li class="nav-item">
+                        <ui-link
+                            class="nav-link"
+                            :has-margin="false"
+                            :is-simple="true"
+                            url="https://www.linkedin.com/company/trasversale-srl"
+                            target="_blank"
+                        >
+                            <linkedin
+                                width="32px"
+                                height="32px"
+                                :hoverable="true"
+                                hover-color="primary"
+                            />
+                        </ui-link>
+                        <!-- <a class="nav-link" href="#">Ln</a> -->
+                    </li>
+                    <li class="nav-item">
+                        <ui-link
+                            class="nav-link"
+                            :has-margin="false"
+                            :is-simple="true"
+                            url="https://www.youtube.com/channel/UCFIPNXBLcaXO7JU9sUBebag"
+                            target="_blank"
+                        >
+                            <youtube
+                                width="32px"
+                                height="32px"
+                                :hoverable="true"
+                                hover-color="primary"
+                            />
+                        </ui-link>
+                        <!-- <a class="nav-link" href="#">Ln</a> -->
+                    </li>
+                    <li class="nav-item">
+                        <ui-link
+                            class="nav-link"
+                            :has-margin="false"
+                            :is-simple="true"
+                            url="//www.instagram.com/trasversale_srl"
+                            target="_blank"
+                        >
+                            <instagram
+                                class="mt-2 mr-2"
+                                width="18px"
+                                height="18px"
+                                :hoverable="true"
+                                hover-color="primary"
+                            />
+                        </ui-link>
+                        <!-- <a class="nav-link" href="#">Ln</a> -->
+                    </li>
+                </ul>
+                <simple-search></simple-search>
+            </div>
+            <div class="navbar-main__menubar">
+                <ul class="navbar-nav mr-auto">
+                    <menu-item
+                        v-for="(page, i) in pages"
+                        :key="i"
+                        :page="page"
                     />
-                </li>
-            </ul>
+                </ul>
+            </div>
+            <div
+                class="navbar-main__submenu main-submenu"
+                v-if="this.subpages && this.current"
+            >
+                <ul class="navbar-nav mr-auto main-submenu__navbar">
+                    <li
+                        v-for="(subpage, j) in subpages"
+                        :key="j"
+                        class="nav-item main-submenu__item"
+                    >
+                        <span
+                            v-if="subpage.hasOwnProperty('divider')"
+                            class="main-submenu__divider"
+                        >
+                            |
+                        </span>
+                        <main-menu-subitem
+                            v-else
+                            :title="subpage.title"
+                            :page-slug="current.slug.slug"
+                            :slug="subpage.slug.slug"
+                        />
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 </template>
 
 <script>
-import MainMenuSubitem from './MainMenuSubitem.vue'
-import MenuItem from './MenuItem.vue'
-import {
-    UiLink
-}
-from '../ui'
-import {
-    Facebook,
-    Linkedin,
-    Twitter,
-    Youtube
-}
-from '../icons'
+import MainMenuSubitem from "./MainMenuSubitem.vue";
+import MenuItem from "./MenuItem.vue";
+import { UiLink } from "../ui";
+import { Facebook, Instagram, Linkedin, Twitter, Youtube } from "../icons";
 
-import SimpleSearch from '../components/SimpleSearch.vue'
+import SimpleSearch from "../components/SimpleSearch.vue";
 
 export default {
-    name: 'MainMenu',
+    name: "MainMenu",
     components: {
         Facebook,
+        Instagram,
         Linkedin,
         MainMenuSubitem,
         MenuItem,
@@ -160,60 +167,61 @@ export default {
     props: {
         pages: {
             type: Array,
-            default: function () {}
+            default: function() {}
         }
     },
-    data: function () {
+    data: function() {
         return {
             current: null,
-            subpages: null,
-        }
+            subpages: null
+        };
     },
     watch: {
-        '$route': function (route) {
-            this.checkSubMenu()
+        $route: function(route) {
+            this.checkSubMenu();
         }
     },
     methods: {
-        checkSubMenu: function () {
-            if (this.$route.hasOwnProperty('params') && this.$route.params.hasOwnProperty('page')) {
-                this.current = this.pages.filter(page => page.slug.slug == this.$route.params.page)[0]
+        checkSubMenu: function() {
+            if (
+                this.$route.hasOwnProperty("params") &&
+                this.$route.params.hasOwnProperty("page")
+            ) {
+                this.current = this.pages.filter(
+                    page => page.slug.slug == this.$route.params.page
+                )[0];
                 if (this.current && this.current.sub_pages.length > 0) {
-                    let subpages = this.current.sub_pages
-                    let temp = []
+                    let subpages = this.current.sub_pages;
+                    let temp = [];
 
                     for (let i = 0; i < subpages.length; i++) {
-                        temp.push(subpages[i])
-                        if (i < (subpages.length - 1)) {
+                        temp.push(subpages[i]);
+                        if (i < subpages.length - 1) {
                             temp.push({
                                 id: new Date().getUTCMilliseconds(),
                                 divider: true
-                            })
+                            });
                         }
                     }
-                    this.subpages = temp
+                    this.subpages = temp;
+                } else {
+                    this.current = null;
+                    this.subpages = null;
                 }
-
-                else {
-                    this.current = null
-                    this.subpages = null
-                }
-            }
-
-            else {
-                this.current = null
-                this.subpages = null
+            } else {
+                this.current = null;
+                this.subpages = null;
             }
         }
     },
-    created: function () {
-        this.checkSubMenu()
-    },
-}
+    created: function() {
+        this.checkSubMenu();
+    }
+};
 </script>
 
 <style lang="scss" scoped>
-@import '~styles/shared';
+@import "~styles/shared";
 
 .navbar-main {
     &__head {
@@ -248,7 +256,7 @@ export default {
 
     &__divider {
         font-weight: 100;
-        color: rgba($black, .5);
+        color: rgba($black, 0.5);
         padding-left: $spacer / 2;
         padding-right: $spacer / 2;
     }
