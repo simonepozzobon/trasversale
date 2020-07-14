@@ -6,7 +6,7 @@
                 href="/"
                 @click.prevent="$root.goTo('home')"
             >
-                <img src="/svg/logo.svg" style="width: 250px" />
+                <img src="/svg/logo.svg" class="navbar-main__logo" />
             </a>
         </div>
 
@@ -15,7 +15,7 @@
             id="navbarSupportedContent"
         >
             <div class="navbar-main__topbar">
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav ml-lg-auto">
                     <li class="nav-item active">
                         <ui-link
                             class="nav-link"
@@ -38,7 +38,7 @@
                             class="nav-link"
                             :has-margin="false"
                             :is-simple="true"
-                            url="https://twitter.com/Trasversale_srl "
+                            url="https://twitter.com/Trasversale_srl"
                             target="_blank"
                         >
                             <twitter
@@ -104,8 +104,19 @@
                     </li>
                 </ul>
                 <simple-search></simple-search>
+                <div class="burger d-block d-lg-none" @click="toggleMenu">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 448 512"
+                        class="burger__svg"
+                    >
+                        <path
+                            d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
+                        ></path>
+                    </svg>
+                </div>
             </div>
-            <div class="navbar-main__menubar">
+            <div class="navbar-main__menubar d-none d-lg-flex">
                 <ul class="navbar-nav mr-auto">
                     <menu-item
                         v-for="(page, i) in pages"
@@ -115,7 +126,7 @@
                 </ul>
             </div>
             <div
-                class="navbar-main__submenu main-submenu"
+                class="navbar-main__submenu main-submenu d-none d-lg-flex"
                 v-if="this.subpages && this.current"
             >
                 <ul class="navbar-nav mr-auto main-submenu__navbar">
@@ -139,6 +150,11 @@
                     </li>
                 </ul>
             </div>
+        </div>
+        <div class="navbar-main__menubar-mob d-block d-lg-none" v-if="isOpen">
+            <ul class="navbar-nav mr-auto">
+                <menu-item v-for="(page, i) in pages" :key="i" :page="page" />
+            </ul>
         </div>
     </nav>
 </template>
@@ -173,15 +189,24 @@ export default {
     data: function() {
         return {
             current: null,
-            subpages: null
+            subpages: null,
+            isOpen: false
         };
     },
     watch: {
         $route: function(route) {
+            this.isOpen = false;
             this.checkSubMenu();
         }
     },
     methods: {
+        toggleMenu: function() {
+            if (this.isOpen) {
+                this.isOpen = false;
+            } else {
+                this.isOpen = true;
+            }
+        },
         checkSubMenu: function() {
             if (
                 this.$route.hasOwnProperty("params") &&
@@ -223,9 +248,103 @@ export default {
 <style lang="scss" scoped>
 @import "~styles/shared";
 
+.burger {
+    padding-left: $spacer;
+    &__svg {
+        width: 24px;
+
+        path {
+            fill: $black;
+        }
+    }
+}
+
 .navbar-main {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0.46875rem 0;
+
+    @include media-breakpoint-up("lg") {
+        padding: 0.46875rem 0.9375rem;
+    }
+
     &__head {
-        margin-left: -48px;
+        margin-left: 0;
+        .navbar-brand {
+            margin-right: 0;
+        }
+
+        @include media-breakpoint-up("sm") {
+            margin-left: 0;
+            .navbar-brand {
+                margin-right: 0;
+            }
+        }
+
+        @include media-breakpoint-up("md") {
+            margin-left: -48px;
+            .navbar-brand {
+                margin-right: 0.9375rem;
+            }
+        }
+
+        @include media-breakpoint-up("lg") {
+            margin-left: -48px;
+        }
+    }
+
+    &__logo {
+        width: 110px;
+
+        @include media-breakpoint-up("sm") {
+        }
+
+        @include media-breakpoint-up("md") {
+            width: 180px;
+        }
+
+        @include media-breakpoint-up("lg") {
+            width: 250px;
+        }
+    }
+
+    &__container {
+        flex-basis: auto;
+        padding-top: 0;
+        flex-direction: row;
+        justify-content: flex-end;
+
+        @include media-breakpoint-up("lg") {
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        @include media-breakpoint-up("lg") {
+            padding-top: 1.171875rem;
+        }
+    }
+
+    &__topbar {
+        display: flex;
+        flex-wrap: wrap;
+        width: auto;
+        align-items: center;
+
+        @include media-breakpoint-up("lg") {
+            width: 100%;
+        }
+
+        .navbar-nav {
+            // flex-direction: column;
+
+            // @include media-breakpoint-down("lg") {
+            flex-direction: row;
+            // }
+        }
+    }
+
+    &__menubar-mob {
+        width: 100%;
     }
 }
 

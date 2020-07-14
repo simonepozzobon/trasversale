@@ -1,28 +1,25 @@
 <template>
-<div class="form-inline my-2 my-lg-0">
-    <input
-        class="form-control mr-sm-2"
-        type="search"
-        placeholder="Search"
-        aria-label="Search"
-        v-model="search"
-        @keyup.enter="checkSearch"
-    >
-</div>
+    <div class="search-input form-inline my-2 my-lg-0">
+        <input
+            class="search-input__input form-control mr-sm-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+            v-model="search"
+            @keyup.enter="checkSearch"
+        />
+    </div>
 </template>
 
 <script>
-import {
-    Uuid
-}
-from '../Utilities'
+import { Uuid } from "../Utilities";
 export default {
-    name: 'UiSimpleSearch',
-    data: function () {
+    name: "UiSimpleSearch",
+    data: function() {
         return {
             search: null,
-            master: null,
-        }
+            master: null
+        };
     },
     // watch: {
     //     search: function (str) {
@@ -34,54 +31,65 @@ export default {
     //     },
     // },
     methods: {
-        debug: function () {
-            this.search = 'storie'
+        debug: function() {
+            this.search = "storie";
         },
-        checkSearch: function () {
+        checkSearch: function() {
             if (this.search != null && this.search.length > 1) {
-                this.startSearch()
+                this.startSearch();
             }
         },
-        startSearch: function () {
+        startSearch: function() {
             // console.log('start', this.search);
             if (this.search && this.search.length > 1) {
                 let data = {
                     string: this.search
-                }
-                this.$http.post('/api/search', data).then(response => {
+                };
+                this.$http.post("/api/search", data).then(response => {
                     // console.log(response.data);
-                    this.formatResults(response.data)
-                })
+                    this.formatResults(response.data);
+                });
             }
         },
-        formatResults: function (results) {
-            this.$root.search = this.search
+        formatResults: function(results) {
+            this.$root.search = this.search;
             // this.search = null
-            let formatted = []
+            let formatted = [];
             for (let i = 0; i < results.length; i++) {
-                let result = results[i]
-                result.uuid = Uuid.get()
-                formatted.push(result)
+                let result = results[i];
+                result.uuid = Uuid.get();
+                formatted.push(result);
             }
 
-            this.$root.searchResults = formatted
+            this.$root.searchResults = formatted;
             this.$nextTick(() => {
-                this.$root.goTo('search')
-            })
+                this.$root.goTo("search");
+            });
         },
-        resetSearch: function () {
-            this.search = ''
-        },
+        resetSearch: function() {
+            this.search = "";
+        }
     },
-    mounted: function () {
+    mounted: function() {
         // this.$nextTick(() => this.debug())
-    },
-}
+    }
+};
 </script>
 
 <style lang="scss" scoped>
-@import '~styles/shared';
+@import "~styles/shared";
 
+.search-input {
+    justify-content: flex-end;
+    width: 140px;
+
+    @include media-breakpoint-up("lg") {
+        width: auto;
+    }
+    // &__input {
+    // width: 80%;
+    // }
+}
 // .ui-simple-search {
 //     max-width: 100%;
 //     margin-bottom: $spacer;
